@@ -1,5 +1,6 @@
 #pragma once
 
+// shared::base + 0x17E9F9C
 enum GameMenuStatus
 {
   InMenu = 0x0,
