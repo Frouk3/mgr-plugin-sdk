@@ -1,5 +1,6 @@
 #pragma once
 
+// shared::base + 0x17EA090
 enum GameFlags
 {
   QTEUiDisable = 0x1,
