@@ -2,6 +2,8 @@
 #include "../shared/shared.h"
 #include <Windows.h>
 
+// cSlowRateManager& g_cSlowRateManager = shared::base + 0x17E93B0;
+
 void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept
 {
 	DWORD address = shared::base + 0x532020;
