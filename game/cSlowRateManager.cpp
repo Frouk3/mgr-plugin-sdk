@@ -1,5 +1,5 @@
 #include "cSlowRateManager.h"
-#include "shared.h"
+#include "../shared/shared.h"
 #include <Windows.h>
 
 void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept
