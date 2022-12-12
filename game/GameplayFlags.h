@@ -1,5 +1,6 @@
 #pragma once
 
+// shared::base + 0x17EA094
 enum GameplayFlags
 {
   b0 = 0x1,
