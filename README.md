@@ -1,2 +1,2 @@
 # mgr-plugin-sdk
-Plugin for Metal Gear Rising Revengeance
+Plugin sdk for Metal Gear Rising Revengeance
