@@ -26,7 +26,7 @@ enum GameplayFlags
   GameCodecSubjectivePointView = 0x100000,
   GameInzangekiCamdir = 0x200000,
   b22 = 0x400000,
-  b33 = 0x800000,
+  b23 = 0x800000,
   GameNoExpAdd = 0x1000000,
   GameItemNoDrop = 0x2000000,
   GamePhaseEndUiDisplayOff = 0x4000000,
