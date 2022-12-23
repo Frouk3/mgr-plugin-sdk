@@ -3622,4 +3622,13 @@ public:
   int field_53F4;
   int field_53F8;
   int field_53FC;
+
+  Pl0000() noexcept;
+  ~Pl0000() noexcept;
+
+  void SetSlowMo(float Duration, float SlowRate) noexcept;
+  void EnableRipperMode() noexcept;
+  void SetFuelContainer(float FuelContainer) noexcept;
+  void DisableRipperMode(bool bUseFade) noexcept;
+  float GetMaxFuelContainer() noexcept;
 };
