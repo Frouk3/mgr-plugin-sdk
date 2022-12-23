@@ -3,12 +3,12 @@
 // shared::base + 0x17EA094
 enum GameplayFlags
 {
-  b0 = 0x1,
-  b1 = 0x2,
-  b2 = 0x4,
-  b3 = 0x8,
-  b4 = 0x10,
-  b5 = 0x20,
+  GAME_b0 = 0x1,
+  GAME_b1 = 0x2,
+  GAME_b2 = 0x4,
+  GAME_b3 = 0x8,
+  GAME_b4 = 0x10,
+  GAME_b5 = 0x20,
   VisorEnabled = 0x40,
   GamePlayerNoLockonButton = 0x80,
   GameGekkoJammingEscapeMomentCamera = 0x100,
@@ -25,8 +25,8 @@ enum GameplayFlags
   GameSliderNinjarunMode = 0x80000,
   GameCodecSubjectivePointView = 0x100000,
   GameInzangekiCamdir = 0x200000,
-  b22 = 0x400000,
-  b23 = 0x800000,
+  GAME_b22 = 0x400000,
+  GAME_b23 = 0x800000,
   GameNoExpAdd = 0x1000000,
   GameItemNoDrop = 0x2000000,
   GamePhaseEndUiDisplayOff = 0x4000000,
@@ -36,4 +36,3 @@ enum GameplayFlags
   PlayerNoMove = 0x40000000,
   PlayerNoXA = 0x80000000,
 };
-

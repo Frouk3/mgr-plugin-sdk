@@ -4,7 +4,7 @@
 class cParts
 {
 public:
-  void *__vftable /*VFT*/;
+  void *__vftable;
   int field_4;
   int field_8;
   int field_C;
@@ -35,8 +35,8 @@ public:
   float field_94;
   float field_98;
   float field_9C;
-  __int16 field_A0;
-  __int16 field_A2;
+  short field_A0;
+  short field_A2;
   int field_A4;
   int field_A8;
   int field_AC;
