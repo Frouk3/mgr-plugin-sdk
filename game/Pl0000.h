@@ -3631,4 +3631,7 @@ public:
   void SetFuelContainer(float FuelContainer) noexcept;
   void DisableRipperMode(bool bUseFade) noexcept;
   float GetMaxFuelContainer() noexcept;
+  bool IsParrying() noexcept;
+  bool IsOnGround() noexcept;
+  bool IsInAir() noexcept;
 };

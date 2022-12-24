@@ -40,5 +40,23 @@ void Pl0000::DisableRipperMode(bool bUseFade) noexcept
 float Pl0000::GetMaxFuelContainer() noexcept
 {
     DWORD address = shared::base + 0x7DA020;
-    ((float (__thiscall *)(Pl0000 *))address)(this);
+    return ((float (__thiscall *)(Pl0000 *))address)(this);
+}
+
+bool Pl0000::IsParrying() noexcept
+{
+    DWORD address = shared::base + 0x6C0B30;
+    return ((bool (__thiscall *)(Pl0000 *))address)(this);
+}
+
+bool Pl0000::IsOnGround() noexcept
+{
+    DWORD address = shared::base + 0x6C0BB0;
+    return ((bool (__thiscall *)(Pl0000 *))address)(this);
+}
+
+bool Pl0000::IsInAir() noexcept
+{
+    DWORD address = shared::base + 0x77C730;
+    return ((bool (__thiscall *)(Pl0000 *))address)(this);
 }

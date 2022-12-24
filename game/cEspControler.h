@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Animation.h"
-
 class cEspControler
 {
 public:
-  void *__vftable /*VFT*/;
+  void *vtbl /*VFT*/;
   int field_4;
   int field_8;
   int field_C;

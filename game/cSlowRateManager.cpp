@@ -1,6 +1,5 @@
 #include "cSlowRateManager.h"
 #include "../shared/shared.h"
-#include <Windows.h>
 
 // cSlowRateManager& g_cSlowRateManager = shared::base + 0x17E93B0;
 
@@ -13,7 +12,7 @@ void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept
 cSlowRateManager* GetcSlowRateManager() noexcept
 {
 	DWORD address = shared::base + 0xA03960;
-	return ((cSlowRateManager *(__stdcall*)())address)();
+	return ((cSlowRateManager *(__cdecl *)())address)();
 }
 
 void cSlowRateManager::SetSlowRate(int SlowRateType, float SlowRate) noexcept
@@ -46,4 +45,16 @@ void cSlowRateManager_Reset() noexcept
 {
 	DWORD address = shared::base + 0x11EDC20;
 	((void(__cdecl*)())address)();
+}
+
+cSlowRateUnit *cSlowRateManager::AllocUnit() noexcept
+{
+	DWORD address = shared::base + 0xA06230;
+	return ((cSlowRateUnit *(__thiscall *)(cSlowRateManager *))address)(this);
+}
+
+cSlowRateManager::cSlowRateManager() noexcept
+{
+	DWORD address = shared::base + 0xA08FB0;
+	((void (__thiscall *)(cSlowRateManager *))address)(this);
 }

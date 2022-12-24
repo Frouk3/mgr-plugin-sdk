@@ -1,9 +1,17 @@
 #pragma once
-#include "cSlowRateUnit.h"
 
-struct ObjectItemsAttached
+namespace Hw
 {
-  cSlowRateUnit *m_pSlowRateUnit;
+    class cHeap;
+    class cHeapVariableBase;
+    class cHeapVariable;
+}
+
+class Hw::cHeap
+{
+protected:
+    void *vtbl;
+public:
   int field_4;
   int field_8;
   int field_C;
@@ -21,18 +29,22 @@ struct ObjectItemsAttached
   int field_3C;
   int field_40;
   int field_44;
-  void *m_pInstance;
+  int field_48;
   int field_4C;
   int field_50;
   int field_54;
   int field_58;
   int field_5C;
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
-  int field_70;
-  int field_74;
-  int field_78;
-  int field_7C;
+};
+
+class Hw::cHeapVariableBase : public Hw::cHeap
+{
+public:
+
+};
+
+class Hw::cHeapVariable : public Hw::cHeapVariableBase
+{
+public:
+
 };
