@@ -5,6 +5,7 @@ namespace Hw
     class cHeap;
     class cHeapVariableBase;
     class cHeapVariable;
+    class cTexture;
 }
 
 class Hw::cHeap
@@ -47,4 +48,15 @@ class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
+};
+
+class Hw::cTexture
+{
+  void *vtbl;
+  int field_4;
+  int field_8;
+  int field_C;
+  int field_10;
+  int field_14;
+  int field_18;
 };
