@@ -16,7 +16,7 @@ PlayerManagerImplement::~PlayerManagerImplement() noexcept
 void PlayerManagerImplement::SetSlowRate(float SlowRate, int a3, int a4) noexcept
 {
     DWORD address = shared::base + 0x84CE30;
-    ((void (__thiscall *)(PlayerManagerImplement *, float, int, int))address)(this, float, a3, a4);
+    ((void (__thiscall *)(PlayerManagerImplement *, SlowRate, int, int))address)(this, float, a3, a4);
 }
 
 cVec4 *PlayerManagerImplement::GetPlayerPosition() noexcept
