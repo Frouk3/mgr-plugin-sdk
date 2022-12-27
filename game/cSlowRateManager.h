@@ -34,6 +34,7 @@ public:
   float field_8C;
   float field_90;
 
+  cSlowRateManager() noexcept;
   void SetSlowRate(int SlowRateType, float SlowRate) noexcept;
   float GetSlowRate(int SlowRateType) noexcept;
   void ResetSlowRate() noexcept;
@@ -44,3 +45,6 @@ public:
 void cSlowRateManager_Reset() noexcept;
 void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept;
 cSlowRateManager* GetcSlowRateManager() noexcept;
+
+extern cSlowRateManager& g_cSlowRateManager;
+extern cSlowRateManager* g_pcSlowRateManager;

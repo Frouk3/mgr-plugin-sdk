@@ -1,4 +1,5 @@
 #pragma once
+#include "../shared/shared.h"
 
 // shared::base + 0x17EA094
 enum GameplayFlags
@@ -36,3 +37,5 @@ enum GameplayFlags
   PlayerNoMove = 0x40000000,
   PlayerNoXA = 0x80000000,
 };
+
+unsigned int &g_GameplayFlags = *(unsigned int*)(shared::base + 0x17EA094);

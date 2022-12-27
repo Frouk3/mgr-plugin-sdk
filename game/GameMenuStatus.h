@@ -1,4 +1,5 @@
 #pragma once
+#include "../shared/shared.h"
 
 // shared::base + 0x17E9F9C
 enum GameMenuStatus
@@ -24,3 +25,4 @@ enum GameMenuStatus
   ProcessOutOfPause = 18,
 };
 
+unsigned int &g_GameMenuStatus = *(unsigned int*)(shared::base + 0x17E9F9C);

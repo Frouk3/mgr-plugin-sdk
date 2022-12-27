@@ -1,4 +1,5 @@
 #pragma once
+#include "../shared/shared.h"
 
 class cGameUIManager
 {
@@ -60,3 +61,5 @@ public:
   int field_D4;
   int field_D8;
 };
+
+extern cGameUIManager &g_cGameUIManager;

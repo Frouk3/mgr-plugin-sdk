@@ -1899,7 +1899,7 @@ public:
   __int16 field_31B0;
   __int16 field_31B2;
   char field_31B4;
-  __unaligned __declspec(align(1)) int field_31B5;
+  __declspec(align(1)) int field_31B5; // that's good we don't have 31B8 field, if we had, some plugins may or may not be stucked (doesn't change some values that are defined down below)
   int field_31BC;
   int field_31C0;
   int field_31C4;
