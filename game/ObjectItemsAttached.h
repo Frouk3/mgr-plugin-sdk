@@ -35,4 +35,9 @@ struct ObjectItemsAttached
   int field_74;
   int field_78;
   int field_7C;
+
+  void *GetItemInstance() noexcept;
+  void UpdateSlowRateUnit() noexcept;
+  float GetCalculatedSlowRate() noexcept;
+  void SetEntitySlowRateType(int SlowRateType) noexcept;
 };

@@ -99,4 +99,9 @@ public:
   float field_9E8;
   float field_9EC;
   float field_9F0;
+
+  void Startup() noexcept;
+  void Heal(int heal) noexcept;
+  void SetupHealth(int health) noexcept;
+  void Damage(int damage, bool leave1Hp) noexcept;
 };

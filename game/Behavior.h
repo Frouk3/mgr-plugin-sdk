@@ -209,4 +209,8 @@ public:
   float field_864;
   float field_868;
   float field_86C;
+
+  Behavior() noexcept;
+  ~Behavior() noexcept;
+  void Startup() noexcept;
 };

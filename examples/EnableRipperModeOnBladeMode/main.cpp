@@ -1,6 +1,5 @@
 #include "Pl0000.h"
 #include "cGameUIManager.h"
-#include "shared/shared.h"
 
 // i didn't check if it its works, just robbed a quick one :O
 void RipperModeOnBladeMode()
