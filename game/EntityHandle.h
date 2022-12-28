@@ -1,7 +1,8 @@
 #pragma once
 #include "cSlowRateUnit.h"
+#include "SceneModelSystem.h"
 
-struct ObjectItemsAttached
+struct EntityHandle
 {
   cSlowRateUnit *m_pSlowRateUnit;
   int field_4;
@@ -17,8 +18,8 @@ struct ObjectItemsAttached
   int field_2C;
   int field_30;
   int field_34;
-  int field_38;
-  int field_3C;
+  SceneModelSystem *field_38;
+  void *m_pSpecifiedInstance;
   int field_40;
   int field_44;
   void *m_pInstance;
