@@ -70,7 +70,7 @@ public:
   float field_460;
   int field_464;
   int field_468;
-  int field_46C;
+  Hw::cTexture* field_46C;
   int field_470;
   int field_474;
   int field_478;

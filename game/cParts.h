@@ -32,7 +32,7 @@ public:
   float field_88;
   int field_8C;
   float field_90;
-  float field_94;
+  float m_fRotation;
   float field_98;
   float field_9C;
   short field_A0;

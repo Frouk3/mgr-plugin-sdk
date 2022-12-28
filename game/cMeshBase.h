@@ -1,4 +1,5 @@
 #pragma once
+#include "ARGB32.h"
 
 class cMeshBase
 {
@@ -7,26 +8,14 @@ public:
   int field_4;
   int field_8;
   int field_C;
-  float field_10;
-  float field_14;
-  float field_18;
-  float field_1C;
-  float field_20;
-  float field_24;
-  float field_28;
-  float field_2C;
+  ARGB32 m_rgbForceColor;
+  ARGB32 m_rgbColor;
   int field_30;
   int field_34;
   int field_38;
   int field_3C;
-  int field_40;
-  int field_44;
-  int field_48;
-  int field_4C;
-  int field_50;
-  int field_54;
-  int field_58;
-  int field_5C;
+  ARGB32 field_40;
+  ARGB32 field_50;
   int field_60;
   int field_64;
   int field_68;

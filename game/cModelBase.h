@@ -2,6 +2,7 @@
 
 #include "cParts.h"
 #include "cMesh.h"
+#include "Hw.h"
 
 class cModelBase : public cParts
 {
@@ -169,14 +170,14 @@ public:
   int field_328;
   short field_32C;
   int field_330;
-  int field_334;
+  cParts* field_334;
   int field_338;
   int field_33C;
   int field_340;
   int field_344;
   int field_348;
-  int field_34C;
-  int field_350;
+  Hw::cTexture* field_34C;
+  cParts* field_350;
   int field_354;
   short field_358;
   int field_35C;
