@@ -1,5 +1,5 @@
 #include "SceneModelSystem.h"
-#include "../shared/shared.h"
+#include "shared.h"
 
 SceneModelSystem::SceneModelSystem() noexcept
 {

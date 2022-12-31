@@ -1,4 +1,4 @@
-#include "../shared/shared.h"
+#include "shared.h"
 #include "Pl0000.h"
 
 Pl0000::Pl0000() noexcept
@@ -59,4 +59,10 @@ bool Pl0000::IsInAir() noexcept
 {
     DWORD address = shared::base + 0x77C730;
     return ((bool (__thiscall *)(Pl0000 *))address)(this);
+}
+
+void Pl0000::CallEffect(int id, cEspControler *esp) noexcept
+{
+    DWORD address = shared::base + 0x7C3470;
+    ((void(__thiscall *)(Pl0000*, int, cEspControler *))address)(this, id, esp);
 }

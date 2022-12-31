@@ -1,5 +1,5 @@
 #include "EntityHandle.h"
-#include "../shared/shared.h"
+#include "shared.h"
 
 void *EntityHandle::GetItemInstance() noexcept
 {

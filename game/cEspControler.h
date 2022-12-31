@@ -47,4 +47,6 @@ public:
   int field_A4;
   int field_A8;
   int field_AC;
+  
+  unsigned int SetEffectDuration(float duration, float a3) noexcept;
 };

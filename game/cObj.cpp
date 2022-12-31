@@ -1,5 +1,5 @@
 #include "cObj.h"
-#include "../shared/shared.h"
+#include "shared.h"
 
 cObj::cObj() noexcept
 {

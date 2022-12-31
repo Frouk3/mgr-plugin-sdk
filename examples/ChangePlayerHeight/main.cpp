@@ -1,5 +1,6 @@
 #include "cGameUIManager.h"
 #include "Pl0000.h"
+#include "shared.h"
 
 void ChangeHeight()
 {
@@ -8,11 +9,11 @@ void ChangeHeight()
     if (!player)
         return;
 
-    if (GetAsyncKeyState(VK_ADD) & 1)
+    if (shared::IsKeyPressed(VK_ADD))
         player->m_vecPosition.y += 5.0f;
-    else if (GetAsyncKeyState(VK_SUBTRACT) & 1)
+    else if (shared::IsKeyPressed(VK_SUBTRACT))
         player->m_vecPosition.y -= 5.0f;
     
-    if ((GetAsyncKeyState(VK_ADD) & 0x8000) != 0 || (GetAsyncKeyState(VK_SUBTRACT) & 0x8000) != 0)
+    if (shared::IsKeyPressed(VK_ADD, true) || shared::IsKeyPressed(VK_SUBTRACT, true))
         player->m_vecVelocity.y = 0.0f;
 }

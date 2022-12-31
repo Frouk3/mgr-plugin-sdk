@@ -1,5 +1,5 @@
 #include "Behavior.h"
-#include "../shared/shared.h"
+#include "shared.h"
 
 void Behavior::Startup() noexcept
 {

@@ -1,5 +1,5 @@
 #include "PhaseManager.h"
-#include "../shared/shared.h"
+#include "shared.h"
 
 PhaseManager& g_PhaseManager = *(PhaseManager*)(shared::base + 0x14B9140);
 
