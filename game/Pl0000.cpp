@@ -66,3 +66,9 @@ void Pl0000::CallEffect(int id, cEspControler *esp) noexcept
     DWORD address = shared::base + 0x7C3470;
     ((void(__thiscall *)(Pl0000*, int, cEspControler *))address)(this, id, esp);
 }
+
+int Pl0000::GetMaxHealth() noexcept
+{
+    DWORD address = shared::base + 0x77C980;
+    return ((int(__thiscall *)(Pl0000 *))address)(this);
+}

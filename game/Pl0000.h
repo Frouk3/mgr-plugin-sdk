@@ -3635,4 +3635,5 @@ public:
   bool IsOnGround() noexcept;
   bool IsInAir() noexcept;
   void CallEffect(int id, cEspControler *esp) noexcept;
+  int GetMaxHealth() noexcept;
 };
