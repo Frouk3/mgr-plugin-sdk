@@ -6,6 +6,8 @@ namespace Hw
     class cHeapVariableBase;
     class cHeapVariable;
     class cTexture;
+    class CameraProj;
+    class cCameraBase;
 }
 
 class Hw::cHeap
@@ -59,4 +61,17 @@ class Hw::cTexture
   int field_10;
   int field_14;
   int field_18;
+};
+
+class Hw::CameraProj
+{
+protected:
+  void *vtbl;
+public:
+
+};
+
+class Hw::cCameraBase
+{
+public:
 };
