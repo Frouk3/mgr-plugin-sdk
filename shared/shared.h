@@ -10,7 +10,7 @@ namespace shared
 		return min + (rand() % (max - min + 1));
 	}
 
-	inline bool IsKeyPressed(int key, bool repeat = false) noexcept
+	inline bool IsKeyPressed(int key, bool repeat = true) noexcept
 	{
 		if (repeat)
 			return (GetAsyncKeyState(key) & 0x8000) != 0;
@@ -32,5 +32,25 @@ namespace shared
 		}
 
 		return false;
+	}
+
+	inline int clamp(int x, int min, int max) noexcept
+	{
+		if (x < min)
+			return min;
+		else if (x > max)
+			return max;
+		
+		return x;
+	}
+
+	inline float clamp(float x, float min, float max) noexcept
+	{
+		if (x < min)
+			return min;
+		else if (x > max)
+			return max;
+
+		return x;
 	}
 }

@@ -21,7 +21,7 @@ public:
   float field_38;
   float field_3C;
   cVec4 m_vecPos;
-  cVec4 m_vecPosition;
+  cVec4 m_vecOffset;
   float field_60;
   float field_64;
   float field_68;

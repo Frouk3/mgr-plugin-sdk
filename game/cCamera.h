@@ -120,7 +120,7 @@ public:
   int field_20C;
   int field_210;
   int field_214;
-  int field_218;
+  float field_218;
   int field_21C;
   int field_220;
   int field_224;
@@ -202,8 +202,8 @@ public:
   int field_354;
   int field_358;
   int field_35C;
-  int field_360;
-  int field_364;
+  float field_360;
+  float field_364;
   int field_368;
   int field_36C;
   int field_370;
