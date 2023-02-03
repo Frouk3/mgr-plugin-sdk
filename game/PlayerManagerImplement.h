@@ -77,4 +77,6 @@ public:
   void PreparePl1500() noexcept;
 };
 
+PlayerManagerImplement *GetPlayerManagerImplement() noexcept;
+
 extern PlayerManagerImplement *g_pPlayerManagerImplement;

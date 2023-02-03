@@ -2,7 +2,7 @@
 #include "shared.h"
 
 cSlowRateManager& g_cSlowRateManager = *(cSlowRateManager*)(shared::base + 0x17E93B0);
-cSlowRateManager* g_pcSlowRateManager = *(cSlowRateManager**)(shared::base + 0x19D9160);
+cSlowRateManager*& g_pcSlowRateManager = *(cSlowRateManager**)(shared::base + 0x19D9160);
 
 void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept
 {

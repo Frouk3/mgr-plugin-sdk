@@ -1,5 +1,10 @@
 #pragma once
 #include <Windows.h>
+#include <stdlib.h>
+
+#define PI 3.14159265359f
+#define DegreeToRadian(x) x * PI / 180
+#define RadianToDegree(x) x * 180 / PI
 
 namespace shared
 {

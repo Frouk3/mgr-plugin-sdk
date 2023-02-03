@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Pl0000.h"
+#include "Pl1400.h"
+#include "Pl1500.h"
+
 class cGameUIManager
 {
 protected:
@@ -43,7 +47,7 @@ public:
   int field_90;
   int field_94;
   void *m_pPlayer;
-  int field_9C;
+  int m_nPlayerEntityHandle;
   float field_A0;
   float field_A4;
   float field_A8;
