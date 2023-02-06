@@ -1,7 +1,7 @@
 #include "shared.h"
 #include "PlayerManagerImplement.h"
 
-PlayerManagerImplement *g_pPlayerManagerImplement = *(PlayerManagerImplement **)(shared::base + 0x17EA100);
+PlayerManagerImplement *&g_pPlayerManagerImplement = *(PlayerManagerImplement **)(shared::base + 0x17EA100);
 
 PlayerManagerImplement::PlayerManagerImplement() noexcept
 {

@@ -79,4 +79,4 @@ public:
 
 PlayerManagerImplement *GetPlayerManagerImplement() noexcept;
 
-extern PlayerManagerImplement *g_pPlayerManagerImplement;
+extern PlayerManagerImplement *&g_pPlayerManagerImplement;
