@@ -1,41 +1,41 @@
 #pragma once
-#include "../shared/shared.h"
+#include "shared.h"
 
 // shared::base + 0x17EA094
-enum GameplayFlags
-{
-  GAME_TGS_MODE = 0x1,
-  GAME_PLAYER_XY_ATTACK_OFF = 0x2,
-  GAME_TUTORIAL_FROM_STORY = 0x4,
-  GAME_b3 = 0x8,
-  GAME_b4 = 0x10,
-  GAME_PLAYER_DISABLE_BLADE_MODE = 0x20,
-  GAME_PLAYER_VISOR_ENABLED = 0x40,
-  GAME_b7 = 0x80,
-  GAME_b8 = 0x100,
-  GAME_b9 = 0x200,
-  GAME_PLAYER_NO_LOCKON_BUTTON = 0x400,
-  GAME_b11 = 0x800,
-  GAME_EM0091_MANIPULATE = 0x1000,
-  GAME_b13 = 0x2000,
-  GameHP1Raiden = 0x4000,
-  GameDepresssionRaiden = 0x8000,
-  GameSoldierMonologue = 0x10000,
-  GameKogekkoPlay = 0x20000,
-  GameWeaponSelect = 0x40000,
-  GameSliderNinjarunMode = 0x80000,
-  GameCodecSubjectivePointView = 0x100000,
-  GameInzangekiCamdir = 0x200000,
-  GAME_INVERSE_CAMERA_X = 0x400000,
-  GAME_INVERSE_CAMERA_Y = 0x800000,
-  GameNoExpAdd = 0x1000000,
-  GameItemNoDrop = 0x2000000,
-  GamePhaseEndUiDisplayOff = 0x4000000,
-  GameResultDisplayOn = 0x8000000,
-  GameBattlecollisionOff = 0x10000000,
-  PlayerNoDiveKill = 0x20000000,
-  PlayerNoMove = 0x40000000,
-  PlayerNoXA = 0x80000000,
-};
+struct GameplayFlags {
+  unsigned int GAME_TGS_MODE : 1;
+  unsigned int GAME_XY_ATTACK_OFF : 1;
+  unsigned int GAME_TUTORIAL_FROM_STORY : 1;
+  unsigned int b04 : 1;
+  unsigned int b05 : 1;
+  unsigned int GAME_DISABLE_ZANGEKI : 1;
+  unsigned int GAME_PLAYER_VISOR_ENABLED : 1;
+  unsigned int GAME_RUNNING_X_ATTACK_OFF : 1;
 
-unsigned int &g_GameplayFlags = *(unsigned int*)(shared::base + 0x17EA094);
+  unsigned int b09 : 1;
+  unsigned int b10 : 1;
+  unsigned int GAME_PLAYER_NO_LOCKON_BUTTON : 1;
+  unsigned int b12 : 1;
+  unsigned int GAME_EM0091_MANUPILATE : 1;
+  unsigned int b14 : 1;
+  unsigned int GAME_HP1_RAIDEN : 1;
+  unsigned int GAME_DEPRESSSION_RAIDEN : 1;
+
+  unsigned int GAME_SOLDIER_MONOLOGUE : 1;
+  unsigned int GAME_KOGEKKO_PLAY : 1;
+  unsigned int GAME_WEAPON_SELECT : 1;
+  unsigned int GAME_SLIDER_NINJARUN_MODE : 1;
+  unsigned int GAME_CODEC_SUBJECTIVE_POINT_VIEW : 1;
+  unsigned int GAME_INZANGEKI_CAMDIR : 1;
+  unsigned int GAME_CAMERA_INVERSE_X : 1;
+  unsigned int GAME_CAMERA_INVERSE_Y : 1;
+
+  unsigned int GAME_NO_EXP_ADD : 1;
+  unsigned int GAME_ITEM_NO_DROP : 1;
+  unsigned int GAME_PHASE_END_UI_DISP_OFF : 1;
+  unsigned int GAME_RESULT_DISP_ON : 1;
+  unsigned int GAME_BATTLECOLLISION_OFF : 1;
+  unsigned int GAME_PLAYER_NO_DIVEKILL : 1;
+  unsigned int GAME_PLAYER_NO_MOVE : 1;
+  unsigned int GAME_PLAYER_NO_XA : 1;
+} &g_GameplayFlags = *(GameplayFlags*)(shared::base + 0x17EA094);

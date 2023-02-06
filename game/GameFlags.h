@@ -1,41 +1,41 @@
 #pragma once
-#include "../shared/shared.h"
+#include "shared.h"
 
 // shared::base + 0x17EA090
-enum GameFlags
-{
-  QTEUiDisable = 0x1,
-  MugenZangeki = 0x2,
-  GameOSBootMode = 0x4,
-  PlayerOneShotOff = 0x8,
-  PlayerOneHand = 0x10,
-  RipperModeOff = 0x20,
-  NaviUiOn = 0x40,
-  PlayerNoOverheat = 0x80,
-  PlayerNoDie = 0x100,
-  SystemMapAutoloadOff = 0x200,
-  PlayerJumpOff = 0x400,
-  PlayerDatsuOff = 0x800,
-  PlayerGeckoTrail = 0x1000,
-  PlayerGuardOff = 0x2000,
-  NinjaRunOff = 0x4000,
-  ZangekiOff = 0x8000,
-  BPush = 0x10000,
-  ActiveYPound = 0x20000,
-  L1AttackOff = 0x40000,
-  IgnoreParkourSliding = 0x80000,
-  IgnoreParkourWall = 0x100000,
-  IgnoreParkourDownwardCliff = 0x200000,
-  IgnoreParkourLowover = 0x400000,
-  PlayerAttackOff = 0x800000,
-  WalkOnly = 0x1000000,
-  MissileNinjaRunMode = 0x2000000,
-  PlayerBattleMotionEnd = 0x4000000,
-  PlayerBattleEnd = 0x8000000,
-  AutoHPUp = 0x10000000,
-  ZangekiMode = 0x20000000,
-  RequireCommunication = 0x40000000,
-  OldRaidenBody = 0x80000000,
-};
+struct GameFlags {
+  unsigned int GAME_QTE_UI_DISABLE : 1;
+  unsigned int GAME_MUGEN_ZANGEKI : 1;
+  unsigned int GAME_OS_BOOT_MODE : 1;
+  unsigned int GAME_PLAYER_ONESHOT_OFF : 1;
+  unsigned int GAME_PLAYER_ONEHAND : 1;
+  unsigned int GAME_RIPPERMODE_OFF : 1;
+  unsigned int GAME_NAVI_UI_ON : 1;
+  unsigned int GAME_PLAYER_NO_OVERHEAT : 1;
 
-unsigned int &g_GameFlags = *(unsigned int *)(shared::base + 0x17EA090);
+  unsigned int GAME_PLAYER_NO_DIE : 1;
+  unsigned int GAME_SYSTEM_MAPAUTOLOAD_OFF : 1;
+  unsigned int GAME_PLAYER_JUMP_OFF : 1;
+  unsigned int GAME_PLAYER_DATSU_OFF : 1;
+  unsigned int GAME_PLAYER_GECKO_TRAIL : 1;
+  unsigned int GAME_PLAYER_GUARD_OFF : 1;
+  unsigned int GAME_PLAYER_NINJYARUN_OFF : 1;
+  unsigned int GAME_PLAYER_ZANGEKI_OFF : 1;
+
+  unsigned int GAME_ACTIVE_B_PUSH : 1;
+  unsigned int GAME_ACTIVE_Y_POUND : 1;
+  unsigned int GAME_L1_ATTACK_OFF : 1;
+  unsigned int GAME_IGNORE_PARKOUR_SLIDING : 1;
+  unsigned int GAME_IGNORE_PARKOUR_WALL : 1;
+  unsigned int GAME_IGNORE_PARKOUR_DOWNWARDCLIFF : 1;
+  unsigned int GAME_IGNORE_PARKOUR_LOWOVER : 1;
+  unsigned int GAME_PLAYER_ATTACK_OFF : 1;
+
+  unsigned int GAME_PLAYER_WALK_ONLY : 1;
+  unsigned int GAME_MISSILE_NINJYARUN_MODE : 1;
+  unsigned int GAME_PLAYERBATTLEMOTIONEND_DEMO : 1;
+  unsigned int GAME_PLAYERBATTLEEND_DEMO : 1;
+  unsigned int GAME_AUTO_HPUP : 1;
+  unsigned int GAME_ZANGEKIMODE : 1;
+  unsigned int GAME_RECVCOMMU : 1;
+  unsigned int GAME_FIRST_ENCOUNTER : 1;
+} &g_GameFlags = *(GameFlags *)(shared::base + 0x17EA090);

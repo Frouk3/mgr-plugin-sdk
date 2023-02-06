@@ -1,5 +1,5 @@
 #pragma once
-#include "../shared/shared.h"
+#include "shared.h"
 
 // shared::base + 0x17E9F9C
 enum GameMenuStatus
