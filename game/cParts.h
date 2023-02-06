@@ -32,8 +32,26 @@ public:
   float field_88;
   int field_8C;
   cVec4 m_vecRotation;
-  short field_A0;
-  short field_A2;
+  short m_nPartIndex;
+  struct {
+    unsigned short b01 : 1;
+    unsigned short bFreezeModelRotation : 1;
+    unsigned short bFreezePosition : 1;
+    unsigned short bFreezeSize : 1;
+    unsigned short b05 : 1;
+    unsigned short b06 : 1;
+    unsigned short b07 : 1;
+    unsigned short b08 : 1;
+
+    unsigned short b09 : 1;
+    unsigned short b10 : 1;
+    unsigned short b11 : 1;
+    unsigned short b12 : 1;
+    unsigned short b13 : 1;
+    unsigned short b14 : 1;
+    unsigned short bFreezeRotation : 1; // same as bFreezeModelRotation
+    unsigned short b16;
+  } m_nPartsFlag;
   int field_A4;
   int field_A8;
   int field_AC;
