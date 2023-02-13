@@ -10,12 +10,12 @@ namespace shared
 {
 	inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
-	inline unsigned int random(unsigned int min, unsigned int max) noexcept
+	inline unsigned int random(unsigned int min, unsigned int max)
 	{
 		return min + (rand() % (max - min + 1));
 	}
 
-	inline bool IsKeyPressed(int key, bool repeat = true) noexcept
+	inline bool IsKeyPressed(int key, bool repeat = true)
 	{
 		if (repeat)
 			return (GetAsyncKeyState(key) & 0x8000) != 0;
@@ -39,7 +39,7 @@ namespace shared
 		return false;
 	}
 
-	inline int clamp(int x, int min, int max) noexcept
+	inline int clamp(int x, int min, int max)
 	{
 		if (x < min)
 			return min;
@@ -49,7 +49,7 @@ namespace shared
 		return x;
 	}
 
-	inline float clamp(float x, float min, float max) noexcept
+	inline float clamp(float x, float min, float max)
 	{
 		if (x < min)
 			return min;

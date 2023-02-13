@@ -2,7 +2,7 @@
 #include "shared.h"
 
 // shared::base + 0x17EA094
-struct GameplayFlags {
+static struct GameplayFlags {
   unsigned int GAME_TGS_MODE : 1;
   unsigned int GAME_XY_ATTACK_OFF : 1;
   unsigned int GAME_TUTORIAL_FROM_STORY : 1;

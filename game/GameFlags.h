@@ -2,7 +2,7 @@
 #include "shared.h"
 
 // shared::base + 0x17EA090
-struct GameFlags {
+static struct GameFlags {
   unsigned int GAME_QTE_UI_DISABLE : 1;
   unsigned int GAME_MUGEN_ZANGEKI : 1;
   unsigned int GAME_OS_BOOT_MODE : 1;
