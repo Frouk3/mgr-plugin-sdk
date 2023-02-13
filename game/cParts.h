@@ -50,7 +50,7 @@ public:
     unsigned short b13 : 1;
     unsigned short b14 : 1;
     unsigned short bFreezeRotation : 1; // same as bFreezeModelRotation
-    unsigned short b16;
+    unsigned short b16 : 1;
   } m_nPartsFlag;
   int field_A4;
   int field_A8;
