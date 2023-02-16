@@ -16,7 +16,7 @@ Pl0000::~Pl0000() noexcept
 void Pl0000::SetSlowMo(float Duration, float SlowRate) noexcept
 {
     DWORD address = shared::base + 0x77AB80;
-    ((void (__thiscall *)(Pl0000 *))address)(this);
+    ((void (__thiscall *)(Pl0000 *, float, float))address)(this, Duration, SlowRate);
 }
 
 void Pl0000::EnableRipperMode() noexcept
@@ -28,7 +28,7 @@ void Pl0000::EnableRipperMode() noexcept
 void Pl0000::SetFuelContainer(float FuelContainer) noexcept
 {
     DWORD address = shared::base + 0x7C3100;
-    ((void (__thiscall *)(Pl0000 *))address)(this);
+    ((void (__thiscall *)(Pl0000 *, float))address)(this, FuelContainer);
 }
 
 void Pl0000::DisableRipperMode(bool bUseFade) noexcept
