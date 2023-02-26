@@ -4,25 +4,22 @@
 cSlowRateManager& g_cSlowRateManager = *(cSlowRateManager*)(shared::base + 0x17E93B0);
 cSlowRateManager*& g_pcSlowRateManager = *(cSlowRateManager**)(shared::base + 0x19D9160);
 
-void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept
+void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate)
 {
-	DWORD address = shared::base + 0x532020;
-	((void(__cdecl*)(int, float))address)(SlowRateType, SlowRate);
+	((void(__cdecl*)(int, float))(shared::base + 0x532020))(SlowRateType, SlowRate);
 }
 
-cSlowRateManager* GetcSlowRateManager() noexcept
+cSlowRateManager* GetcSlowRateManager()
 {
-	DWORD address = shared::base + 0xA03960;
-	return ((cSlowRateManager *(__cdecl *)())address)();
+	return ((cSlowRateManager *(__cdecl *)())(shared::base + 0xA03960))();
 }
 
-void cSlowRateManager::SetSlowRate(int SlowRateType, float SlowRate) noexcept
+void cSlowRateManager::SetSlowRate(int SlowRateType, float SlowRate)
 {
-	DWORD address = shared::base + 0xA03A70;
-	((void(__thiscall*)(cSlowRateManager*, int, float))address)(this, SlowRateType, SlowRate);
+	((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03A70))(this, SlowRateType, SlowRate);
 }
 
-float cSlowRateManager::GetSlowRate(int SlowRateType) noexcept
+float cSlowRateManager::GetSlowRate(int SlowRateType)
 {
 	if (SlowRateType < 4)
 		return this->m_fSlowRate[SlowRateType].m_fRate;
@@ -30,32 +27,27 @@ float cSlowRateManager::GetSlowRate(int SlowRateType) noexcept
 		return 1.0f;
 }
 
-void cSlowRateManager::ResetSlowRate() noexcept
+void cSlowRateManager::ResetSlowRate()
 {
-	DWORD address = shared::base + 0xA03B10;
-	((void(__thiscall*)(cSlowRateManager*))address)(this);
+	((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA03B10))(this);
 }
 
-void cSlowRateManager::Cleanup() noexcept
+void cSlowRateManager::Cleanup()
 {
-	DWORD address = shared::base + 0xA08740;
-	((void(__thiscall*)(cSlowRateManager*))address)(this);
+	((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08740))(this);
 }
 
-void cSlowRateManager_Reset() noexcept
+void cSlowRateManager_Reset()
 {
-	DWORD address = shared::base + 0x11EDC20;
-	((void(__cdecl*)())address)();
+	((void(__cdecl*)())(shared::base + 0x11EDC20))();
 }
 
-cSlowRateUnit *cSlowRateManager::AllocUnit() noexcept
+cSlowRateUnit *cSlowRateManager::AllocUnit()
 {
-	DWORD address = shared::base + 0xA06230;
-	return ((cSlowRateUnit *(__thiscall *)(cSlowRateManager *))address)(this);
+	return ((cSlowRateUnit *(__thiscall *)(cSlowRateManager *))(shared::base + 0xA06230))(this);
 }
 
-cSlowRateManager::cSlowRateManager() noexcept
+cSlowRateManager::cSlowRateManager()
 {
-	DWORD address = shared::base + 0xA08FB0;
-	((void (__thiscall *)(cSlowRateManager *))address)(this);
+	((void (__thiscall *)(cSlowRateManager *))(shared::base + 0xA08FB0))(this);
 }

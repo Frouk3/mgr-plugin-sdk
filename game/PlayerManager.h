@@ -2,8 +2,7 @@
 
 class PlayerManager
 {
-protected:
-    void *vtbl;
 public:
 
+    virtual ~PlayerManager() {};
 };

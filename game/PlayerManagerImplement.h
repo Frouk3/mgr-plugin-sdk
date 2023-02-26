@@ -66,17 +66,17 @@ public:
   int *field_F8;
   int *field_FC;
   
-  PlayerManagerImplement() noexcept;
-  ~PlayerManagerImplement() noexcept;
+  PlayerManagerImplement();
+  ~PlayerManagerImplement();
 
-  void SetSlowRate(float SlowRate, int a3, int a4) noexcept;
-  cVec4 *GetPlayerPosition() noexcept;
-  void PreparePlayer() noexcept;
-  void PreparePl0000() noexcept;
-  void PreparePl1400() noexcept;
-  void PreparePl1500() noexcept;
+  void SetSlowRate(float SlowRate, int a3, int a4);
+  cVec4 *GetPlayerPosition();
+  void PreparePlayer();
+  void PreparePl0000();
+  void PreparePl1400();
+  void PreparePl1500();
 };
 
-PlayerManagerImplement *GetPlayerManagerImplement() noexcept;
+PlayerManagerImplement *GetPlayerManagerImplement();
 
 extern PlayerManagerImplement *&g_pPlayerManagerImplement;

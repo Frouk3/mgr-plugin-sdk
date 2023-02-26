@@ -4,7 +4,6 @@
 class cMeshBase
 {
 public:
-  void *__vftable;
   int field_4;
   int field_8;
   int field_C;
@@ -20,4 +19,6 @@ public:
   int field_64;
   int field_68;
   int field_6C;
+
+  virtual ~cMeshBase() {};
 };

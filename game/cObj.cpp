@@ -1,26 +1,22 @@
 #include "cObj.h"
 #include "shared.h"
 
-cObj::cObj() noexcept
+cObj::cObj()
 {
-    DWORD address = shared::base + 0x5FD150;
-    ((void (__thiscall *)(cObj *))address)(this);
+    ((void (__thiscall *)(cObj *))(shared::base + 0x5FD150))(this);
 }
 
-cObj::~cObj() noexcept
+cObj::~cObj()
 {
-    DWORD address = shared::base + 0x5F88E0;
-    ((void (__thiscall *)(cObj *))address)(this);
+    ((void (__thiscall *)(cObj *))(shared::base + 0x5F88E0))(this);
 }
 
-void cObj::EnableRender() noexcept
+void cObj::EnableRender()
 {
-    DWORD address = shared::base + 0x5FABA0;
-    ((void (__thiscall *)(cObj *))address)(this);
+    ((void (__thiscall *)(cObj *))(shared::base + 0x5FABA0))(this);
 }
 
-void cObj::DisableRender() noexcept
+void cObj::DisableRender()
 {
-    DWORD address = shared::base + 0x5FABA0;
-    ((void (__thiscall *)(cObj *))address)(this);
+    ((void (__thiscall *)(cObj *))(shared::base + 0x5FABA0))(this);
 }

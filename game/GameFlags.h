@@ -2,6 +2,7 @@
 #include "shared.h"
 
 // shared::base + 0x17EA090
+// Can be long???
 static struct GameFlags {
   unsigned int GAME_QTE_UI_DISABLE : 1;
   unsigned int GAME_MUGEN_ZANGEKI : 1;

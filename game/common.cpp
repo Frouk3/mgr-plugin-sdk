@@ -3,6 +3,5 @@
 
 void Core_PlaySound(const char* se, int unused) noexcept
 {
-	DWORD address = shared::base + 0xA5E050;
-	((void(__cdecl*)(const char*, int))address)(se, unused);
+	((void(__cdecl*)(const char*, int))(shared::base + 0xA5E050))(se, unused);
 }

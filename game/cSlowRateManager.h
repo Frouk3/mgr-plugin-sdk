@@ -4,8 +4,6 @@
 
 class cSlowRateManager
 {
-protected:
-  void *vtbl;
 public:
   int field_4;
   int field_8;
@@ -34,17 +32,18 @@ public:
   float field_8C;
   float field_90;
 
-  cSlowRateManager() noexcept;
-  void SetSlowRate(int SlowRateType, float SlowRate) noexcept;
-  float GetSlowRate(int SlowRateType) noexcept;
-  void ResetSlowRate() noexcept;
-  void Cleanup() noexcept;
-  cSlowRateUnit *AllocUnit() noexcept;
+  virtual ~cSlowRateManager() {};
+  cSlowRateManager();
+  void SetSlowRate(int SlowRateType, float SlowRate);
+  float GetSlowRate(int SlowRateType);
+  void ResetSlowRate();
+  void Cleanup();
+  cSlowRateUnit *AllocUnit();
 };
 
-void cSlowRateManager_Reset() noexcept;
-void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate) noexcept;
-cSlowRateManager* GetcSlowRateManager() noexcept;
+void cSlowRateManager_Reset();
+void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate);
+cSlowRateManager* GetcSlowRateManager();
 
 extern cSlowRateManager& g_cSlowRateManager;
 extern cSlowRateManager*& g_pcSlowRateManager;

@@ -42,8 +42,8 @@ public:
   int field_528;
   int field_52C;
 
-  cObj() noexcept;
-  ~cObj() noexcept;
-  void EnableRender() noexcept;
-  void DisableRender() noexcept;
+  cObj();
+  ~cObj();
+  void EnableRender();
+  void DisableRender();
 };

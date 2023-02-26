@@ -3,56 +3,47 @@
 
 PlayerManagerImplement *&g_pPlayerManagerImplement = *(PlayerManagerImplement **)(shared::base + 0x17EA100);
 
-PlayerManagerImplement::PlayerManagerImplement() noexcept
+PlayerManagerImplement::PlayerManagerImplement()
 {
-    DWORD address = shared::base + 0x856D60;
-    ((void (__thiscall *)(PlayerManagerImplement *))address)(this);
+    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x856D60))(this);
 }
 
-PlayerManagerImplement::~PlayerManagerImplement() noexcept
+PlayerManagerImplement::~PlayerManagerImplement()
 {
-    DWORD address = shared::base + 0x84CEB0;
-    ((void (__thiscall *)(PlayerManagerImplement *))address)(this);
+    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x84CEB0))(this);
 }
 
-void PlayerManagerImplement::SetSlowRate(float SlowRate, int a3, int a4) noexcept
+void PlayerManagerImplement::SetSlowRate(float SlowRate, int a3, int a4)
 {
-    DWORD address = shared::base + 0x84CE30;
-    ((void (__thiscall *)(PlayerManagerImplement *, float, int, int))address)(this, SlowRate, a3, a4);
+    ((void (__thiscall *)(PlayerManagerImplement *, float, int, int))(shared::base + 0x84CE30))(this, SlowRate, a3, a4);
 }
 
-cVec4 *PlayerManagerImplement::GetPlayerPosition() noexcept
+cVec4 *PlayerManagerImplement::GetPlayerPosition()
 {
-    DWORD address = shared::base + 0x84CDF0;
-    return ((cVec4 *(__thiscall *)(PlayerManagerImplement *))address)(this);
+    return ((cVec4 *(__thiscall *)(PlayerManagerImplement *))(shared::base + 0x84CDF0))(this);
 }
 
-void PlayerManagerImplement::PreparePlayer() noexcept
+void PlayerManagerImplement::PreparePlayer()
 {
-    DWORD address = shared::base + 0x841040;
-    ((void (__thiscall *)(PlayerManagerImplement *))address)(this);
+    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x841040))(this);
 }
 
-void PlayerManagerImplement::PreparePl0000() noexcept
+void PlayerManagerImplement::PreparePl0000()
 {
-    DWORD address = shared::base + 0x840850;
-    ((void (__thiscall *)(PlayerManagerImplement *))address)(this);
+    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x840850))(this);
 }
 
-void PlayerManagerImplement::PreparePl1400() noexcept
+void PlayerManagerImplement::PreparePl1400()
 {
-    DWORD address = shared::base + 0x840B00;
-    ((void (__thiscall *)(PlayerManagerImplement *))address)(this);
+    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x840B00))(this);
 }
 
-void PlayerManagerImplement::PreparePl1500() noexcept
+void PlayerManagerImplement::PreparePl1500()
 {
-    DWORD address = shared::base + 0x840DA0;
-    ((void (__thiscall *)(PlayerManagerImplement *))address)(this);
+    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x840DA0))(this);
 }
 
-PlayerManagerImplement *GetPlayerManagerImplement() noexcept
+PlayerManagerImplement *GetPlayerManagerImplement()
 {
-    DWORD address = shared::base + 0x813920;
-    return ((PlayerManagerImplement *(__cdecl *)())address)();
+    return ((PlayerManagerImplement *(__cdecl *)())(shared::base + 0x813920))();
 }
