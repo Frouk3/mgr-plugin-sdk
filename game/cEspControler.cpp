@@ -1,8 +1,7 @@
 #include "shared.h"
 #include "cEspControler.h"
 
-unsigned int cEspControler::SetEffectDuration(float duration, float a3) noexcept
+unsigned int cEspControler::SetEffectDuration(float duration, float a3)
 {
-	DWORD address = shared::base + 0xAAA6E0;
-	return ((unsigned int(__thiscall*)(cEspControler*, float, float))address)(this, duration, a3);
+	return ((unsigned int(__thiscall*)(cEspControler*, float, float))(shared::base + 0xAAA6E0))(this, duration, a3);
 }

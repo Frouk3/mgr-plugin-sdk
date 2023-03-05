@@ -8,11 +8,6 @@ PlayerManagerImplement::PlayerManagerImplement()
     ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x856D60))(this);
 }
 
-PlayerManagerImplement::~PlayerManagerImplement()
-{
-    ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x84CEB0))(this);
-}
-
 void PlayerManagerImplement::SetSlowRate(float SlowRate, int a3, int a4)
 {
     ((void (__thiscall *)(PlayerManagerImplement *, float, int, int))(shared::base + 0x84CE30))(this, SlowRate, a3, a4);

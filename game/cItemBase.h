@@ -2,8 +2,6 @@
 
 class cItemBase
 {
-protected:
-  void *vtbl;
 public:
   int m_nFlags;
   int field_8;
@@ -25,4 +23,6 @@ public:
   int field_48;
   int field_4C;
   int field_50;
+
+  virtual ~cItemBase() {};
 };

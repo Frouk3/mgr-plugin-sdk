@@ -10,8 +10,3 @@ Behavior::Behavior()
 {
     ((void(__thiscall *)(Behavior *))(shared::base + 0x6A3540))(this);
 }
-
-Behavior::~Behavior()
-{
-    ((void(__thiscall *)(Behavior *))(shared::base + 0x6A3690))(this);
-}

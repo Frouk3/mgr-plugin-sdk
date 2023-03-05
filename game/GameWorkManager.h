@@ -2,8 +2,6 @@
 
 class GameWorkManager
 {
-protected:
-  void *vtbl /*VFT*/;
 public:
   int field_4;
   int field_8;
@@ -72,4 +70,6 @@ public:
   int field_104;
   int field_108;
   int field_10C;
+
+  virtual ~GameWorkManager() {};
 };

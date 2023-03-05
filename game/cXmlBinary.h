@@ -12,4 +12,6 @@ public:
     int field_14;
     int field_18;
     int field_1C;
+
+    virtual ~cXmlBinary() override {};
 };

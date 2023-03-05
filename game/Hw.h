@@ -12,8 +12,6 @@ namespace Hw
 
 class Hw::cHeap
 {
-protected:
-    void *vtbl;
 public:
   int field_4;
   int field_8;
@@ -38,40 +36,48 @@ public:
   int field_54;
   int field_58;
   int field_5C;
+
+  virtual ~cHeap() {};
 };
 
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
 
+  virtual ~cHeapVariableBase() override {};
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
+  virtual ~cHeapVariable() override {};
 };
 
 class Hw::cTexture
 {
-  void *vtbl;
+public:
   int field_4;
   int field_8;
   int field_C;
   int field_10;
   int field_14;
   int field_18;
+
+  virtual ~cTexture() {};
 };
 
 class Hw::CameraProj
 {
-protected:
-  void *vtbl;
 public:
 
+
+  virtual ~CameraProj() {};
 };
 
 class Hw::cCameraBase
 {
 public:
+
+  virtual ~cCameraBase() {};
 };

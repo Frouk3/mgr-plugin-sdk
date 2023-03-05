@@ -8,5 +8,6 @@ namespace Animation
 class Animation::EspCtrlCustom
 {
 public:
-  void *__vftable /*VFT*/;
+
+  virtual ~EspCtrlCustom() {};
 };

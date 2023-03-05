@@ -5,4 +5,6 @@ class PlBaseDLC : public Pl0000
 {
 public:
     int field_5400;
+
+    virtual ~PlBaseDLC() override {};
 };

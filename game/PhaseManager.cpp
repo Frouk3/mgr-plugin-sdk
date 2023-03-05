@@ -3,74 +3,62 @@
 
 PhaseManager& g_PhaseManager = *(PhaseManager*)(shared::base + 0x14B9140);
 
-int PhaseManager::GetCurrentPhase() noexcept
+int PhaseManager::GetCurrentPhase()
 {
-    DWORD address = shared::base + 0x532720;
-    return ((int (__cdecl *)())address)();
+    return ((int (__cdecl *)())(shared::base + 0x532720))();
 }
 
-int PhaseManager::CreateReadRoomList(int a2, int a3, int a4) noexcept
+int PhaseManager::CreateReadRoomList(int a2, int a3, int a4)
 {
-    DWORD address = shared::base + 0x945560;
-    return ((int (__thiscall *)(PhaseManager *, int, int, int))address)(this, a2, a3, a4);
+    return ((int (__thiscall *)(PhaseManager *, int, int, int))(shared::base + 0x945560))(this, a2, a3, a4);
 }
 
-bool PhaseManager::IsCurrentPhase(const char* phase) noexcept
+bool PhaseManager::IsCurrentPhase(const char* phase)
 {
-    DWORD address = shared::base + 0x945560;
-    return ((bool (__thiscall *)(PhaseManager *, const char *))address)(this, phase);
+    return ((bool (__thiscall *)(PhaseManager *, const char *))(shared::base + 0x945560))(this, phase);
 }
 
-bool PhaseManager::IsDLCPhase() noexcept
+bool PhaseManager::IsDLCPhase()
 {
-    DWORD address = shared::base + 0x9466F0;
-    return ((bool (__thiscall *)(PhaseManager *))address)(this);
+    return ((bool (__thiscall *)(PhaseManager *))(shared::base + 0x9466F0))(this);
 }
 
-bool PhaseManager::IsSamDLC() noexcept
+bool PhaseManager::IsSamDLC()
 {
-    DWORD address = shared::base + 0x946780;
-    return ((bool (__thiscall *)(PhaseManager *))address)(this);
+    return ((bool (__thiscall *)(PhaseManager *))(shared::base + 0x946780))(this);
 }
 
-bool PhaseManager::IsWolfDLC() noexcept
+bool PhaseManager::IsWolfDLC()
 {
-    DWORD address = shared::base + 0x9467A0;
-    return ((bool (__thiscall *)(PhaseManager *))address)(this);
+    return ((bool (__thiscall *)(PhaseManager *))(shared::base + 0x9467A0))(this);
 }
 
-int PhaseManager::SetDefaultData() noexcept
+int PhaseManager::SetDefaultData()
 {
-    DWORD address = shared::base + 0x94E890;
-    return ((int (__thiscall *)(PhaseManager *))address)(this);
+    return ((int (__thiscall *)(PhaseManager *))(shared::base + 0x94E890))(this);
 }
 
-bool PhaseManager::IsPassSubPhase(int a2, bool a3, const char *debugLog) noexcept
+bool PhaseManager::IsPassSubPhase(int a2, bool a3, const char *debugLog)
 {
-    DWORD address = shared::base + 0x94F0B0;
-    return ((bool (__thiscall *)(PhaseManager *, int, bool , const char*))address)(this, a2, a3, debugLog);
+    return ((bool (__thiscall *)(PhaseManager *, int, bool , const char*))(shared::base + 0x94F0B0))(this, a2, a3, debugLog);
 }
 
-void PhaseManager::Startup() noexcept
+void PhaseManager::Startup()
 {
-    DWORD address = shared::base + 0x958370;
-    ((void (__thiscall *)(PhaseManager *))address)(this);
+    ((void (__thiscall *)(PhaseManager *))(shared::base + 0x958370))(this);
 }
 
-bool PhaseManager::SetSubPhaseData(const char* phase) noexcept
+bool PhaseManager::SetSubPhaseData(const char* phase)
 {
-    DWORD address = shared::base + 0x958D70;
-    return ((bool (__thiscall *)(PhaseManager *, const char *))address)(this, phase);
+    return ((bool (__thiscall *)(PhaseManager *, const char *))(shared::base + 0x958D70))(this, phase);
 }
 
-bool PhaseManager::SetPhaseData(int a2) noexcept
+bool PhaseManager::SetPhaseData(int a2)
 {
-    DWORD address = shared::base + 0x95ED60;
-    return ((bool (__thiscall *)(PhaseManager*, int))address)(this, a2);
+    return ((bool (__thiscall *)(PhaseManager*, int))(shared::base + 0x95ED60))(this, a2);
 }
 
-void PhaseManager::GameOverEvent(int a2) noexcept
+void PhaseManager::GameOverEvent(int a2)
 {
-    DWORD address = shared::base + 0x9664E0;
-    ((void (__thiscall *)(PhaseManager *, int))address)(this, a2);
+    ((void (__thiscall *)(PhaseManager *, int))(shared::base + 0x9664E0))(this, a2);
 }

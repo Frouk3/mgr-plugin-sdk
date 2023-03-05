@@ -3,5 +3,6 @@
 class BattleParameter
 {
 public:
-  void *__vftable;
+
+  virtual ~BattleParameter() {};
 };

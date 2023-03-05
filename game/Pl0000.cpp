@@ -1,74 +1,57 @@
 #include "shared.h"
 #include "Pl0000.h"
 
-Pl0000::Pl0000() noexcept
+Pl0000::Pl0000()
 {
-    DWORD address = shared::base + 0x6C0310;
-    ((void (__thiscall *)(Pl0000 *))address)(this);
+    ((void (__thiscall *)(Pl0000 *))(shared::base + 0x6C0310))(this);
 }
 
-Pl0000::~Pl0000() noexcept
+void Pl0000::SetSlowMo(float Duration, float SlowRate)
 {
-    DWORD address = shared::base + 0x6C13C0;
-    ((void (__thiscall *)(Pl0000 *))address)(this);
+    ((void (__thiscall *)(Pl0000 *, float, float))(shared::base + 0x77AB80))(this, Duration, SlowRate);
 }
 
-void Pl0000::SetSlowMo(float Duration, float SlowRate) noexcept
+void Pl0000::EnableRipperMode()
 {
-    DWORD address = shared::base + 0x77AB80;
-    ((void (__thiscall *)(Pl0000 *, float, float))address)(this, Duration, SlowRate);
+    ((void (__thiscall *)(Pl0000 *))(shared::base + 0x785190))(this);
 }
 
-void Pl0000::EnableRipperMode() noexcept
+void Pl0000::SetFuelContainer(float FuelContainer)
 {
-    DWORD address = shared::base + 0x785190;
-    ((void (__thiscall *)(Pl0000 *))address)(this);
+    ((void (__thiscall *)(Pl0000 *, float))(shared::base + 0x7C3100))(this, FuelContainer);
 }
 
-void Pl0000::SetFuelContainer(float FuelContainer) noexcept
+void Pl0000::DisableRipperMode(bool bUseFade)
 {
-    DWORD address = shared::base + 0x7C3100;
-    ((void (__thiscall *)(Pl0000 *, float))address)(this, FuelContainer);
+    ((void (__thiscall *)(Pl0000 *, bool))(shared::base + 0x7D9590))(this, bUseFade);
 }
 
-void Pl0000::DisableRipperMode(bool bUseFade) noexcept
+float Pl0000::GetMaxFuelContainer()
 {
-    DWORD address = shared::base + 0x7D9590;
-    ((void (__thiscall *)(Pl0000 *, bool))address)(this, bUseFade);
+    return ((float (__thiscall *)(Pl0000 *))(shared::base + 0x7DA020))(this);
 }
 
-float Pl0000::GetMaxFuelContainer() noexcept
+bool Pl0000::IsParrying()
 {
-    DWORD address = shared::base + 0x7DA020;
-    return ((float (__thiscall *)(Pl0000 *))address)(this);
+    return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x6C0B30))(this);
 }
 
-bool Pl0000::IsParrying() noexcept
+bool Pl0000::IsOnGround()
 {
-    DWORD address = shared::base + 0x6C0B30;
-    return ((bool (__thiscall *)(Pl0000 *))address)(this);
+    return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x6C0BB0))(this);
 }
 
-bool Pl0000::IsOnGround() noexcept
+bool Pl0000::IsInAir()
 {
-    DWORD address = shared::base + 0x6C0BB0;
-    return ((bool (__thiscall *)(Pl0000 *))address)(this);
+    return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x77C730))(this);
 }
 
-bool Pl0000::IsInAir() noexcept
+void Pl0000::CallEffect(int id, cEspControler *esp)
 {
-    DWORD address = shared::base + 0x77C730;
-    return ((bool (__thiscall *)(Pl0000 *))address)(this);
+    ((void(__thiscall *)(Pl0000*, int, cEspControler *))(shared::base + 0x7C3470))(this, id, esp);
 }
 
-void Pl0000::CallEffect(int id, cEspControler *esp) noexcept
+int Pl0000::GetMaxHealth()
 {
-    DWORD address = shared::base + 0x7C3470;
-    ((void(__thiscall *)(Pl0000*, int, cEspControler *))address)(this, id, esp);
-}
-
-int Pl0000::GetMaxHealth() noexcept
-{
-    DWORD address = shared::base + 0x77C980;
-    return ((int(__thiscall *)(Pl0000 *))address)(this);
+    return ((int(__thiscall *)(Pl0000 *))(shared::base + 0x77C980))(this);
 }

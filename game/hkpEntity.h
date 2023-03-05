@@ -105,4 +105,6 @@ public:
   int field_20C;
   int field_210;
   int field_214;
+
+  virtual ~hkpEntity() override {};
 };

@@ -43,7 +43,7 @@ public:
   int field_52C;
 
   cObj();
-  ~cObj();
+  virtual ~cObj() override {};
   void EnableRender();
   void DisableRender();
 };

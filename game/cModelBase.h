@@ -185,4 +185,6 @@ public:
   int field_364;
   int field_368;
   int field_36C;
+
+  virtual ~cModelBase() override {};
 };

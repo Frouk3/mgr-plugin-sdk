@@ -37,8 +37,8 @@ struct EntityHandle
   int field_78;
   int field_7C;
 
-  void *GetItemInstance() noexcept;
-  void UpdateSlowRateUnit() noexcept;
-  float GetCalculatedSlowRate() noexcept;
-  void SetEntitySlowRateType(int SlowRateType) noexcept;
+  void *GetItemInstance();
+  void UpdateSlowRateUnit();
+  float GetCalculatedSlowRate();
+  void SetEntitySlowRateType(int SlowRateType);
 };

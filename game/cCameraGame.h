@@ -160,6 +160,8 @@ public:
   int field_948;
   int field_94C;
   int field_950;
+
+  virtual ~cCameraGame() override {};
 };
 
 extern cCameraGame& g_cCameraGame;

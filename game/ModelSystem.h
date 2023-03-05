@@ -2,8 +2,7 @@
 
 class ModelSystem
 {
-protected:
-    void *vtbl;
 public:
 
+    virtual ~ModelSystem() {};
 };

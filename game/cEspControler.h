@@ -3,7 +3,6 @@
 class cEspControler
 {
 public:
-  void *vtbl /*VFT*/;
   int field_4;
   int field_8;
   int field_C;
@@ -48,5 +47,6 @@ public:
   int field_A8;
   int field_AC;
   
-  unsigned int SetEffectDuration(float duration, float a3) noexcept;
+  virtual ~cEspControler() {};
+  unsigned int SetEffectDuration(float duration, float a3);
 };

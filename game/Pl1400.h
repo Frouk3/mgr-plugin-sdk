@@ -31,4 +31,6 @@ public:
   int field_5464;
   int field_5468;
   int field_546C;
+
+  virtual ~Pl1400() override {};
 };

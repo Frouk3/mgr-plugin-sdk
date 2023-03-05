@@ -3623,17 +3623,17 @@ public:
   int field_53F8;
   int field_53FC;
 
-  Pl0000() noexcept;
-  ~Pl0000() noexcept;
+  Pl0000();
+  virtual ~Pl0000() override {};
 
-  void SetSlowMo(float Duration, float SlowRate) noexcept;
-  void EnableRipperMode() noexcept;
-  void SetFuelContainer(float FuelContainer) noexcept;
-  void DisableRipperMode(bool bUseFade) noexcept;
-  float GetMaxFuelContainer() noexcept;
-  bool IsParrying() noexcept;
-  bool IsOnGround() noexcept;
-  bool IsInAir() noexcept;
-  void CallEffect(int id, cEspControler *esp) noexcept;
-  int GetMaxHealth() noexcept;
+  void SetSlowMo(float Duration, float SlowRate);
+  void EnableRipperMode();
+  void SetFuelContainer(float FuelContainer);
+  void DisableRipperMode(bool bUseFade);
+  float GetMaxFuelContainer();
+  bool IsParrying();
+  bool IsOnGround();
+  bool IsInAir();
+  void CallEffect(int id, cEspControler *esp);
+  int GetMaxHealth();
 };

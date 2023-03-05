@@ -79,4 +79,6 @@ public:
   int field_484;
   int field_488;
   int field_48C;
+
+  virtual ~cModel() override {};
 };

@@ -211,6 +211,6 @@ public:
   float field_86C;
 
   Behavior();
-  ~Behavior();
+  virtual ~Behavior() override {};
   void Startup();
 };

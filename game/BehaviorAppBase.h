@@ -2,6 +2,7 @@
 
 #include "Behavior.h"
 
+// physical object
 class BehaviorAppBase : public Behavior
 {
 public:
@@ -100,8 +101,10 @@ public:
   float field_9EC;
   float field_9F0;
 
-  void Startup() noexcept;
-  void Heal(int heal) noexcept;
-  void SetupHealth(int health) noexcept;
-  void Damage(int damage, bool leave1Hp) noexcept;
+  BehaviorAppBase();
+  virtual ~BehaviorAppBase() override {};
+  void Startup();
+  void Heal(int heal);
+  void SetupHealth(int health);
+  void Damage(int damage, bool leave1Hp);
 };

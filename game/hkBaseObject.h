@@ -3,5 +3,6 @@
 class hkBaseObject
 {
 public:
-  void *__vftable /*VFT*/;
+
+  virtual ~hkBaseObject() {};
 };

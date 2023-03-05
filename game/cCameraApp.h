@@ -170,4 +170,6 @@ public:
   float field_6D8;
   int field_6DC;
   float field_6E0;
+
+  virtual ~cCameraApp() override {};
 };

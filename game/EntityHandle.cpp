@@ -1,26 +1,22 @@
 #include "EntityHandle.h"
 #include "shared.h"
 
-void *EntityHandle::GetItemInstance() noexcept
+void *EntityHandle::GetItemInstance()
 {
-    DWORD address = shared::base + 0x67C8A0;
-    return ((void *(__thiscall *)(EntityHandle *))address)(this);
+    return ((void *(__thiscall *)(EntityHandle *))(shared::base + 0x67C8A0))(this);
 }
 
-void EntityHandle::UpdateSlowRateUnit() noexcept
+void EntityHandle::UpdateSlowRateUnit()
 {
-    DWORD address = shared::base + 0xA049A0;
-    ((void (__thiscall *)(EntityHandle *))address)(this);
+    ((void (__thiscall *)(EntityHandle *))(shared::base + 0xA049A0))(this);
 }
 
-float EntityHandle::GetCalculatedSlowRate() noexcept
+float EntityHandle::GetCalculatedSlowRate()
 {
-    DWORD address = shared::base + 0xA049B0;
-    return ((float (__thiscall *)(EntityHandle *))address)(this);
+    return ((float (__thiscall *)(EntityHandle *))(shared::base + 0xA049B0))(this);
 }
 
-void EntityHandle::SetEntitySlowRateType(int SlowRateType) noexcept
+void EntityHandle::SetEntitySlowRateType(int SlowRateType)
 {
-    DWORD address = shared::base + 0xA08640;
-    ((void (__thiscall *)(EntityHandle *, int))address)(this, SlowRateType);
+    ((void (__thiscall *)(EntityHandle *, int))(shared::base + 0xA08640))(this, SlowRateType);
 }

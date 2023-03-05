@@ -1,26 +1,27 @@
 #include "BehaviorAppBase.h"
 #include "shared.h"
 
-void BehaviorAppBase::Startup() noexcept
+BehaviorAppBase::BehaviorAppBase()
 {
-    DWORD address = shared::base + 0x698340;
-    ((void(__thiscall *)(BehaviorAppBase *))address)(this);
+    // empty constructor, since we don't have full constructor for this
 }
 
-void BehaviorAppBase::Heal(int heal) noexcept
+void BehaviorAppBase::Startup()
 {
-    DWORD address = shared::base + 0x68EE70;
-    ((void(__thiscall *)(BehaviorAppBase *, int))address)(this, heal);
+    ((void(__thiscall *)(BehaviorAppBase *))(shared::base + 0x698340))(this);
 }
 
-void BehaviorAppBase::SetupHealth(int health) noexcept
+void BehaviorAppBase::Heal(int heal)
 {
-    DWORD address = shared::base + 0x68EDF0;
-    ((void(__thiscall *)(BehaviorAppBase *, int))address)(this, health);
+    ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE70))(this, heal);
 }
 
-void BehaviorAppBase::Damage(int damage, bool leave1Hp) noexcept
+void BehaviorAppBase::SetupHealth(int health)
 {
-    DWORD address = shared::base + 0x68EE30;
-    ((void(__thiscall *)(BehaviorAppBase *, int, bool))address)(this, damage, leave1Hp);
+    ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EDF0))(this, health);
+}
+
+void BehaviorAppBase::Damage(int damage, bool leave1Hp)
+{
+    ((void(__thiscall *)(BehaviorAppBase *, int, bool))(shared::base + 0x68EE30))(this, damage, leave1Hp);
 }

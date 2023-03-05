@@ -67,7 +67,7 @@ public:
   int *field_FC;
   
   PlayerManagerImplement();
-  ~PlayerManagerImplement();
+  virtual ~PlayerManagerImplement() override {};
 
   void SetSlowRate(float SlowRate, int a3, int a4);
   cVec4 *GetPlayerPosition();

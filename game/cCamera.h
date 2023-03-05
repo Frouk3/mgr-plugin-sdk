@@ -246,4 +246,6 @@ public:
   float field_404;
   float field_408;
   float field_40C;
+
+  virtual ~cCamera() override {}
 };

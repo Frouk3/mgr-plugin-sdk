@@ -37,4 +37,6 @@ public:
   int field_7C;
   int field_80;
   int field_84;
+
+  virtual ~hkpWorldObject() override {};
 };

@@ -10,4 +10,6 @@ public:
   int field_8;
   int field_C;
   cEspControler field_10[7];
+
+  virtual ~EspCtrlCustomImpl() override {};
 };

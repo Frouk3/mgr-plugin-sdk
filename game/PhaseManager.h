@@ -143,18 +143,18 @@ struct PhaseManager
   int field_25C;
   int field_260;
 
-  int GetCurrentPhase() noexcept;
-  int CreateReadRoomList(int a2, int a3, int a4) noexcept;
-  bool IsCurrentPhase(const char *phase) noexcept;
-  bool IsDLCPhase() noexcept;
-  bool IsSamDLC() noexcept;
-  bool IsWolfDLC() noexcept;
-  int SetDefaultData() noexcept;
-  bool IsPassSubPhase(int a2, bool a3, const char *debugLog) noexcept;
-  void Startup() noexcept;
-  bool SetSubPhaseData(const char* phase) noexcept;
-  bool SetPhaseData(int a2) noexcept;
-  void GameOverEvent(int a2) noexcept;
+  int GetCurrentPhase();
+  int CreateReadRoomList(int a2, int a3, int a4);
+  bool IsCurrentPhase(const char *phase);
+  bool IsDLCPhase();
+  bool IsSamDLC();
+  bool IsWolfDLC();
+  int SetDefaultData();
+  bool IsPassSubPhase(int a2, bool a3, const char *debugLog);
+  void Startup();
+  bool SetSubPhaseData(const char* phase);
+  bool SetPhaseData(int a2);
+  void GameOverEvent(int a2);
 };
 
 extern PhaseManager& g_PhaseManager;

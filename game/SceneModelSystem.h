@@ -51,8 +51,8 @@ public:
   int field_B8;
   int field_BC;
 
-  SceneModelSystem() noexcept;
-  ~SceneModelSystem() noexcept;
-  void DestroyModel(int a2) noexcept;
-  void CreateModel(int a2, int a3, int a4) noexcept;
+  SceneModelSystem();
+  virtual ~SceneModelSystem() override {};
+  void DestroyModel(int a2);
+  void CreateModel(int a2, int a3, int a4);
 };

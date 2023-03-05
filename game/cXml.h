@@ -3,5 +3,6 @@
 class cXml
 {
 public:
-    void *__vftable;
+    
+    virtual ~cXml() {};
 };

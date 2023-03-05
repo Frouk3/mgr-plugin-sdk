@@ -12,6 +12,6 @@ public:
     int field_8;
     int field_C;
 
-    virtual ~cCondition();
+    virtual ~cCondition() {};
     bool CanRun();
 };
