@@ -23,7 +23,7 @@ public:
 		float m_fRate;
 		float m_fDefaultRate;
 		float m_fActualRate;
-		float m_fCalculatedRate;
+		float m_fSlowRateTick;
 	} m_fSlowRate[4];
   float m_fTickRate;
   float m_fTicks;
@@ -38,11 +38,13 @@ public:
   float GetSlowRate(int SlowRateType);
   void ResetSlowRate();
   void Cleanup();
+  float GetCalculatedRate(int type);
   cSlowRateUnit *AllocUnit();
 };
 
 void cSlowRateManager_Reset();
 void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate);
+float cSlowRateManager_GetTickRate(int type);
 cSlowRateManager* GetcSlowRateManager();
 
 extern cSlowRateManager& g_cSlowRateManager;

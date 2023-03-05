@@ -51,3 +51,13 @@ cSlowRateManager::cSlowRateManager()
 {
 	((void (__thiscall *)(cSlowRateManager *))(shared::base + 0xA08FB0))(this);
 }
+
+float cSlowRateManager::GetCalculatedRate(int type)
+{
+	return ((float(__thiscall *)(cSlowRateManager *, int))(shared::base + 0xA03A90))(this, type);
+}
+
+float cSlowRateManager_GetTickRate(int type)
+{
+	return ((float (__cdecl *)(int))(shared::base + 0x532000))(type);
+}
