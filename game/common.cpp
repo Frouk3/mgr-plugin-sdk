@@ -12,3 +12,5 @@ void printf(const char* fmt, ...)
 	va_start(va, fmt);
 	((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))(fmt, va);
 }
+
+static bool &bIsForegroundWindow = *(bool*)(shared::base + 0x19D509C);

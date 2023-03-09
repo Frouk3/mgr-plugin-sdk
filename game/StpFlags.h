@@ -38,4 +38,40 @@ static struct StpFlags
     unsigned int STP_EM : 1;
     unsigned int STP_PL : 1;
     unsigned int STP_OBJ : 1;
+
+    unsigned int b32 : 1;
+    unsigned int b33 : 1;
+    unsigned int b34 : 1;
+    unsigned int b35 : 1;
+    unsigned int b36 : 1;
+    unsigned int b37 : 1;
+    unsigned int b38 : 1;
+    unsigned int b39 : 1;
+
+    unsigned int b40 : 1;
+    unsigned int b41 : 1;
+    unsigned int b42 : 1;
+    unsigned int b43 : 1;
+    unsigned int b44 : 1;
+    unsigned int b45 : 1;
+    unsigned int b46 : 1;
+    unsigned int STP_EM_BRAIN : 1;
+
+    unsigned int b48 : 1;
+    unsigned int b49 : 1;
+    unsigned int b50 : 1;
+    unsigned int b51 : 1;
+    unsigned int b52 : 1;
+    unsigned int b53 : 1;
+    unsigned int b54 : 1;
+    unsigned int b55 : 1;
+    
+    unsigned int b56 : 1;
+    unsigned int b57 : 1;
+    unsigned int b58 : 1;
+    unsigned int b59 : 1;
+    unsigned int b60 : 1;
+    unsigned int b61 : 1;
+    unsigned int b62 : 1;
+    unsigned int STP_GAME_UPDATE : 1;
 } &g_StpFlags = *(StpFlags *)(shared::base + 0x17EA070);
