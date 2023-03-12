@@ -10,7 +10,7 @@ static struct StpFlags
     unsigned int b5 : 1;
     unsigned int b6 : 1;
     unsigned int b7 : 1;
-    unsigned int b8 : 1;
+    unsigned int STP_KEY_INPUT : 1;
 
     unsigned int b9 : 1;
     unsigned int b10 : 1;
