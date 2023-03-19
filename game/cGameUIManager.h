@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cActionMessageParts.h"
+#include "cStageConnect.h"
 #include "Pl0000.h"
 #include "Pl1400.h"
 #include "Pl1500.h"
@@ -12,7 +14,7 @@ public:
   int field_C;
   int field_10;
   int field_14;
-  int field_18;
+  cStageConnect* m_pStageConnect;
   int field_1C;
   int field_20;
   int field_24;
@@ -34,15 +36,12 @@ public:
   cParts* m_pPlayerParts[13];
   void *m_pPlayerInstance;
   int m_nPlayerEntityHandle;
-  float field_A0;
-  float field_A4;
-  float field_A8;
-  float field_AC;
+  cVec4 m_vecPlayerPosition;
   float field_B0;
   float field_B4;
   float field_B8;
   float field_BC;
-  int field_C0;
+  cActionMessageParts* m_pActionMessageParts;
   int field_C4;
   int field_C8;
   int field_CC;

@@ -2,7 +2,7 @@
 
 #include "cXmlBinary.h"
 #include "cModel.h"
-#include "EntityHandle.h"
+#include "Entity.h"
 
 class cObj : public cModel
 {
@@ -32,7 +32,7 @@ public:
   int field_4E4;
   int field_4E8;
   int field_4EC;
-  EntityHandle *m_pEntityHandle;
+  Entity *m_pEntity;
   cXmlBinary field_4F4;
   int field_514;
   int field_518;

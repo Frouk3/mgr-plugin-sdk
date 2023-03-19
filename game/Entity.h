@@ -2,7 +2,7 @@
 #include "cSlowRateUnit.h"
 #include "SceneModelSystem.h"
 
-struct EntityHandle
+struct Entity
 {
   cSlowRateUnit *m_pSlowRateUnit;
   int field_4;

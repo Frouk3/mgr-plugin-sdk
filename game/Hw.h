@@ -8,6 +8,7 @@ namespace Hw
     class cTexture;
     class CameraProj;
     class cCameraBase;
+    class cHeapPhysical;
 }
 
 class Hw::cHeap
@@ -80,4 +81,15 @@ class Hw::cCameraBase
 public:
 
   virtual ~cCameraBase() {};
+};
+
+class Hw::cHeapPhysical : public Hw::cHeap
+{
+public:
+  int field_60;
+  int field_64;
+  int field_68;
+  int field_6C;
+
+  virtual ~cHeapPhysical() override {};
 };
