@@ -17,5 +17,7 @@ When using Visual Studio Code you can't compile your project into .asi mod
 Feel free to contribute, but make sure you will give the exact information what will you change or add <br />
 About IDA database, i will put the link [here](https://drive.google.com/file/d/1TTIz8vpW4CCyaA2Bc1rhdnXtnlnGmLoy/view?usp=drivesdk)
 
+Move the folders named "game" and "shared" into the folder of your project, then go to the Project Settings->Directories->Include Directories and include folders named "game" and "shared" and include required headers with ```#include <headername.h>``` cpp file nor source file will be included if you done everything correctly
+
 ## Making a mod
 There's example how to make a basic mod for the game, but, the code itself and sdk will change with some time
