@@ -2,6 +2,7 @@
 
 #include "Hw.h"
 #include "PhaseReadManager.h"
+#include "shared.h"
 
 class PhaseReadManagerImplement : public PhaseReadManager
 {
@@ -298,3 +299,5 @@ public:
   virtual int field_24() {};
   virtual ~PhaseReadManagerImplement() {};
 };
+
+static PhaseReadManagerImplement *&g_pPhaseReadManagerImplement = *(PhaseReadManagerImplement**)(shared::base + 0x19C51C0);
