@@ -11,10 +11,10 @@ public:
     int field_18;
 
     virtual ~cCustomObjCtrlManager() {};
-    virtual void field_4() {};
-    virtual void field_8() {};
-    virtual void field_C() {};
-    virtual void field_10() {};
-    virtual void field_14() {};
-    virtual void field_18() {};
+    virtual void Function1() {};
+    virtual void Function2() {};
+    virtual void Function3() {};
+    virtual void Function4() {};
+    virtual void Function5() {};
+    virtual void Function6() {};
 };

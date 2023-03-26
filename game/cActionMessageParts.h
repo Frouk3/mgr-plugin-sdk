@@ -46,10 +46,10 @@ public:
   int field_128;
 
   virtual ~cActionMessageParts() override {};
-  virtual void field_4() override {};
-  virtual void field_8() override {};
-  virtual void field_C() override {};
-  virtual void field_10() override {};
-  virtual void field_14() override {};
-  virtual void field_18() override {};
+  virtual void Function1() override {};
+  virtual void Function2() override {};
+  virtual void Function3() override {};
+  virtual void Function4() override {};
+  virtual void Function5() override {};
+  virtual void Function6() override {};
 };

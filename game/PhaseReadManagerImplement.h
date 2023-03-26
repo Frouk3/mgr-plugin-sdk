@@ -287,17 +287,17 @@ public:
   int field_498;
   int field_49C;
 
-  virtual int field_0() {};
-  virtual int field_4() {};
-  virtual int field_8(int a2, int a3, int a4, int a5) {};
-  virtual int field_C() {};
-  virtual int field_10() {};
-  virtual int field_14() {};
-  virtual int field_18() {};
-  virtual bool field_1C() {};
-  virtual int field_20() {};
-  virtual int field_24() {};
-  virtual ~PhaseReadManagerImplement() {};
+  virtual int Function0() {};
+  virtual int Function1() {};
+  virtual int Function2(int a2, int a3, int a4, int a5) {};
+  virtual int Function3() {};
+  virtual int Function4() {};
+  virtual int Function5() {};
+  virtual int Function6() {};
+  virtual bool Function7() {};
+  virtual int Function8() {};
+  virtual int Function9() {};
+  virtual ~PhaseReadManagerImplement() override {};
 };
 
 static PhaseReadManagerImplement *&g_pPhaseReadManagerImplement = *(PhaseReadManagerImplement**)(shared::base + 0x19C51C0);

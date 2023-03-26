@@ -4,7 +4,7 @@
 // i didn't check if it its works, just robbed a quick one :O
 void RipperModeOnBladeMode()
 {
-    Pl0000 *player = (Pl0000*)g_cGameUIManager.m_pPl;
+    Pl0000 *player = (Pl0000*)g_cGameUIManager.m_pPlayer;
 
     if (player)
     {

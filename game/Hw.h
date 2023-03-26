@@ -53,6 +53,7 @@ class Hw::cHeapVariable : public Hw::cHeapVariableBase
 public:
 
   virtual ~cHeapVariable() override {};
+  void *AllocateMemory(size_t size, Hw::cHeapVariable *heap);
 };
 
 class Hw::cTexture
