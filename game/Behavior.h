@@ -6,6 +6,7 @@
 #include "BattleParameterImplement.h"
 #include "EspCtrlCustomImpl.h"
 #include "CharacterControl.h"
+#include "lib.h"
 
 class Behavior : public cObj
 {
@@ -156,7 +157,7 @@ public:
   int field_794;
   EspCtrlCustomImpl *field_798;
   int field_79C;
-  int m_pEffectIntegrationContainer;
+  void *m_pEffectIntegrationContainer;
   int field_7A4;
   int field_7A8;
   int field_7AC;

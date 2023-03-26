@@ -93,7 +93,7 @@ namespace Trigger
         unsigned int b10 : 1;
         unsigned int b11 : 1;
         unsigned int STP_TRG_DELAY_PL_CHK : 1;
-        unsigned int b13 : 1;
+        unsigned int STP_SITUATION : 1;
         unsigned int STP_ENEMYSET : 1;
         unsigned int STP_SCENARIO : 1;
         unsigned int STP_EVENT_SKIP : 1;
