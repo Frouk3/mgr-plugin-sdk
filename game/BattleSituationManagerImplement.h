@@ -14,4 +14,5 @@ public:
     virtual ~BattleSituationManagerImplement() override {};
 };
 
+extern BattleSituationManagerImplement*& g_pBattleSituationManagerImplement;
 BattleSituationManagerImplement* GetBattleSituationManagerImplement();
