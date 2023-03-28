@@ -10,7 +10,7 @@ template <class T>
 class lib::Array
 {
 public:
-    T *m_pArrayStart[m_nMaxElements];
+    T *m_pArrayStart[];
     int m_nCurrentElements;
     int m_nMaxElements;
 
@@ -18,8 +18,8 @@ public:
     virtual T* GetObjects() {};
     virtual bool ReplaceObject(T pObject) {};
     virtual T AppendObject(T pObject, T pAppendObject) {};
-    virtual void Copy(lib::Array *lib) {};
+    virtual void Copy(lib::Array<T> *lib) {};
 };
 
 template <class T, int size>
-class lib::StaticArray : public lib::Array {};
+class lib::StaticArray : public lib::Array<T> {};

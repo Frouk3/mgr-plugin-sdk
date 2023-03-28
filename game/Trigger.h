@@ -76,7 +76,7 @@ namespace Trigger
         unsigned int GAME_PLAYER_NO_DIVEKILL : 1;
         unsigned int GAME_PLAYER_NO_MOVE : 1;
         unsigned int GAME_PLAYER_NO_XA : 1;
-    } &Trigger::GameFlags = *(gameFlags*)(shared::base + 0x17EA090);
+    } &GameFlags = *(gameFlags*)(shared::base + 0x17EA090);
 
     struct stpFlags
     {
@@ -151,7 +151,7 @@ namespace Trigger
         unsigned int b61 : 1;
         unsigned int b62 : 1;
         unsigned int STP_GAME_UPDATE : 1;
-    } &Trigger::StpFlags = *(stpFlags *)(shared::base + 0x17EA070);
+    } &StpFlags = *(stpFlags *)(shared::base + 0x17EA070);
     struct staFlags
     {
         unsigned int b1 : 1;
@@ -225,7 +225,7 @@ namespace Trigger
         unsigned int STA_OBJ_FADE_IN_WAIT : 1;
         unsigned int STA_OBJ_FADE_IN : 1;
         unsigned int b63 : 1;
-    } &Trigger::StaFlags = *(staFlags*)(shared::base + 0x17EA060);
+    } &StaFlags = *(staFlags*)(shared::base + 0x17EA060);
 };
 
 class Trigger::cCondition

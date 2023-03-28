@@ -9,6 +9,14 @@ namespace Hw
     class CameraProj;
     class cCameraBase;
     class cHeapPhysical;
+    class cHeapHook;
+    class cHeapFixed;
+    class cHeapOneTime;
+    class cHeapPhysicalBase;
+    class cHeapGlobal;
+    class cShareHeapPhysical;
+    class cPrimHeap;
+    class cIndexBufferHeap;
 }
 
 class Hw::cHeap
@@ -84,7 +92,35 @@ public:
   virtual ~cCameraBase() {};
 };
 
-class Hw::cHeapPhysical : public Hw::cHeap
+class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
+{
+public:
+
+  virtual ~cHeapPhysical() override {};
+};
+
+class Hw::cHeapHook
+{
+public:
+
+  virtual ~cHeapHook() {};
+};
+
+class Hw::cHeapFixed : public Hw::cHeap
+{
+public:
+
+  virtual ~cHeapFixed() override {};
+};
+
+class Hw::cHeapOneTime : public Hw::cHeap
+{
+public:
+
+  virtual ~cHeapOneTime() override {};
+};
+
+class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
   int field_60;
@@ -92,5 +128,43 @@ public:
   int field_68;
   int field_6C;
 
-  virtual ~cHeapPhysical() override {};
+  virtual ~cHeapPhysicalBase() override {};
+};
+
+class Hw::cHeapGlobal : public Hw::cHeapVariableBase
+{
+public:
+
+  virtual ~cHeapGlobal() override {};
+};
+
+class Hw::cShareHeapPhysical : Hw::cHeapPhysical
+{
+public:
+
+  virtual ~cShareHeapPhysical() override {};
+};
+
+class Hw::cPrimHeap
+{
+public:
+  int field_4;
+  int field_8;
+  int field_C;
+  int field_10;
+
+  virtual ~cPrimHeap() {};
+};
+
+class Hw::cIndexBufferHeap
+{
+public:
+  int field_4;
+  int field_8;
+  int field_C;
+  int field_10;
+  int field_14;
+  int field_18;
+  
+  virtual ~cIndexBufferHeap() {};
 };

@@ -24,4 +24,5 @@ public:
     virtual ~SituationManagerImplement() override {};
 };
 
+SituationManagerImplement *GetSituationManagerImplement();
 extern SituationManagerImplement*& g_pSituationManagerImplement;
