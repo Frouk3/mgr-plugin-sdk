@@ -6,7 +6,6 @@
 class cCamera : public cCameraViewProj
 {
 public:
-  int field_4;
   int field_8;
   int field_C;
   int field_10;

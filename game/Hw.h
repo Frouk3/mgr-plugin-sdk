@@ -81,7 +81,6 @@ class Hw::CameraProj
 {
 public:
 
-
   virtual ~CameraProj() {};
 };
 
@@ -90,6 +89,17 @@ class Hw::cCameraBase
 public:
 
   virtual ~cCameraBase() {};
+};
+
+class Hw::cHeapPhysicalBase : public Hw::cHeap
+{
+public:
+  int field_60;
+  int field_64;
+  int field_68;
+  int field_6C;
+
+  virtual ~cHeapPhysicalBase() override {};
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
@@ -118,17 +128,6 @@ class Hw::cHeapOneTime : public Hw::cHeap
 public:
 
   virtual ~cHeapOneTime() override {};
-};
-
-class Hw::cHeapPhysicalBase : public Hw::cHeap
-{
-public:
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
-
-  virtual ~cHeapPhysicalBase() override {};
 };
 
 class Hw::cHeapGlobal : public Hw::cHeapVariableBase

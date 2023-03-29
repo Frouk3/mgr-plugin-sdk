@@ -4,7 +4,8 @@
 namespace Trigger
 {
     class cCondition;
-    struct gameFlags {
+
+    extern struct gameFlags {
         unsigned int GAME_QTE_UI_DISABLE : 1;
         unsigned int GAME_MUGEN_ZANGEKI : 1;
         unsigned int GAME_OS_BOOT_MODE : 1;
@@ -76,9 +77,9 @@ namespace Trigger
         unsigned int GAME_PLAYER_NO_DIVEKILL : 1;
         unsigned int GAME_PLAYER_NO_MOVE : 1;
         unsigned int GAME_PLAYER_NO_XA : 1;
-    } &GameFlags = *(gameFlags*)(shared::base + 0x17EA090);
+    } &GameFlags;
 
-    struct stpFlags
+    extern struct stpFlags
     {
         unsigned int b1 : 1;
         unsigned int b2 : 1;
@@ -151,8 +152,9 @@ namespace Trigger
         unsigned int b61 : 1;
         unsigned int b62 : 1;
         unsigned int STP_GAME_UPDATE : 1;
-    } &StpFlags = *(stpFlags *)(shared::base + 0x17EA070);
-    struct staFlags
+    } &StpFlags;
+
+    extern struct staFlags
     {
         unsigned int b1 : 1;
         unsigned int b2 : 1;
@@ -225,7 +227,7 @@ namespace Trigger
         unsigned int STA_OBJ_FADE_IN_WAIT : 1;
         unsigned int STA_OBJ_FADE_IN : 1;
         unsigned int b63 : 1;
-    } &StaFlags = *(staFlags*)(shared::base + 0x17EA060);
+    } &StaFlags;
 };
 
 class Trigger::cCondition
