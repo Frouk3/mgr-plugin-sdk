@@ -5,6 +5,7 @@
 #include "Pl0000.h"
 #include "Pl1400.h"
 #include "Pl1500.h"
+#include "cDryCellGauge2.h"
 
 class cGameUIManager
 {
@@ -43,7 +44,7 @@ public:
   float field_BC;
   cActionMessageParts* m_pActionMessageParts;
   int field_C4;
-  int field_C8;
+  cDryCellGauge2* m_pcDryCellGauge2;
   int field_CC;
   int field_D0;
   int field_D4;

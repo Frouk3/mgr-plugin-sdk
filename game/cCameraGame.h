@@ -1,5 +1,6 @@
 #pragma once
 #include "cCameraApp.h"
+#include "BehaviorEmBase.h"
 
 class cCameraGame : public cCameraApp
 {
@@ -9,7 +10,7 @@ public:
   int field_6EC;
   int field_6F0;
   int field_6F4;
-  int field_6F8;
+  BehaviorEmBase* m_pEnemyLockOn;
   int field_6FC;
   int field_700;
   int field_704;

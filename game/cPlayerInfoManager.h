@@ -2,6 +2,32 @@
 
 #include "Hw.h"
 #include "cChainCombo.h"
+#include "cEffectDatsuDisp.h"
+#include "cEffectSouDisp.h"
+#include "cEffectZanDisp.h"
+#include "cAttentionDisp.h"
+#include "cQTEButton.h"
+#include "cQTECallAlarm.h"
+#include "cEnergyGaugeWhiteRaiden.h"
+#include "cDryCellGauge2.h"
+#include "cJammingDie.h"
+#include "cJammingWall.h"
+#include "cResultDisp.h"
+#include "cItemGetDisp.h"
+#include "cSubWeaponInfoDisp.h"
+#include "cBossWeaponInfoDisp.h"
+#include "cWeaponInfoDisp.h"
+#include "cGrenadeGuideLine.h"
+#include "cNinjyaRunNavi.h"
+#include "cVisorMode.h"
+#include "cRpgSite.h"
+#include "cSentryGunSite.h"
+#include "cStingerMissileSite.h"
+#include "cStealthKillTarget.h"
+#include "cDestinationDisp.h"
+#include "cFreeMissionDisp.h"
+#include "cUnLockInfoDisp.h"
+#include "cVRMissionBackPanel.h"
 
 class cPlayerInfoManager
 {
@@ -11,34 +37,34 @@ public:
   int field_C;
   int field_10;
   cChainCombo *m_pcChainCombo;
-  int field_18;
-  int field_1C;
-  int field_20;
-  int field_24;
-  int field_28;
-  int field_2C;
-  int field_30;
-  int field_34;
-  int field_38;
-  int field_3C;
-  int field_40;
-  int field_44;
+  cEffectDatsuDisp *m_pcEffectDatsuDisp;
+  cEffectSouDisp *m_pcEffectSouDisp;
+  cEffectZanDisp *m_pcEffectZanDisp;
+  cAttentionDisp *m_pcAttentionDisp;
+  cQTEButton *m_pcQTEButton;
+  cQTECallAlarm *m_pcQTECallAlarm;
+  cEnergyGaugeWhiteRaiden *m_pcEnergyGaugeWhiteRaiden;
+  cDryCellGauge2 *m_pcDryCellGauge2;
+  cJammingDie *m_pcJammingDie;
+  cJammingWall *m_pcJammingWall;
+  cResultDisp *m_pcResultDisp;
+  cItemGetDisp *m_pcItemGetDisp;
   int field_48;
-  int field_4C;
-  int field_50;
-  int field_54;
-  int field_58;
+  cSubWeaponInfoDisp *m_pcSubWeaponInfoDisp;
+  cBossWeaponInfoDisp *m_pcBossWeaponInfoDisp;
+  cWeaponInfoDisp *m_pcWeaponInfoDisp;
+  cGrenadeGuideLine *m_pcGrenadeGuideLine;
   int field_5C;
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
-  int field_70;
-  int field_74;
-  int field_78;
-  int field_7C;
-  int field_80;
-  int field_84;
+  cNinjyaRunNavi *m_pcNinjyaRunNavi;
+  cVisorMode *m_pcVisorMode;
+  cRpgSite *m_pcRpgSite;
+  cSentryGunSite *m_pcSentryGunSite;
+  cStingerMissileSite *m_pcStingerMissileSite;
+  cStealthKillTarget *m_pcStealthKillTarget;
+  cDestinationDisp *m_pcDestinationDisp;
+  cFreeMissionDisp *m_pcFreeMissionDisp;
+  cUnLockInfoDisp *m_pcUnLockInfoDisp;
+  cVRMissionBackPanel *m_pcVRMissionBackPanel;
   int field_88;
   int field_8C;
   float field_90;
@@ -106,6 +132,11 @@ public:
   int field_188;
   int field_18C;
   int field_190;
+  int field_194;
+  int field_198;
+  int field_19C;
 
   virtual ~cPlayerInfoManager() {};
 };
+
+extern cPlayerInfoManager*& g_cPlayerInfoManager;
