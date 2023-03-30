@@ -14,5 +14,5 @@ public:
     int field_A8;
     int field_AC;
     
-    virtual ~cVisorMode() override {}:
+    virtual ~cVisorMode() override {};
 };

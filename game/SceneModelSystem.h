@@ -56,5 +56,5 @@ public:
   virtual void CreateModel(int a2, int a3, int a4) {}; // unused
   virtual void Function2(int a2) {};
   virtual void DestroyModel(int a2) {}; // unused
-  virtual int __stdcall Function4(int a2) {};
+  virtual void __stdcall Function4(int a2) {};
 };
