@@ -23,8 +23,8 @@ Move the folders named "game" and "shared" into the folder of your project, then
 There's example how to make a basic mod for the game, but, the code itself and sdk will change with some time
 
 ## Updating SDK for existing project
-To update the project, you need to download this SDK from GitHub as source code
-Code->Download ZIP
-Once download, extract game and shared
-If there's template in your Visual Studio, move them into the plugin sdk template folder
-Copy/move the folders game and shared into your project, and update(if its Visual Studio)
+To update the project, you need to download this SDK from GitHub as source code<br />
+Code->Download ZIP<br />
+Once download, extract game and shared<br />
+If there's template in your Visual Studio, move them into the plugin sdk template folder<br />
+Copy/move the folders game and shared into your project, and update(if its Visual Studio)<br />
