@@ -26,5 +26,5 @@ There's example how to make a basic mod for the game, but, the code itself and s
 To update the project, you need to download this SDK from GitHub as source code<br />
 Code->Download ZIP<br />
 Once download, extract game and shared<br />
-If there's template in your Visual Studio, move them into the plugin sdk template folder<br />
+If there's template in your Visual Studio, move them into the plugin sdk template folder(in case its not archive file)<br />
 Copy/move the folders game and shared into your project, and update(if its Visual Studio)<br />
