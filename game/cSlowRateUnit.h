@@ -14,4 +14,5 @@ struct cSlowRateUnit
   int field_24;
   int field_28;
   int field_2C;
+  int field_30;
 };

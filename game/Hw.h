@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 
 namespace Hw
 {
@@ -32,16 +33,16 @@ public:
   int field_20;
   int field_24;
   int field_28;
-  int field_2C;
-  int field_30;
-  int field_34;
-  int field_38;
+  Hw::cHeapGlobal *m_pGlobalHeap;
+  Hw::cHeapVariable *m_pNext;
+  Hw::cHeapVariable *m_pPrev;
+  char *m_TargetAlloc;
   int field_3C;
-  int field_40;
+  HANDLE *m_pHandle;
   int field_44;
   int field_48;
-  int field_4C;
-  int field_50;
+  int m_nMaxPhysical;
+  int m_nFreePhysical;
   int field_54;
   int field_58;
   int field_5C;

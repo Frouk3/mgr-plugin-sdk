@@ -17,9 +17,9 @@ public:
     int field_28;
     int field_2C;
 
-    virtual void Function0() {};
-    virtual void* Function1(int arg0, int a2) {};
-    virtual void Function2(int a2) {};
+    virtual void Function0() = 0;
+    virtual void* Function1(int arg0, int a2) = 0;
+    virtual void Function2(int a2) = 0;
     virtual ~BattleParameterManagerImplement() override {};
 };
 
