@@ -1,4 +1,5 @@
 #pragma once
+#include "shared.h"
 
 struct ARGB32
 {
@@ -7,3 +8,5 @@ struct ARGB32
   float b;
   float a;
 };
+
+VALIDATE_SIZE(ARGB32, 0x10);

@@ -8,3 +8,5 @@ public:
 
     virtual ~PlBaseDLC() override {};
 };
+
+VALIDATE_SIZE(PlBaseDLC, 0x5404);

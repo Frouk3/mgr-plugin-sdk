@@ -47,3 +47,5 @@ public:
   void EnableRender();
   void DisableRender();
 };
+
+VALIDATE_SIZE(cObj, 0x530);

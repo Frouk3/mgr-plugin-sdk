@@ -188,3 +188,5 @@ public:
 
   virtual ~cModelBase() override {};
 };
+
+VALIDATE_SIZE(cModelBase, 0x370);

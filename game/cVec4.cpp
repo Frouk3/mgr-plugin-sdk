@@ -13,3 +13,11 @@ void cVec4::operator=(cVec4& right)
     this->z = right.z;
     this->w = right.w;
 }
+
+cVec4::cVec4(float x, float y, float z, float w)
+{
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->w = w;
+}

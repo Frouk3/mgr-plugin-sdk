@@ -108,3 +108,5 @@ public:
   void SetupHealth(int health);
   void Damage(int damage, bool leave1Hp);
 };
+
+VALIDATE_SIZE(BehaviorAppBase, 0x9F4);

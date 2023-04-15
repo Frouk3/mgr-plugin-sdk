@@ -82,3 +82,5 @@ public:
 
   virtual ~cModel() override {};
 };
+
+VALIDATE_SIZE(cModel, 0x490);

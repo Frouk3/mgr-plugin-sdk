@@ -191,3 +191,5 @@ public:
 
   virtual ~Pl1500() override {};
 };
+
+VALIDATE_SIZE(Pl1500, 0x5790);

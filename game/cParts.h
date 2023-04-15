@@ -1,5 +1,6 @@
 #pragma once
 #include "cVec4.h"
+#include "shared.h"
 
 class cParts
 {
@@ -57,3 +58,5 @@ public:
 
   virtual ~cParts() {};
 };
+
+VALIDATE_SIZE(cParts, 0xB0);

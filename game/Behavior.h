@@ -217,3 +217,5 @@ public:
   virtual ~Behavior() override {};
   void Startup();
 };
+
+VALIDATE_SIZE(Behavior, 0x870);

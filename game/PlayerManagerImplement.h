@@ -1,40 +1,15 @@
 #pragma once
 #include "PlayerManager.h"
 #include "cVec4.h"
+#include "Hw.h"
+#include "lib.h"
 
 class PlayerManagerImplement : public PlayerManager
 {
 public:
   int field_4;
   int field_8;
-  int field_C;
-  int field_10;
-  int field_14;
-  int field_18;
-  int field_1C;
-  int field_20;
-  int field_24;
-  int field_28;
-  int field_2C;
-  int field_30;
-  int field_34;
-  int field_38;
-  int field_3C;
-  int field_40;
-  int field_44;
-  int field_48;
-  int field_4C;
-  int field_50;
-  int field_54;
-  int field_58;
-  int field_5C;
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
-  int field_70;
-  int field_74;
-  int field_78;
+  Hw::cTexture field_C[4];
   int field_7C;
   int field_80;
   int field_84;
@@ -57,14 +32,14 @@ public:
   int m_nHealthBonus;
   int m_nFuelContainerBonus;
   int m_nBattlePoints;
-  int field_E0;
-  int field_E4;
-  int field_E8;
-  int field_EC;
+  int m_nMainWeaponEquipped;
+  int m_nCustomWeaponEquipped;
+  int m_nSubWeaponEquipped;
+  int m_nRecoveryEquipped;
   int field_F0;
   int field_F4;
-  int *field_F8;
-  int *field_FC;
+  lib::StaticArray<int, 2> *m_nEntityArray;
+  DWORD *field_FC;
   
   PlayerManagerImplement();
   virtual ~PlayerManagerImplement() override {};
@@ -80,3 +55,5 @@ public:
 PlayerManagerImplement *GetPlayerManagerImplement();
 
 extern PlayerManagerImplement *&g_pPlayerManagerImplement;
+
+VALIDATE_SIZE(PlayerManagerImplement, 0x100);
