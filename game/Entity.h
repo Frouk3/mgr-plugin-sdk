@@ -1,6 +1,7 @@
 #pragma once
 #include "cSlowRateUnit.h"
 #include "SceneModelSystem.h"
+#include "cVec4.h"
 
 struct Entity
 {
@@ -41,4 +42,11 @@ struct Entity
   void UpdateSlowRateUnit();
   float GetCalculatedSlowRate();
   void SetEntitySlowRateType(int SlowRateType);
+  void SetOffset(cVec4 *offset);
+  cVec4* GetOffset();
+  void AddToOffset(cVec4 *offset);
+  void SetRotation(cVec4 *rotation);
+  cVec4 *GetRotation();
+  void SetSize(cVec4 *size);
+  cVec4 *GetSize();
 };

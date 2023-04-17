@@ -3624,6 +3624,8 @@ public:
   bool IsInAir();
   void CallEffect(int id, cEspControler *esp);
   int GetMaxHealth();
+  cVec4 GetPosForCamera();
+  void ForceKill();
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

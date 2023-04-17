@@ -119,4 +119,6 @@ struct CharacterControl
   int field_1C8;
   int field_1CC;
   int field_1D0;
+
+  bool IsOnGround();
 };

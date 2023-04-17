@@ -216,6 +216,22 @@ public:
   Behavior();
   virtual ~Behavior() override {};
   void Startup();
+  cVec4 GetOffsetPosition();
+  void SetState(int action, int actId, int a3, int a4);
+  int GetCurrentActionId();
+  int GetCurrentAction();
+  void SetStealthCamoEnabled(bool bEnable);
+  bool SetupCloth(int a2);
+  void SetOffset(cVec4 *offset);
+  cVec4 *GetOffset();
+  void AddToOffset(cVec4 *offset);
+  void ChangeHeight(float height);
+  void Place(cVec4 *pos, cVec4* rotation);
+  void Place(cVec4 *pos, cVec4* rotation, cVec4 *size);
+  void SetRotation(cVec4 *rotation);
+  cVec4 *GetRotation();
+  void SetSize(cVec4 *size);
+  cVec4 *GetSize();
 };
 
 VALIDATE_SIZE(Behavior, 0x870);

@@ -55,3 +55,13 @@ int Pl0000::GetMaxHealth()
 {
     return ((int(__thiscall *)(Pl0000 *))(shared::base + 0x77C980))(this);
 }
+
+cVec4 Pl0000::GetPosForCamera()
+{
+    return ((cVec4 (__thiscall *)(Pl0000 *))(shared::base + 0x6C0C60))(this);
+}
+
+void Pl0000::ForceKill()
+{
+    ((void (__thiscall *)(Pl0000 *))(shared::base + 0x77CE20))(this);
+}

@@ -63,3 +63,6 @@ struct EntitySystem
 };
 
 extern EntitySystem &g_EntitySystem;
+
+
+VALIDATE_SIZE(EntitySystem, 0x12C);

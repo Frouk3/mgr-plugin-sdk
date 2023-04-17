@@ -8,11 +8,11 @@
 // giving issues with size in Visual Studio Code(should not interact with code generation or compiling)
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
 
-static bool prevKey_state[1024] = {};
-static bool key_state[1024] = {};
-
 namespace shared
 {
+	inline bool key_state[1024] = {};
+	inline bool prevKey_state[1024] = {};
+
 	inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
 	inline unsigned int random(unsigned int min, unsigned int max)
@@ -57,7 +57,7 @@ namespace shared
 		if (prevKey_state[ownerId] != key_state[ownerId])
 		{
 			prevKey_state[ownerId] = key_state[ownerId];
-			return prevKey_state[ownerId];
+			return prevKey_state[ownerId]; // or: return key_state[ownerId];
 		}
 
 		if (prevKey_state[ownerId] == key_state[ownerId])
