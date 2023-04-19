@@ -4,6 +4,7 @@ namespace lib
 {
     template <class T> class Array;
     template <class T, int size> class StaticArray;
+    template <class T> class AllocatedArray;
 };
 
 template <class T>
@@ -14,6 +15,11 @@ public:
     int m_nCurrentElements;
     int m_nMaxElements;
 
+    Array()
+    {
+
+    }
+
     virtual ~Array() {};
     virtual T* GetObjects() {};
     virtual bool ReplaceObject(T pObject) {};
@@ -22,4 +28,24 @@ public:
 };
 
 template <class T, int size>
-class lib::StaticArray : public lib::Array<T> {};
+class lib::StaticArray : public lib::Array<T> 
+{
+public:
+
+    StaticArray()
+    {
+        m_nMaxElements = size;
+    }
+};
+
+template <class T>
+class lib::AllocatedArray : public lib::Array<T>
+{
+public:
+    int field_14;
+
+    AllocatedArray()
+    {
+        
+    }
+};

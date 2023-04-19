@@ -38,7 +38,7 @@ public:
   int m_nRecoveryEquipped;
   int field_F0;
   int field_F4;
-  lib::StaticArray<int, 2> *m_nEntityArray;
+  lib::StaticArray<int, 2> *m_pEntityArray;
   DWORD *field_FC;
   
   PlayerManagerImplement();
