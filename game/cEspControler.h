@@ -48,5 +48,5 @@ public:
   int field_AC;
   
   virtual ~cEspControler() {};
-  unsigned int SetEffectDuration(float duration, float a3);
+  void Fade(float duration, float endFace);
 };

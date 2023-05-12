@@ -9,6 +9,7 @@
 #include "lib.h"
 #include "StateMachineContextPl0010.h"
 #include "StateMachineFactoryPl0010.h"
+#include <D3dx9math.h>
 
 class Behavior : public cObj
 {
@@ -214,24 +215,39 @@ public:
   float field_86C;
 
   Behavior();
-  virtual ~Behavior() override {};
+
   void Startup();
+  void Function17();
+  void Function18();
+  void Update();
+  void Function20(); // some kind of, UpdateModel
+  void Function21();
+  void Function22();
+  void Function23();
+  void Function24();
+  void Function25();
+  cVec4 *GetOffset();
+  void SetOffset(cVec4 *offset);
+  void AddToOffset(cVec4 *offset);
+  void ChangeHeight(float height);
+  void Place(cVec4 *pos, cVec4* rotation);
+  void Place(cVec4 *pos, cVec4* rotation, cVec4 *size);
+  void Function32();
+  cVec4 *GetRotation();
+  void SetRotation(cVec4 *rotation);
+  cVec4 *GetSize();
+  void SetSize(cVec4 *size);
+  int Function37();
+  int GetIndex();
+  void Transform(D3DXMATRIX *matrix);
+  void Inverse(D3DXMATRIX *matrix);
+  void SetSeqAtk();
   cVec4 GetOffsetPosition();
   void SetState(int action, int actId, int a3, int a4);
   int GetCurrentActionId();
   int GetCurrentAction();
   void SetStealthCamoEnabled(bool bEnable);
   bool SetupCloth(int a2);
-  void SetOffset(cVec4 *offset);
-  cVec4 *GetOffset();
-  void AddToOffset(cVec4 *offset);
-  void ChangeHeight(float height);
-  void Place(cVec4 *pos, cVec4* rotation);
-  void Place(cVec4 *pos, cVec4* rotation, cVec4 *size);
-  void SetRotation(cVec4 *rotation);
-  cVec4 *GetRotation();
-  void SetSize(cVec4 *size);
-  cVec4 *GetSize();
 };
 
 VALIDATE_SIZE(Behavior, 0x870);

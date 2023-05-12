@@ -9,17 +9,142 @@ Behavior::Behavior()
 
 void Behavior::Startup()
 {
-    ((void(__thiscall *)(Behavior *))(shared::base + 0x691E90))(this);
+    CallVMTFunc<16, Behavior *>(this);
+}
+
+void Behavior::Function17()
+{
+    CallVMTFunc<17, Behavior *>(this);
+}
+
+void Behavior::Function18()
+{
+    CallVMTFunc<18, Behavior *>(this);
+}
+
+void Behavior::Update()
+{
+    CallVMTFunc<19, Behavior *>(this);
+}
+
+void Behavior::Function20()
+{
+    CallVMTFunc<20, Behavior *>(this);
+}
+
+void Behavior::Function21()
+{
+    CallVMTFunc<21, Behavior *>(this);
+}
+
+void Behavior::Function22()
+{
+    CallVMTFunc<22, Behavior *>(this);
+}
+
+void Behavior::Function23()
+{
+    CallVMTFunc<23, Behavior *>(this);
+}
+
+void Behavior::Function24()
+{
+    CallVMTFunc<24, Behavior *>(this);
+}
+
+void Behavior::Function25()
+{
+    CallVMTFunc<25, Behavior *>(this);
+}
+
+cVec4* Behavior::GetOffset()
+{
+    return CallVMTFunc<cVec4 *, 26, Behavior *>(this);
+}
+
+void Behavior::SetOffset(cVec4 *offset)
+{
+    CallVMTFunc<27, Behavior *, cVec4 *>(this, offset);
+}
+
+void Behavior::AddToOffset(cVec4* offset)
+{
+    CallVMTFunc<28, Behavior *, cVec4 *>(this, offset);
+}
+
+void Behavior::ChangeHeight(float height)
+{
+    CallVMTFunc<29, Behavior *, float>(this, height);
+}
+
+void Behavior::Place(cVec4 *pos, cVec4* rotation)
+{
+    CallVMTFunc<30, Behavior *, cVec4 *, cVec4 *>(this, pos, rotation);
+}
+
+void Behavior::Place(cVec4 *pos, cVec4* rotation, cVec4* size)
+{
+    CallVMTFunc<31, Behavior *, cVec4 *, cVec4 *, cVec4 *>(this, pos, rotation, size);
+}
+
+void Behavior::Function32()
+{
+    CallVMTFunc<32, Behavior *>(this);
+}
+
+cVec4 *Behavior::GetRotation()
+{
+    return CallVMTFunc<cVec4 *, 33, Behavior *>(this);
+}
+
+void Behavior::SetRotation(cVec4 *rotation)
+{
+    CallVMTFunc<34, Behavior *, cVec4 *>(this, rotation);
+}
+
+cVec4* Behavior::GetSize()
+{
+    return CallVMTFunc<cVec4 *, 35, Behavior *>(this);
+}
+
+void Behavior::SetSize(cVec4 *size)
+{
+    CallVMTFunc<36, Behavior *, cVec4 *>(this, size);
+}
+
+int Behavior::Function37()
+{
+    return CallVMTFunc<int, 37, Behavior *>(this);
+}
+
+int Behavior::GetIndex()
+{
+    return CallVMTFunc<int, 38, Behavior *>(this);
+}
+
+void Behavior::Transform(D3DXMATRIX *matrix)
+{
+    CallVMTFunc<45, Behavior *, D3DXMATRIX *>(this, matrix);
+}
+
+void Behavior::Inverse(D3DXMATRIX *matrix)
+{
+    CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
 }
 
 cVec4 Behavior::GetOffsetPosition()
 {
-    return ((cVec4 (__thiscall *)(Behavior *))(shared::base + 0x00DE30))(this);
+    return CallVMTFunc<cVec4, 159, Behavior *>(this);
 }
 
-void Behavior::SetState(int a1, int a2, int a3, int a4)
+void Behavior::SetSeqAtk()
 {
-    ((void (__thiscall *)(Behavior *, int, int, int, int))(shared::base + 0x68CAF0))(this, a1, a2, a3, a4);
+    CallVMTFunc<74, Behavior *>(this);
+}
+
+void Behavior::SetState(int action, int id, int prevAct, int prevId)
+{
+    ((void (__thiscall *)(Behavior *, int, int, int, int))(shared::base + 0x68CAF0))(this, action, id, prevAct, prevId);
 }
 
 int Behavior::GetCurrentActionId()
@@ -34,61 +159,11 @@ int Behavior::GetCurrentAction()
 
 void Behavior::SetStealthCamoEnabled(bool bEnable)
 {
-    ((void (__thiscall *)(Behavior *, bool))(shared::base + 0x68E710))(this, bEnable);
+    CallVMTFunc<68, Behavior *, bool>(this, bEnable);
 }
 
 // @param a2 Unknown
 bool Behavior::SetupCloth(int a2)
 {
     return ((bool (__thiscall *)(Behavior *, int))(shared::base + 0x692380))(this, a2);
-}
-
-cVec4 *Behavior::GetOffset()
-{
-    return ((cVec4 *(__thiscall *)(Behavior *))(shared::base + 0x692780))(this);
-}
-
-void Behavior::SetOffset(cVec4 *offset)
-{
-    ((void (__thiscall *)(Behavior *, cVec4 *))(shared::base + 0x6927A0))(this, offset);
-}
-
-void Behavior::AddToOffset(cVec4* offset)
-{
-    ((void (__thiscall *)(Behavior *, cVec4 *))(shared::base + 0x6927C0))(this, offset);
-}
-
-void Behavior::ChangeHeight(float height)
-{
-    ((void (__thiscall *)(Behavior *, float))(shared::base + 0x6927E0))(this, height);
-}
-
-void Behavior::Place(cVec4 *pos, cVec4* rotation)
-{
-    ((void (__thiscall *)(Behavior *, cVec4 *, cVec4 *))(shared::base + 0x692820))(this, pos, rotation);
-}
-
-void Behavior::Place(cVec4 *pos, cVec4* rotation, cVec4* size)
-{
-    ((void (__thiscall *)(Behavior *, cVec4 *, cVec4 *, cVec4 *))(shared::base + 0x6928B0))(this, pos, rotation, size);
-}
-
-cVec4 *Behavior::GetRotation()
-{
-    return ((cVec4* (__thiscall *)(Behavior *))(shared::base + 0x692950))(this);
-}
-
-void Behavior::SetRotation(cVec4 *rotation)
-{
-    ((void (__thiscall *)(Behavior *, cVec4 *))(shared::base + 0x692970))(this, rotation);
-}
-
-void Behavior::SetSize(cVec4 *size)
-{
-    ((void (__thiscall *)(Behavior *, cVec4 *))(shared::base + 0x6929B0))(this, size);
-}
-
-cVec4* Behavior::GetSize()
-{
-    return ((cVec4 *(__thiscall *)(Behavior *))(shared::base + 0x692990))(this);
 }

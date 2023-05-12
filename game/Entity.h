@@ -2,6 +2,9 @@
 #include "cSlowRateUnit.h"
 #include "SceneModelSystem.h"
 #include "cVec4.h"
+#include "Hw.h"
+
+struct Animation;
 
 struct Entity
 {
@@ -19,9 +22,9 @@ struct Entity
   int field_2C;
   int field_30;
   int field_34;
-  SceneModelSystem *field_38;
+  SceneModelSystem *m_pSceneModelSystem;
   void *m_pSpecifiedInstance;
-  int field_40;
+  Animation* m_pAnimation;
   int field_44;
   void *m_pInstance;
   int field_4C;
@@ -36,7 +39,7 @@ struct Entity
   int field_70;
   int field_74;
   int field_78;
-  int field_7C;
+  Hw::cHeapFixed* m_pcHeapFixed;
 
   void *GetItemInstance();
   void UpdateSlowRateUnit();

@@ -15,8 +15,8 @@ public:
   int field_4A4;
   unsigned int field_4A8;
   int field_4AC;
-  unsigned int field_4B0;
-  int field_4B4;
+  unsigned int m_nModelIndex;
+  unsigned int m_nClothIndex;
   int field_4B8;
   int field_4BC;
   int field_4C0;
@@ -42,10 +42,28 @@ public:
   int field_528;
   int field_52C;
 
-  cObj();
-  virtual ~cObj() override {};
+  // vft
+
+  void *Function1();
+  bool CreateDummy();
+  void Function3();
+  // void Function4(); // nullsub
+
+  void Function5();
+  void Function6();
   void EnableRender();
   void DisableRender();
+  float Function9(); // return 1.0
+  void Function10(int a2);
+  // void Function11(); // nullsub
+
+  void Function12();
+  void Function13();
+  int GetRenderable();
+  void UpdateCollision(int a2);
+  // vft end 
+
+  cObj();
 };
 
 VALIDATE_SIZE(cObj, 0x530);

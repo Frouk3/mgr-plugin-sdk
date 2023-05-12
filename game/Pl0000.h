@@ -3622,7 +3622,7 @@ public:
   bool IsParrying();
   bool IsOnGround();
   bool IsInAir();
-  void CallEffect(int id, cEspControler *esp);
+  void CreateEffect(int id, cEspControler *esp);
   int GetMaxHealth();
   cVec4 GetPosForCamera();
   void ForceKill();

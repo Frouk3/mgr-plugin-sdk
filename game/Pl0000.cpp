@@ -46,7 +46,7 @@ bool Pl0000::IsInAir()
     return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x77C730))(this);
 }
 
-void Pl0000::CallEffect(int id, cEspControler *esp)
+void Pl0000::CreateEffect(int id, cEspControler *esp)
 {
     ((void(__thiscall *)(Pl0000*, int, cEspControler *))(shared::base + 0x7C3470))(this, id, esp);
 }

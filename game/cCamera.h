@@ -1,7 +1,7 @@
 #pragma once
 #include "cCameraViewProj.h"
 #include "cVec4.h"
-#include "D3DXMATRIX.h"
+#include <d3dx9math.h>
 
 class cCamera : public cCameraViewProj
 {

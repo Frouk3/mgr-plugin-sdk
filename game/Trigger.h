@@ -92,7 +92,7 @@ namespace Trigger
 
         unsigned int b9 : 1;
         unsigned int b10 : 1;
-        unsigned int b11 : 1;
+        unsigned int STP_MOUSE_UPDATE : 1;
         unsigned int STP_TRG_DELAY_PL_CHK : 1;
         unsigned int STP_SITUATION : 1;
         unsigned int STP_ENEMYSET : 1;

@@ -72,6 +72,8 @@ public:
   int field_108;
   int field_10C;
 
+  CollisionAttackData();
+
   virtual void field_0() override {};
   virtual ~CollisionAttackData() override {};
 };

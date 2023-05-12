@@ -86,3 +86,37 @@ namespace shared
 		return x;
 	}
 }
+
+inline void** GetVMT(const void* self)
+{
+	return *(void***)(self);
+}
+
+inline void *GetVMT(const void* self, size_t index)
+{
+	return GetVMT(self)[index];
+}
+
+template <typename ret, size_t index, typename C, typename... Args>
+ret CallVMTFunc(C self, Args... args)
+{
+	return ((ret (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
+}
+
+template <size_t index, typename C, typename... Args>
+void CallVMTFunc(C self, Args... args)
+{
+	((void (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
+}
+
+template <typename ret, unsigned int address, typename C, typename... Args>
+ret CallMethod(C self, Args... args)
+{
+	return ((ret (__thiscall *)(C, Args...))address)(self, args...);
+}
+
+template <unsigned int address, typename C, typename... Args>
+void CallMethod(C self, Args... args)
+{
+	((void (__thiscall *)(C, Args...))address)(self, args...);
+}

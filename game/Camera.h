@@ -1,6 +1,6 @@
 #pragma once
 #include "BehaviorEmBase.h"
-#include "D3DXMATRIX.h"
+#include <d3dx9math.h>
 
 namespace Camera
 {

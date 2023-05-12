@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ModelSystem.h"
 
 class SceneModelSystem : public ModelSystem
