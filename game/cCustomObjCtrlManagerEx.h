@@ -36,10 +36,4 @@ public:
   float field_8C;
 
   virtual ~cCustomObjCtrlManagerEx() override {};
-  virtual void Function1() override = 0;
-  virtual void Function2() override = 0;
-  virtual void Function3() override = 0;
-  virtual void Function4() override = 0;
-  virtual void Function5() override = 0;
-  virtual void Function6() override = 0;
 };

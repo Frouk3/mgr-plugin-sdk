@@ -11,7 +11,7 @@ public:
   ARGB32 m_rgbColor;
   int field_30;
   int field_34;
-  int field_38;
+  int m_nMeshFlags;
   int field_3C;
   ARGB32 field_40;
   ARGB32 field_50;

@@ -11,10 +11,10 @@ template <typename T>
 class lib::Array
 {
 public:
-    T *m_pArrayStart[];
+    T *m_pArrayStart;
     int m_nCurrentElements = 0;
     int m_nMaxElements = 0;
-    T m_Array;
+    T m_Array[];
 
     Array()
     {

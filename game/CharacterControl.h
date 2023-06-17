@@ -1,9 +1,12 @@
 #pragma once
+#include "CharacterProxy.h"
+#include "CharacterProxyListener.h"
+#include "cVec4.h"
 
 struct CharacterControl
 {
-  int field_0;
-  int field_4;
+  CharacterProxy *m_pCharacterProxy;
+  CharacterProxyListener *m_pCharacterListener;
   int field_8;
   int field_C;
   int m_nOnGroundState;
@@ -58,14 +61,11 @@ struct CharacterControl
   int field_D4;
   int field_D8;
   int field_DC;
-  int field_E0;
-  int field_E4;
-  int field_E8;
-  int field_EC;
-  int field_F0;
-  int field_F4;
-  int field_F8;
-  int field_FC;
+  cVec4 field_E0;
+  void* m_pOwner;
+  float field_F4;
+  float m_fHeight;
+  float m_fRadius;
   int field_100;
   int field_104;
   int field_108;

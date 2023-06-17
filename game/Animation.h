@@ -1,9 +1,25 @@
 #pragma once
-#include "Entity.h"
+
+struct Entity;
 
 struct Animation
 {
 public:
+  class Control
+  {
+  public:
+    
+    class NodeListener
+    {
+    public:
+      int field_4;
+      int field_8;
+      int field_C;
+
+      virtual ~NodeListener() {};
+    };
+  };
+
   int field_0;
   int field_4;
   int field_8;
@@ -172,7 +188,7 @@ public:
   int field_2A0;
   int field_2A4;
   int field_2A8;
-  int field_2AC;
+  Animation::Control::NodeListener m_NodeListener[8];
   int field_2B0;
   int field_2B4;
   int field_2B8;

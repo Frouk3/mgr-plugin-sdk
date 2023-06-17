@@ -49,7 +49,7 @@ public:
   int field_414;
   int field_418;
   int field_41C;
-  int field_420;
+  float field_420;
   int field_424;
   int field_428;
   int field_42C;

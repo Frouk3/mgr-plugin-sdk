@@ -8,17 +8,17 @@ class cObj : public cModel
 {
 public:
   int field_490;
-  int field_494;
+  int m_nAnimationHandle;
   int field_498;
   int field_49C;
-  int field_4A0;
-  int field_4A4;
-  unsigned int field_4A8;
-  int field_4AC;
+  int m_nSetType;
+  int m_nType;
+  int m_nSetFlag;
+  int m_nSetRtn;
   unsigned int m_nModelIndex;
   unsigned int m_nClothIndex;
   int field_4B8;
-  int field_4BC;
+  int m_nAnimIndex;
   int field_4C0;
   int field_4C4;
   char field_4C8;
@@ -47,7 +47,7 @@ public:
   void *Function1();
   bool CreateDummy();
   void Function3();
-  // void Function4(); // nullsub
+  void Function4(); // nullsub
 
   void Function5();
   void Function6();
@@ -55,7 +55,7 @@ public:
   void DisableRender();
   float Function9(); // return 1.0
   void Function10(int a2);
-  // void Function11(); // nullsub
+  void Function11(); // nullsub
 
   void Function12();
   void Function13();

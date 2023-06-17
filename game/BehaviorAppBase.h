@@ -102,7 +102,6 @@ public:
   float field_9F0;
 
   BehaviorAppBase();
-  virtual ~BehaviorAppBase() override {};
   void Startup();
   void Heal(int heal);
   void SetupHealth(int health);

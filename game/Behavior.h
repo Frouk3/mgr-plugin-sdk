@@ -219,7 +219,7 @@ public:
   void Startup();
   void Function17();
   void Function18();
-  void Update();
+  void Tick();
   void Function20(); // some kind of, UpdateModel
   void Function21();
   void Function22();
@@ -248,6 +248,11 @@ public:
   int GetCurrentAction();
   void SetStealthCamoEnabled(bool bEnable);
   bool SetupCloth(int a2);
+};
+
+struct BehaviorData
+{
+
 };
 
 VALIDATE_SIZE(Behavior, 0x870);

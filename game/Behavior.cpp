@@ -22,7 +22,7 @@ void Behavior::Function18()
     CallVMTFunc<18, Behavior *>(this);
 }
 
-void Behavior::Update()
+void Behavior::Tick()
 {
     CallVMTFunc<19, Behavior *>(this);
 }

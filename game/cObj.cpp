@@ -21,6 +21,11 @@ void cObj::Function3()
     CallVMTFunc<3, cObj *>(this);
 }
 
+void cObj::Function4()
+{
+    CallVMTFunc<3, cObj *>(this);
+}
+
 void cObj::Function5()
 {
     CallVMTFunc<5, cObj *>(this);
@@ -49,6 +54,11 @@ float cObj::Function9()
 void cObj::Function10(int a2)
 {
     CallVMTFunc<10, cObj*, int>(this, a2);
+}
+
+void cObj::Function11()
+{
+    CallVMTFunc<11, cObj *>(this);
 }
 
 void cObj::Function12()

@@ -41,7 +41,7 @@ public:
     int field_A78;
     int field_A7C;
     int field_A80;
-    int field_A84;
+    Behavior* m_pEnemy;
     int field_A88;
     int field_A8C;
     int field_A90;

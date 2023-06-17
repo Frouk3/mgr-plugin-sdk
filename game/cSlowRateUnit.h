@@ -1,8 +1,8 @@
 #pragma once
 
-struct cSlowRateUnit
+class cSlowRateUnit
 {
-  int field_0;
+public:
   int m_nSlowRateType;
   int field_8;
   float m_fGlobalSlowRate;
@@ -15,4 +15,6 @@ struct cSlowRateUnit
   int field_28;
   int field_2C;
   int field_30;
+
+  virtual ~cSlowRateUnit() {};
 };

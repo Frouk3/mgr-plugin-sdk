@@ -3,5 +3,5 @@
 
 void cEspControler::Fade(float duration, float endFade)
 {
-	CallMethod<shared::base + 0xAAA6E0, cEspControler *, float, float>(this, duration, endFade);
+	((void (__thiscall *)(cEspControler *, float, float))(shared::base + 0xAAA6E0))(this, duration, endFade);
 }

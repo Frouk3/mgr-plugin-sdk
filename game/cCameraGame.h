@@ -5,10 +5,10 @@
 class cCameraGame : public cCameraApp
 {
 public:
-  int field_6E4;
+  void *m_pStates;
   int field_6E8;
   int field_6EC;
-  int field_6F0;
+  int m_bUsesLockon;
   int field_6F4;
   BehaviorEmBase* m_pEnemyLockOn;
   int field_6FC;

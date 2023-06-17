@@ -3,22 +3,20 @@
 #include "SceneModelSystem.h"
 #include "cVec4.h"
 #include "Hw.h"
+#include "Animation.h"
 
-struct Animation;
+typedef unsigned int EntityHandle;
 
 struct Entity
 {
   cSlowRateUnit *m_pSlowRateUnit;
-  int field_4;
-  int field_8;
-  int field_C;
-  int field_10;
+  char m_EntityName[16];
   int field_14;
   int field_18;
   int field_1C;
   int field_20;
-  int field_24;
-  int field_28;
+  unsigned int m_nEntityIndex;
+  unsigned int m_nEntityFlags;
   int field_2C;
   int field_30;
   int field_34;
@@ -30,16 +28,8 @@ struct Entity
   int field_4C;
   int field_50;
   int field_54;
-  int field_58;
+  int m_nSetType;
   int field_5C;
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
-  int field_70;
-  int field_74;
-  int field_78;
-  Hw::cHeapFixed* m_pcHeapFixed;
 
   void *GetItemInstance();
   void UpdateSlowRateUnit();
@@ -53,3 +43,5 @@ struct Entity
   void SetSize(cVec4 *size);
   cVec4 *GetSize();
 };
+
+VALIDATE_SIZE(Entity, 0x60);

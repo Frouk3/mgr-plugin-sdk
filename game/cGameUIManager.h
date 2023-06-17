@@ -6,6 +6,7 @@
 #include "Pl1400.h"
 #include "Pl1500.h"
 #include "cDryCellGauge2.h"
+#include "cEnergyGaugeWhiteRaiden.h"
 
 class cGameUIManager
 {
@@ -45,7 +46,7 @@ public:
   cActionMessageParts* m_pActionMessageParts;
   int field_C4;
   cDryCellGauge2* m_pcDryCellGauge2;
-  int field_CC;
+  cEnergyGaugeWhiteRaiden* m_pcEnergyGaugeWhiteRaiden;
   int field_D0;
   int field_D4;
   int field_D8;
