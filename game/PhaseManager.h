@@ -16,9 +16,9 @@ struct PhaseManager
   int field_28;
   int field_2C;
   int field_30;
-  unsigned int m_nCurrentPhase;
+  unsigned int m_nCurrentSubPhase;
   int m_nCurrentPhaseHash;
-  int field_3C;
+  char m_CurrentPhase[16];
   int field_40;
   int field_44;
   int field_48;

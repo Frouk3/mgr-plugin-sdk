@@ -8,12 +8,12 @@ cObj::cObj()
 
 void *cObj::Function1()
 {
-    return CallVMTFunc<void *, 1, cObj*>(this);
+    return ReturnCallVMTFunc<void *, 1, cObj*>(this);
 }
 
 bool cObj::CreateDummy()
 {
-    return CallVMTFunc<bool, 2, cObj *>(this);
+    return ReturnCallVMTFunc<bool, 2, cObj *>(this);
 }
 
 void cObj::Function3()
@@ -48,7 +48,7 @@ void cObj::DisableRender()
 
 float cObj::Function9()
 {
-    return CallVMTFunc<float, 9, cObj *>(this);
+    return ReturnCallVMTFunc<float, 9, cObj *>(this);
 }
 
 void cObj::Function10(int a2)
@@ -73,7 +73,7 @@ void cObj::Function13()
 
 int cObj::GetRenderable()
 {
-    return CallVMTFunc<int, 14, cObj *>(this);
+    return ReturnCallVMTFunc<int, 14, cObj *>(this);
 }
 
 // maybe AddColission?

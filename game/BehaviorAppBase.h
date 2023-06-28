@@ -102,7 +102,6 @@ public:
   float field_9F0;
 
   BehaviorAppBase();
-  void Startup();
   void Heal(int heal);
   void SetupHealth(int health);
   void Damage(int damage, bool leave1Hp);

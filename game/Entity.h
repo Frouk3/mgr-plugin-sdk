@@ -6,6 +6,7 @@
 #include "Animation.h"
 
 typedef unsigned int EntityHandle;
+struct EntitySystem;
 
 struct Entity
 {
@@ -31,6 +32,7 @@ struct Entity
   int m_nSetType;
   int field_5C;
 
+  struct ConstructInfo;
   void *GetItemInstance();
   void UpdateSlowRateUnit();
   float GetCalculatedSlowRate();

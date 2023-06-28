@@ -1,11 +1,12 @@
 #pragma once
 #include "cCameraViewProj.h"
 #include "cVec4.h"
-#include <d3dx9math.h>
+#include <D3dx9math.h>
 
 class cCamera : public cCameraViewProj
 {
 public:
+  int field_4;
   int field_8;
   int field_C;
   int field_10;

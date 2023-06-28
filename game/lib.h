@@ -47,7 +47,7 @@ class lib::AllocatedArray : public lib::Array<T>
 public:
     int field_14;
 
-    AllocatedArray()
+    AllocatedArray() : Array()
     {
         this->field_14 = 0;
     }

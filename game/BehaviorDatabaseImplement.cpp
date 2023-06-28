@@ -5,12 +5,12 @@ BehaviorDatabaseImplement *&g_pBehaviorDatabaseImplement = *(BehaviorDatabaseImp
 
 int BehaviorDatabaseImplement::Function0(int a2)
 {
-    return CallVMTFunc<int, 0, BehaviorDatabaseImplement *, int>(this, a2);
+    return ReturnCallVMTFunc<int, 0, BehaviorDatabaseImplement *, int>(this, a2);
 }
 
 int BehaviorDatabaseImplement::Function1(int a2)
 {
-    return CallVMTFunc<int, 1, BehaviorDatabaseImplement *, int>(this, a2);
+    return ReturnCallVMTFunc<int, 1, BehaviorDatabaseImplement *, int>(this, a2);
 }
 
 void BehaviorDatabaseImplement::Function2(float a2)
@@ -20,7 +20,7 @@ void BehaviorDatabaseImplement::Function2(float a2)
 
 int BehaviorDatabaseImplement::Function3()
 {
-    return CallVMTFunc<int, 3, BehaviorDatabaseImplement *>(this);
+    return ReturnCallVMTFunc<int, 3, BehaviorDatabaseImplement *>(this);
 }
 
 void BehaviorDatabaseImplement::Function4(int a2, int a3)

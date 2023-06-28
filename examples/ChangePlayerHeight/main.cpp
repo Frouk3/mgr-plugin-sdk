@@ -1,8 +1,7 @@
 #include "cGameUIManager.h"
-#include "Pl0000.h"
-#include "shared.h"
+#include "plugin.h"
 
-void ChangeHeight()
+void ProcessHeightChange()
 {
     Pl0000 *player = (Pl0000*)g_cGameUIManager.m_pPlayer;
 
@@ -16,4 +15,9 @@ void ChangeHeight()
     
     if (shared::IsKeyPressed(VK_ADD) || shared::IsKeyPressed(VK_SUBTRACT))
         player->m_vecVelocity.y = 0.0f;
+} 
+
+void plugin::OnStartup()
+{
+    UpdateEvent::Add(ProcessHeightChange);
 }

@@ -5,27 +5,27 @@ BehaviorUniqueAllocatorImplement *&g_pBehaviorUniqueAllocatorImplement = *(Behav
 
 int BehaviorUniqueAllocatorImplement::Function0()
 {
-    return CallVMTFunc<int, 0, BehaviorUniqueAllocatorImplement*>(this);
+    return ReturnCallVMTFunc<int, 0, BehaviorUniqueAllocatorImplement*>(this);
 }
 
 int BehaviorUniqueAllocatorImplement::Function1()
 {
-    return CallVMTFunc<int, 1, BehaviorUniqueAllocatorImplement *>(this);
+    return ReturnCallVMTFunc<int, 1, BehaviorUniqueAllocatorImplement *>(this);
 }
 
 int BehaviorUniqueAllocatorImplement::Function2()
 {
-    return CallVMTFunc<int, 2, BehaviorUniqueAllocatorImplement*>(this);
+    return ReturnCallVMTFunc<int, 2, BehaviorUniqueAllocatorImplement*>(this);
 }
 
 int BehaviorUniqueAllocatorImplement::Function3()
 {
-    return CallVMTFunc<int, 3, BehaviorUniqueAllocatorImplement*>(this);
+    return ReturnCallVMTFunc<int, 3, BehaviorUniqueAllocatorImplement*>(this);
 }
 
 float BehaviorUniqueAllocatorImplement::Function4()
 {
-    return CallVMTFunc<float, 4, BehaviorUniqueAllocatorImplement*>(this);
+    return ReturnCallVMTFunc<float, 4, BehaviorUniqueAllocatorImplement*>(this);
 }
 
 BehaviorUniqueAllocatorImplement *GetBehaviorUniqueAllocatorImplement()

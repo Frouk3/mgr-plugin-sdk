@@ -59,7 +59,7 @@ void Behavior::Function25()
 
 cVec4* Behavior::GetOffset()
 {
-    return CallVMTFunc<cVec4 *, 26, Behavior *>(this);
+    return ReturnCallVMTFunc<cVec4 *, 26, Behavior *>(this);
 }
 
 void Behavior::SetOffset(cVec4 *offset)
@@ -94,7 +94,7 @@ void Behavior::Function32()
 
 cVec4 *Behavior::GetRotation()
 {
-    return CallVMTFunc<cVec4 *, 33, Behavior *>(this);
+    return ReturnCallVMTFunc<cVec4 *, 33, Behavior *>(this);
 }
 
 void Behavior::SetRotation(cVec4 *rotation)
@@ -104,7 +104,7 @@ void Behavior::SetRotation(cVec4 *rotation)
 
 cVec4* Behavior::GetSize()
 {
-    return CallVMTFunc<cVec4 *, 35, Behavior *>(this);
+    return ReturnCallVMTFunc<cVec4 *, 35, Behavior *>(this);
 }
 
 void Behavior::SetSize(cVec4 *size)
@@ -114,12 +114,12 @@ void Behavior::SetSize(cVec4 *size)
 
 int Behavior::Function37()
 {
-    return CallVMTFunc<int, 37, Behavior *>(this);
+    return ReturnCallVMTFunc<int, 37, Behavior *>(this);
 }
 
 int Behavior::GetIndex()
 {
-    return CallVMTFunc<int, 38, Behavior *>(this);
+    return ReturnCallVMTFunc<int, 38, Behavior *>(this);
 }
 
 void Behavior::Transform(D3DXMATRIX *matrix)
@@ -134,7 +134,7 @@ void Behavior::Inverse(D3DXMATRIX *matrix)
 
 cVec4 Behavior::GetOffsetPosition()
 {
-    return CallVMTFunc<cVec4, 159, Behavior *>(this);
+    return ReturnCallVMTFunc<cVec4, 159, Behavior *>(this);
 }
 
 void Behavior::SetSeqAtk()

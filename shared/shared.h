@@ -50,7 +50,7 @@ namespace shared
 	inline bool IsKeyPressed(int ownerId, int key, bool repeat = true)
 	{
 		if (repeat)
-			return (GetAsyncKeyState(key) & 0x8000) != 0;
+			return IsKeyPressed(key, repeat);
 
 		key_state[ownerId] = (GetAsyncKeyState(key) & 0x8000) != 0;
 
@@ -98,7 +98,7 @@ inline void *GetVMT(const void* self, size_t index)
 }
 
 template <typename ret, size_t index, typename C, typename... Args>
-ret CallVMTFunc(C self, Args... args)
+ret ReturnCallVMTFunc(C self, Args... args)
 {
 	return ((ret (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
 }
@@ -110,7 +110,7 @@ void CallVMTFunc(C self, Args... args)
 }
 
 template <typename ret, unsigned int address, typename C, typename... Args>
-ret CallMethod(C self, Args... args)
+ret ReturnCallMethod(C self, Args... args)
 {
 	return ((ret (__thiscall *)(C, Args...))address)(self, args...);
 }

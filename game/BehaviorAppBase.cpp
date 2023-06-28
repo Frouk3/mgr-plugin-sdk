@@ -6,11 +6,6 @@ BehaviorAppBase::BehaviorAppBase()
     // empty constructor, since we don't have full constructor for this
 }
 
-void BehaviorAppBase::Startup()
-{
-    ((void(__thiscall *)(BehaviorAppBase *))(shared::base + 0x698340))(this);
-}
-
 void BehaviorAppBase::Heal(int heal)
 {
     ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE70))(this, heal);

@@ -2,6 +2,8 @@
 #include "Hw.h"
 #include "SceneModelSystem.h"
 #include "Entity.h"
+#include "cVec3.h"
+#include "Behavior.h"
 
 struct EntitySystem
 {
@@ -58,8 +60,134 @@ struct EntitySystem
   int field_124;
   int field_128;
 
-  Entity *ConstructEntity(const char* name, unsigned int index, void *pInfo = nullptr);
-  Entity *ConstructEntity(void *pInfo);
+  struct EnemySpawnInfo;
+  struct EntityInfo;
+  struct ObjectInfo;
+  Entity *ConstructEntity(const char* name, unsigned int index, ObjectInfo *pObjInfo);
+  Entity *ConstructEntity(EntityInfo *pInfo);
+};
+
+struct EntitySystem::EnemySpawnInfo
+{
+  short field_0;
+  short field_2;
+  short field_4;
+  int field_8;
+  int m_nEntityId;
+  cVec3 m_vecBaseRot;
+  cVec3 m_vecTrans;
+  cVec3 m_vecBaseRotL;
+  cVec3 m_vecTransL;
+  float m_fRotation;
+  int m_nSetType;
+  int m_nType;
+  int m_nSetRtn;
+  int m_nSetFlag;
+  int field_54;
+  int m_nPathNo;
+  int m_nWaypointNo;
+  int m_nSetWait;
+  int m_nParentId;
+  int m_nPartsNo;
+  int m_nHashNo;
+  int m_nParam;
+  int m_nBezierNo;
+  int field_78;
+  int m_nItemId;
+  int m_nGroupPos;
+  int field_84;
+  int field_88;
+  int field_8C;
+  int field_90;
+  int field_94;
+  int field_98;
+  int field_9C;
+  int field_A0;
+  int field_A4;
+  int field_A8;
+  int field_AC;
+  int field_B0;
+  int field_B4;
+  int field_B8;
+  int field_BC;
+  int field_C0;
+  int field_C4;
+  int field_C8;
+  int field_CC;
+  int field_D0;
+  int m_nInitialRtn;
+  float m_fInitialTime;
+  cVec3 m_vecInitialPos;
+  float m_fInitialPosDirY;
+  int field_EC;
+  int field_F0;
+  int m_nItemAlias;
+  char m_Free0;
+  char m_DropItemNormal;
+  char m_DropItemStealth;
+  char m_VisceraTableNo;
+  float m_fReflexViewAngY;
+  float m_fReflexViewAngX;
+  float m_fReflexViewDist;
+  float m_fScoutViewAngY;
+  float m_fScoutViewAngX;
+  float m_fScoutViewDist;
+  int field_114;
+};
+
+struct EntitySystem::EntityInfo
+{
+  char *m_Name;
+  int m_nModelIndex;
+  int m_nAnimIndex;
+  EntitySystem::ObjectInfo *m_pObjectInfo;
+  int field_10;
+  int field_14;
+  Behavior *field_18;
+  int field_1C;
+  void *m_pModelData;
+  int field_24;
+  int field_28;
+  void *m_pParam;
+};
+
+struct EntitySystem::ObjectInfo
+{
+  int m_nSetType;
+  int m_nType;
+  int m_nSetRtn;
+  int m_nSetFlag;
+  float field_10;
+  float field_14;
+  float field_18;
+  float field_1C;
+  float field_20;
+  float field_24;
+  float field_28;
+  float field_2C;
+  float field_30;
+  float field_34;
+  float field_38;
+  float field_3C;
+  float field_40;
+  float field_44;
+  float field_48;
+  float field_4C;
+  cVec3 m_vecTransformPosition;
+  cVec3 m_vecRotation;
+  cVec3 m_vecSize;
+  int field_74;
+  int field_78;
+  int field_7C;
+};
+
+struct Entity::ConstructInfo
+{
+  EntitySystem *m_pEntitySystem;
+  SceneModelSystem *m_pSceneModelSystem;
+  int field_8;
+  EntitySystem::EntityInfo *m_pEntityInfo;
+  int field_10;
 };
 
 extern EntitySystem &g_EntitySystem;
