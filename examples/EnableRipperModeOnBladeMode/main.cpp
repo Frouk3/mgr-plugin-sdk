@@ -1,5 +1,6 @@
 #include "Pl0000.h"
 #include "cGameUIManager.h"
+#include "plugin.h"
 
 // i didn't check if it its works, just robbed a quick one :O
 void RipperModeOnBladeMode()
@@ -12,4 +13,9 @@ void RipperModeOnBladeMode()
             if (!player->m_nRipperModeEnabled)
                 player->EnableRipperMode();
     }
+}
+
+void plugin::OnStartup()
+{
+    UpdateEvent::Add(RipperModeOnBladeMode);
 }

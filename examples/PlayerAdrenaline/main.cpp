@@ -2,6 +2,7 @@
 #include "cGameUIManager.h"
 #include "cSlowRateManager.h"
 #include "Trigger.h"
+#include "plugin.h"
 
 void AdrenalineTime() noexcept
 {
@@ -28,4 +29,9 @@ void AdrenalineTime() noexcept
 
         once = true; 
     }
+}
+
+void plugin::OnStartup()
+{
+    UpdateEvent::Add(AdrenalineTime);
 }
