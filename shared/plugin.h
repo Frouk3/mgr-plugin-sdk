@@ -95,7 +95,7 @@ namespace plugin
             funcPtrs.emplace_back(funcPtr);
         }
 
-        void __declsped(naked) MainHook()
+        void __declspec(naked) MainHook()
         {
             __asm
             {
@@ -123,7 +123,7 @@ namespace plugin
 
         void Run()
         {
-            for (auto& : funcPtrs)
+            for (auto& f: funcPtrs)
                 f();
         }
 
@@ -134,10 +134,13 @@ namespace plugin
 
         void __declspec(naked) MainHook()
         {
-            pushad
-            call Run
-            popad
-            jmp returnAddress
+            __asm
+            {
+                pushad
+                call Run
+                popad
+                jmp returnAddress
+            }
         }
 
         uint32_t DoHook(uint32_t address)
