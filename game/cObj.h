@@ -44,7 +44,7 @@ public:
 
   // vft
 
-  void *Function1();
+  void *GetContext();
   bool CreateDummy();
   void Function3();
   void Function4(); // nullsub

@@ -8,7 +8,7 @@ BehaviorAppBase::BehaviorAppBase()
 
 void BehaviorAppBase::Heal(int heal)
 {
-    ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE70))(this, heal);
+    CallVMTFunc<194, BehaviorAppBase *, int>(this, heal);
 }
 
 void BehaviorAppBase::SetupHealth(int health)
@@ -18,5 +18,5 @@ void BehaviorAppBase::SetupHealth(int health)
 
 void BehaviorAppBase::Damage(int damage, bool leave1Hp)
 {
-    ((void(__thiscall *)(BehaviorAppBase *, int, bool))(shared::base + 0x68EE30))(this, damage, leave1Hp);
+    CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
 }

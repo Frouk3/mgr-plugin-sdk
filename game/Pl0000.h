@@ -3614,18 +3614,26 @@ public:
   Pl0000();
   virtual ~Pl0000() override {};
 
+  bool IsBladeModeActive();
+  bool IsRunning();
+  bool IsIdle();
+  bool IsInAir();
+  bool CanActivateRipperMode();
+  bool IsCodecTalk();
+  bool IsParrying();
+  bool IsOnGround();
+  void ForceKill();
+  float GetDefenseDamage();
+  void UpdateInput();
+  void HandleActions();
+  void ChangeSubWeapon();
+  void CreateEffect(int id, cEspControler *esp);
   void SetSlowMo(float Duration, float SlowRate);
   void EnableRipperMode();
   void SetFuelContainer(float FuelContainer);
   void DisableRipperMode(bool bUseFade);
   float GetMaxFuelContainer();
-  bool IsParrying();
-  bool IsOnGround();
-  bool IsInAir();
-  void CreateEffect(int id, cEspControler *esp);
   int GetMaxHealth();
-  cVec4 GetPosForCamera();
-  void ForceKill();
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

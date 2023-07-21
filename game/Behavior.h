@@ -216,12 +216,14 @@ public:
 
   Behavior();
 
+// vft
+
   void Startup();
   void Function17();
   void Function18();
   void Tick();
   void Function20(); // some kind of, UpdateModel
-  void Function21();
+  void UpdateBodyParts();
   void Function22();
   void Function23();
   void Function24();
@@ -237,16 +239,25 @@ public:
   void SetRotation(cVec4 *rotation);
   cVec4 *GetSize();
   void SetSize(cVec4 *size);
-  int Function37();
+  int GetSequence();
   int GetIndex();
+  int GetSequenceFile(const char *a2);
+  int Function40();
+  void Function41();
+  int Function42();
   void Transform(D3DXMATRIX *matrix);
   void Inverse(D3DXMATRIX *matrix);
   void SetSeqAtk();
+  void *SetCutCreateInfo();
+  bool IsAlive();
   cVec4 GetOffsetPosition();
+  void SetStealthCamoEnabled(bool bEnable);
+
+// vft end
+
   void SetState(int action, int actId, int a3, int a4);
   int GetCurrentActionId();
   int GetCurrentAction();
-  void SetStealthCamoEnabled(bool bEnable);
   bool SetupCloth(int a2);
 };
 

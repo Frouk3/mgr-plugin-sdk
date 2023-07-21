@@ -6,6 +6,77 @@ Pl0000::Pl0000()
     ((void (__thiscall *)(Pl0000 *))(shared::base + 0x6C0310))(this);
 }
 
+bool Pl0000::IsBladeModeActive()
+{
+    return ReturnCallVMTFunc<bool, 203, Pl0000 *>(this);
+}
+
+bool Pl0000::IsRunning()
+{
+    return ReturnCallVMTFunc<bool, 204, Pl0000 *>(this);
+}
+
+bool Pl0000::IsIdle()
+{
+    return ReturnCallVMTFunc<bool, 206, Pl0000 *>(this);
+}
+
+bool Pl0000::IsInAir()
+{
+    return ReturnCallVMTFunc<bool, 208, Pl0000 *>(this);
+}
+
+bool Pl0000::CanActivateRipperMode()
+{
+    return ReturnCallVMTFunc<bool, 209, Pl0000 *>(this);
+}
+
+bool Pl0000::IsCodecTalk()
+{
+    return ReturnCallVMTFunc<bool, 211, Pl0000 *>(this);
+}
+
+bool Pl0000::IsParrying()
+{
+    return ReturnCallVMTFunc<bool, 216, Pl0000 *>(this);
+}
+
+bool Pl0000::IsOnGround()
+{
+    return ReturnCallVMTFunc<bool, 220, Pl0000 *>(this);
+}
+
+void Pl0000::ForceKill()
+{
+    CallVMTFunc<227, Pl0000 *>(this);
+}
+
+float Pl0000::GetDefenseDamage()
+{
+    return ReturnCallVMTFunc<float, 237, Pl0000 *>(this);
+}
+
+void Pl0000::UpdateInput()
+{
+    CallVMTFunc<241, Pl0000 *>(this);
+}
+
+void Pl0000::HandleActions()
+{
+    CallVMTFunc<242, Pl0000 *>(this);
+}
+
+void Pl0000::ChangeSubWeapon()
+{
+    CallVMTFunc<246, Pl0000 *>(this);
+}
+
+// duplicate at field_3DC(247th virtual function)
+void Pl0000::CreateEffect(int id, cEspControler *esp)
+{
+    CallVMTFunc<248, Pl0000 *, int, cEspControler *>(this, id, esp);
+}
+
 void Pl0000::SetSlowMo(float Duration, float SlowRate)
 {
     ((void (__thiscall *)(Pl0000 *, float, float))(shared::base + 0x77AB80))(this, Duration, SlowRate);
@@ -31,37 +102,7 @@ float Pl0000::GetMaxFuelContainer()
     return ((float (__thiscall *)(Pl0000 *))(shared::base + 0x7DA020))(this);
 }
 
-bool Pl0000::IsParrying()
-{
-    return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x6C0B30))(this);
-}
-
-bool Pl0000::IsOnGround()
-{
-    return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x6C0BB0))(this);
-}
-
-bool Pl0000::IsInAir()
-{
-    return ((bool (__thiscall *)(Pl0000 *))(shared::base + 0x77C730))(this);
-}
-
-void Pl0000::CreateEffect(int id, cEspControler *esp)
-{
-    ((void(__thiscall *)(Pl0000*, int, cEspControler *))(shared::base + 0x7C3470))(this, id, esp);
-}
-
 int Pl0000::GetMaxHealth()
 {
     return ((int(__thiscall *)(Pl0000 *))(shared::base + 0x77C980))(this);
-}
-
-cVec4 Pl0000::GetPosForCamera()
-{
-    return ((cVec4 (__thiscall *)(Pl0000 *))(shared::base + 0x6C0C60))(this);
-}
-
-void Pl0000::ForceKill()
-{
-    ((void (__thiscall *)(Pl0000 *))(shared::base + 0x77CE20))(this);
 }

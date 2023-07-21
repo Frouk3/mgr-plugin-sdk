@@ -32,7 +32,7 @@ void Behavior::Function20()
     CallVMTFunc<20, Behavior *>(this);
 }
 
-void Behavior::Function21()
+void Behavior::UpdateBodyParts()
 {
     CallVMTFunc<21, Behavior *>(this);
 }
@@ -112,7 +112,7 @@ void Behavior::SetSize(cVec4 *size)
     CallVMTFunc<36, Behavior *, cVec4 *>(this, size);
 }
 
-int Behavior::Function37()
+int Behavior::GetSequence()
 {
     return ReturnCallVMTFunc<int, 37, Behavior *>(this);
 }
@@ -120,6 +120,26 @@ int Behavior::Function37()
 int Behavior::GetIndex()
 {
     return ReturnCallVMTFunc<int, 38, Behavior *>(this);
+}
+
+int Behavior::GetSequenceFile(const char *a2)
+{
+    return ReturnCallVMTFunc<int, 39, Behavior *>(this);
+}
+
+int Behavior::Function40()
+{
+    return ReturnCallVMTFunc<int, 40, Behavior *>(this);
+}
+
+void Behavior::Function41()
+{
+    CallVMTFunc<41, Behavior *>(this);
+}
+
+int Behavior::Function42()
+{
+    return ReturnCallVMTFunc<int, 42, Behavior *>(this);
 }
 
 void Behavior::Transform(D3DXMATRIX *matrix)
@@ -132,14 +152,29 @@ void Behavior::Inverse(D3DXMATRIX *matrix)
     CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
 }
 
-cVec4 Behavior::GetOffsetPosition()
+void Behavior::SetStealthCamoEnabled(bool bEnable)
 {
-    return ReturnCallVMTFunc<cVec4, 159, Behavior *>(this);
+    CallVMTFunc<68, Behavior *, bool>(this, bEnable);
 }
 
 void Behavior::SetSeqAtk()
 {
     CallVMTFunc<74, Behavior *>(this);
+}
+
+void *Behavior::SetCutCreateInfo()
+{
+    return ReturnCallVMTFunc<void *, 110, Behavior *>(this);
+}
+
+bool Behavior::IsAlive()
+{
+    return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
+}
+
+cVec4 Behavior::GetOffsetPosition()
+{
+    return ReturnCallVMTFunc<cVec4, 159, Behavior *>(this);
 }
 
 void Behavior::SetState(int action, int id, int prevAct, int prevId)
@@ -155,11 +190,6 @@ int Behavior::GetCurrentActionId()
 int Behavior::GetCurrentAction()
 {
     return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
-}
-
-void Behavior::SetStealthCamoEnabled(bool bEnable)
-{
-    CallVMTFunc<68, Behavior *, bool>(this, bEnable);
 }
 
 // @param a2 Unknown

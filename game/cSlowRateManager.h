@@ -20,10 +20,10 @@ public:
   int field_34;
   int field_38;
   struct {
+		float m_fSlowRate;
 		float m_fRate;
-		float m_fDefaultRate;
-		float m_fActualRate;
-		float m_fSlowRateTick;
+		float m_fDesiredRate;
+		float m_fCalculatedSlowRate;
 	} m_fSlowRate[4];
   float m_fTickRate;
   float m_fTicks;

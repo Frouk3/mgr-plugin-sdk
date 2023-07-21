@@ -5,9 +5,9 @@ class cSlowRateUnit
 public:
   int m_nSlowRateType;
   int field_8;
-  float m_fGlobalSlowRate;
-  float m_fCurrentSlowRate;
-  float m_fParticleSlowRate;
+  float m_fSlowRate;
+  float m_fRate;
+  float m_fDesiredSlowRate;
   float m_fCalculatedSlowRate;
   int field_1C;
   int field_20;

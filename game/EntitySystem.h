@@ -26,8 +26,8 @@ struct EntitySystem
   int field_40;
   int field_44;
   int field_48;
-  int field_4C;
-  int field_50;
+  Entity** m_pStartEntityArray; // for (Entity **i = this->m_pStartEntityArray; i != this->m_pEndEntityArray; i = (Entity**)i[2])
+  Entity** m_pEndEntityArray;
   int field_54;
   int field_58;
   int field_5C;

@@ -6,7 +6,7 @@ cObj::cObj()
     ((void (__thiscall *)(cObj *))(shared::base + 0x5FD150))(this);
 }
 
-void *cObj::Function1()
+void *cObj::GetContext()
 {
     return ReturnCallVMTFunc<void *, 1, cObj*>(this);
 }

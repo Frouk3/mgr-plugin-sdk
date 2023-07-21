@@ -22,7 +22,7 @@ void cSlowRateManager::SetSlowRate(int SlowRateType, float SlowRate)
 float cSlowRateManager::GetSlowRate(int SlowRateType)
 {
 	if (SlowRateType < 4)
-		return this->m_fSlowRate[SlowRateType].m_fRate;
+		return this->m_fSlowRate[SlowRateType].m_fSlowRate;
 	else
 		return 1.0f;
 }

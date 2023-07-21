@@ -1,5 +1,7 @@
 #pragma once
 #include <Windows.h>
+#include <d3d9.h>
+#include "shared.h"
 
 namespace Hw
 {
@@ -20,6 +22,9 @@ namespace Hw
     class cIndexBufferHeap;
     class cRenderTargetInfo;
     class cOtWork;
+
+    inline IDirect3D9 *pDirect3D9 = *(IDirect3D9**)(shared::base + 0x1B206D8);
+    inline IDirect3DDevice9 *GraphicDevice = *(IDirect3DDevice9**)(shared::base + 0x1B206D4);
 }
 
 class Hw::cHeap
