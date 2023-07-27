@@ -34,9 +34,9 @@ public:
   int field_54;
   int field_58;
   int field_5C;
-  void* m_pPlayer;
+  Pl1500* m_pPlayer;
   cParts* m_pPlayerParts[13];
-  void *m_pPlayerInstance;
+  Pl1500 *m_pPlayerInstance;
   int m_nPlayerEntityHandle;
   cVec4 m_vecPlayerPosition;
   float field_B0;

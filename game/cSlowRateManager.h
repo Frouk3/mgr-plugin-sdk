@@ -19,7 +19,7 @@ public:
   int field_30;
   int field_34;
   int field_38;
-  struct {
+  struct SlowRateUnit {
 		float m_fSlowRate;
 		float m_fRate;
 		float m_fDesiredRate;
@@ -34,17 +34,18 @@ public:
 
   virtual ~cSlowRateManager() {};
   cSlowRateManager();
-  void SetSlowRate(int SlowRateType, float SlowRate);
-  float GetSlowRate(int SlowRateType);
+  void SetSlowRate(eSlowRateType SlowRateType, float SlowRate);
+  float GetSlowRate(eSlowRateType SlowRateType);
   void ResetSlowRate();
   void Cleanup();
-  float GetCalculatedRate(int type);
+  float GetCalculatedRate(eSlowRateType type);
   cSlowRateUnit *AllocUnit();
+
+  static inline void SetSlowRaten(eSlowRateType SlowRateType, float SlowRate);
+  static inline float GetTickRate(eSlowRateType type);
+  static inline void Reset();
 };
 
-void cSlowRateManager_Reset();
-void cSlowRateManager_SetSlowRate(int SlowRateType, float SlowRate);
-float cSlowRateManager_GetTickRate(int type);
 cSlowRateManager* GetcSlowRateManager();
 
 extern cSlowRateManager& g_cSlowRateManager;

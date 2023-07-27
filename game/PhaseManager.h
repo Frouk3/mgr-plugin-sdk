@@ -143,7 +143,7 @@ struct PhaseManager
   int field_25C;
   int field_260;
 
-  int GetCurrentPhase();
+  static inline int GetCurrentPhase();
   int CreateReadRoomList(int a2, int a3, int a4);
   bool IsCurrentPhase(const char *phase);
   bool IsDLCPhase();

@@ -32,6 +32,8 @@ struct EntitySystem
   int field_58;
   int field_5C;
   Hw::cHeapFixed m_HeapFixed;
+  int field_B8;
+  int field_BC;
   int field_C0;
   int field_C4;
   int field_C8;

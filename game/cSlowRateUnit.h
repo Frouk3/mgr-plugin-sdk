@@ -1,9 +1,17 @@
 #pragma once
 
+enum eSlowRateType : int
+{
+  SLOWRATE_GLOBAL,
+  SLOWRATE_PL,
+  SLOWRATE_EM,
+  SLOWRATE_ETC
+};
+
 class cSlowRateUnit
 {
 public:
-  int m_nSlowRateType;
+  eSlowRateType m_nSlowRateType;
   int field_8;
   float m_fSlowRate;
   float m_fRate;

@@ -18,9 +18,6 @@ public:
     int field_28;
     int field_2C;
 
-    virtual void Function0() {};
-    virtual int Function1(int a2, Entity* a3, int a4) {};
-    virtual int Function2(float *a2, int a3, float* a4) {};
     virtual ~SituationManagerImplement() override {};
 };
 

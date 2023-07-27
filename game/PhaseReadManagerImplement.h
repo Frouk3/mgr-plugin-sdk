@@ -28,6 +28,8 @@ public:
   int field_20;
   int field_24;
   Hw::cHeapPhysical field_28;
+  int field_90;
+  int field_94;
   int field_98;
   int field_9C;
   int field_A0;
@@ -287,16 +289,6 @@ public:
   int field_498;
   int field_49C;
 
-  virtual int Function0() {};
-  virtual int Function1() {};
-  virtual int Function2(int a2, int a3, int a4, int a5) {};
-  virtual int Function3() {};
-  virtual int Function4() {};
-  virtual int Function5() {};
-  virtual int Function6() {};
-  virtual bool Function7() {};
-  virtual int Function8() {};
-  virtual int Function9() {};
   virtual ~PhaseReadManagerImplement() override {};
 };
 

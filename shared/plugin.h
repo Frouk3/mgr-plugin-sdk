@@ -5,7 +5,7 @@
 
 namespace plugin
 {
-    namespace UpdateEvent
+    namespace UpdateEvent // updates always
     {
         uintptr_t returnAddress;
         std::list<void(*)()> funcPtrs;
@@ -42,7 +42,7 @@ namespace plugin
         }
     }
 
-    namespace OnGameStartup
+    namespace OnGameStartup // starts on game launch(or scene startup)
     {
         uintptr_t returnAddress;
         std::list<void(*)()> funcPtrs;
@@ -79,7 +79,7 @@ namespace plugin
         }
     }
 
-    namespace OnSceneStartup
+    namespace OnSceneStartup // starts on every phase
     {
         uintptr_t returnAddress;
         std::list<void(*)()> funcPtrs;
@@ -153,7 +153,7 @@ namespace plugin
         }
     }
 
-    namespace OnTickEvent
+    namespace OnTickEvent // event only during in game(when game doesn't have Trigger::StaFlags.STA_PAUSE)
     {
         uintptr_t returnAddress;
         std::list<void(*)()> funcPtrs;
@@ -226,7 +226,7 @@ namespace plugin
             return origCall;
         }
     }
-
+    // !!! DOESN'T WORK CURRENTLY !!!
     namespace DrawingEvent
     {
         uintptr_t returnAddress;

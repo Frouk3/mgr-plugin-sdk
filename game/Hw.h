@@ -51,8 +51,6 @@ public:
   int m_nMaxPhysical;
   int m_nFreePhysical;
   int field_54;
-  int field_58;
-  int field_5C;
 
   virtual ~cHeap() {};
 };
