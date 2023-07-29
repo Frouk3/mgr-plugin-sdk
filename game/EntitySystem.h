@@ -141,6 +141,11 @@ struct EntitySystem::EnemySpawnInfo
   float m_fScoutViewAngX;
   float m_fScoutViewDist;
   int field_114;
+
+  EnemySpawnInfo()
+  {
+      ((void(__thiscall*)(EntitySystem::EnemySpawnInfo*))(shared::base + 0xEC5C0))(this);
+  };
 };
 
 struct EntitySystem::EntityInfo
@@ -157,6 +162,11 @@ struct EntitySystem::EntityInfo
   int field_24;
   int field_28;
   void *m_pParam;
+
+  EntityInfo()
+  {
+    ((void (__thiscall *)(EntitySystem::EntityInfo *))(shared::base + 0x67CA40))(this);
+  }
 };
 
 struct EntitySystem::ObjectInfo
@@ -187,6 +197,11 @@ struct EntitySystem::ObjectInfo
   int field_74;
   int field_78;
   int field_7C;
+
+  ObjectInfo()
+  {
+    ((void (__thiscall *)(EntitySystem::ObjectInfo *))(shared::base + 0xB190))(this);
+  }
 };
 
 struct Entity::ConstructInfo
