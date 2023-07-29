@@ -120,5 +120,8 @@ struct CharacterControl
   int field_1CC;
   int field_1D0;
 
-  bool IsOnGround();
+  bool IsOnGround()
+  {
+    return ((bool (__thiscall *)(CharacterControl *))(shared::base + 0x4E2740))(this);
+  }
 };

@@ -7,13 +7,10 @@ public:
     int field_8;
     int field_C;
 
-    int Function0();
-    int Function1();
-    int Function2();
-    int Function3();
-    float Function4();
-    virtual ~BehaviorUniqueAllocatorImplement() override {};
 };
 
-extern BehaviorUniqueAllocatorImplement *&g_pBehaviorUniqueAllocatorImplement;
-BehaviorUniqueAllocatorImplement *GetBehaviorUniqueAllocatorImplement();
+static BehaviorUniqueAllocatorImplement *&g_pBehaviorUniqueAllocatorImplement = *(BehaviorUniqueAllocatorImplement**)(shared::base + 0x17E9BF0);
+BehaviorUniqueAllocatorImplement *GetBehaviorUniqueAllocatorImplement()
+{
+    return ((BehaviorUniqueAllocatorImplement *(__cdecl *)())(shared::base + 0x68AFD0))();
+}

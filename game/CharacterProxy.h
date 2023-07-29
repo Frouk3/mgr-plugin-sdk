@@ -6,5 +6,4 @@ class CharacterProxy : public hkpCharacterProxy
 {
 public:
 
-    virtual ~CharacterProxy() override {};
 };

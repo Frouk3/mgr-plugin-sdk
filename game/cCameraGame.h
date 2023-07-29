@@ -1029,4 +1029,4 @@ public:
   virtual ~cCameraGame() override {};
 };
 
-extern cCameraGame& g_cCameraGame;
+static cCameraGame& g_cCameraGame = *(cCameraGame*)(shared::base + 0x17EA1D0);

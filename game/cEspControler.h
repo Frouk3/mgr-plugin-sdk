@@ -1,4 +1,5 @@
 #pragma once
+#include "shared.h"
 
 class cEspControler
 {
@@ -48,5 +49,8 @@ public:
   int field_AC;
   
   virtual ~cEspControler() {};
-  void Fade(float duration, float endFace);
+  void FadeUnits(float duration, float endFade)
+  {
+      ((void(__thiscall*)(cEspControler*, float, float))(shared::base + 0xAAA6E0))(this, duration, endFade);
+  }
 };

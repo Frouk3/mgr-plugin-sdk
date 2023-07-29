@@ -17,10 +17,6 @@ public:
     int field_28;
     int field_2C;
 
-    virtual void Function0() = 0;
-    virtual void* Function1(int arg0, int a2) = 0;
-    virtual void Function2(int a2) = 0;
-    virtual ~BattleParameterManagerImplement() override {};
 };
 
-extern BattleParameterManagerImplement*& g_pBattleParameterManagerImplement;
+static BattleParameterManagerImplement*& g_pBattleParameterManagerImplement = *(BattleParameterManagerImplement**)(shared::base + 0x19C5260);

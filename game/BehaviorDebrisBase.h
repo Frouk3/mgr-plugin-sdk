@@ -47,8 +47,6 @@ public:
     {
     public:
         BehaviorDebrisBase* m_pOwner;
-
-        virtual ~ExplosionSlot() override {}; 
     } m_pExplosionSlot;
     int field_908;
     int field_90C;

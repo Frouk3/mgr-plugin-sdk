@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BehaviorAppBase.h"
+#include "shared.h"
 
 class Pl0000 : public BehaviorAppBase
 {
@@ -3611,29 +3612,93 @@ public:
   int field_53F8;
   int field_53FC;
 
-  Pl0000();
+  Pl0000()
+  {
+    ((void (__thiscall *)(Pl0000 *))(shared::base + 0x6C0310))(this);
+  }
   virtual ~Pl0000() override {};
 
-  bool IsBladeModeActive();
-  bool IsRunning();
-  bool IsIdle();
-  bool IsInAir();
-  bool CanActivateRipperMode();
-  bool IsCodecTalk();
-  bool IsParrying();
-  bool IsOnGround();
-  void ForceKill();
-  float GetDefenseDamage();
-  void UpdateInput();
-  void HandleActions();
-  void ChangeSubWeapon();
-  void CreateEffect(int id, cEspControler *esp);
-  void SetSlowMo(float Duration, float SlowRate);
-  void EnableRipperMode();
-  void SetFuelContainer(float FuelContainer);
-  void DisableRipperMode(bool bUseFade);
-  float GetMaxFuelContainer();
-  int GetMaxHealth();
+  bool IsBladeModeActive()
+  {
+    return ReturnCallVMTFunc<bool, 203, Pl0000 *>(this);
+  }
+  bool IsRunning()
+  {
+    return ReturnCallVMTFunc<bool, 204, Pl0000 *>(this);
+  }
+  bool IsIdle()
+  {
+    return ReturnCallVMTFunc<bool, 206, Pl0000 *>(this);
+  }
+  bool IsInAir()
+  {
+    return ReturnCallVMTFunc<bool, 208, Pl0000 *>(this);
+  }
+  bool CanActivateRipperMode()
+  {
+    return ReturnCallVMTFunc<bool, 209, Pl0000 *>(this);
+  }
+  bool IsCodecTalk()
+  {
+    return ReturnCallVMTFunc<bool, 211, Pl0000 *>(this);
+  }
+  bool IsParrying()
+  {
+    ReturnCallVMTFunc<bool, 216, Pl0000 *>(this);
+  }
+  bool IsOnGround()
+  {
+    return ReturnCallVMTFunc<bool, 220, Pl0000 *>(this);
+  }
+  void ForceKill()
+  {
+    CallVMTFunc<227, Pl0000 *>(this);
+  }
+  float GetDefenseDamage()
+  {
+    return ReturnCallVMTFunc<float, 237, Pl0000 *>(this);
+  }
+  void UpdateInput()
+  {
+    CallVMTFunc<241, Pl0000 *>(this);
+  }
+  void HandleActions()
+  {
+    CallVMTFunc<242, Pl0000 *>(this);
+  }
+  void ChangeSubWeapon()
+  {
+    CallVMTFunc<246, Pl0000 *>(this);
+  }
+  // duplicate at field_3DC(247th virtual function)
+  void CreateEffect(int id, cEspControler *esp)
+  {
+    CallVMTFunc<248, Pl0000 *, int, cEspControler *>(this, id, esp);
+  }
+  void SetSlowMo(float Duration, float SlowRate)
+  {
+    ((void (__thiscall *)(Pl0000 *, float, float))(shared::base + 0x77AB80))(this, Duration, SlowRate);
+  }
+  void EnableRipperMode()
+  {
+    ((void (__thiscall *)(Pl0000 *))(shared::base + 0x785190))(this);
+  }
+  void SetFuelContainer(float FuelContainer)
+  {
+    ((void (__thiscall *)(Pl0000 *, float))(shared::base + 0x7C3100))(this, FuelContainer);
+  }
+  void DisableRipperMode(bool bUseFade)
+  {
+    ((void (__thiscall *)(Pl0000 *, bool))(shared::base + 0x7D9590))(this, bUseFade);
+  }
+  float GetMaxFuelContainer()
+  {
+    return ((float (__thiscall *)(Pl0000 *))(shared::base + 0x7DA020))(this);
+  }
+  int GetMaxHealth()
+  {
+    return ((int(__thiscall *)(Pl0000 *))(shared::base + 0x77C980))(this);
+  }
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

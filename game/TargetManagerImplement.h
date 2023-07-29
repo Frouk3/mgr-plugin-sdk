@@ -13,8 +13,6 @@ public:
     int field_18;
     int field_1C;
     int field_20;
-
-    
 };
 
-extern TargetManagerImplement*& g_pTargetManagerImplement;
+static TargetManagerImplement*& g_pTargetManagerImplement = *(TargetManagerImplement**)(shared::base + 0x17EA108);

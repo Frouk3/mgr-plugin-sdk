@@ -65,8 +65,14 @@ struct EntitySystem
   struct EnemySpawnInfo;
   struct EntityInfo;
   struct ObjectInfo;
-  Entity *ConstructEntity(const char* name, unsigned int index, ObjectInfo *pObjInfo);
-  Entity *ConstructEntity(EntityInfo *pInfo);
+  Entity *ConstructEntity(const char* name, unsigned int index, ObjectInfo *pObjInfo)
+  {
+    return ((Entity *(__thiscall *)(EntitySystem *, const char*, unsigned int, ObjectInfo *))(shared::base + 0x682090))(this, name, index, pObjInfo);
+  }
+  Entity *ConstructEntity(EntityInfo *pInfo)
+  {
+    return ((Entity *(__thiscall *)(EntitySystem*, EntityInfo *))(shared::base + 0x681B80))(this, pInfo);
+  }
 };
 
 struct EntitySystem::EnemySpawnInfo
@@ -192,7 +198,7 @@ struct Entity::ConstructInfo
   int field_10;
 };
 
-extern EntitySystem &g_EntitySystem;
+static EntitySystem &g_EntitySystem = *(EntitySystem*)(shared::base + 0x17E9A98);
 
 
 VALIDATE_SIZE(EntitySystem, 0x12C);

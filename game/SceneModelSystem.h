@@ -53,5 +53,8 @@ public:
   int field_B8;
   int field_BC;
 
-  SceneModelSystem();
+  SceneModelSystem()
+  {
+    ((void (__thiscall *)(SceneModelSystem *))(shared::base + 0x6197D0))(this);
+  }
 };

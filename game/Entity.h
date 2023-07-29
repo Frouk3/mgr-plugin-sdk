@@ -4,6 +4,7 @@
 #include "cVec4.h"
 #include "Hw.h"
 #include "Animation.h"
+#include "shared.h"
 
 typedef unsigned int EntityHandle;
 struct EntitySystem;
@@ -33,17 +34,50 @@ struct Entity
   int field_5C;
 
   struct ConstructInfo;
-  void *GetItemInstance();
-  void UpdateSlowRateUnit();
-  float GetCalculatedSlowRate();
-  void SetEntitySlowRateType(int SlowRateType);
-  void SetOffset(cVec4 *offset);
-  cVec4* GetOffset();
-  void AddToOffset(cVec4 *offset);
-  void SetRotation(cVec4 *rotation);
-  cVec4 *GetRotation();
-  void SetSize(cVec4 *size);
-  cVec4 *GetSize();
+  void *GetItemInstance()
+  {
+    return ((void *(__thiscall *)(Entity *))(shared::base + 0x67C8A0))(this);
+  }
+  void UpdateSlowRateUnit()
+  {
+    ((void (__thiscall *)(Entity *))(shared::base + 0xA049A0))(this);
+  }
+  float GetCalculatedSlowRate()
+  {
+    return ((float (__thiscall *)(Entity *))(shared::base + 0xA049B0))(this);
+  }
+  void SetEntitySlowRateType(int SlowRateType)
+  {
+    ((void (__thiscall *)(Entity *, int))(shared::base + 0xA08640))(this, SlowRateType);
+  }
+  void SetOffset(cVec4 *offset)
+  {
+      ((void(__thiscall*)(Entity*, cVec4*))(shared::base + 0x67CE90))(this, offset);
+  }
+  cVec4* GetOffset()
+  {
+      return ((cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8B0))(this);
+  }
+  void AddToOffset(cVec4 *offset)
+  {
+    ((void (__thiscall *)(Entity *, cVec4 *))(shared::base + 0x67CEC0))(this, offset);
+  }
+  void SetRotation(cVec4 *rotation)
+  {
+    ((void (__thiscall *)(Entity *, cVec4 *))(shared::base + 0x67CF00))(this, rotation);
+  }
+  cVec4 *GetRotation()
+  {
+    return ((cVec4 *(__thiscall *)(Entity *))(shared::base + 0x67C8D0))(this);
+  }
+  void SetSize(cVec4 *size)
+  {
+    ((void (__thiscall *)(Entity *, cVec4 *))(shared::base + 0x67CF90))(this, size);
+  }
+  cVec4 *GetSize()
+  {
+    return ((cVec4 *(__thiscall *)(Entity *))(shared::base + 0x67C8F0))(this);
+  }
 };
 
 VALIDATE_SIZE(Entity, 0x60);

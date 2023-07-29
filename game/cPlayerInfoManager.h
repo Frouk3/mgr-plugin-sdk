@@ -139,4 +139,4 @@ public:
   virtual ~cPlayerInfoManager() {};
 };
 
-extern cPlayerInfoManager*& g_cPlayerInfoManager;
+static cPlayerInfoManager*& g_cPlayerInfoManager = *(cPlayerInfoManager**)(shared::base + 0x1737A10);

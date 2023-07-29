@@ -7,5 +7,4 @@ class CharacterProxyListener : public hkReferencedObject, hkpCharacterProxyListe
 {
 public:
 
-    virtual ~CharacterProxyListener() override {};
 };

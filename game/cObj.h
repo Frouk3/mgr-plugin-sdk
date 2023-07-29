@@ -3,6 +3,7 @@
 #include "cXmlBinary.h"
 #include "cModel.h"
 #include "Entity.h"
+#include "shared.h"
 
 class cObj : public cModel
 {
@@ -43,27 +44,41 @@ public:
   int field_52C;
 
   // vft
+  void *GetContext()
+  {
+    return ReturnCallVMTFunc<void *, 1, cObj*>(this);
+  }
 
-  void *GetContext();
-  bool CreateDummy();
-  void Function3();
-  void Function4(); // nullsub
+  bool CreateDummy()
+  {
+    return ReturnCallVMTFunc<bool, 2, cObj *>(this);
+  }
 
-  void Function5();
-  void Function6();
-  void EnableRender();
-  void DisableRender();
-  float Function9(); // return 1.0
-  void Function10(int a2);
-  void Function11(); // nullsub
+  void EnableRender()
+  {
+    CallVMTFunc<7, cObj*>(this);
+  }
 
-  void Function12();
-  void Function13();
-  int GetRenderable();
-  void UpdateCollision(int a2);
+  void DisableRender()
+  {
+    CallVMTFunc<8, cObj *>(this);
+  }
+
+  int GetRenderable()
+  {
+    return ReturnCallVMTFunc<int, 14, cObj *>(this);
+  }
+  // Maybe add collision?
+  void UpdateCollision(int a2)
+  {
+    CallVMTFunc<15, cObj *, int>(this, a2);
+  }
   // vft end 
 
-  cObj();
+  cObj()
+  {
+    ((void (__thiscall *)(cObj *))(shared::base + 0x5FD150))(this);
+  }
 };
 
 VALIDATE_SIZE(cObj, 0x530);

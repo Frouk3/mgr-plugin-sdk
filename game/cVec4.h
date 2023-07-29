@@ -8,9 +8,24 @@ struct cVec4
   float z;
   float w;
   
-  void Normalize(cVec4 *v1, cVec4 *v2);
-  void operator=(cVec4 &right);
-  cVec4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f);
+  void Normalize(cVec4 *v1, cVec4 *v2)
+  { 
+    ((void (__cdecl *)(cVec4 *, cVec4*))(shared::base + 0x9DF460))(v1, v2);
+  };
+  void operator=(cVec4 &right)
+  {
+    this->x = right.x;
+    this->y = right.y;
+    this->z = right.z;
+    this->w = right.w;
+  }
+  cVec4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f)
+  {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+    this->w = w;
+  };
 };
 
 VALIDATE_SIZE(cVec4, 0x10);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CollisionUserData.h"
+#include "shared.h"
 
 class CollisionAttackData : public CollisionUserData
 {
@@ -72,8 +73,8 @@ public:
   int field_108;
   int field_10C;
 
-  CollisionAttackData();
-
-  virtual void field_0() override {};
-  virtual ~CollisionAttackData() override {};
+  CollisionAttackData()
+  {
+    ((void (__thiscall *)(CollisionAttackData *))(shared::base + 0x973030))(this);
+  }
 };

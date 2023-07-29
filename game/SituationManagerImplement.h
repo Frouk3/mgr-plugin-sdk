@@ -21,5 +21,8 @@ public:
     virtual ~SituationManagerImplement() override {};
 };
 
-SituationManagerImplement *GetSituationManagerImplement();
-extern SituationManagerImplement*& g_pSituationManagerImplement;
+SituationManagerImplement *GetSituationManagerImplement()
+{
+    return ((SituationManagerImplement *(__cdecl *)())(shared::base + 0x8206D0))();
+}
+static SituationManagerImplement*& g_pSituationManagerImplement = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);

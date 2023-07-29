@@ -23,14 +23,11 @@ public:
     int field_24;
     int field_28;
     int field_2C;
-
-    int Function0(int a2);
-    int Function1(int a2);
-    void Function2(float a2);
-    int Function3();
-    void Function4(int a2, int a3);
-    virtual ~BehaviorDatabaseImplement() override {};
 };
 
-extern BehaviorDatabaseImplement*& g_pBehaviorDatabaseImplement;
-BehaviorDatabaseImplement *GetBehaviorDatabaseImplement();
+static BehaviorDatabaseImplement *&g_pBehaviorDatabaseImplement = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
+
+BehaviorDatabaseImplement *GetBehaviorDatabaseImplement()
+{
+    return ((BehaviorDatabaseImplement *(__cdecl *)())(shared::base + 0x68B0B0))();
+}

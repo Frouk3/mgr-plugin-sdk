@@ -37,7 +37,7 @@ public:
   Pl1500* m_pPlayer;
   cParts* m_pPlayerParts[13];
   Pl1500 *m_pPlayerInstance;
-  int m_nPlayerEntityHandle;
+  EntityHandle m_nPlayerEntityHandle;
   cVec4 m_vecPlayerPosition;
   float field_B0;
   float field_B4;
@@ -54,4 +54,4 @@ public:
   virtual ~cGameUIManager() {};
 };
 
-extern cGameUIManager& g_cGameUIManager;
+static cGameUIManager& g_cGameUIManager = *(cGameUIManager*)(shared::base + 0x19C1430);

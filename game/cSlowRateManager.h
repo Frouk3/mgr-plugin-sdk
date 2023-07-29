@@ -33,20 +33,64 @@ public:
   float field_90;
 
   virtual ~cSlowRateManager() {};
-  cSlowRateManager();
-  void SetSlowRate(eSlowRateType SlowRateType, float SlowRate);
-  float GetSlowRate(eSlowRateType SlowRateType);
-  void ResetSlowRate();
-  void Cleanup();
-  float GetCalculatedRate(eSlowRateType type);
-  cSlowRateUnit *AllocUnit();
+  cSlowRateManager()
+  {
+    ((void (__thiscall *)(cSlowRateManager *))(shared::base + 0xA08FB0))(this);
+  }
 
-  static inline void SetSlowRaten(eSlowRateType SlowRateType, float SlowRate);
-  static inline float GetTickRate(eSlowRateType type);
-  static inline void Reset();
+  void SetSlowRate(eSlowRateType SlowRateType, float SlowRate)
+  {
+    ((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03A70))(this, SlowRateType, SlowRate);
+  }
+
+  float GetSlowRate(eSlowRateType SlowRateType)
+  {
+	if (SlowRateType < 4)
+		return this->m_fSlowRate[SlowRateType].m_fSlowRate;
+	else
+		return 1.0f;
+  }
+
+  void ResetSlowRate()
+  {
+    ((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA03B10))(this);
+  }
+
+  void Cleanup()
+  {
+    ((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08740))(this);
+  }
+
+  float GetCalculatedRate(eSlowRateType type)
+  {
+	  return ((float(__thiscall *)(cSlowRateManager *, int))(shared::base + 0xA03A90))(this, type);
+  }
+
+  cSlowRateUnit *AllocUnit()
+  {
+	  return ((cSlowRateUnit *(__thiscall *)(cSlowRateManager *))(shared::base + 0xA06230))(this);
+  }
+
+  static inline void SetSlowRaten(eSlowRateType SlowRateType, float SlowRate)
+  {
+	  ((void(__cdecl*)(int, float))(shared::base + 0x532020))(SlowRateType, SlowRate);
+  }
+
+  static inline float GetTickRate(eSlowRateType type)
+  {
+	  return ((float (__cdecl *)(int))(shared::base + 0x532000))(type);
+  }
+
+  static inline void Reset()
+  {
+	  ((void(__cdecl*)())(shared::base + 0x11EDC20))();
+  }
 };
 
-cSlowRateManager* GetcSlowRateManager();
+cSlowRateManager* GetcSlowRateManager()
+{
+  return ((cSlowRateManager *(__cdecl *)())(shared::base + 0xA03960))();
+}
 
-extern cSlowRateManager& g_cSlowRateManager;
-extern cSlowRateManager*& g_pcSlowRateManager;
+static cSlowRateManager& g_cSlowRateManager = *(cSlowRateManager*)(shared::base + 0x17E93B0);
+static cSlowRateManager*& g_pcSlowRateManager = *(cSlowRateManager**)(shared::base + 0x19D9160);
