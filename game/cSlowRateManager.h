@@ -87,7 +87,7 @@ public:
   }
 };
 
-cSlowRateManager* GetcSlowRateManager()
+static cSlowRateManager* GetcSlowRateManager()
 {
   return ((cSlowRateManager *(__cdecl *)())(shared::base + 0xA03960))();
 }
