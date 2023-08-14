@@ -226,7 +226,7 @@ namespace plugin
             return origCall;
         }
     }
-    // !!! DOESN'T WORK CURRENTLY !!!
+
     namespace DrawingEvent
     {
         uintptr_t returnAddress;

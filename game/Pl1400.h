@@ -32,7 +32,7 @@ public:
   int field_5468;
   int field_546C;
 
-  virtual ~Pl1400() override {};
+  
 };
 
 VALIDATE_SIZE(Pl1400, 0x5470);

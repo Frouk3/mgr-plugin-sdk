@@ -1,5 +1,6 @@
 #pragma once
 #include "cXmlBinary.h"
+#include "shared.h"
 
 struct PhaseManager
 {

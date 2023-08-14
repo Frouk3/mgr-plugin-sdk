@@ -188,8 +188,6 @@ public:
   int field_5784;
   int field_5788;
   int field_578C;
-
-  virtual ~Pl1500() override {};
 };
 
 VALIDATE_SIZE(Pl1500, 0x5790);

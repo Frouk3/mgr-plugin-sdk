@@ -23,8 +23,8 @@ namespace Hw
     class cRenderTargetInfo;
     class cOtWork;
 
-    inline IDirect3D9 *pDirect3D9 = *(IDirect3D9**)(shared::base + 0x1B206D8);
-    inline IDirect3DDevice9 *GraphicDevice = *(IDirect3DDevice9**)(shared::base + 0x1B206D4);
+    inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+    inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
 }
 
 class Hw::cHeap

@@ -3616,7 +3616,6 @@ public:
   {
     ((void (__thiscall *)(Pl0000 *))(shared::base + 0x6C0310))(this);
   }
-  virtual ~Pl0000() override {};
 
   bool IsBladeModeActive()
   {

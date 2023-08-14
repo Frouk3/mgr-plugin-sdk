@@ -236,3 +236,5 @@ public:
 
   virtual ~EspCtrlCustom() {};
 };
+
+VALIDATE_SIZE(Animation, 0x344);

@@ -7,7 +7,6 @@
 #define RadianToDegree(x) x * 180 / PI
 // giving issues with size in Visual Studio Code(should not interact with code generation or compiling)
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
-
 namespace shared
 {
 	inline bool key_state[1024] = {};
