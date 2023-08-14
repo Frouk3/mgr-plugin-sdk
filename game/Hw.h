@@ -25,6 +25,7 @@ namespace Hw
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
+    inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C); 
 }
 
 class Hw::cHeap

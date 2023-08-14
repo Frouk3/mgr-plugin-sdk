@@ -227,7 +227,7 @@ namespace plugin
         }
     }
 
-    namespace DrawingEvent
+    namespace OnEndScene
     {
         uintptr_t returnAddress;
         std::list<void(*)()> funcPtrs;
@@ -264,6 +264,83 @@ namespace plugin
         }
     }
 
+    namespace OnDeviceReset
+    {
+        namespace After
+        {
+            uintptr_t returnAddress;
+            std::list<void(*)()> funcPtrs;
+
+            void Run()
+            {
+                for (auto &f : funcPtrs)
+                    f();
+            }
+
+            void Add(void(*funcPtr)())
+            {
+                funcPtrs.emplace_back(funcPtr);
+            }
+
+            void __declspec(naked) MainHook()
+            {
+                __asm
+                {
+                    pushad
+                    call Run
+                    popad
+                    jmp returnAddress
+                }
+            }
+
+            uint32_t DoHook(uint32_t address)
+            {
+                uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
+
+                injector::MakeCALL(address, MainHook, true);
+
+                return origCall;
+            }
+        }
+
+        namespace Before
+        {
+            uintptr_t returnAddress;
+            std::list<void(*)()> funcPtrs;
+
+            void Run()
+            {
+                for (auto &f : funcPtrs)
+                    f();
+            }
+
+            void Add(void(*funcPtr)())
+            {
+                funcPtrs.emplace_back(funcPtr);
+            }
+
+            void __declspec(naked) MainHook()
+            {
+                __asm
+                {
+                    pushad
+                    call Run
+                    popad
+                    jmp returnAddress
+                }
+            }
+
+            uint32_t DoHook(uint32_t address)
+            {
+                uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
+
+                injector::MakeCALL(address, MainHook, true);
+
+                return origCall;
+            }
+        }
+    }
+
     void InitEvents()
     {
         UpdateEvent::returnAddress = UpdateEvent::DoHook(shared::base + 0x6526A2);
@@ -272,7 +349,9 @@ namespace plugin
         OnSceneCleanup::returnAddress = OnSceneCleanup::DoHook(shared::base + 0x650770);
         OnTickEvent::returnAddress = OnTickEvent::DoHook(shared::base + 0x64D411);
         OnPauseEvent::returnAddress = OnPauseEvent::DoHook(shared::base + 0x64D40A);
-        DrawingEvent::returnAddress = DrawingEvent::DoHook(shared::base + 0x65264C);
+        OnEndScene::returnAddress = OnEndScene::DoHook(shared::base + 0x65264C);
+        OnDeviceReset::After::returnAddress = OnDeviceReset::After::DoHook(shared::base + 0xB9D499);
+        OnDeviceReset::Before::returnAddress = OnDeviceReset::Before::DoHook(shared::base + 0xB9D0FA);
     }
 
     void OnStartup();
