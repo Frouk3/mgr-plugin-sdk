@@ -1,5 +1,6 @@
 #pragma once
 #include "GameWorkManager.h"
+#include "shared.h"
 
 class GameWorkManagerImplement : public GameWorkManager
 {
@@ -71,4 +72,7 @@ public:
     int field_104;
     int field_108;
     int field_10C;
+
+    static inline GameWorkManagerImplement *&pInstance = *(GameWorkManagerImplement**)(shared::base + 0x17EA184);
 };
+

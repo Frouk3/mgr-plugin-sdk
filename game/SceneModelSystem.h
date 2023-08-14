@@ -57,4 +57,6 @@ public:
   {
     ((void (__thiscall *)(SceneModelSystem *))(shared::base + 0x6197D0))(this);
   }
+
+  static inline SceneModelSystem &Instance = *(SceneModelSystem*)(shared::base + 0x177B628);
 };

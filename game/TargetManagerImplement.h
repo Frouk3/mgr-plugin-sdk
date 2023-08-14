@@ -13,6 +13,6 @@ public:
     int field_18;
     int field_1C;
     int field_20;
-};
 
-static TargetManagerImplement*& g_pTargetManagerImplement = *(TargetManagerImplement**)(shared::base + 0x17EA108);
+    static inline TargetManagerImplement*& pInstance = *(TargetManagerImplement**)(shared::base + 0x17EA108);
+};

@@ -17,6 +17,5 @@ public:
     int field_28;
     int field_2C;
 
+    static inline BattleParameterManagerImplement*& pInstance = *(BattleParameterManagerImplement**)(shared::base + 0x19C5260);
 };
-
-static BattleParameterManagerImplement*& g_pBattleParameterManagerImplement = *(BattleParameterManagerImplement**)(shared::base + 0x19C5260);

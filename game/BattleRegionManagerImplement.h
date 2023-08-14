@@ -11,10 +11,10 @@ public:
     int field_C;
     cEspControler field_10;
   
-};
+    static inline BattleRegionManagerImplement*& pInstance = *(BattleRegionManagerImplement**)(shared::base + 0x1734B00);
 
-static BattleRegionManagerImplement*& g_pBattleRegionManagerImplement = *(BattleRegionManagerImplement**)(shared::base + 0x1734B00);
-BattleRegionManagerImplement* GetBattleRegionManagerImplement()
-{
-    return ((BattleRegionManagerImplement *(__cdecl *)())(shared::base + 0x1110))();
-}
+    static inline BattleRegionManagerImplement* Get()
+    {
+        return ((BattleRegionManagerImplement *(__cdecl *)())(shared::base + 0x1110))();
+    }
+};

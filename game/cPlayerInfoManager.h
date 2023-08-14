@@ -137,6 +137,8 @@ public:
   int field_19C;
 
   virtual ~cPlayerInfoManager() {};
+
+  static inline cPlayerInfoManager &Instance = *(cPlayerInfoManager*)(shared::base + 0x1737A10);
 };
 
-static cPlayerInfoManager*& g_cPlayerInfoManager = *(cPlayerInfoManager**)(shared::base + 0x1737A10);
+VALIDATE_SIZE(cPlayerInfoManager, 0x1A0);

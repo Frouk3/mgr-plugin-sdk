@@ -52,6 +52,6 @@ public:
   int field_D8;
 
   virtual ~cGameUIManager() {};
+  
+  static inline cGameUIManager& Instance = *(cGameUIManager*)(shared::base + 0x19C1430);
 };
-
-static cGameUIManager& g_cGameUIManager = *(cGameUIManager*)(shared::base + 0x19C1430);

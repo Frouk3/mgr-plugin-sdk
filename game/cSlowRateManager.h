@@ -85,12 +85,12 @@ public:
   {
 	  ((void(__cdecl*)())(shared::base + 0x11EDC20))();
   }
+
+  static inline cSlowRateManager* Get()
+  {
+      return ((cSlowRateManager *(__cdecl *)())(shared::base + 0xA03960))();
+  }
+
+  static inline cSlowRateManager& Instance = *(cSlowRateManager*)(shared::base + 0x17E93B0);
+  static inline cSlowRateManager*& pInstance = *(cSlowRateManager**)(shared::base + 0x19D9160);
 };
-
-static cSlowRateManager* GetcSlowRateManager()
-{
-  return ((cSlowRateManager *(__cdecl *)())(shared::base + 0xA03960))();
-}
-
-static cSlowRateManager& g_cSlowRateManager = *(cSlowRateManager*)(shared::base + 0x17E93B0);
-static cSlowRateManager*& g_pcSlowRateManager = *(cSlowRateManager**)(shared::base + 0x19D9160);

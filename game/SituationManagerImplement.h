@@ -17,10 +17,11 @@ public:
     int field_24;
     int field_28;
     int field_2C;
-};
 
-SituationManagerImplement *GetSituationManagerImplement()
-{
-    return ((SituationManagerImplement *(__cdecl *)())(shared::base + 0x8206D0))();
-}
-static SituationManagerImplement*& g_pSituationManagerImplement = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);
+    static inline SituationManagerImplement*& pInstance = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);
+
+    static inline SituationManagerImplement *Get()
+    {
+        return ((SituationManagerImplement *(__cdecl *)())(shared::base + 0x8206D0))();
+    }
+};

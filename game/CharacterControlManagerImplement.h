@@ -3,6 +3,7 @@
 #include "lib.h"
 #include "CharacterControl.h"
 #include "CharacterControlManager.h"
+#include "shared.h"
 
 class CharacterControlManagerImplement : public CharacterControlManager
 {
@@ -18,4 +19,6 @@ public:
     int field_24;
     int field_28;
     int field_2C;
+
+    static inline CharacterControlManagerImplement *&pInstance = *(CharacterControlManagerImplement**)(shared::base + 0x1735D9C);
 };

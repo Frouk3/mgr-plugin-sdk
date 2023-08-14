@@ -28,8 +28,6 @@ public:
   int field_20;
   int field_24;
   Hw::cHeapPhysical field_28;
-  int field_90;
-  int field_94;
   int field_98;
   int field_9C;
   int field_A0;
@@ -290,6 +288,8 @@ public:
   int field_49C;
 
   virtual ~PhaseReadManagerImplement() override {};
+
+  static inline PhaseReadManagerImplement *&pInstance = *(PhaseReadManagerImplement**)(shared::base + 0x19C51C0);
 };
 
-static PhaseReadManagerImplement *&g_pPhaseReadManagerImplement = *(PhaseReadManagerImplement**)(shared::base + 0x19C51C0);
+VALIDATE_SIZE(PhaseReadManagerImplement, 0x4A0);

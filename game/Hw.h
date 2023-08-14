@@ -39,15 +39,15 @@ public:
   int field_1C;
   int field_20;
   int field_24;
-  int field_28;
+  Hw::cHeapVariable *m_pReservedHeap;
   Hw::cHeapGlobal *m_pGlobalHeap;
   Hw::cHeapVariable *m_pNext;
   Hw::cHeapVariable *m_pPrev;
-  char *m_TargetAlloc;
+  const char *m_TargetAlloc;
   int field_3C;
   HANDLE *m_pHandle;
   int field_44;
-  int field_48;
+  int m_nFixedSizeAllocation;
   int m_nMaxPhysical;
   int m_nFreePhysical;
   int field_54;
@@ -67,7 +67,6 @@ class Hw::cHeapVariable : public Hw::cHeapVariableBase
 public:
 
   virtual ~cHeapVariable() override {};
-  void *AllocateMemory(size_t size, Hw::cHeapVariable *heap);
 };
 
 class Hw::cTexture
@@ -100,6 +99,8 @@ public:
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
+  int field_58;
+  int field_5C;
   int field_60;
   int field_64;
   int field_68;
@@ -198,3 +199,6 @@ public:
   
   virtual ~cOtWork() {};
 };
+
+VALIDATE_SIZE(Hw::cHeap, 0x58);
+VALIDATE_SIZE(Hw::cHeapPhysicalBase, 0x70);

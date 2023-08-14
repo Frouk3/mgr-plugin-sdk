@@ -78,6 +78,8 @@ struct EntitySystem
   {
     return ((Entity *(__thiscall *)(EntitySystem *, eObjID))(shared::base + 0x67F600))(this, objID);
   }
+
+  static inline EntitySystem &Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
 };
 
 struct EntitySystem::EnemySpawnInfo
@@ -217,8 +219,5 @@ struct Entity::ConstructInfo
   EntitySystem::EntityInfo *m_pEntityInfo;
   int field_10;
 };
-
-static EntitySystem &g_EntitySystem = *(EntitySystem*)(shared::base + 0x17E9A98);
-
 
 VALIDATE_SIZE(EntitySystem, 0x12C);
