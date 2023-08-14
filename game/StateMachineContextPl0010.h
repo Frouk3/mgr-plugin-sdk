@@ -295,7 +295,4 @@ public:
   int field_5D4;
   float field_5D8;
   int field_5DC;
-
-  virtual void *Function0() {};
-  virtual ~StateMachineContextPl0010() override {};
 };

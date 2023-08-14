@@ -65,13 +65,18 @@ struct EntitySystem
   struct EnemySpawnInfo;
   struct EntityInfo;
   struct ObjectInfo;
-  Entity *ConstructEntity(const char* name, unsigned int index, ObjectInfo *pObjInfo)
+  Entity *CreateEntity(const char* name, eObjID objID, ObjectInfo *pObjInfo)
   {
-    return ((Entity *(__thiscall *)(EntitySystem *, const char*, unsigned int, ObjectInfo *))(shared::base + 0x682090))(this, name, index, pObjInfo);
+    return ((Entity *(__thiscall *)(EntitySystem *, const char*, eObjID, ObjectInfo *))(shared::base + 0x682090))(this, name, objID, pObjInfo);
   }
-  Entity *ConstructEntity(EntityInfo *pInfo)
+  Entity *CreateEntity(EntityInfo *pInfo)
   {
     return ((Entity *(__thiscall *)(EntitySystem*, EntityInfo *))(shared::base + 0x681B80))(this, pInfo);
+  }
+
+  Entity *FindEntityByIndex(eObjID objID)
+  {
+    return ((Entity *(__thiscall *)(EntitySystem *, eObjID))(shared::base + 0x67F600))(this, objID);
   }
 };
 

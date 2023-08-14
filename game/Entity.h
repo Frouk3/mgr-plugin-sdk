@@ -17,7 +17,7 @@ struct Entity
   int field_18;
   int field_1C;
   int field_20;
-  unsigned int m_nEntityIndex;
+  eObjID m_nEntityIndex;
   unsigned int m_nEntityFlags;
   int field_2C;
   int field_30;
@@ -34,6 +34,11 @@ struct Entity
   int field_5C;
 
   struct ConstructInfo;
+
+  BOOL Construct(ConstructInfo *pConstructInfo)
+  {
+    return ((BOOL (__thiscall *)(Entity *, ConstructInfo *))(shared::base + 0x680E70))(this, pConstructInfo);
+  }
   void *GetItemInstance()
   {
     return ((void *(__thiscall *)(Entity *))(shared::base + 0x67C8A0))(this);

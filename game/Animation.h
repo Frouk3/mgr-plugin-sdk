@@ -228,6 +228,11 @@ public:
   int field_340;
 
   class EspCtrlCustom;
+
+  Animation()
+  {
+    ((void (__thiscall *)(Animation *))(shared::base + 0xA35080))(this);
+  }
 };
 
 class Animation::EspCtrlCustom

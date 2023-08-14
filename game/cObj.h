@@ -4,6 +4,7 @@
 #include "cModel.h"
 #include "Entity.h"
 #include "shared.h"
+#include "eObjID.h"
 
 class cObj : public cModel
 {
@@ -16,8 +17,8 @@ public:
   int m_nType;
   int m_nSetFlag;
   int m_nSetRtn;
-  unsigned int m_nModelIndex;
-  unsigned int m_nClothIndex;
+  eObjID m_nModelIndex;
+  eObjID m_nClothIndex;
   int field_4B8;
   int m_nAnimIndex;
   int field_4C0;
