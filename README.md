@@ -19,3 +19,6 @@ About IDA database, i will put the link [here](https://drive.google.com/file/d/1
 
 ## Making a mod
 There's example how to make a basic mod for the game, but, the code itself and sdk will change with some time
+
+[MGR Plugin Framework](https://github.com/Frouk3/mgr-plugin-sdk/files/12339706/MGR.Plugin.Framework.zip)<br />
+Use it to make mods with plugin sdk
