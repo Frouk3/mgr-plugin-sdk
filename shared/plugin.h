@@ -283,3 +283,19 @@ namespace plugin
         OnStartup();
     }
 }
+
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
+{
+    DisableThreadLibraryCalls(hInstance);
+
+    switch (fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+        plugin::Init();
+        break;
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+
+    return TRUE;
+}

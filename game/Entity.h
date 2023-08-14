@@ -5,8 +5,9 @@
 #include "Hw.h"
 #include "Animation.h"
 #include "shared.h"
+#include "eObjID.h"
+#include "EntityHandle.h"
 
-typedef unsigned int EntityHandle;
 struct EntitySystem;
 
 struct Entity
