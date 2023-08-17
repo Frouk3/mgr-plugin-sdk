@@ -9,7 +9,7 @@
 class PlayerManagerImplement : public PlayerManager
 {
 public:
-    unsigned int field_4; // EntityHandle (??)
+    EntityHandle field_4; // EntityHandle (??)
     int field_8;
     Hw::cTexture m_PlayerTextures[5];
     float m_fSlowRate;
@@ -34,7 +34,7 @@ public:
     int field_F0;
     int field_F4;
     lib::StaticArray<EntityHandle, 2> *m_pEntityArray;
-    unsigned int field_FC; // EntityHandle (??)
+    EntityHandle field_FC; // EntityHandle (??)
     
     PlayerManagerImplement()
     {
