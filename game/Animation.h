@@ -222,6 +222,114 @@ public:
     {
         ((void (__thiscall *)(Animation *))(shared::base + 0xA35080))(this);
     }
+
+    class Motion
+    {
+    public:
+        class Node
+        {
+        public:
+            int field_4;
+            int field_8;
+            int field_C;
+            int field_10;
+            int field_14;
+            int field_18;
+            int field_1C;
+            int field_20;
+            int field_24;
+            int field_28;
+            int field_2C;
+            int field_30;
+            int field_34;
+            int field_38;
+            int field_3C;
+            int field_40;
+            int field_44;
+            int field_48;
+            int field_4C;
+            int field_50;
+            int field_54;
+            int field_58;
+            int field_5C;
+            int field_60;
+            int field_64;
+            float field_68;
+            float field_6C;
+            float field_70;
+            float field_74;
+            float field_78;
+            int field_7C;
+            int field_80;
+            EspCtrlCustomImpl *field_84;
+            int field_88;
+
+            virtual ~Node() {};
+        };
+
+        class NodeBlend : public Node
+        {
+        public:
+            int field_8C;
+            int field_90;
+            int field_94;
+            int field_98;
+            float field_9C;
+            int field_A0;
+            float fiedl_A4;
+            float field_A8;
+            int field_AC;
+        };
+
+        class NodeGrindBlend : public NodeBlend
+        {
+
+        };
+
+        class NodeListener
+        {
+            int field_4;
+            int field_8;
+            int field_C;
+
+            virtual ~NodeListener() {};
+        };
+
+        class NodeParallel : public Node
+        {
+        public:
+            int field_8C;
+            int field_90;
+            int field_94;
+        };
+
+        class NodeSequence : public Node
+        {
+            int field_8C;
+            int field_90;
+            int field_94;
+        };
+
+        class NodeSlot
+        {
+        public:
+            class NodeHandler : public NodeListener
+            {
+            public:
+
+            };
+        };
+
+        class Unit
+        {
+        public:
+            class NodeHandler : public NodeListener
+            {
+            public:
+
+            };
+        };
+    };
 };
 
 class Animation::EspCtrlCustom

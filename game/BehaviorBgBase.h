@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Behavior.h"
 
 class BehaviorBgBase : public Behavior

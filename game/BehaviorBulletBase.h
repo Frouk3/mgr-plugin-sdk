@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Behavior.h"
 #include "EspControllerBullet.h"
 

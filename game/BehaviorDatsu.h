@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Behavior.h"
 
 class BehaviorDatsu : public Behavior

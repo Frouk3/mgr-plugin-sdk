@@ -1,3 +1,5 @@
+#pragma once
+
 #include "BehaviorUniqueAllocator.h"
 #include "shared.h"
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "BehaviorAppBase.h"
 
 class BehaviorCamera : public BehaviorAppBase
@@ -30,7 +32,7 @@ public:
     int field_A54;
     int field_A58;
     int field_A5C;
-    
+
     BehaviorCamera()
     {
         ((void (__thiscall *)(BehaviorCamera *))(shared::base + 0x6AF350))(this);
