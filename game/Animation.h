@@ -20,23 +20,22 @@ public:
 
             virtual ~NodeListener() {};
         };
-        class NodeSlot;
+
+        class NodeSlot
+        {
+        public:
+            class NodeHandler : public NodeListener
+            {
+            public:
+
+            };
+        };
     };
 
     class PostControl
     {
     public:
         class Work;  
-    };
-
-    class Control::NodeSlot
-    {
-    public:
-        class NodeHandler : public Animation::Control::NodeListener
-        {
-        public:
-
-        };
     };
 
     int field_0;

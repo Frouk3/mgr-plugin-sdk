@@ -24,6 +24,11 @@ public:
     int field_28;
     int field_2C;
 
+    BehaviorDatabaseImplement()
+    {
+        ((void (__thiscall *)(BehaviorDatabaseImplement *))(shared::base + 0x6C18F0))(this);
+    }
+
     static inline BehaviorDatabaseImplement *&pInstance = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
     
     static inline BehaviorDatabaseImplement *Get()
