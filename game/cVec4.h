@@ -1,5 +1,6 @@
 #pragma once
 #include "shared.h"
+#include <math.h>
 
 struct cVec4
 {
@@ -8,10 +9,10 @@ struct cVec4
   float z;
   float w;
   
-  void Normalize(cVec4 *v1, cVec4 *v2)
+  static inline void Normalize(cVec4 *v1, cVec4 *v2)
   { 
     ((void (__cdecl *)(cVec4 *, cVec4*))(shared::base + 0x9DF460))(v1, v2);
-  };
+  }
   void operator=(cVec4 &right)
   {
     this->x = right.x;
@@ -26,6 +27,10 @@ struct cVec4
     this->z = z;
     this->w = w;
   };
+  float Magnitude()
+  {
+    return sqrtf(powf(this->x, 2) + powf(this->y, 2) + powf(this->z, 2));
+  }
 };
 
 VALIDATE_SIZE(cVec4, 0x10);

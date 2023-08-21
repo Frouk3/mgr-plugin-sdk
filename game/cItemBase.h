@@ -1,4 +1,5 @@
 #pragma once
+#include "shared.h"
 
 class cItemBase
 {
@@ -24,5 +25,13 @@ public:
   int field_4C;
   int field_50;
 
-  virtual ~cItemBase() {};
+  const char* GetClassName()
+  {
+    return ReturnCallVMTFunc<const char*, 0, cItemBase *>(this);
+  }
+  virtual ~cItemBase() {CallVMTFunc<1, cItemBase *>(this); };
+  void SetMaxCount(void *a2)
+  {
+    CallVMTFunc<2, cItemBase *, void *>(this, a2);
+  }
 };

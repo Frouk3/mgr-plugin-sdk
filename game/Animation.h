@@ -4,6 +4,8 @@
 
 struct Entity;
 
+class EspCtrlCustomImpl;
+
 struct Animation
 {
 public:
@@ -214,7 +216,12 @@ public:
     int field_33C;
     int field_340;
 
-    class EspCtrlCustom;
+    class EspCtrlCustom
+    {
+    public:
+
+        virtual ~EspCtrlCustom() {};
+    };
     class FootIk2;
     class HandIk;
 
@@ -288,6 +295,7 @@ public:
 
         class NodeListener
         {
+        public:
             int field_4;
             int field_8;
             int field_C;
@@ -330,13 +338,6 @@ public:
             };
         };
     };
-};
-
-class Animation::EspCtrlCustom
-{
-public:
-
-    virtual ~EspCtrlCustom() {};
 };
 
 class Animation::PostControl::Work

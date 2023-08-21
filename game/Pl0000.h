@@ -3427,6 +3427,10 @@ public:
   {
     ((void (__thiscall *)(Pl0000 *, bool))(shared::base + 0x77E210))(this, bShouldLose);
   }
+  BOOL IsUnarmed()
+  {
+    return ((BOOL (__thiscall *)(Pl0000 *))(shared::base + 0x780980))(this);
+  }
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

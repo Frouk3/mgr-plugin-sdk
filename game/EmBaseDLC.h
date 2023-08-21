@@ -15,8 +15,8 @@ public:
     float m_fRageDuration;
     int field_E88;
 
-    void SetRaged(Entity *RageCreator)
+    void SetRaged(void *a2 = nullptr)
     {
-        CallVMTFunc<220, EmBaseDLC *, Entity *>(this, RageCreator); 
+        CallVMTFunc<220, EmBaseDLC *, void *>(this, a2); 
     }
 };

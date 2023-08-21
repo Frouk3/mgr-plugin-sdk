@@ -168,5 +168,13 @@ public:
     int field_DB0;
     char field_DB4;
 
-    virtual ~BehaviorEmBase() override {};
+    void SetWait()
+    {
+        CallVMTFunc<211, BehaviorEmBase *>(this);
+    }
+
+    void CreateEffect(int effId, cEspControler *pEsp)
+    {
+        CallVMTFunc<214, BehaviorEmBase *, int, cEspControler *>(this, effId, pEsp);
+    }
 };

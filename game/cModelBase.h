@@ -182,7 +182,7 @@ public:
   short m_ncBodyParts;
   int field_35C;
   int field_360;
-  int field_364;
+  unsigned int m_nObjectFlags;
   int field_368;
   int field_36C;
 };
