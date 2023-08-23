@@ -11,9 +11,46 @@
 #include "StateMachineFactoryPl0010.h"
 #include <D3dx9math.h>
 
+struct Constraints
+{
+    eObjID m_nIndex;
+    int field_4;
+    EntityHandle m_nObjectEntityHandle;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    float field_20;
+    float field_24;
+    float field_28;
+    float field_2C;
+    cVec4 m_vecOffset;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+};
+
 class Behavior : public cObj
 {
 public:
+    struct AnimationSlot
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        int field_10;
+        int field_14;
+        int field_18;
+        int field_1C;
+        int field_20;
+        int field_24;
+        float field_28;
+        int field_2C;
+    };
+
     int field_530;
     int field_534;
     int field_538;
@@ -66,15 +103,15 @@ public:
     float field_600;
     int field_604;
     int field_608;
-    int field_60C;
+    void* m_pBehaviorInfo;
     int field_610;
     int field_614;
-    int m_nCurrentAction;
+    unsigned int m_nCurrentAction;
     int m_nCurrentActionId;
     int field_620;
     int field_624;
-    int field_628;
-    int field_62C;
+    unsigned int m_nPreviousAction;
+    int m_nPreviousActionId;
     int field_630;
     int field_634;
     int field_638;
@@ -149,7 +186,7 @@ public:
     int field_768;
     int field_76C;
     int field_770;
-    int field_774;
+    lib::StaticArray<AnimationSlot, 16> *m_pAnimationSlots;
     int field_778;
     int field_77C;
     int field_780;
@@ -169,7 +206,7 @@ public:
     int field_7B8;
     int field_7BC;
     float field_7C0;
-    int m_pContraints;
+    lib::StaticArray<Constraints, 32> **m_pContraints;
     int field_7C8;
     int field_7CC;
     StateMachineContextPl0010 *m_pStateMachineContext;
@@ -221,9 +258,13 @@ public:
 
 // vft
 
-    void Startup()
+    BOOL Startup()
     {
-        CallVMTFunc<16, Behavior *>(this);
+        return ReturnCallVMTFunc<BOOL, 16, Behavior *>(this);
+    }
+    BOOL Shutdown()
+    {
+        return ReturnCallVMTFunc<BOOL, 17, Behavior *>(this);
     }
     void Tick()
     {

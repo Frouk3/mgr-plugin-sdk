@@ -12,7 +12,7 @@ public:
         int field_4;
         int field_8;
     };
-    lib::AllocatedArray<BehaviorDatabaseImplement::UsedContainer> *m_pUsedContainer;
+    lib::AllocatedArray<BehaviorDatabaseImplement::UsedContainer> **m_pUsedContainer;
     lib::StaticArray<BehaviorData *, 2048> *m_pBehaviorData;
     int field_C;
     int field_10;

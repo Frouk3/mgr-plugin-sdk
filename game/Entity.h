@@ -20,7 +20,7 @@ struct Entity
   int field_20;
   eObjID m_nEntityIndex;
   unsigned int m_nEntityFlags;
-  int field_2C;
+  EntityHandle m_nEntityHandle;
   int field_30;
   int field_34;
   SceneModelSystem *m_pSceneModelSystem;
@@ -28,7 +28,7 @@ struct Entity
   Animation* m_pAnimation;
   int field_44;
   void *m_pInstance;
-  int field_4C;
+  BOOL m_bModelRegistered;
   int field_50;
   int field_54;
   int m_nSetType;
