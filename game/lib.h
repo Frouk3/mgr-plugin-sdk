@@ -14,7 +14,7 @@ public:
     T *m_pArrayStart;
     int m_nCurrentElements = 0;
     int m_nMaxElements = 0;
-    T m_Array;
+    T m_Array[1];
 
     Array()
     {
