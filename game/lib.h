@@ -14,7 +14,7 @@ public:
     T *m_pArrayStart;
     int m_nCurrentElements = 0;
     int m_nMaxElements = 0;
-    T m_Array[];
+    T m_Array;
 
     Array()
     {
@@ -31,11 +31,11 @@ public:
 };
 
 template <typename T, int size>
-class lib::StaticArray : public lib::Array<T> 
+class lib::StaticArray : public lib::Array<T>
 {
 public:
 
-    StaticArray() : Array()
+    StaticArray()
     {
         this->m_nMaxElements = size;
     }
