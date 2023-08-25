@@ -1027,6 +1027,6 @@ public:
   int field_16D0;
 
   virtual ~cCameraGame() override {};
-};
 
-static cCameraGame& g_cCameraGame = *(cCameraGame*)(shared::base + 0x17EA1D0);
+  static inline cCameraGame& Instance = *(cCameraGame*)(shared::base + 0x17EA1D0);
+};

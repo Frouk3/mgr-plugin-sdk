@@ -2,6 +2,7 @@
 #include "CharacterProxy.h"
 #include "CharacterProxyListener.h"
 #include "cVec4.h"
+#include "lib.h"
 
 struct CharacterControl
 {
@@ -25,7 +26,7 @@ struct CharacterControl
   int field_44;
   int field_48;
   int field_4C;
-  int field_50;
+  lib::StaticArray<CharacterControl *, 8> field_50;
   int field_54;
   int field_58;
   int field_5C;

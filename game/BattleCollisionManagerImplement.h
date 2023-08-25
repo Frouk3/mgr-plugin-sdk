@@ -4,6 +4,7 @@
 #include "Slot.h"
 #include "lib.h"
 #include "Collision.h"
+#include "Hw.h"
 
 class BattleCollisionManagerImplement : public BattleCollisionManager
 {

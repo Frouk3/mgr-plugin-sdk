@@ -25,8 +25,8 @@ public:
 
     virtual ~Array() {};
     virtual T* GetObjects() {};
-    virtual bool ReplaceObject(T pObject) {};
-    virtual T AppendObject(T pObject, T pAppendObject) {};
+    virtual bool ReplaceObject(T *pObject) {};
+    virtual T AppendObject(T *pObject, T *pAppendObject) {};
     virtual void Copy(lib::Array<T> *lib) {};
 };
 

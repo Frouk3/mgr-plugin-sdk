@@ -192,6 +192,5 @@ struct PhaseManager
   {
     ((void (__thiscall *)(PhaseManager *, int))(shared::base + 0x9664E0))(this, a2);
   }
+  static inline PhaseManager& Instance = *(PhaseManager*)(shared::base + 0x14B9140);
 };
-
-static PhaseManager& g_PhaseManager = *(PhaseManager*)(shared::base + 0x14B9140);
