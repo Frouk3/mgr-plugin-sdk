@@ -119,3 +119,27 @@ void CallMethod(C self, Args... args)
 {
 	((void (__thiscall *)(C, Args...))address)(self, args...);
 }
+
+template<unsigned int address, typename... Args>
+void CdeclCall(Args... args)
+{
+	((void (__cdecl*)(Args...))address)(args...);
+}
+
+template<typename ret, unsigned int address, typename... Args>
+ret ReturnCdeclCall(Args... args)
+{
+	return ((ret (__cdecl *)(Args...))address)(args...);
+}
+
+template<typename ret, unsigned int address, typename... Args>
+ret ReturnStdcall(Args... args)
+{
+	return ((ret (__stdcall *)(Args...))address)(args...);
+}
+
+template<unsigned int address, typename... Args>
+void Stdcall(Args... args)
+{
+	((void (__stdcall *)(Args...))address)(args...);
+}

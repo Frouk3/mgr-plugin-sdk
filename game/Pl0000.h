@@ -3407,7 +3407,7 @@ public:
   {
     ((void (__thiscall *)(Pl0000 *))(shared::base + 0x785190))(this);
   }
-  void SetFuelContainer(float FuelContainer)
+  void SetFuelCapacity(float FuelContainer)
   {
     ((void (__thiscall *)(Pl0000 *, float))(shared::base + 0x7C3100))(this, FuelContainer);
   }
@@ -3415,7 +3415,7 @@ public:
   {
     ((void (__thiscall *)(Pl0000 *, bool))(shared::base + 0x7D9590))(this, bUseFade);
   }
-  float GetMaxFuelContainer()
+  float GetCurrentFuelCapacity()
   {
     return ((float (__thiscall *)(Pl0000 *))(shared::base + 0x7DA020))(this);
   }

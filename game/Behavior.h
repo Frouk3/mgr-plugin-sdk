@@ -51,6 +51,17 @@ public:
         int field_2C;
     };
 
+    struct EffectIntegrationContainer
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        int field_10;
+        int field_14;
+        int field_18;
+    };
+
     int field_530;
     int field_534;
     int field_538;
@@ -197,7 +208,7 @@ public:
     int field_794;
     EspCtrlCustomImpl *m_pEspCtrlCustomImpl;
     int field_79C;
-    void *m_pEffectIntegrationContainer;
+    lib::StaticArray<EffectIntegrationContainer, 32> *m_pEffectIntegrationContainer;
     int field_7A4;
     int field_7A8;
     int field_7AC;

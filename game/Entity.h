@@ -40,7 +40,7 @@ struct Entity
   {
     return ((BOOL (__thiscall *)(Entity *, ConstructInfo *))(shared::base + 0x680E70))(this, pConstructInfo);
   }
-  void *GetItemInstance()
+  void *GetEntityInstance()
   {
     return ((void *(__thiscall *)(Entity *))(shared::base + 0x67C8A0))(this);
   }

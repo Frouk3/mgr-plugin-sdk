@@ -48,7 +48,11 @@ public:
     public:
         BehaviorDebrisBase* m_pOwner;
     } m_pExplosionSlot;
-    int field_908;
+    class DiscreateSlot : public Slot
+    {
+    public:
+        BehaviorDebrisBase *m_pOwner;
+    } m_pDiscreateSlot;
     int field_90C;
     int field_910;
     int field_914;
