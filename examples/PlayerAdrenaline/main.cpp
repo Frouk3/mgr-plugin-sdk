@@ -4,10 +4,10 @@
 #include "Trigger.h"
 #include "plugin.h"
 
-void AdrenalineTime() noexcept
+void AdrenalineTime()
 {
-    cSlowRateManager* SlowRateManager = g_pcSlowRateManager;
-    Pl0000 *player = (Pl0000*)g_cGameUIManager.m_pPlayer;
+    cSlowRateManager* SlowRateManager = cSlowRateManager::pInstance;
+    Pl0000 *player = (Pl0000*)cGameUIManager::Instance.m_pPlayer;
     static bool once = false;
 
     if (player->m_nHealth / player->GetMaxHealth() <= 0.4)
@@ -15,9 +15,9 @@ void AdrenalineTime() noexcept
         Trigger::GameFlags.GAME_MUGEN_ZANGEKI = true;
         player->EnableRipperMode();
 
-        SlowRateManager->SetSlowRate(0, 0.6);
-        SlowRateManager->SetSlowRate(1, 1.66667);
-        SlowRateManager->SetSlowRate(2, 0.6);
+        SlowRateManager->SetSlowRate(SLOWRATE_GLOBAL, 0.6);
+        SlowRateManager->SetSlowRate(SLOWRATE_PL, 1.66667);
+        SlowRateManager->SetSlowRate(SLOWRATE_EM, 0.6);
 
         once = false;
     }

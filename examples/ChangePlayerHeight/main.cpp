@@ -3,7 +3,7 @@
 
 void ProcessHeightChange()
 {
-    Pl0000 *player = (Pl0000*)g_cGameUIManager.m_pPlayer;
+    Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
 
     if (!player)
         return;
