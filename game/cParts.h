@@ -33,7 +33,7 @@ public:
   int field_8C;
   cVec4 m_vecRotation;
   short m_nPartIndex;
-  struct {
+  struct PartsProperties {
     unsigned short b01 : 1;
     unsigned short bFreezeModelRotation : 1;
     unsigned short bFreezePosition : 1;

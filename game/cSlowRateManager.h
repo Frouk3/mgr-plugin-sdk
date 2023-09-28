@@ -24,7 +24,7 @@ public:
 		float m_fRate;
 		float m_fDesiredRate;
 		float m_fCalculatedSlowRate;
-	} m_fSlowRate[4];
+	} m_SlowRateUnit[4];
   float m_fTickRate;
   float m_fTicks;
   float field_84;
@@ -46,7 +46,7 @@ public:
   float GetSlowRate(eSlowRateType SlowRateType)
   {
 	if (SlowRateType < 4)
-		return this->m_fSlowRate[SlowRateType].m_fSlowRate;
+		return this->m_SlowRateUnit[SlowRateType].m_fSlowRate;
 	else
 		return 1.0f;
   }

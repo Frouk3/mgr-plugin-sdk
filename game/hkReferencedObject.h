@@ -7,5 +7,5 @@ class hkReferencedObject : public hkBaseObject
 public:
   int field_4;
 
-  virtual ~hkReferencedObject() override {};
+  virtual void* getClassType() {};
 };

@@ -7,6 +7,7 @@
 #define RadianToDegree(x) x * 180 / PI
 // giving issues with size in Visual Studio Code(should not interact with code generation or compiling)
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
+
 namespace shared
 {
 	inline bool key_state[1024] = {};
@@ -40,9 +41,9 @@ namespace shared
 	 * 
 	 * It uses previous state and current state of keys to check it only once.
 	 * 
-	 * @param ownerId Can take id of key, but rather not used in bigger projects where ownerId is pushed as key
-	 * @param key Virtual key
-	 * @param repeat Should it check only once, default is true
+	 * @param[in] ownerId Can take id of key, but rather not used in bigger projects where ownerId is pushed as key
+	 * @param[in] key Virtual key
+	 * @param[in] repeat Should it check only once, default is true
 	 * 
 	 * @return Returns bool according the key press
 	 * */ 
@@ -97,49 +98,49 @@ inline void *GetVMT(const void* self, size_t index)
 }
 
 template <typename ret, size_t index, typename C, typename... Args>
-ret ReturnCallVMTFunc(C self, Args... args)
+inline ret ReturnCallVMTFunc(C self, Args... args)
 {
 	return ((ret (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
 }
 
 template <size_t index, typename C, typename... Args>
-void CallVMTFunc(C self, Args... args)
+inline void CallVMTFunc(C self, Args... args)
 {
 	((void (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
 }
 
 template <typename ret, unsigned int address, typename C, typename... Args>
-ret ReturnCallMethod(C self, Args... args)
+inline ret ReturnCallMethod(C self, Args... args)
 {
 	return ((ret (__thiscall *)(C, Args...))address)(self, args...);
 }
 
 template <unsigned int address, typename C, typename... Args>
-void CallMethod(C self, Args... args)
+inline void CallMethod(C self, Args... args)
 {
 	((void (__thiscall *)(C, Args...))address)(self, args...);
 }
 
 template<unsigned int address, typename... Args>
-void CdeclCall(Args... args)
+inline void CdeclCall(Args... args)
 {
 	((void (__cdecl*)(Args...))address)(args...);
 }
 
 template<typename ret, unsigned int address, typename... Args>
-ret ReturnCdeclCall(Args... args)
+inline ret ReturnCdeclCall(Args... args)
 {
 	return ((ret (__cdecl *)(Args...))address)(args...);
 }
 
 template<typename ret, unsigned int address, typename... Args>
-ret ReturnStdcall(Args... args)
+inline ret ReturnStdcall(Args... args)
 {
 	return ((ret (__stdcall *)(Args...))address)(args...);
 }
 
 template<unsigned int address, typename... Args>
-void Stdcall(Args... args)
+inline void Stdcall(Args... args)
 {
 	((void (__stdcall *)(Args...))address)(args...);
 }

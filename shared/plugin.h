@@ -3,6 +3,7 @@
 #include "stdint.h"
 #include <list>
 
+#ifndef plugin
 namespace plugin
 {
     namespace UpdateEvent // updates always
@@ -341,6 +342,43 @@ namespace plugin
         }
     }
 
+    namespace OnExit
+    {
+        uintptr_t returnAddress;
+        std::list<void(*)()> funcPtrs;
+
+        void Run()
+        {
+            for (auto &f : funcPtrs)
+                f();
+        }
+
+        void Add(void(*funcPtr)())
+        {
+            funcPtrs.emplace_back(funcPtr);
+        }
+
+        void __declspec(naked) MainHook()
+        {
+            __asm
+            {
+                pushad
+                call Run
+                popad
+                jmp returnAddress
+            }
+        }
+
+        uint32_t DoHook(uint32_t address)
+        {
+            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
+
+            injector::MakeCALL(address, MainHook, true);
+
+            return origCall;
+        }
+    }
+
     void InitEvents()
     {
         UpdateEvent::returnAddress = UpdateEvent::DoHook(shared::base + 0x6526A2);
@@ -352,6 +390,7 @@ namespace plugin
         OnEndScene::returnAddress = OnEndScene::DoHook(shared::base + 0x65264C);
         OnDeviceReset::After::returnAddress = OnDeviceReset::After::DoHook(shared::base + 0xB9D499);
         OnDeviceReset::Before::returnAddress = OnDeviceReset::Before::DoHook(shared::base + 0xB9D0FA);
+        OnExit::returnAddress = OnExit::DoHook(shared::base + 0x9F975C);
     }
 
     void OnStartup();
@@ -362,7 +401,9 @@ namespace plugin
         OnStartup();
     }
 }
+#endif
 
+#ifndef DllMain
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
 {
     DisableThreadLibraryCalls(hInstance);
@@ -378,3 +419,4 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
 
     return TRUE;
 }
+#endif

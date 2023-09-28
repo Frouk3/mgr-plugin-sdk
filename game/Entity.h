@@ -84,6 +84,10 @@ struct Entity
   {
     return ((cVec4 *(__thiscall *)(Entity *))(shared::base + 0x67C8F0))(this);
   }
+  ~Entity()
+  {
+    ((void (__thiscall *)(Entity *))(shared::base + 0x6805F0))(this);
+  }
 };
 
 VALIDATE_SIZE(Entity, 0x60);
