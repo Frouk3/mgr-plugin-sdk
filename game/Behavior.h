@@ -384,6 +384,16 @@ public:
     {
         return ((bool (__thiscall *)(Behavior *, int))(shared::base + 0x692380))(this, a2);
     }
+
+    int requestAnimationByMap(int animId, Entity *pAnimEntity, int a4, float a5, float a6, unsigned int animFlags, float a8, float a9)
+    {
+        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, pAnimEntity, a4, a5, a6, animFlags, a8, a9);
+    }
+
+    int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float a9, unsigned int flags)
+    {
+        return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, a9, flags);
+    }
 };
 
 struct BehaviorData

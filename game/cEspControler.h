@@ -52,5 +52,11 @@ public:
   void FadeUnits(float duration, float endFade)
   {
       ((void(__thiscall*)(cEspControler*, float, float))(shared::base + 0xAAA6E0))(this, duration, endFade);
-  }
+  };
+
+  cEspControler()
+  {
+      ((void(__thiscall*)(cEspControler*))(shared::base + 0xAAA060))(this);
+  };
+
 };

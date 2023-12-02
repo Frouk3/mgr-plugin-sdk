@@ -6,6 +6,15 @@
 #ifndef plugin
 namespace plugin
 {
+    uint32_t DoHook(uintptr_t address, void (*hook)())
+    {
+        uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
+
+        injector::MakeCALL(address, hook, true);
+
+        return origCall;
+    }
+
     namespace UpdateEvent // updates always
     {
         uintptr_t returnAddress;
@@ -31,15 +40,6 @@ namespace plugin
                 popad
                 jmp returnAddress
             }
-        }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
         }
     }
 
@@ -69,15 +69,6 @@ namespace plugin
                 jmp returnAddress
             }
         }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
-        }
     }
 
     namespace OnSceneStartup // starts on every phase
@@ -105,15 +96,6 @@ namespace plugin
                 popad
                 jmp returnAddress
             }
-        }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
         }
     }
     // on every cutscene
@@ -143,15 +125,6 @@ namespace plugin
                 jmp returnAddress
             }
         }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
-        }
     }
 
     namespace OnTickEvent // event only during in game(when game doesn't have Trigger::StaFlags.STA_PAUSE)
@@ -179,15 +152,6 @@ namespace plugin
                 popad
                 jmp returnAddress
             }
-        }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
         }
     }
 
@@ -217,15 +181,6 @@ namespace plugin
                 jmp returnAddress
             }
         }
-        
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-            
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
-        }
     }
 
     namespace OnEndScene
@@ -253,15 +208,6 @@ namespace plugin
                 popad
                 jmp returnAddress
             }
-        }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall; 
         }
     }
 
@@ -293,15 +239,6 @@ namespace plugin
                     jmp returnAddress
                 }
             }
-
-            uint32_t DoHook(uint32_t address)
-            {
-                uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-                injector::MakeCALL(address, MainHook, true);
-
-                return origCall;
-            }
         }
 
         namespace Before
@@ -330,67 +267,30 @@ namespace plugin
                     jmp returnAddress
                 }
             }
-
-            uint32_t DoHook(uint32_t address)
-            {
-                uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-                injector::MakeCALL(address, MainHook, true);
-
-                return origCall;
-            }
         }
     }
 
     namespace OnExit
     {
-        uintptr_t returnAddress;
-        std::list<void(*)()> funcPtrs;
-
-        void Run()
+        void Add(void(__cdecl *atexitFunc)())
         {
-            for (auto &f : funcPtrs)
-                f();
-        }
-
-        void Add(void(*funcPtr)())
-        {
-            funcPtrs.emplace_back(funcPtr);
-        }
-
-        void __declspec(naked) MainHook()
-        {
-            __asm
-            {
-                pushad
-                call Run
-                popad
-                jmp returnAddress
-            }
-        }
-
-        uint32_t DoHook(uint32_t address)
-        {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, MainHook, true);
-
-            return origCall;
+            atexit(atexitFunc);
         }
     }
 
     void InitEvents()
     {
-        UpdateEvent::returnAddress = UpdateEvent::DoHook(shared::base + 0x6526A2);
-        OnGameStartup::returnAddress = OnGameStartup::DoHook(shared::base + 0x65104D);
-        OnSceneStartup::returnAddress = OnSceneStartup::DoHook(shared::base + 0x64D227);
-        OnSceneCleanup::returnAddress = OnSceneCleanup::DoHook(shared::base + 0x650770);
-        OnTickEvent::returnAddress = OnTickEvent::DoHook(shared::base + 0x64D411);
-        OnPauseEvent::returnAddress = OnPauseEvent::DoHook(shared::base + 0x64D40A);
-        OnEndScene::returnAddress = OnEndScene::DoHook(shared::base + 0x65264C);
-        OnDeviceReset::After::returnAddress = OnDeviceReset::After::DoHook(shared::base + 0xB9D499);
-        OnDeviceReset::Before::returnAddress = OnDeviceReset::Before::DoHook(shared::base + 0xB9D0FA);
-        OnExit::returnAddress = OnExit::DoHook(shared::base + 0x9F975C);
+        UpdateEvent::returnAddress = DoHook(shared::base + 0x6526A2, UpdateEvent::MainHook);
+        OnGameStartup::returnAddress = DoHook(shared::base + 0x65104D, OnGameStartup::MainHook);
+        OnSceneStartup::returnAddress = DoHook(shared::base + 0x64D227, OnSceneStartup::MainHook);
+        OnSceneCleanup::returnAddress = DoHook(shared::base + 0x650770, OnSceneCleanup::MainHook);
+        OnTickEvent::returnAddress = DoHook(shared::base + 0x64D411, OnTickEvent::MainHook);
+        OnPauseEvent::returnAddress = DoHook(shared::base + 0x64D40A, OnPauseEvent::MainHook);
+        OnEndScene::returnAddress = DoHook(shared::base + 0x65264C, OnEndScene::MainHook);
+        OnDeviceReset::After::returnAddress = DoHook(shared::base + 0xB9D499, OnDeviceReset::After::MainHook);
+        OnDeviceReset::Before::returnAddress = DoHook(shared::base + 0xB9D0FA, OnDeviceReset::Before::MainHook);
+        // we do not want to do this 
+        // OnExit::returnAddress = DoHook(shared::base + 0x9F975C, OnExit::MainHook);
     }
 
     void OnStartup();
