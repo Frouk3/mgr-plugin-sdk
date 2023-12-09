@@ -3419,9 +3419,9 @@ public:
   {
     return ((float (__thiscall *)(Pl0000 *))(shared::base + 0x7DA020))(this);
   }
-  int GetMaxHealth()
+  int GetMaxHealth(int unused = 0)
   {
-    return ((int(__thiscall *)(Pl0000 *))(shared::base + 0x77C980))(this);
+    return ((int(__thiscall *)(Pl0000 *, int))(shared::base + 0x77C980))(this, unused);
   }
   void SetSwordLost(bool bShouldLose)
   {

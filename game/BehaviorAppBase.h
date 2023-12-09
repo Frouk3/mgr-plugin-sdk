@@ -101,21 +101,30 @@ public:
     float field_9EC;
     float field_9F0;
     // empty constructor
+    // vftable at 0x123F724
     BehaviorAppBase()
     {
 
     }
     void Heal(int heal)
     {
-        CallVMTFunc<194, BehaviorAppBase *, int>(this, heal);
+        CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
     }
     void SetupHealth(int health)
     {
         ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EDF0))(this, health);
     }
+    void SetHealth(int health)
+    {
+        ((void (__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE20))(this, health);
+    }
     void Damage(int damage, bool leave1Hp)
     {
         CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
+    }
+    int GetHealth()
+    {
+        return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
     }
 };
 
