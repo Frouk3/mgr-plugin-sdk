@@ -1029,4 +1029,9 @@ public:
   virtual ~cCameraGame() override {};
 
   static inline cCameraGame& Instance = *(cCameraGame*)(shared::base + 0x17EA1D0);
+  // returns 1 if successful
+  BOOL WorldToScreen(cVec4 *screenPos, D3DXVECTOR3 *worldPos)
+  {
+    return ((BOOL (__thiscall *)(cCameraGame *, cVec4 *, D3DXVECTOR3 *))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+  }
 };
