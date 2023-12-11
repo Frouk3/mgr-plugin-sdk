@@ -90,11 +90,10 @@ public:
   virtual ~CameraProj() {};
 };
 
-class Hw::cCameraBase
+class Hw::cCameraBase : public Hw::CameraProj
 {
 public:
 
-  virtual ~cCameraBase() {};
 };
 
 class Hw::cHeapPhysicalBase : public Hw::cHeap
