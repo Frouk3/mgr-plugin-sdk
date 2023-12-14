@@ -283,7 +283,7 @@ namespace plugin
         UpdateEvent::returnAddress = DoHook(shared::base + 0x6526A2, UpdateEvent::MainHook);
         OnGameStartup::returnAddress = DoHook(shared::base + 0x65104D, OnGameStartup::MainHook);
         OnSceneStartup::returnAddress = DoHook(shared::base + 0x64D227, OnSceneStartup::MainHook);
-        OnSceneCleanup::returnAddress = DoHook(shared::base + 0x650770, OnSceneCleanup::MainHook);
+        OnSceneCleanup::returnAddress = DoHook(shared::base + 0x654237, OnSceneCleanup::MainHook);
         OnTickEvent::returnAddress = DoHook(shared::base + 0x64D411, OnTickEvent::MainHook);
         OnPauseEvent::returnAddress = DoHook(shared::base + 0x64D40A, OnPauseEvent::MainHook);
         OnEndScene::returnAddress = DoHook(shared::base + 0x65264C, OnEndScene::MainHook);
