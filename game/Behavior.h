@@ -285,15 +285,15 @@ public:
     {
         CallVMTFunc<21, Behavior *>(this);
     }
-    cVec4 *GetOffset()
+    cVec4 *GetTransPos()
     {
         return ReturnCallVMTFunc<cVec4 *, 26, Behavior *>(this);
     }
-    void SetOffset(cVec4 *offset)
+    void SetTransPos(cVec4 *transPos)
     {
-        CallVMTFunc<27, Behavior *, cVec4 *>(this, offset);
+        CallVMTFunc<27, Behavior *, cVec4 *>(this, transPos);
     }
-    void AddToOffset(cVec4 *offset)
+    void OffsetTransPos(cVec4 *offset)
     {
         CallVMTFunc<28, Behavior *, cVec4 *>(this, offset);
     }
@@ -301,13 +301,13 @@ public:
     {
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
-    void Place(cVec4 *pos, cVec4* rotation)
-    {
-        CallVMTFunc<30, Behavior *, cVec4 *, cVec4 *>(this, pos, rotation);
-    }
     void Place(cVec4 *pos, cVec4* rotation, cVec4 *size)
     {
-        CallVMTFunc<31, Behavior *, cVec4 *, cVec4 *, cVec4 *>(this, pos, rotation, size);
+        CallVMTFunc<30, Behavior *, cVec4 *, cVec4 *, cVec4 *>(this, pos, rotation, size);
+    }
+    void Place(cVec4 *pos, cVec4* rotation)
+    {
+        CallVMTFunc<31, Behavior *, cVec4 *, cVec4 *>(this, pos, rotation);
     }
     cVec4 *GetRotation()
     {
