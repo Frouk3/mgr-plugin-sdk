@@ -1,3 +1,7 @@
 #pragma once
+#include "shared.h"
 
-typedef unsigned int EntityHandle;
+struct EntityHandle
+{
+    unsigned int m_nHandle;
+};

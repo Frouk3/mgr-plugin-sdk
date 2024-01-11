@@ -88,6 +88,14 @@ struct Entity
   {
     ((void (__thiscall *)(Entity *))(shared::base + 0x6805F0))(this);
   }
+  void ShutdownInstance()
+  {
+    ((void (__thiscall *)(Entity *))(shared::base + 0x681290))(this);
+  }
+  void ShutdownSlowRateUnit()
+  {
+    ((void (__thiscall *)(Entity *))(shared::base + 0xA085E0))(this);
+  }
 };
 
 VALIDATE_SIZE(Entity, 0x60);

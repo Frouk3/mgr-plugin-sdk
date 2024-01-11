@@ -12,8 +12,8 @@ class lib::Array
 {
 public:
     T *m_pArrayStart;
-    int m_nSize = 0;
-    int m_nCapacity = 0;
+    int m_nSize;
+    int m_nCapacity;
     T m_Array[1];
 
     Array()
@@ -30,7 +30,7 @@ public:
     /// @brief Pushes object into the back of array, after the last object
     /// @param[in] pObject Object that will be pushed
     /// @return false on fail, true on success
-    virtual bool PushBack(T *pObject) {};
+    virtual bool push_back(T *pObject) {};
     /// @brief Pushes/replaces object after pObject with pPushedObject
     /// @param[in, out] pObject Object in array 
     /// @param[in] pPushedObject Object to push after 
@@ -39,6 +39,23 @@ public:
     /// @param[in, out] array To switch with 
     virtual void Switch(lib::Array<T> *array) {};
     virtual void unused(void *) {};
+    auto begin()
+    {
+        return &this->m_pArrayStart[0];
+    }
+    auto begin() const
+    {
+        return &this->m_pArrayStart[0];
+    }
+
+    auto end()
+    {
+        return &this->m_pArrayStart[this->m_nSize];
+    }
+    auto end() const
+    {
+        return &this->m_pArrayStart[this->m_nSize];
+    }
 };
 
 template <typename T, int size>

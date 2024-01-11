@@ -22,6 +22,15 @@ namespace Hw
     class cIndexBufferHeap;
     class cRenderTargetInfo;
     class cOtWork;
+    template <typename T>
+    struct cFixedVector
+    {
+        int field_0;
+        T* m_pStart;
+        int m_nCapacity;
+        int field_C;
+        int field_10;
+    };
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);

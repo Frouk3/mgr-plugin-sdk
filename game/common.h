@@ -19,4 +19,9 @@ inline unsigned int stringhash32(const char* str)
 	return ((unsigned int (__cdecl *)(const char*))(shared::base + 0xA03EA0))(str);
 }
 
+inline void *eFree(void *block)
+{
+	return ((void *(__cdecl *)(void *))(shared::base + 0x9D4920))(block);
+}
+
 inline bool &bIsForegroundWindow = *(bool*)(shared::base + 0x19D509C);

@@ -3,19 +3,17 @@
 #include "plugin.h"
 
 // i didn't check if it its works, just robbed a quick one :O
-void RipperModeOnBladeMode()
-{
-    Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
-
-    if (player)
-    {
-        if (player->m_nCurrentAction == 69 || player->m_nCurrentAction == 70) // Raiden only
-            if (!player->m_nRipperModeEnabled)
-                player->EnableRipperMode();
-    }
-}
-
 void plugin::OnStartup()
 {
-    UpdateEvent::Add(RipperModeOnBladeMode);
+    UpdateEvent::Add([]
+    {
+        Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
+
+        if (player)
+        {
+            if (player->m_nCurrentAction == 69 || player->m_nCurrentAction == 70) // Raiden only
+                if (!player->m_nRipperModeEnabled)
+                    player->EnableRipperMode();
+        }
+    });
 }

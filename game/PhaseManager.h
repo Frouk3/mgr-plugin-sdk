@@ -192,5 +192,13 @@ struct PhaseManager
   {
     ((void (__thiscall *)(PhaseManager *, int))(shared::base + 0x9664E0))(this, a2);
   }
+  void requestSubPhaseChange(const char* phase, BOOL checkIfPass, int a3)
+  {
+      ((void(__thiscall*)(PhaseManager*, const char*, BOOL, int))(shared::base + 0x95EA40))(this, phase, checkIfPass, a3);
+  }
+  void requestPhaseChange(int phaseHash, const char* phase)
+  {
+      ((void(__thiscall*)(PhaseManager*, int, const char*))(shared::base + 0x95E850))(this, phaseHash, phase);
+  }
   static inline PhaseManager& Instance = *(PhaseManager*)(shared::base + 0x14B9140);
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "cVec4.h"
 #include "shared.h"
+#include <d3dx9math.h>
 
 class cParts
 {
@@ -8,7 +9,7 @@ public:
   int field_4;
   int field_8;
   int field_C;
-  D3DXMATRIX m_Matrix;
+  D3DXMATRIX m_PartsMatrix;
   cVec4 m_vecTransPos;
   float field_60;
   float field_64;

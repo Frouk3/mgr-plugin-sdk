@@ -13,7 +13,7 @@ struct cVec4
   { 
     ((void (__cdecl *)(cVec4 *, cVec4*))(shared::base + 0x9DF460))(v1, v2);
   }
-  void operator=(cVec4 &right)
+  void operator=(const cVec4 &right)
   {
     this->x = right.x;
     this->y = right.y;
