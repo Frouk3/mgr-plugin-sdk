@@ -11,7 +11,7 @@
 namespace shared
 {
 	inline bool key_state[1024] = {};
-	inline bool prevKey_state[1024] = {};
+	inline int keyOwner = 0;
 
 	inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
@@ -25,44 +25,33 @@ namespace shared
 		return min + (max - min) * (rand() / float(RAND_MAX + 1));
 	}
 	/**
-	 * @param key Virtual key
-	 * @param repeat If its repeatable, default is true
-	*/
-	inline bool IsKeyPressed(int key, bool repeat = true)
-	{
-		if (repeat)
-			return (GetAsyncKeyState(key) & 0x8000) != 0;
-
-		return (GetAsyncKeyState(key) & 1) != 0;
-	}
-
-	/**
 	 * @brief Better key press check
 	 * 
 	 * It uses previous state and current state of keys to check it only once.
+	 * RESET BEFORE KEY CHECK OR AFTER
 	 * 
-	 * @param[in] ownerId Can take id of key, but rather not used in bigger projects where ownerId is pushed as key
 	 * @param[in] key Virtual key
 	 * @param[in] repeat Should it check only once, default is true
 	 * 
 	 * @return Returns bool according the key press
 	 * */ 
-	inline bool IsKeyPressed(int ownerId, int key, bool repeat = true)
+	inline bool IsKeyPressed(int key, bool repeat = true)
 	{
 		if (repeat)
-			return IsKeyPressed(key, repeat);
+			return (GetAsyncKeyState(key)) & 0x8000;
 
-		key_state[ownerId] = (GetAsyncKeyState(key) & 0x8000) != 0;
+		bool keystat = (GetAsyncKeyState(key) & 0x8000) != 0;
 
-		if (prevKey_state[ownerId] != key_state[ownerId])
+		if (keystat != key_state[keyOwner])
 		{
-			prevKey_state[ownerId] = key_state[ownerId];
-			return prevKey_state[ownerId]; // or: return key_state[ownerId];
+			key_state[keyOwner] = keystat;
+			return key_state[keyOwner++];
 		}
 
-		if (prevKey_state[ownerId] == key_state[ownerId])
-			return false;
-
+		if (keystat == key_state[keyOwner])
+			goto IsKeyPressedEnd;
+	IsKeyPressedEnd:
+		keyOwner++;
 		return false;
 	}
 
