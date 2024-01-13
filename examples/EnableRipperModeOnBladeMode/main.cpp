@@ -5,7 +5,7 @@
 // i didn't check if it its works, just robbed a quick one :O
 void plugin::OnStartup()
 {
-    UpdateEvent::Add([]
+    Events::OnTickEvent += []
     {
         Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
 
@@ -15,5 +15,5 @@ void plugin::OnStartup()
                 if (!player->m_nRipperModeEnabled)
                     player->EnableRipperMode();
         }
-    });
+    };
 }

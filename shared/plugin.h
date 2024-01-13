@@ -105,7 +105,7 @@ public:
     static inline IEvent OnTickEvent = IEvent(&OnTickEventList, nullptr);
     static inline IEvent OnPauseEvent = IEvent(&OnPauseEventList, nullptr);
     static inline IEvent OnEndScene = IEvent(&OnEndSceneList, nullptr);
-    static inline IEventTwoState OnReset = IEventTwoState(IEvent(&OnResetBeforeList, nullptr), IEvent(&OnResetAfterList, nullptr));
+    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, nullptr), IEvent(&OnResetAfterList, nullptr));
 };
 
 static inline void OnUpdateRun()
@@ -202,7 +202,7 @@ static inline void __declspec(naked) OnResetAfterMainHook()
         pushad
         call OnResetAfterRun
         popad
-        jmp Events::OnReset.after.returnAddress
+        jmp Events::OnDeviceReset.after.returnAddress
     }
 }
 
@@ -235,7 +235,7 @@ static inline void __declspec(naked) OnResetBeforeMainHook()
         pushad
         call OnResetBeforeRun
         popad
-        jmp Events::OnReset.before.returnAddress
+        jmp Events::OnDeviceReset.before.returnAddress
     }
 }
 
@@ -273,8 +273,8 @@ namespace plugin
         Events::OnTickEvent.SetMainHook(OnTickEventMainHook);
         Events::OnPauseEvent.SetMainHook(OnPauseEventMainHook);
         Events::OnEndScene.SetMainHook(OnEndSceneMainHook);
-        Events::OnReset.after.SetMainHook(OnResetAfterMainHook);
-        Events::OnReset.before.SetMainHook(OnResetBeforeMainHook);
+        Events::OnDeviceReset.after.SetMainHook(OnResetAfterMainHook);
+        Events::OnDeviceReset.before.SetMainHook(OnResetBeforeMainHook);
 
         Events::OnUpdateEvent.Patch(shared::base + 0x6526A2);
         Events::OnGameStartupEvent.Patch(shared::base + 0x65104D);
@@ -283,8 +283,8 @@ namespace plugin
         Events::OnTickEvent.Patch(shared::base + 0x64D411);
         Events::OnPauseEvent.Patch(shared::base + 0x64D40A);
         Events::OnEndScene.Patch(shared::base + 0x65264C);
-        Events::OnReset.after.Patch(shared::base + 0xB9D499);
-        Events::OnReset.before.Patch(shared::base + 0xB9D0FA);
+        Events::OnDeviceReset.after.Patch(shared::base + 0xB9D499);
+        Events::OnDeviceReset.before.Patch(shared::base + 0xB9D0FA);
         // we do not want to do this 
         // OnExit::returnAddress = DoHook(shared::base + 0x9F975C, OnExit::MainHook);
     }

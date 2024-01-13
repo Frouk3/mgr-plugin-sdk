@@ -3,7 +3,7 @@
 
 void plugin::OnStartup()
 {
-    UpdateEvent::Add([]
+    Events::OnTickEvent += []
     {
         Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
 
@@ -17,5 +17,7 @@ void plugin::OnStartup()
         
         if (shared::IsKeyPressed(VK_ADD) || shared::IsKeyPressed(VK_SUBTRACT))
             player->m_vecVelocity.y = 0.0f;
-    });
+
+        shared::keyOwner = 0;
+    };
 }

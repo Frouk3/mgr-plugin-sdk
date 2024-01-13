@@ -6,7 +6,7 @@
 
 void plugin::OnStartup()
 {
-    UpdateEvent::Add([]
+    Events::OnTickEvent += []
     {
         cSlowRateManager* SlowRateManager = cSlowRateManager::pInstance;
         Pl0000 *player = (Pl0000*)cGameUIManager::Instance.m_pPlayer;
@@ -31,5 +31,5 @@ void plugin::OnStartup()
 
             once = true; 
         }
-    });
+    };
 }
