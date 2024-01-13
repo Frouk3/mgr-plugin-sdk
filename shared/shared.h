@@ -11,7 +11,6 @@
 namespace shared
 {
 	inline bool key_state[1024] = {};
-	inline int keyOwner = 0;
 
 	inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
@@ -35,23 +34,26 @@ namespace shared
 	 * 
 	 * @return Returns bool according the key press
 	 * */ 
+	template <int ownerId = -1>
 	inline bool IsKeyPressed(int key, bool repeat = true)
 	{
 		if (repeat)
-			return (GetAsyncKeyState(key)) & 0x8000;
+			return (GetAsyncKeyState(key) & 0x8000) != 0;
+
+		if (ownerId == -1)
+			return false;
 
 		bool keystat = (GetAsyncKeyState(key) & 0x8000) != 0;
 
-		if (keystat != key_state[keyOwner])
+		if (keystat != key_state[ownerId])
 		{
-			key_state[keyOwner] = keystat;
-			return key_state[keyOwner++];
+			key_state[ownerId] = keystat;
+			return key_state[ownerId];
 		}
 
-		if (keystat == key_state[keyOwner])
-			goto IsKeyPressedEnd;
-	IsKeyPressedEnd:
-		keyOwner++;
+		if (keystat == key_state[ownerId])
+			return false;
+
 		return false;
 	}
 
