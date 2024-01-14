@@ -5,6 +5,25 @@
 #include "stdint.h"
 #include <vector>
 
+namespace plugin
+{
+    // inline void InitEvents()
+    // {
+    //    // Events::MainHookInit();
+    //    
+    //    // we do not want to do this 
+    //    // OnExit::returnAddress = DoHook(shared::base + 0x9F975C, OnExit::MainHook);
+    // }
+
+    inline void OnStartup();
+
+    inline void Init()
+    {
+        // InitEvents();
+        OnStartup();
+    }
+}
+
 class Events
 {
 private:
@@ -178,17 +197,34 @@ public:
 
     static inline void MainHookInit()
     {
-        Events::OnUpdateEvent.SetMainHook(Caves::OnUpdateMainHook);
-        Events::OnGameStartupEvent.SetMainHook(Caves::OnGameStartupMainHook);
-        Events::OnSceneStartupEvent.SetMainHook(Caves::OnSceneStartupMainHook);
-        Events::OnSceneCleanupEvent.SetMainHook(Caves::OnSceneCleanupMainHook);
-        Events::OnTickEvent.SetMainHook(Caves::OnTickEventMainHook);
-        Events::OnPauseEvent.SetMainHook(Caves::OnPauseEventMainHook);
-        Events::OnEndScene.SetMainHook(Caves::OnEndSceneMainHook);
-        Events::OnDeviceReset.after.SetMainHook(Caves::OnResetAfterMainHook);
-        Events::OnDeviceReset.before.SetMainHook(Caves::OnResetBeforeMainHook);
+        OnUpdateEvent.SetMainHook(Caves::OnUpdateMainHook);
+        OnGameStartupEvent.SetMainHook(Caves::OnGameStartupMainHook);
+        OnSceneStartupEvent.SetMainHook(Caves::OnSceneStartupMainHook);
+        OnSceneCleanupEvent.SetMainHook(Caves::OnSceneCleanupMainHook);
+        OnTickEvent.SetMainHook(Caves::OnTickEventMainHook);
+        OnPauseEvent.SetMainHook(Caves::OnPauseEventMainHook);
+        OnEndScene.SetMainHook(Caves::OnEndSceneMainHook);
+        OnDeviceReset.after.SetMainHook(Caves::OnResetAfterMainHook);
+        OnDeviceReset.before.SetMainHook(Caves::OnResetBeforeMainHook);
+
+        OnUpdateEvent.Patch(shared::base + 0x6526A2);
+        OnGameStartupEvent.Patch(shared::base + 0x65104D);
+        OnSceneStartupEvent.Patch(shared::base + 0x64D227);
+        OnSceneCleanupEvent.Patch(shared::base + 0x654237);
+        OnTickEvent.Patch(shared::base + 0x64D411);
+        OnPauseEvent.Patch(shared::base + 0x64D40A);
+        OnEndScene.Patch(shared::base + 0x65264C);
+        OnDeviceReset.after.Patch(shared::base + 0xB9D499);
+        OnDeviceReset.before.Patch(shared::base + 0xB9D0FA);
     };
-};
+
+    Events()
+    {
+        MainHookInit();
+        plugin::Init();
+    };
+
+} EventClassInit;
 
 void __declspec(naked) Events::Caves::OnEndSceneMainHook()
 {
@@ -289,49 +325,5 @@ void __declspec(naked) Events::Caves::OnUpdateMainHook()
         popad
         jmp Events::OnUpdateEvent.returnAddress
     }
-}
-
-namespace plugin
-{
-    inline void InitEvents()
-    {
-        Events::MainHookInit();
-
-        Events::OnUpdateEvent.Patch(shared::base + 0x6526A2);
-        Events::OnGameStartupEvent.Patch(shared::base + 0x65104D);
-        Events::OnSceneStartupEvent.Patch(shared::base + 0x64D227);
-        Events::OnSceneCleanupEvent.Patch(shared::base + 0x654237);
-        Events::OnTickEvent.Patch(shared::base + 0x64D411);
-        Events::OnPauseEvent.Patch(shared::base + 0x64D40A);
-        Events::OnEndScene.Patch(shared::base + 0x65264C);
-        Events::OnDeviceReset.after.Patch(shared::base + 0xB9D499);
-        Events::OnDeviceReset.before.Patch(shared::base + 0xB9D0FA);
-        // we do not want to do this 
-        // OnExit::returnAddress = DoHook(shared::base + 0x9F975C, OnExit::MainHook);
-    }
-
-    inline void OnStartup();
-
-    inline void Init()
-    {
-        InitEvents();
-        OnStartup();
-    }
-}
-
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, LPVOID)
-{
-    DisableThreadLibraryCalls(hInstance);
-
-    switch (fdwReason)
-    {
-    case DLL_PROCESS_ATTACH:
-        plugin::Init();
-        break;
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-
-    return TRUE;
 }
 #endif
