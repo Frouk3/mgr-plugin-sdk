@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef PLUGIN_INIT
 #define PLUGIN_INIT
 #include "injector/injector.hpp"
@@ -15,7 +17,7 @@ namespace plugin
     //    // OnExit::returnAddress = DoHook(shared::base + 0x9F975C, OnExit::MainHook);
     // }
 
-    inline void OnStartup();
+    void OnStartup();
 
     inline void Init()
     {
@@ -82,7 +84,7 @@ private:
             this->listPtr = listVec;
             this->mainhookptr = func;
         }
-        // In case you don't know, initialize everything in main
+
         IEvent& operator+=(void(*funcptr)())
         {
             listPtr->emplace_back(funcptr);
@@ -223,10 +225,9 @@ public:
         MainHookInit();
         plugin::Init();
     };
-
 };
 
-static inline Events EventUnusedForThisSequence;
+inline Events EventUnusedSequence;
 
 void __declspec(naked) Events::Caves::OnEndSceneMainHook()
 {
