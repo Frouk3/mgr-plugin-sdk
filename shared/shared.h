@@ -10,7 +10,7 @@
 
 namespace shared
 {
-	inline bool key_state[1024] = {};
+	inline bool key_state[512] = {}; // should be enough
 
 	inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
@@ -29,13 +29,13 @@ namespace shared
 	 * It uses previous state and current state of keys to check it only once.
 	 * RESET BEFORE KEY CHECK OR AFTER
 	 * 
-	 * @param[in] key Virtual key
-	 * @param[in] repeat Should it check only once, default is true
+	 * @param[in] key - Virtual key
+	 * @param[in] repeat - Should it check only once, default is true
+	 * @param[in] ownerId - Used for owner
 	 * 
 	 * @return Returns bool according the key press
 	 * */ 
-	template <int ownerId = -1>
-	inline bool IsKeyPressed(int key, bool repeat = true)
+	inline bool IsKeyPressed(int key, bool repeat = true, int ownerId = -1)
 	{
 		if (repeat)
 			return (GetAsyncKeyState(key) & 0x8000) != 0;

@@ -5,43 +5,44 @@
 #include "stdint.h"
 #include <vector>
 
-// OnUpdate
+class Events
+{
+private:
+    // OnUpdate
 
-static inline std::vector<void(*)()> OnUpdateList;
+    static inline std::vector<void(*)()> OnUpdateList;
 ///////////////////////////////////////////////////////////////////////
     // OnGameStartup
 
-static inline std::vector<void(*)()> OnGameStartupList;
+    static inline std::vector<void(*)()> OnGameStartupList;
 ///////////////////////////////////////////////////////////////////////
     // OnSceneStartup
 
-static inline std::vector<void(*)()> OnSceneStartupList;
+    static inline std::vector<void(*)()> OnSceneStartupList;
 ///////////////////////////////////////////////////////////////////////
     // OnSceneCleanup
 
-static inline std::vector<void(*)()> OnSceneCleanupList;
+    static inline std::vector<void(*)()> OnSceneCleanupList;
 ///////////////////////////////////////////////////////////////////////
     // OnTickEvent
 
-static inline std::vector<void(*)()> OnTickEventList;
+    static inline std::vector<void(*)()> OnTickEventList;
 ///////////////////////////////////////////////////////////////////////
     // OnPauseEvent
 
-static inline std::vector<void(*)()> OnPauseEventList;
+    static inline std::vector<void(*)()> OnPauseEventList;
 ///////////////////////////////////////////////////////////////////////
     // OnEndScene
 
-static inline std::vector<void(*)()> OnEndSceneList;
+    static inline std::vector<void(*)()> OnEndSceneList;
 ///////////////////////////////////////////////////////////////////////
     // OnReset
     // Before
 
-static inline std::vector<void(*)()> OnResetBeforeList;
-// After
-static inline std::vector<void(*)()> OnResetAfterList;
+    static inline std::vector<void(*)()> OnResetBeforeList;
+    // After
 
-class Events
-{
+    static inline std::vector<void(*)()> OnResetAfterList;
 private:
     class IEvent
     {
@@ -106,140 +107,103 @@ public:
     static inline IEvent OnPauseEvent = IEvent(&OnPauseEventList, nullptr);
     static inline IEvent OnEndScene = IEvent(&OnEndSceneList, nullptr);
     static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, nullptr), IEvent(&OnResetAfterList, nullptr));
+private:
+    static inline void OnUpdateRun()
+    {
+        for (auto& f : OnUpdateList)
+            f();
+    }
+
+    static inline void OnGameStartupRun()
+    {
+        for (auto& f : OnGameStartupList)
+            f();
+    }
+
+    static inline void OnSceneStartupRun()
+    {
+        for (auto& f : OnSceneStartupList)
+            f();
+    }
+
+    static inline void OnSceneCleanupRun()
+    {
+        for (auto& f : OnSceneCleanupList)
+            f();
+    }
+
+    static inline void OnTickEventRun()
+    {
+        for (auto& f : OnTickEventList)
+            f();
+    }
+
+    static inline void OnPauseEventRun()
+    {
+        for (auto& f : OnPauseEventList)
+            f();
+    }
+
+    static inline void OnEndSceneRun()
+    {
+        for (auto& f : OnEndSceneList)
+            f();
+    }
+
+    static inline void OnResetBeforeRun()
+    {
+        for (auto& f : OnResetBeforeList)
+            f();
+    }
+
+    static inline void OnResetAfterRun()
+    {
+        for (auto& f : OnResetAfterList)
+            f();
+    }
+
+    struct Caves
+    {
+        static inline void OnUpdateMainHook();
+        static inline void OnGameStartupMainHook();
+        static inline void OnSceneStartupMainHook();
+        static inline void OnResetAfterMainHook();
+        static inline void OnSceneCleanupMainHook();
+        static inline void OnTickEventMainHook();
+        static inline void OnResetBeforeMainHook();
+        static inline void OnPauseEventMainHook();
+        static inline void OnEndSceneMainHook();
+    };
+public:
+
+    static inline void MainHookInit()
+    {
+        Events::OnUpdateEvent.SetMainHook(Caves::OnUpdateMainHook);
+        Events::OnGameStartupEvent.SetMainHook(Caves::OnGameStartupMainHook);
+        Events::OnSceneStartupEvent.SetMainHook(Caves::OnSceneStartupMainHook);
+        Events::OnSceneCleanupEvent.SetMainHook(Caves::OnSceneCleanupMainHook);
+        Events::OnTickEvent.SetMainHook(Caves::OnTickEventMainHook);
+        Events::OnPauseEvent.SetMainHook(Caves::OnPauseEventMainHook);
+        Events::OnEndScene.SetMainHook(Caves::OnEndSceneMainHook);
+        Events::OnDeviceReset.after.SetMainHook(Caves::OnResetAfterMainHook);
+        Events::OnDeviceReset.before.SetMainHook(Caves::OnResetBeforeMainHook);
+    };
 };
 
-static inline void OnUpdateRun()
+void __declspec(naked) Events::Caves::OnEndSceneMainHook()
 {
-    for (auto& f : OnUpdateList)
-        f();
-}
-
-static inline void OnGameStartupRun()
-{
-    for (auto& f : OnGameStartupList)
-        f();
-}
-
-static inline void OnSceneStartupRun()
-{
-    for (auto& f : OnSceneStartupList)
-        f();
-}
-
-static inline void OnSceneCleanupRun()
-{
-    for (auto& f : OnSceneCleanupList)
-        f();
-}
-
-static inline void OnTickEventRun()
-{
-    for (auto& f : OnTickEventList)
-        f();
-}
-
-static inline void OnPauseEventRun()
-{
-    for (auto& f : OnPauseEventList)
-        f();
-}
-
-static inline void OnEndSceneRun()
-{
-    for (auto& f : OnEndSceneList)
-        f();
-}
-
-static inline void OnResetBeforeRun()
-{
-    for (auto& f : OnResetBeforeList)
-        f();
-}
-
-static inline void OnResetAfterRun()
-{
-    for (auto& f : OnResetAfterList)
-        f();
-}
-
-static inline void __declspec(naked) OnUpdateMainHook()
-{
-    __asm
     {
-        pushad
-        call OnUpdateRun
-        popad
-        jmp Events::OnUpdateEvent.returnAddress
+        __asm
+        {
+            pushad
+            call OnEndSceneRun
+            popad
+            jmp Events::OnEndScene.returnAddress
+        }
     }
 }
 
-static inline void __declspec(naked) OnGameStartupMainHook()
-{
-    __asm
-    {
-        pushad
-        call OnGameStartupRun
-        popad
-        jmp Events::OnGameStartupEvent.returnAddress
-    }
-}
-
-static inline void __declspec(naked) OnSceneStartupMainHook()
-{
-    __asm
-    {
-        pushad
-        call OnSceneStartupRun
-        popad
-        jmp Events::OnSceneStartupEvent.returnAddress
-    }
-}
-
-static inline void __declspec(naked) OnResetAfterMainHook()
-{
-    __asm
-    {
-        pushad
-        call OnResetAfterRun
-        popad
-        jmp Events::OnDeviceReset.after.returnAddress
-    }
-}
-
-static inline void __declspec(naked) OnSceneCleanupMainHook()
-{
-    __asm
-    {
-        pushad
-        call OnSceneCleanupRun
-        popad
-        jmp Events::OnSceneCleanupEvent.returnAddress
-    }
-}
-
-static inline void __declspec(naked) OnTickEventMainHook()
-{
-    __asm
-    {
-        pushad
-        call OnTickEventRun
-        popad
-        jmp Events::OnTickEvent.returnAddress
-    }
-}
-
-static inline void __declspec(naked) OnResetBeforeMainHook()
-{
-    __asm
-    {
-        pushad
-        call OnResetBeforeRun
-        popad
-        jmp Events::OnDeviceReset.before.returnAddress
-    }
-}
-
-static inline void __declspec(naked) OnPauseEventMainHook()
+void __declspec(naked) Events::Caves::OnPauseEventMainHook()
 {
     __asm
     {
@@ -250,31 +214,88 @@ static inline void __declspec(naked) OnPauseEventMainHook()
     }
 }
 
-static inline void __declspec(naked) OnEndSceneMainHook()
+void __declspec(naked) Events::Caves::OnResetBeforeMainHook()
 {
     __asm
     {
         pushad
-        call OnEndSceneRun
+        call OnResetBeforeRun
         popad
-        jmp Events::OnEndScene.returnAddress
+        jmp Events::OnDeviceReset.before.returnAddress
     }
 }
 
+void __declspec(naked) Events::Caves::OnTickEventMainHook()
+{
+    __asm
+    {
+        pushad
+        call OnTickEventRun
+        popad
+        jmp Events::OnTickEvent.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnSceneCleanupMainHook()
+{
+    __asm
+    {
+        pushad
+        call OnSceneCleanupRun
+        popad
+        jmp Events::OnSceneCleanupEvent.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnResetAfterMainHook()
+{
+    __asm
+    {
+        pushad
+        call OnResetAfterRun
+        popad
+        jmp Events::OnDeviceReset.after.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnSceneStartupMainHook()
+{
+    __asm
+    {
+        pushad
+        call OnSceneStartupRun
+        popad
+        jmp Events::OnSceneStartupEvent.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnGameStartupMainHook()
+{
+    __asm
+    {
+        pushad
+        call OnGameStartupRun
+        popad
+        jmp Events::OnGameStartupEvent.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnUpdateMainHook()
+{
+    __asm
+    {
+        pushad
+        call OnUpdateRun
+        popad
+        jmp Events::OnUpdateEvent.returnAddress
+    }
+}
 
 namespace plugin
 {
     inline void InitEvents()
     {
-        Events::OnUpdateEvent.SetMainHook(OnUpdateMainHook);
-        Events::OnGameStartupEvent.SetMainHook(OnGameStartupMainHook);
-        Events::OnSceneStartupEvent.SetMainHook(OnSceneStartupMainHook);
-        Events::OnSceneCleanupEvent.SetMainHook(OnSceneCleanupMainHook);
-        Events::OnTickEvent.SetMainHook(OnTickEventMainHook);
-        Events::OnPauseEvent.SetMainHook(OnPauseEventMainHook);
-        Events::OnEndScene.SetMainHook(OnEndSceneMainHook);
-        Events::OnDeviceReset.after.SetMainHook(OnResetAfterMainHook);
-        Events::OnDeviceReset.before.SetMainHook(OnResetBeforeMainHook);
+        Events::MainHookInit();
 
         Events::OnUpdateEvent.Patch(shared::base + 0x6526A2);
         Events::OnGameStartupEvent.Patch(shared::base + 0x65104D);
