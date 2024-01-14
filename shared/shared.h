@@ -40,6 +40,9 @@ namespace shared
 		if (repeat)
 			return (GetAsyncKeyState(key) & 0x8000) != 0;
 
+		if (!repeat && ownerId == -1)
+			return (GetAsyncKeyState(key) & 1) != 0;
+
 		if (ownerId == -1)
 			return false;
 
