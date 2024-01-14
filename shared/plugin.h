@@ -82,7 +82,7 @@ private:
             this->listPtr = listVec;
             this->mainhookptr = func;
         }
-
+        // In case you don't know, initialize everything in main
         IEvent& operator+=(void(*funcptr)())
         {
             listPtr->emplace_back(funcptr);
@@ -224,7 +224,9 @@ public:
         plugin::Init();
     };
 
-} EventClassInit;
+};
+
+static inline Events EventUnusedForThisSequence;
 
 void __declspec(naked) Events::Caves::OnEndSceneMainHook()
 {
