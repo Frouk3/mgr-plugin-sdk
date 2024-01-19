@@ -144,7 +144,7 @@ struct PhaseManager
   int field_25C;
   int field_260;
 
-  static inline int GetCurrentPhase()
+  static inline int GetCurrentSubPhase()
   {
     return ((int (__cdecl *)())(shared::base + 0x532720))();
   }
@@ -196,9 +196,9 @@ struct PhaseManager
   {
       ((void(__thiscall*)(PhaseManager*, const char*, BOOL, int))(shared::base + 0x95EA40))(this, phase, checkIfPass, a3);
   }
-  void requestPhaseChange(int phaseHash, const char* phase)
+  void requestPhaseChange(int subPhase, const char* phase)
   {
-      ((void(__thiscall*)(PhaseManager*, int, const char*))(shared::base + 0x95E850))(this, phaseHash, phase);
+      ((void(__thiscall*)(PhaseManager*, int, const char*))(shared::base + 0x95E850))(this, subPhase, phase);
   }
   static inline PhaseManager& Instance = *(PhaseManager*)(shared::base + 0x14B9140);
 };

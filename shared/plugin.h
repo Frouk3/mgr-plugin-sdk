@@ -227,7 +227,7 @@ public:
     };
 };
 
-inline Events EventUnusedSequence;
+inline Events ____unusedEventClass;
 
 void __declspec(naked) Events::Caves::OnEndSceneMainHook()
 {

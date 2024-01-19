@@ -14,11 +14,10 @@ public:
     T *m_pArrayStart;
     int m_nSize;
     int m_nCapacity;
-    T m_Array[1];
 
     Array()
     {
-        this->m_pArrayStart = &this->m_Array;
+        this->m_pArrayStart = 0;
         this->m_nSize = 0;
         this->m_nCapacity = 0;
     }
@@ -62,10 +61,11 @@ template <typename T, int size>
 class lib::StaticArray : public lib::Array<T>
 {
 public:
+    T m_Array[size];
 
-    StaticArray()
+    StaticArray() : Array()
     {
-        this->m_nCapacity = size;
+        
     }
 };
 
@@ -73,7 +73,7 @@ template <typename T>
 class lib::AllocatedArray : public lib::Array<T>
 {
 public:
-    int field_14;
+    int field_10;
 
     AllocatedArray() : Array()
     {
