@@ -4,7 +4,6 @@
 class cItemPossessionWeaponGranade : public cItemPossessionBase
 {
 public:
-  int m_nDLCCount;
+    int m_nGranadeMaxPossession;
 
-  virtual ~cItemPossessionWeaponGranade() override {};
 };
