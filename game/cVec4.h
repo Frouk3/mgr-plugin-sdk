@@ -31,6 +31,13 @@ struct cVec4
   {
     return sqrtf(powf(this->x, 2) + powf(this->y, 2) + powf(this->z, 2));
   }
+  cVec4 &operator+=(const cVec4& rhs)
+  {
+      this->x += rhs.x;
+      this->y += rhs.y;
+      this->z += rhs.z;
+      return *this;
+  }
 };
 
 VALIDATE_SIZE(cVec4, 0x10);

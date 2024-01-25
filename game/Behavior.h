@@ -269,118 +269,118 @@ public:
 
 // vft
 
-    BOOL Startup()
+    BOOL startup()
     {
         return ReturnCallVMTFunc<BOOL, 16, Behavior *>(this);
     }
-    BOOL Shutdown()
+    BOOL shutdown()
     {
         return ReturnCallVMTFunc<BOOL, 17, Behavior *>(this);
     }
-    void Tick()
+    void tick()
     {
         CallVMTFunc<19, Behavior *>(this);
     }
-    void UpdateBodyParts()
+    void updateBodyParts()
     {
         CallVMTFunc<21, Behavior *>(this);
     }
-    cVec4 *GetTransPos()
+    cVec4 *getTransPos()
     {
         return ReturnCallVMTFunc<cVec4 *, 26, Behavior *>(this);
     }
-    void SetTransPos(cVec4 *transPos)
+    void setTransPos(cVec4 *transPos)
     {
         CallVMTFunc<27, Behavior *, cVec4 *>(this, transPos);
     }
-    void OffsetTransPos(cVec4 *offset)
+    void offsetTransPos(cVec4 *offset)
     {
         CallVMTFunc<28, Behavior *, cVec4 *>(this, offset);
     }
-    void ChangeHeight(float height)
+    void changeHeight(float height)
     {
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
-    void Place(cVec4 *pos, cVec4* rotation, cVec4 *size)
+    void place(cVec4 *pos, cVec4* rotation, cVec4 *size)
     {
         CallVMTFunc<30, Behavior *, cVec4 *, cVec4 *, cVec4 *>(this, pos, rotation, size);
     }
-    void Place(cVec4 *pos, cVec4* rotation)
+    void place(cVec4 *pos, cVec4* rotation)
     {
         CallVMTFunc<31, Behavior *, cVec4 *, cVec4 *>(this, pos, rotation);
     }
-    cVec4 *GetRotation()
+    cVec4 *getRotation()
     {
         return ReturnCallVMTFunc<cVec4 *, 33, Behavior *>(this);
     }
-    void SetRotation(cVec4 *rotation)
+    void setRotation(cVec4 *rotation)
     {
         CallVMTFunc<34, Behavior *, cVec4 *>(this, rotation);
     }
-    cVec4 *GetSize()
+    cVec4 *getSize()
     {
         return ReturnCallVMTFunc<cVec4 *, 35, Behavior *>(this);
     }
-    void SetSize(cVec4 *size)
+    void setSize(cVec4 *size)
     {
         CallVMTFunc<36, Behavior *, cVec4 *>(this, size);
     }
-    int GetSequence()
+    int getSequence()
     {
         return ReturnCallVMTFunc<int, 37, Behavior *>(this);
     }
-    int GetIndex()
+    int getIndex()
     {
         return ReturnCallVMTFunc<int, 38, Behavior *>(this);
     }
-    int GetSequenceFile(const char *a2)
+    int getSequenceFile(const char *a2)
     {
         return ReturnCallVMTFunc<int, 39, Behavior *, const char*>(this, a2);
     }
-    void Transform(D3DXMATRIX *matrix)
+    void transform(D3DXMATRIX *matrix)
     {
         CallVMTFunc<45, Behavior *, D3DXMATRIX *>(this, matrix);
     }
-    void Inverse(D3DXMATRIX *matrix)
+    void inverse(D3DXMATRIX *matrix)
     {
         CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
     }
-    void SetStealthCamoEnabled(bool bEnable)
+    void setStealthCamoEnabled(bool bEnable)
     {
         CallVMTFunc<68, Behavior *, bool>(this, bEnable);
     }
-    void SetSeqAtk()
+    void setSeqAtk()
     {
         CallVMTFunc<74, Behavior *>(this);
     }
-    void *SetCutCreateInfo()
+    void *setCutCreateInfo()
     {
         return ReturnCallVMTFunc<void *, 110, Behavior *>(this);
     }
-    bool IsAlive()
+    bool isAlive()
     {
         return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
     }
-    cVec4 GetOffsetPosition()
+    cVec4 getOffsetPosition()
     {
         return ReturnCallVMTFunc<cVec4, 159, Behavior *>(this);
     }
 
 // vft end
 
-    void SetState(int action, int actId, int a3, int a4)
+    void setState(int action, int actId, int a3, int a4)
     {
         ((void (__thiscall *)(Behavior *, int, int, int, int))(shared::base + 0x68CAF0))(this, action, actId, a3, a4);
     }
-    int GetCurrentActionId()
+    int getCurrentActionId()
     {
         return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAC0))(this);
     }
-    int GetCurrentAction()
+    int getCurrentAction()
     {
         return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
     }
-    bool SetupCloth(int a2)
+    bool setupCloth(int a2)
     {
         return ((bool (__thiscall *)(Behavior *, int))(shared::base + 0x692380))(this, a2);
     }
@@ -393,6 +393,11 @@ public:
     int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float a9, unsigned int flags)
     {
         return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, a9, flags);
+    }
+
+    void removeConstraint(int constraintId)
+    {
+        ((void (__thiscall *)(Behavior*, int))(shared::base + 0x69E060))(this, constraintId);
     }
 };
 

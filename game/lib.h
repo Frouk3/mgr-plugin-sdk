@@ -88,11 +88,11 @@ template <typename T>
 class lib::AllocatedArray : public lib::Array<T>
 {
 public:
-    int field_10;
-    int field_14;
+    void* m_pAllocator;
+    void *m_pDeallocator;
 
     AllocatedArray() : Array()
     {
-        this->field_14 = 0;
+        
     }
 };
