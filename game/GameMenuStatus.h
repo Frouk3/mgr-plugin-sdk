@@ -25,4 +25,4 @@ enum GameMenuStatus
   ProcessOutOfPause = 18,
 };
 
-inline GameMenuStatus &g_GameMenuStatus = *(GameMenuStatus*)(shared::base + 0x17E9F9C);
+inline GameMenuStatus &g_GameMenuStatus = *(GameMenuStatus*)(shared::base + 0x17E9F9C); // todo: idk, kill it
