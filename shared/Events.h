@@ -73,6 +73,12 @@ private:
             this->mainhookptr = func;
         }
 
+        IEvent(std::vector<void(*)()>* listVec, void(__cdecl* mainhook)(), unsigned int address)
+        {
+            this->IEvent::IEvent(listVec, mainhook);
+            this->Patch(address);
+        }
+
         IEvent& operator+=(void(*funcptr)())
         {
             listPtr->emplace_back(funcptr);
@@ -106,18 +112,6 @@ private:
             this->after = IEvent(evAfter);
         }
     };
-
-public:
-    static inline IEvent OnUpdateEvent = IEvent(&OnUpdateList, nullptr);
-    static inline IEvent OnGameStartupEvent = IEvent(&OnGameStartupList, nullptr);
-    static inline IEvent OnSceneStartupEvent = IEvent(&OnSceneStartupList, nullptr);
-    static inline IEvent OnSceneCleanupEvent = IEvent(&OnSceneCleanupList, nullptr);
-    static inline IEvent OnTickEvent = IEvent(&OnTickEventList, nullptr);
-    static inline IEvent OnPauseEvent = IEvent(&OnPauseEventList, nullptr);
-    static inline IEvent OnEndScene = IEvent(&OnEndSceneList, nullptr);
-    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, nullptr), IEvent(&OnResetAfterList, nullptr));
-    static inline IEvent OnApplicationStartEvent = IEvent(&OnApplicationStartList, nullptr);
-    static inline IEvent OnPresent = IEvent(&OnPresentList, nullptr);
 private:
     static inline void OnUpdateRun()
     {
@@ -200,37 +194,20 @@ private:
         static inline void OnPresentHook();
     };
 public:
-
-    static inline void MainHookInit()
-    {
-        OnUpdateEvent.SetMainHook(Caves::OnUpdateMainHook);
-        OnGameStartupEvent.SetMainHook(Caves::OnGameStartupMainHook);
-        OnSceneStartupEvent.SetMainHook(Caves::OnSceneStartupMainHook);
-        OnSceneCleanupEvent.SetMainHook(Caves::OnSceneCleanupMainHook);
-        OnTickEvent.SetMainHook(Caves::OnTickEventMainHook);
-        OnPauseEvent.SetMainHook(Caves::OnPauseEventMainHook);
-        OnEndScene.SetMainHook(Caves::OnEndSceneMainHook);
-        OnDeviceReset.after.SetMainHook(Caves::OnResetAfterMainHook);
-        OnDeviceReset.before.SetMainHook(Caves::OnResetBeforeMainHook);
-        OnApplicationStartEvent.SetMainHook(Caves::OnApplicationStartup);
-        OnPresent.SetMainHook(Caves::OnPresentHook);
-
-        OnUpdateEvent.Patch(shared::base + 0x6526A2);
-        OnGameStartupEvent.Patch(shared::base + 0x65104D);
-        OnSceneStartupEvent.Patch(shared::base + 0x64D227);
-        OnSceneCleanupEvent.Patch(shared::base + 0x654237);
-        OnTickEvent.Patch(shared::base + 0x64D411);
-        OnPauseEvent.Patch(shared::base + 0x64D40A);
-        OnEndScene.Patch(shared::base + 0x65264C);
-        OnDeviceReset.after.Patch(shared::base + 0xB9D499);
-        OnDeviceReset.before.Patch(shared::base + 0xB9D0FA);
-        OnApplicationStartEvent.Patch(shared::base + 0x653360);
-        OnPresent.Patch(shared::base + 0xB9807A);
-    };
+    static inline IEvent OnUpdateEvent = IEvent(&OnUpdateList, Caves::OnUpdateMainHook, shared::base + 0x6526A2);
+    static inline IEvent OnGameStartupEvent = IEvent(&OnGameStartupList, Caves::OnGameStartupMainHook, shared::base + 0x65104D);
+    static inline IEvent OnSceneStartupEvent = IEvent(&OnSceneStartupList, Caves::OnSceneStartupMainHook, shared::base + 0x64D227);
+    static inline IEvent OnSceneCleanupEvent = IEvent(&OnSceneCleanupList, Caves::OnSceneCleanupMainHook, shared::base + 0x654237);
+    static inline IEvent OnTickEvent = IEvent(&OnTickEventList, Caves::OnTickEventMainHook, shared::base + 0x64D411);
+    static inline IEvent OnPauseEvent = IEvent(&OnPauseEventList, Caves::OnPauseEventMainHook, shared::base + 0x64D40A);
+    static inline IEvent OnEndScene = IEvent(&OnEndSceneList, Caves::OnEndSceneMainHook, shared::base + 0x65264C);
+    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, Caves::OnResetBeforeMainHook, shared::base + 0xB9D499), IEvent(&OnResetAfterList, Caves::OnResetAfterMainHook, shared::base + 0xB9D0FA));
+    static inline IEvent OnApplicationStartEvent = IEvent(&OnApplicationStartList, Caves::OnApplicationStartup, shared::base + 0x653360);
+    static inline IEvent OnPresent = IEvent(&OnPresentList, Caves::OnPresentHook, shared::base + 0xB9807A);
 
     Events()
     {
-        MainHookInit();
+
     };
 };
 
