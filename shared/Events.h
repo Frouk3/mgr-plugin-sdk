@@ -48,6 +48,10 @@ private:
     // OnAppStart
 
     static inline std::vector<void(*)()> OnApplicationStartList;
+///////////////////////////////////////////////////////////////////////
+    // OnPresent
+
+    static inline std::vector<void(*)()> OnPresentList;
 private:
     class IEvent
     {
@@ -113,6 +117,7 @@ public:
     static inline IEvent OnEndScene = IEvent(&OnEndSceneList, nullptr);
     static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, nullptr), IEvent(&OnResetAfterList, nullptr));
     static inline IEvent OnApplicationStartEvent = IEvent(&OnApplicationStartList, nullptr);
+    static inline IEvent OnPresent = IEvent(&OnPresentList, nullptr);
 private:
     static inline void OnUpdateRun()
     {
@@ -174,6 +179,12 @@ private:
             f();
     }
 
+    static inline void OnPresentRun()
+    {
+        for (auto &f : OnPresentList)
+            f();
+    }
+
     struct Caves
     {
         static inline void OnUpdateMainHook();
@@ -186,6 +197,7 @@ private:
         static inline void OnPauseEventMainHook();
         static inline void OnEndSceneMainHook();
         static inline void OnApplicationStartup();
+        static inline void OnPresentHook();
     };
 public:
 
@@ -201,6 +213,7 @@ public:
         OnDeviceReset.after.SetMainHook(Caves::OnResetAfterMainHook);
         OnDeviceReset.before.SetMainHook(Caves::OnResetBeforeMainHook);
         OnApplicationStartEvent.SetMainHook(Caves::OnApplicationStartup);
+        OnPresent.SetMainHook(Caves::OnPresentHook);
 
         OnUpdateEvent.Patch(shared::base + 0x6526A2);
         OnGameStartupEvent.Patch(shared::base + 0x65104D);
@@ -212,6 +225,7 @@ public:
         OnDeviceReset.after.Patch(shared::base + 0xB9D499);
         OnDeviceReset.before.Patch(shared::base + 0xB9D0FA);
         OnApplicationStartEvent.Patch(shared::base + 0x653360);
+        OnPresent.Patch(shared::base + 0xB9807A);
     };
 
     Events()
@@ -331,5 +345,16 @@ void __declspec(naked) Events::Caves::OnUpdateMainHook()
         call OnUpdateRun
         popad
         jmp Events::OnUpdateEvent.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnPresentHook()
+{
+    __asm
+    {
+        pushad
+        call OnPresentRun
+        popad
+        jmp Events::OnPresent.returnAddress
     }
 }
