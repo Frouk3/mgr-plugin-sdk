@@ -201,7 +201,7 @@ public:
     static inline IEvent OnTickEvent = IEvent(&OnTickEventList, Caves::OnTickEventMainHook, shared::base + 0x64D411);
     static inline IEvent OnPauseEvent = IEvent(&OnPauseEventList, Caves::OnPauseEventMainHook, shared::base + 0x64D40A);
     static inline IEvent OnEndScene = IEvent(&OnEndSceneList, Caves::OnEndSceneMainHook, shared::base + 0x65264C);
-    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, Caves::OnResetBeforeMainHook, shared::base + 0xB9D499), IEvent(&OnResetAfterList, Caves::OnResetAfterMainHook, shared::base + 0xB9D0FA));
+    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, Caves::OnResetBeforeMainHook, shared::base + 0xB9D0FA), IEvent(&OnResetAfterList, Caves::OnResetAfterMainHook, shared::base + 0xB9D499));
     static inline IEvent OnApplicationStartEvent = IEvent(&OnApplicationStartList, Caves::OnApplicationStartup, shared::base + 0x653360);
     static inline IEvent OnPresent = IEvent(&OnPresentList, Caves::OnPresentHook, shared::base + 0xB9807A);
 
