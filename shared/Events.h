@@ -8,50 +8,7 @@
 class Events
 {
 private:
-    // OnUpdate
 
-    static inline std::vector<void(*)()> OnUpdateList;
-///////////////////////////////////////////////////////////////////////
-    // OnGameStartup
-
-    static inline std::vector<void(*)()> OnGameStartupList;
-///////////////////////////////////////////////////////////////////////
-    // OnSceneStartup
-
-    static inline std::vector<void(*)()> OnSceneStartupList;
-///////////////////////////////////////////////////////////////////////
-    // OnSceneCleanup
-
-    static inline std::vector<void(*)()> OnSceneCleanupList;
-///////////////////////////////////////////////////////////////////////
-    // OnTickEvent
-
-    static inline std::vector<void(*)()> OnTickEventList;
-///////////////////////////////////////////////////////////////////////
-    // OnPauseEvent
-
-    static inline std::vector<void(*)()> OnPauseEventList;
-///////////////////////////////////////////////////////////////////////
-    // OnEndScene
-
-    static inline std::vector<void(*)()> OnEndSceneList;
-///////////////////////////////////////////////////////////////////////
-    // OnReset
-    // Before
-
-    static inline std::vector<void(*)()> OnResetBeforeList;
-    // After
-
-    static inline std::vector<void(*)()> OnResetAfterList;
-
-///////////////////////////////////////////////////////////////////////
-    // OnAppStart
-
-    static inline std::vector<void(*)()> OnApplicationStartList;
-///////////////////////////////////////////////////////////////////////
-    // OnPresent
-
-    static inline std::vector<void(*)()> OnPresentList;
 private:
     class IEvent
     {
@@ -59,11 +16,14 @@ private:
         uintptr_t returnAddress;
         std::vector<void(*)()>* listPtr;
         void(__cdecl* mainhookptr)() = nullptr;
+        void(__stdcall* run)(IEvent *) = nullptr;
 
         IEvent()
         {
             this->returnAddress = 0;
             this->mainhookptr = nullptr;
+            this->run = nullptr;
+            this->listPtr = nullptr;
         }
 
         IEvent(std::vector<void(*)()>* listVec, void(__cdecl* func)())
@@ -71,11 +31,24 @@ private:
             this->returnAddress = 0;
             this->listPtr = listVec;
             this->mainhookptr = func;
+            this->run = nullptr;
         }
 
         IEvent(std::vector<void(*)()>* listVec, void(__cdecl* mainhook)(), unsigned int address)
         {
             this->IEvent::IEvent(listVec, mainhook);
+            this->Patch(address);
+        }
+
+        IEvent(void(__cdecl *mainhook)(), unsigned int address)
+        {
+            this->listPtr = new std::vector<void(__cdecl*)()>();
+            this->mainhookptr = mainhook;
+            this->run = [](IEvent *self)
+                {
+                    for (auto& f : *self->listPtr)
+                        f();
+                };
             this->Patch(address);
         }
 
@@ -109,7 +82,7 @@ private:
         }
     };
 private:
-    static inline void OnUpdateRun()
+    /*static inline void OnUpdateRun()
     {
         for (auto& f : OnUpdateList)
             f();
@@ -173,7 +146,7 @@ private:
     {
         for (auto &f : OnPresentList)
             f();
-    }
+    }*/
 
     struct Caves
     {
@@ -190,16 +163,16 @@ private:
         static inline void OnPresentHook();
     };
 public:
-    static inline IEvent OnUpdateEvent = IEvent(&OnUpdateList, Caves::OnUpdateMainHook, shared::base + 0x6526A2);
-    static inline IEvent OnGameStartupEvent = IEvent(&OnGameStartupList, Caves::OnGameStartupMainHook, shared::base + 0x65104D);
-    static inline IEvent OnSceneStartupEvent = IEvent(&OnSceneStartupList, Caves::OnSceneStartupMainHook, shared::base + 0x64D227);
-    static inline IEvent OnSceneCleanupEvent = IEvent(&OnSceneCleanupList, Caves::OnSceneCleanupMainHook, shared::base + 0x654237);
-    static inline IEvent OnTickEvent = IEvent(&OnTickEventList, Caves::OnTickEventMainHook, shared::base + 0x64D411);
-    static inline IEvent OnPauseEvent = IEvent(&OnPauseEventList, Caves::OnPauseEventMainHook, shared::base + 0x64D40A);
-    static inline IEvent OnEndScene = IEvent(&OnEndSceneList, Caves::OnEndSceneMainHook, shared::base + 0x65264C);
-    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(&OnResetBeforeList, Caves::OnResetBeforeMainHook, shared::base + 0xB9D0FA), IEvent(&OnResetAfterList, Caves::OnResetAfterMainHook, shared::base + 0xB9D499));
-    static inline IEvent OnApplicationStartEvent = IEvent(&OnApplicationStartList, Caves::OnApplicationStartup, shared::base + 0x653360);
-    static inline IEvent OnPresent = IEvent(&OnPresentList, Caves::OnPresentHook, shared::base + 0xB9807A);
+    static inline IEvent OnUpdateEvent = IEvent(Caves::OnUpdateMainHook, shared::base + 0x6526A2);
+    static inline IEvent OnGameStartupEvent = IEvent(Caves::OnGameStartupMainHook, shared::base + 0x65104D);
+    static inline IEvent OnSceneStartupEvent = IEvent(Caves::OnSceneStartupMainHook, shared::base + 0x64D227);
+    static inline IEvent OnSceneCleanupEvent = IEvent(Caves::OnSceneCleanupMainHook, shared::base + 0x654237);
+    static inline IEvent OnTickEvent = IEvent(Caves::OnTickEventMainHook, shared::base + 0x64D411);
+    static inline IEvent OnPauseEvent = IEvent(Caves::OnPauseEventMainHook, shared::base + 0x64D40A);
+    static inline IEvent OnEndScene = IEvent(Caves::OnEndSceneMainHook, shared::base + 0x65264C);
+    static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(Caves::OnResetBeforeMainHook, shared::base + 0xB9D0FA), IEvent(Caves::OnResetAfterMainHook, shared::base + 0xB9D499));
+    static inline IEvent OnApplicationStartEvent = IEvent(Caves::OnApplicationStartup, shared::base + 0x653360);
+    static inline IEvent OnPresent = IEvent(Caves::OnPresentHook, shared::base + 0xB9807A);
 
     Events()
     {
@@ -214,7 +187,9 @@ void __declspec(naked) Events::Caves::OnApplicationStartup()
     __asm
     {
         pushad
-        call OnApplicationStartRun
+        lea ecx, OnApplicationStartEvent
+        push ecx
+        call OnApplicationStartEvent.run
         popad
         jmp Events::OnApplicationStartEvent.returnAddress
     }
@@ -222,14 +197,14 @@ void __declspec(naked) Events::Caves::OnApplicationStartup()
 
 void __declspec(naked) Events::Caves::OnEndSceneMainHook()
 {
+    __asm
     {
-        __asm
-        {
-            pushad
-            call OnEndSceneRun
-            popad
-            jmp Events::OnEndScene.returnAddress
-        }
+        pushad
+        lea ecx, OnEndScene
+        push ecx
+        call OnEndScene.run
+        popad
+        jmp Events::OnEndScene.returnAddress
     }
 }
 
@@ -238,7 +213,9 @@ void __declspec(naked) Events::Caves::OnPauseEventMainHook()
     __asm
     {
         pushad
-        call OnPauseEventRun
+        lea ecx, OnPauseEvent
+        push ecx
+        call OnPauseEvent.run
         popad
         jmp Events::OnPauseEvent.returnAddress
     }
@@ -249,7 +226,9 @@ void __declspec(naked) Events::Caves::OnResetBeforeMainHook()
     __asm
     {
         pushad
-        call OnResetBeforeRun
+        lea ecx, OnDeviceReset.before
+        push ecx
+        call OnDeviceReset.before.run
         popad
         jmp Events::OnDeviceReset.before.returnAddress
     }
@@ -260,7 +239,9 @@ void __declspec(naked) Events::Caves::OnTickEventMainHook()
     __asm
     {
         pushad
-        call OnTickEventRun
+        lea ecx, OnTickEvent
+        push ecx
+        call OnTickEvent.run
         popad
         jmp Events::OnTickEvent.returnAddress
     }
@@ -271,7 +252,9 @@ void __declspec(naked) Events::Caves::OnSceneCleanupMainHook()
     __asm
     {
         pushad
-        call OnSceneCleanupRun
+        lea ecx, OnSceneCleanupEvent
+        push ecx
+        call OnSceneCleanupEvent.run
         popad
         jmp Events::OnSceneCleanupEvent.returnAddress
     }
@@ -282,7 +265,9 @@ void __declspec(naked) Events::Caves::OnResetAfterMainHook()
     __asm
     {
         pushad
-        call OnResetAfterRun
+        lea ecx, OnDeviceReset.after
+        push ecx
+        call OnDeviceReset.after.run
         popad
         jmp Events::OnDeviceReset.after.returnAddress
     }
@@ -293,7 +278,9 @@ void __declspec(naked) Events::Caves::OnSceneStartupMainHook()
     __asm
     {
         pushad
-        call OnSceneStartupRun
+        lea ecx, OnSceneStartupEvent
+        push ecx
+        call OnSceneStartupEvent.run
         popad
         jmp Events::OnSceneStartupEvent.returnAddress
     }
@@ -304,7 +291,9 @@ void __declspec(naked) Events::Caves::OnGameStartupMainHook()
     __asm
     {
         pushad
-        call OnGameStartupRun
+        lea ecx, OnGameStartupEvent
+        push ecx
+        call OnGameStartupEvent.run
         popad
         jmp Events::OnGameStartupEvent.returnAddress
     }
@@ -315,7 +304,9 @@ void __declspec(naked) Events::Caves::OnUpdateMainHook()
     __asm
     {
         pushad
-        call OnUpdateRun
+        lea ecx, OnUpdateEvent
+        push ecx
+        call OnUpdateEvent.run
         popad
         jmp Events::OnUpdateEvent.returnAddress
     }
@@ -326,7 +317,9 @@ void __declspec(naked) Events::Caves::OnPresentHook()
     __asm
     {
         pushad
-        call OnPresentRun
+        lea ecx, OnPresent
+        push ecx
+        call OnPresent.run
         popad
         jmp Events::OnPresent.returnAddress
     }
