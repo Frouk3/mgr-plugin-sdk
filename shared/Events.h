@@ -92,11 +92,7 @@ private:
 
         void Patch(uint32_t address)
         {
-            uint32_t origCall = (uint32_t)injector::ReadRelativeOffset(address + 1);
-
-            injector::MakeCALL(address, this->mainhookptr, true);
-
-            this->returnAddress = origCall;
+            this->returnAddress = (uintptr_t)injector::MakeCALL(address, this->mainhookptr, true);
         }
     };
 
