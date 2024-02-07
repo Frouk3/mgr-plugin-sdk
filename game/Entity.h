@@ -41,9 +41,9 @@ struct Entity
         return ((BOOL(__thiscall*)(Entity*, ConstructInfo*))(shared::base + 0x680E70))(this, pConstructInfo);
     }
     template <typename T>
-    T getEntityInstance()
+    T *getEntityInstance()
     {
-        return ((T (__thiscall*)(Entity*))(shared::base + 0x67C8A0))(this);
+        return ((T *(__thiscall*)(Entity*))(shared::base + 0x67C8A0))(this);
     }
     void updateSlowRateUnit()
     {
