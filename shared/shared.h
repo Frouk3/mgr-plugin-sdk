@@ -62,23 +62,14 @@ namespace shared
 		return false;
 	}
 
-	inline int clamp(int x, int min, int max)
+	template <typename T>
+	inline T clamp(T x, T min, T max)
 	{
 		if (x < min)
 			return min;
 		else if (x > max)
 			return max;
 		
-		return x;
-	}
-
-	inline float clamp(float x, float min, float max)
-	{
-		if (x < min)
-			return min;
-		else if (x > max)
-			return max;
-
 		return x;
 	}
 }

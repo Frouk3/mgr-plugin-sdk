@@ -7,7 +7,7 @@
 
 struct EntitySystem
 {
-    int m_nMaxSize;
+    size_t m_nEntityCapacity; // how much entities can we hold?
     Hw::cHeapVariable* m_pHeapVariable;
     SceneModelSystem* m_pSceneModelSystem;
     int field_C;
@@ -21,19 +21,11 @@ struct EntitySystem
     int field_2C;
     int field_30;
     int field_34;
-    int field_38;
-    int field_3C;
-    int field_40;
-    int field_44;
-    int field_48;
-    Entity** m_pStartEntityArray; // for (Entity **i = this->m_pStartEntityArray; i != this->m_pEndEntityArray; i = (Entity**)i[2])
-    Entity** m_pEndEntityArray;
+    Hw::cFixedList<Entity *> m_EntityList;
     int field_54;
     int field_58;
     int field_5C;
     Hw::cHeapFixed m_HeapFixed;
-    int field_B8;
-    int field_BC;
     int field_C0;
     int field_C4;
     int field_C8;
@@ -42,18 +34,8 @@ struct EntitySystem
     int field_D4;
     int field_D8;
     int field_DC;
-    int field_E0;
-    int field_E4;
-    int field_E8;
-    int field_EC;
-    int field_F0;
-    int field_F4;
-    int field_F8;
-    int field_FC;
-    int field_100;
-    int field_104;
-    int field_108;
-    int field_10C;
+    lib::AllocatedArray<Entity *> field_E0;
+    lib::AllocatedArray<Entity *> m_DatsuArray;
     int field_110;
     int field_114;
     int field_118;

@@ -78,7 +78,7 @@ class lib::StaticArray : public lib::Array<T>
 public:
     T m_Array[size];
 
-    StaticArray() : Array()
+    StaticArray() : Array<T>()
     {
         
     }
@@ -91,8 +91,9 @@ public:
     void* m_pAllocator;
     void *m_pDeallocator;
 
-    AllocatedArray() : Array()
+    AllocatedArray() : Array<T>()
     {
-        
+        this->m_pAllocator = nullptr;
+        this->m_pDeallocator = nullptr;
     }
 };

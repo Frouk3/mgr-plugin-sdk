@@ -32,6 +32,25 @@ namespace Hw
         int field_10;
     };
 
+    template <typename T>
+    struct cFixedList
+    {
+        int field_0;
+        struct Node
+        {
+            T m_value;
+            Node* m_prev;
+            Node* m_next;
+        } *m_pStart;
+        size_t m_nCapacity;
+        size_t m_nSize;
+        Node* m_pLast;
+        Node* m_pFirst;
+        Node* m_pEnd;
+
+        // unfortunatelly we need the iterator to do the for each loop
+    };
+
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C); 
@@ -40,63 +59,63 @@ namespace Hw
 class Hw::cHeap
 {
 public:
-  int field_4;
-  int field_8;
-  int field_C;
-  int field_10;
-  int field_14;
-  int field_18;
-  int field_1C;
-  int field_20;
-  int field_24;
-  Hw::cHeapVariable *m_pReservedHeap;
-  Hw::cHeapGlobal *m_pGlobalHeap;
-  Hw::cHeapVariable *m_pNext;
-  Hw::cHeapVariable *m_pPrev;
-  const char *m_TargetAlloc;
-  int field_3C;
-  HANDLE *m_pHandle;
-  int field_44;
-  int m_nFixedSizeAllocation;
-  int m_nMaxPhysical;
-  int m_nFreePhysical;
-  int field_54;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    Hw::cHeapVariable* m_pReservedHeap;
+    Hw::cHeapGlobal* m_pGlobalHeap;
+    Hw::cHeapVariable* m_pNext;
+    Hw::cHeapVariable* m_pPrev;
+    const char* m_TargetAlloc;
+    int field_3C;
+    HANDLE* m_pHandle;
+    int field_44;
+    int m_nFixedSizeAllocation;
+    int m_nMaxPhysical;
+    int m_nFreePhysical;
+    int field_54;
 
-  virtual ~cHeap() {};
+    virtual ~cHeap() {};
 };
 
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
 
-  virtual ~cHeapVariableBase() override {};
+
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
-  virtual ~cHeapVariable() override {};
+    
 };
 
 class Hw::cTexture
 {
 public:
-  int field_4;
-  int field_8;
-  int field_C;
-  int field_10;
-  int field_14;
-  int field_18;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
 
-  virtual ~cTexture() {};
+    virtual ~cTexture() {};
 };
 
 class Hw::CameraProj
 {
 public:
 
-  virtual ~CameraProj() {};
+    virtual ~CameraProj() {};
 };
 
 class Hw::cCameraBase : public Hw::CameraProj
@@ -108,106 +127,108 @@ public:
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
-  int field_58;
-  int field_5C;
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
 
-  virtual ~cHeapPhysicalBase() override {};
+    
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
 {
 public:
 
-  virtual ~cHeapPhysical() override {};
+    
 };
 
 class Hw::cHeapHook
 {
 public:
 
-  virtual ~cHeapHook() {};
+    virtual ~cHeapHook() {};
 };
 
 class Hw::cHeapFixed : public Hw::cHeap
 {
 public:
 
-  virtual ~cHeapFixed() override {};
+    int field_58;
+    int field_5C;
 };
 
 class Hw::cHeapOneTime : public Hw::cHeap
 {
 public:
 
-  virtual ~cHeapOneTime() override {};
+    
 };
 
 class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
-  virtual ~cHeapGlobal() override {};
+    
 };
 
 class Hw::cShareHeapPhysical : Hw::cHeapPhysical
 {
 public:
 
-  virtual ~cShareHeapPhysical() override {};
+    
 };
 
 class Hw::cPrimHeap
 {
 public:
-  int field_4;
-  int field_8;
-  int field_C;
-  int field_10;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
 
-  virtual ~cPrimHeap() {};
+    virtual ~cPrimHeap() {};
 };
 
 class Hw::cIndexBufferHeap
 {
 public:
-  int field_4;
-  int field_8;
-  int field_C;
-  int field_10;
-  int field_14;
-  int field_18;
-  
-  virtual ~cIndexBufferHeap() {};
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+
+    virtual ~cIndexBufferHeap() {};
 };
 
 class Hw::cRenderTargetInfo
 {
 public:
-  int field_4;
-  int field_8;
-  int field_C;
-  int field_10;
-  int field_14;
-  int field_18;
-  int field_1C;
-  int field_20;
-  int field_24;
-  int field_28;
-  int field_2C;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
 
-  virtual ~cRenderTargetInfo() {};
+    virtual ~cRenderTargetInfo() {};
 };
 
 class Hw::cOtWork
 {
 public:
-  
-  virtual ~cOtWork() {};
+
+    virtual ~cOtWork() {};
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x58);
 VALIDATE_SIZE(Hw::cHeapPhysicalBase, 0x70);
+VALIDATE_SIZE(Hw::cHeapFixed, 0x60);
