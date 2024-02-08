@@ -399,6 +399,11 @@ public:
     {
         ((void (__thiscall *)(Behavior*, int))(shared::base + 0x69E060))(this, constraintId);
     }
+
+    void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int _bone)
+    {
+        ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, _bone);
+    }
 };
 
 struct BehaviorData

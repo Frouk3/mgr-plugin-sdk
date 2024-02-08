@@ -3,6 +3,11 @@
 #include "BehaviorAppBase.h"
 #include "shared.h"
 
+#include "NinjaRunEventManagerImplement.h"
+
+#include "Slot.h"
+#include "cQteArea.h"
+
 class cCameraGame;
 
 class Pl0000 : public BehaviorAppBase
@@ -27,7 +32,7 @@ public:
   int field_B8C;
   int field_B90;
   int field_B94;
-  int field_B98;
+  EntityHandle m_FaceHandle;
   int field_B9C;
   int field_BA0;
   int field_BA4;
@@ -66,8 +71,8 @@ public:
   int field_C34;
   int field_C38;
   int field_C3C;
-  cEspControler field_C40;
-  int field_CF0;
+  cEspControler m_BloodLArmControler;
+  int m_nCuttedLArm;
   int field_CF4;
   int field_CF8;
   int field_CFC;
@@ -103,38 +108,8 @@ public:
   int field_D74;
   int field_D78;
   int field_D7C;
-  int field_D80;
-  int field_D84;
-  int field_D88;
-  int field_D8C;
-  int field_D90;
-  int field_D94;
-  int field_D98;
-  int field_D9C;
-  int field_DA0;
-  int field_DA4;
-  int field_DA8;
-  int field_DAC;
-  int field_DB0;
-  int field_DB4;
-  int field_DB8;
-  int field_DBC;
-  int field_DC0;
-  int field_DC4;
-  int field_DC8;
-  int field_DCC;
-  int field_DD0;
-  int field_DD4;
-  int field_DD8;
-  int field_DDC;
-  int field_DE0;
-  int field_DE4;
-  int field_DE8;
-  int field_DEC;
-  int field_DF0;
-  int field_DF4;
-  int field_DF8;
-  int field_DFC;
+  D3DXMATRIX field_D80;
+  D3DXMATRIX field_DC0;
   float field_E00;
   float field_E04;
   int field_E08;
@@ -214,16 +189,16 @@ public:
   int field_FDC;
   int field_FE0;
   int field_FE4;
-  int field_FE8;
-  int field_FEC;
-  int field_FF0;
-  int field_FF4;
-  int field_FF8;
-  int field_FFC;
+  EntityHandle m_HairHandle;
+  EntityHandle m_HelmetHandle;
+  EntityHandle m_SwordHandle;
+  EntityHandle m_SheathHandle;
+  EntityHandle field_FF8;
+  EntityHandle field_FFC;
   int field_1000;
   int field_1004;
   int field_1008;
-  int field_100C;
+  EntityHandle field_100C;
   int field_1010;
   int field_1014;
   int field_1018;
@@ -277,10 +252,10 @@ public:
   int field_10F0;
   int field_10F4;
   void *field_10F8;
-  int filed_10FC;
+  int field_10FC;
   int field_1100;
   int field_1104;
-  int field_1108;
+  EntityHandle field_1108;
   float field_110C;
   float field_1110;
   float field_1114;
@@ -311,14 +286,14 @@ public:
   int field_1184;
   Entity *field_1188;
   Animation *m_pAnimation;
-  Entity *m_pBlade;
-  int field_1194;
+  Entity *m_pBladeEntity;
+  Entity *m_pSheathEntity;
   int field_1198;
   int field_119C;
   int field_11A0;
   int field_11A4;
   int field_11A8;
-  int field_11AC;
+  EntityHandle field_11AC;
   int field_11B0;
   int field_11B4;
   int field_11B8;
@@ -381,7 +356,7 @@ public:
   int field_12A8;
   float field_12AC;
   int field_12B0;
-  int field_12B4;
+  void *field_12B4;
   float field_12B8;
   int field_12BC;
   cEspControler field_12C0;
@@ -1195,7 +1170,7 @@ public:
   float field_2698;
   int field_269C;
   int field_26A0;
-  Entity *field_26A4;
+  Entity *m_pVrWallCheckEntity;
   int field_26A8;
   int field_26AC;
   float field_26B0;
@@ -1395,7 +1370,7 @@ public:
   int field_2BBC;
   cVec4 field_2BC0;
   float field_2BD0;
-  int field_2BD4;
+  float field_2BD4;
   float field_2BD8;
   int field_2BDC;
   int field_2BE0;
@@ -1411,7 +1386,7 @@ public:
   int field_2C08;
   int field_2C0C;
   float field_2C10;
-  int field_2C14;
+  float field_2C14;
   int field_2C18;
   int field_2C1C;
   float field_2C20;
@@ -1772,37 +1747,14 @@ public:
   float m_fHealTime;
   __int16 field_31B0;
   __int16 field_31B2;
-  char field_31B4;
-  int field_31B5;
+  int field_31B4;
+  int field_31B8;
   int field_31BC;
   int field_31C0;
   int field_31C4;
   int field_31C8;
   int field_31CC;
-  int field_31D0;
-  int field_31D4;
-  int field_31D8;
-  int field_31DC;
-  int field_31E0;
-  int field_31E4;
-  int field_31E8;
-  int field_31EC;
-  int field_31F0;
-  int field_31F4;
-  int field_31F8;
-  int field_31FC;
-  int field_3200;
-  int field_3204;
-  int field_3208;
-  int field_320C;
-  int field_3210;
-  int field_3214;
-  int field_3218;
-  int field_321C;
-  int field_3220;
-  int field_3224;
-  int field_3228;
-  int field_322C;
+  cQteArea field_31D0;
   int field_3230;
   int field_3234;
   int field_3238;
@@ -1918,21 +1870,22 @@ public:
   int field_3804;
   int field_3808;
   int field_380C;
-  int field_3810;
+  EntityHandle field_3810;
   int field_3814;
-  int field_3818;
+  EntityHandle field_3818;
   int field_381C;
-  struct FuelContainers
+  class FuelContainer
   {
-    int field_0;
-    float m_fFuelContainer;
-    int field_8;
-    float m_fMaxFuelContainer;
-    float field_10;
-    int field_14;
-  } *m_pFuelContainers;
-  int field_3824;
-  int m_nMaxFuelContainerUpgrades;
+  public:
+      int field_0;
+      float m_fFuelContainer;
+      int field_8;
+      float m_fFuelContainerCapacity;
+      float field_10;
+      int field_14;
+  }*m_pFuelContainers;
+  int m_nMaxFCUpgrades;
+  int m_nCurrentFCUpgrades;
   int field_382C;
   float field_3830;
   float field_3834;
@@ -2047,7 +2000,7 @@ public:
   int field_3E94;
   int field_3E98;
   int field_3E9C;
-  int field_3EA0;
+  EntityHandle field_3EA0;
   float field_3EA4;
   int field_3EA8;
   int field_3EAC;
@@ -2055,13 +2008,13 @@ public:
   int field_3EB4;
   int field_3EB8;
   int field_3EBC;
-  int field_3EC0;
-  int field_3EC4;
-  int field_3EC8;
+  float field_3EC0;
+  float field_3EC4;
+  float field_3EC8;
   int field_3ECC;
-  int field_3ED0;
-  int field_3ED4;
-  int field_3ED8;
+  float field_3ED0;
+  float field_3ED4;
+  float field_3ED8;
   int field_3EDC;
   int field_3EE0;
   int field_3EE4;
@@ -2176,16 +2129,24 @@ public:
   float field_4174;
   int field_4178;
   int field_417C;
-  int field_4180;
+  float field_4180;
   int field_4184;
   int field_4188;
-  int field_418C;
+  float field_418C;
   int field_4190;
   float field_4194;
   float field_4198;
   int field_419C;
-  int field_41A0;
-  int field_41A4;
+  class SlashStartSlotPl0010 : public Slot
+  {
+  public:
+      Pl0000* m_pOwner;
+  }*m_pSlashStartSlot;
+  class GetMoneySlotPl0010 : public Slot
+  {
+  public:
+      Pl0000* m_pOwner;
+  }*m_pGetMoneySlot;
   float field_41A8;
   int field_41AC;
   cVec4 field_41B0;
@@ -3116,7 +3077,7 @@ public:
   int field_5084;
   int field_5088;
   int field_508C;
-  int field_5090;
+  lib::StaticArray<FreeRunActivity::Info *, 64> *m_pFreeRunActivityInfoArray;
   int field_5094;
   int field_5098;
   int field_509C;
