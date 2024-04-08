@@ -27,8 +27,8 @@ namespace Hw
     {
         int field_0;
         T* m_pStart;
-        int m_nCapacity;
-        int field_C;
+        size_t m_nCapacity;
+        size_t m_nSize;
         int field_10;
     };
 
