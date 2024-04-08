@@ -153,10 +153,15 @@ public:
     int m_nModelFlags;
     int field_368;
     int field_36C;
-
+    // returns bone without raw index
     cParts *getBone(unsigned int bone)
     {
         return ((cParts *(__thiscall *)(cModelBase *, unsigned int))(shared::base + 0x612210))(this, bone);
+    }
+    // get rotation according where model is looking based on position?
+    float getRotationYaw(cVec4 *position)
+    {
+        return ((float(__thiscall*)(cModelBase*, cVec4*))(shared::base + 0x68EC30))(this, position);
     }
 };
 

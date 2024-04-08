@@ -10,21 +10,19 @@
 #include "StateMachineContextPl0010.h"
 #include "StateMachineFactoryPl0010.h"
 #include <D3dx9math.h>
+#include <AnimationMapManagerImplement.h>
 
 struct Constraints
 {
-    eObjID m_nIndex;
-    int field_4;
+    int m_nIndex;
+    EntityHandle m_nMainEntity;
     EntityHandle m_nObjectEntityHandle;
-    int field_C;
+    unsigned int m_nBone;
     int field_10;
     int field_14;
     int field_18;
     int field_1C;
-    float field_20;
-    float field_24;
-    float field_28;
-    float field_2C;
+    cVec4 m_vecRotation;
     cVec4 m_vecOffset;
     int field_40;
     int field_44;
@@ -39,15 +37,12 @@ public:
     {
         int field_0;
         int field_4;
-        int field_8;
-        int field_C;
-        int field_10;
-        int field_14;
-        int field_18;
+        char m_AnimName[16];
+        Behavior* m_Parent;
         int field_1C;
-        int field_20;
+        AnimationMap::Unit* m_AnimationMap;
         int field_24;
-        float field_28;
+        float m_fAnimTimer;
         int field_2C;
     };
 
@@ -191,7 +186,7 @@ public:
     int field_750;
     BattleParameterImplement *m_pBattleParameterImplement;
     int field_758;
-    int field_75C;
+    lib::AllocatedArray<AnimationMap::Unit> **m_ppAnimationUnit;
     int field_760;
     CharacterControl *m_pCharacterControl;
     int field_768;
@@ -276,6 +271,10 @@ public:
     BOOL shutdown()
     {
         return ReturnCallVMTFunc<BOOL, 17, Behavior *>(this);
+    }
+    void updateLogic()
+    {
+        CallVMTFunc<18, Behavior*>(this);
     }
     void tick()
     {
@@ -411,4 +410,5 @@ struct BehaviorData
 
 };
 
+VALIDATE_SIZE(Behavior::AnimationSlot, 0x30);
 VALIDATE_SIZE(Behavior, 0x870);

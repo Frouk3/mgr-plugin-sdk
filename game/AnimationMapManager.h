@@ -2,5 +2,6 @@
 
 class AnimationMapManager
 {
-    virtual ~AnimationMapManager() { ((void (__thiscall *)(AnimationMapManager *))(*(void***)this)[3])(this); };
+public:
+    virtual void __dummyVF() {};
 };
