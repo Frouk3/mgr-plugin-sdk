@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "shared.h"
+#include "Hw.h"
 
 // e prefix is indicated that it is used by the engine
 
@@ -21,24 +22,22 @@ inline unsigned int stringhash32(const char* str)
 	return ((unsigned int (__cdecl *)(const char*))(shared::base + 0xA03EA0))(str);
 }
 
-inline void *eFree(void *block)
+inline void * __cdecl eFree(void *block)
 {
 	return ((void *(__cdecl *)(void *))(shared::base + 0x9D4920))(block);
 }
 
-inline void *eAllocate(size_t size)
+[[NODISCARD]] inline void *__cdecl AllocateMemory(size_t size)
 {
-	auto operatorNew = *(void**)(shared::base + 0x177B794);
-	if (!operatorNew)
-		return nullptr;
-	return ((void*(__cdecl *)(size_t))operatorNew)(size);
+	auto mem = Hw::cHeapGlobal::get()->allocate(size, 32u, 0, 0);
+	if (mem)
+		memset(mem, 0, size);
+	return mem;
 }
 
-inline void eDeallocate(void *block)
+inline void __cdecl FreeMemory(void *block, int a2)
 {
-	auto operatorDelete = *(void**)(shared::base + 0x177B790);
-	if (operatorDelete)
-		((void(__cdecl *)(void *))operatorDelete)(block);
+	((void(__cdecl*)(void*, int))(shared::base + 0x61D3D0))(block, a2); // most cases, deleted memory always has value of 0xEEEEEEEE
 }
 
 inline bool &bIsForegroundWindow = *(bool*)(shared::base + 0x19D509C);

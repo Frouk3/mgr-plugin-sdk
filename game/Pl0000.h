@@ -3384,9 +3384,9 @@ public:
   {
     return ((int(__thiscall *)(Pl0000 *, int))(shared::base + 0x77C980))(this, unused);
   }
-  void SetSwordLost(bool bShouldLose)
+  void SetSwordLost(BOOL bShouldLose)
   {
-    ((void (__thiscall *)(Pl0000 *, bool))(shared::base + 0x77E210))(this, bShouldLose);
+    ((void (__thiscall *)(Pl0000 *, BOOL))(shared::base + 0x77E210))(this, bShouldLose);
   }
   BOOL IsUnarmed()
   {

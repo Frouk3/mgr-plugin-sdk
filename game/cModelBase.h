@@ -9,22 +9,10 @@ class cModelBase : public cParts
 public:
     D3DXMATRIX field_B0;
     D3DXMATRIX field_F0;
-    int field_130;
-    int field_134;
-    int field_138;
-    int field_13C;
-    int field_140;
-    int field_144;
-    int field_148;
-    int field_14C;
-    float field_150;
-    float field_154;
-    float field_158;
-    float field_15C;
-    float field_160;
-    float field_164;
-    float field_168;
-    float field_16C;
+    cVec4 m_vecModelRenderPos;
+    cVec4 m_vecRotationRenderPos;
+    cVec4 m_vecBoundingBoxMin;
+    cVec4 m_vecBoundingBoxMax;
     float field_170;
     float field_174;
     float field_178;
@@ -129,7 +117,7 @@ public:
     int field_304;
     int field_308;
     int field_30C;
-    int m_bStealthCamoEnabled;
+    BOOL m_bStealthCamoToggle;
     int field_314;
     int field_318;
     int field_31C;
@@ -137,7 +125,7 @@ public:
     __int16 m_nMaxcMeshCount;
     int field_328;
     __int16 field_32C;
-    void *m_pModelData;
+    void *m_pWmb;
     cParts *m_pcBodyParts;
     int field_338;
     int field_33C;

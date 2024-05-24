@@ -40,11 +40,11 @@ private:
             this->Patch(address);
         }
 
-        IEvent(void(__cdecl *mainhook)(), unsigned int address)
+        IEvent(void(__cdecl* mainhook)(), unsigned int address)
         {
             this->listPtr = new std::vector<void(__cdecl*)()>();
             this->mainhookptr = mainhook;
-            this->run = [](IEvent *self)
+            this->run = [](IEvent* self)
                 {
                     for (auto& f : *self->listPtr)
                         f();
@@ -161,6 +161,7 @@ private:
         static inline void OnEndSceneMainHook();
         static inline void OnApplicationStartup();
         static inline void OnPresentHook();
+        static inline void OnApplicationStartMid();
     };
 public:
     static inline IEvent OnUpdateEvent = IEvent(Caves::OnUpdateMainHook, shared::base + 0x6526A2);
@@ -173,6 +174,7 @@ public:
     static inline IEventTwoState OnDeviceReset = IEventTwoState(IEvent(Caves::OnResetBeforeMainHook, shared::base + 0xB9D0FA), IEvent(Caves::OnResetAfterMainHook, shared::base + 0xB9D499));
     static inline IEvent OnApplicationStartEvent = IEvent(Caves::OnApplicationStartup, shared::base + 0x653360);
     static inline IEvent OnPresent = IEvent(Caves::OnPresentHook, shared::base + 0xB9807A);
+    static inline IEvent OnApplicationStartEventMid = IEvent(Caves::OnApplicationStartMid, shared::base + 0x653056);
 
     Events()
     {
@@ -322,5 +324,18 @@ void __declspec(naked) Events::Caves::OnPresentHook()
         call OnPresent.run
         popad
         jmp Events::OnPresent.returnAddress
+    }
+}
+
+void __declspec(naked) Events::Caves::OnApplicationStartMid()
+{
+    __asm
+    {
+        pushad
+        lea ecx, OnApplicationStartEventMid
+        push ecx
+        call OnApplicationStartEventMid.run
+        popad
+        jmp Events::OnApplicationStartEventMid.returnAddress
     }
 }

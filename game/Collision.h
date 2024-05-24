@@ -203,7 +203,7 @@ public:
     int field_1A4;
     int field_1A8;
     int field_1AC;
-    hkpAllCdPointCollector field_1B0;
+    hkpCdAllPointCollector field_1B0;
     int field_1D4;
     int field_1D8;
     int field_1DC;

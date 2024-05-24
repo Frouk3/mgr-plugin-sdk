@@ -60,7 +60,7 @@ public:
             return;
 
         size_t insertIndex = *(char**)&position - (char*)this->m_pStart; // FIXME: Not sure what size is
-        if (insertIndex > this->m_nSize)
+        if ((insertIndex >> 2) > this->m_nSize)
             return;
 
         for (int i = this->m_nSize; i > insertIndex; --i)
@@ -84,6 +84,7 @@ public:
         this->m_pStart[0] = element;
 
         ++this->m_nSize;
+        return true;
     }
     /// @brief Swaps members with another array
     /// @param[in, out] array To switch with 
@@ -130,6 +131,17 @@ public:
     auto& operator [](size_t index)
     {
         return this->m_pStart[index];
+    }
+
+    auto& operator [](size_t index) const
+    {
+        return this->m_pStart[index];
+    }
+
+    void clear()
+    {
+        this->m_nSize = 0;
+        ZeroMemory(this->m_pStart, sizeof(T) * this->m_nSize);
     }
 };
 

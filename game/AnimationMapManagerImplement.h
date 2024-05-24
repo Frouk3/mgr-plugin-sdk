@@ -71,6 +71,8 @@ public:
     {
         CallVMTFunc<3, AnimationMapManagerImplement*, char>(this, 0);
     }
+
+    static inline AnimationMapManagerImplement*& pInstance = *(AnimationMapManagerImplement**)(shared::base + 0x1735BF4);
 };
 
 VALIDATE_SIZE(AnimationMap::Unit, 0x3C);

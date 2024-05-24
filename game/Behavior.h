@@ -11,6 +11,8 @@
 #include "StateMachineFactoryPl0010.h"
 #include <D3dx9math.h>
 #include <AnimationMapManagerImplement.h>
+#include "Collision.h"
+#include "RigidBodyCollision.h"
 
 struct Constraints
 {
@@ -57,6 +59,23 @@ public:
         int field_18;
     };
 
+    struct InstructionContainer
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        int field_10;
+        int field_14;
+        int field_18;
+        int field_1C;
+        int field_20;
+        int field_24;
+        int field_28;
+        int field_2C;
+        int field_30;
+    };
+
     int field_530;
     int field_534;
     int field_538;
@@ -70,13 +89,13 @@ public:
     float field_564;
     float field_568;
     float field_56C;
-    int field_570;
-    int field_574;
-    int field_578;
-    int field_57C;
-    int field_580;
-    int field_584;
-    int *field_588;
+    float field_570;
+    float field_574;
+    float field_578;
+    float field_57C;
+    float field_580;
+    float field_584;
+    float field_588;
     int field_58C;
     char field_590;
     int field_594;
@@ -109,19 +128,19 @@ public:
     float field_600;
     int field_604;
     int field_608;
-    void* m_pBehaviorInfo;
+    int m_pBehaviorInfo;
     int field_610;
     int field_614;
     unsigned int m_nCurrentAction;
     int m_nCurrentActionId;
     int field_620;
     int field_624;
-    unsigned int m_nPreviousAction;
+    int m_nPreviousAction;
     int m_nPreviousActionId;
     int field_630;
     int field_634;
     int field_638;
-    int field_63C;
+    lib::AllocatedArray<InstructionContainer> *m_pInstructionContainerArray;
     int field_640;
     int field_644;
     int field_648;
@@ -133,14 +152,10 @@ public:
     int field_660;
     int field_664;
     int field_668;
-    int field_66C;
+    EntityHandle field_66C;
     int field_670;
     int field_674;
-    int field_678;
-    int field_67C;
-    int field_680;
-    int field_684;
-    int field_688;
+    Hw::cFixedVector<int> field_678; // FIXME LATER;;
     int field_68C;
     int field_690;
     float field_694;
@@ -186,13 +201,13 @@ public:
     int field_750;
     BattleParameterImplement *m_pBattleParameterImplement;
     int field_758;
-    lib::AllocatedArray<AnimationMap::Unit> **m_ppAnimationUnit;
+    lib::AllocatedArray<AnimationMap::Unit> **m_ppAnimationMap;
     int field_760;
     CharacterControl *m_pCharacterControl;
     int field_768;
     int field_76C;
     int field_770;
-    lib::StaticArray<AnimationSlot, 16> *m_pAnimationSlots;
+    lib::StaticArray<AnimationSlot, 16> *m_pAnimationSlot;
     int field_778;
     int field_77C;
     int field_780;
@@ -202,17 +217,17 @@ public:
     int field_790;
     int field_794;
     EspCtrlCustomImpl *m_pEspCtrlCustomImpl;
-    int field_79C;
+    cEspControler *field_79C;
     lib::StaticArray<EffectIntegrationContainer, 32> *m_pEffectIntegrationContainer;
-    int field_7A4;
-    int field_7A8;
+    lib::StaticArray<Collision *, 250> *m_pAttackCollision;
+    lib::StaticArray<Collision *, 64> *m_pDefenseCollisions;
     int field_7AC;
-    int field_7B0;
-    int field_7B4;
-    int field_7B8;
+    RigidBodyCollision *m_pRigidBodyCollision;
+    void *m_pRigidBodyList;
+    lib::AllocatedArray<Collision*> *m_pAllocatedCollisionArray;
     int field_7BC;
     float field_7C0;
-    lib::StaticArray<Constraints, 32> **m_pContraints;
+    lib::StaticArray<Constraints, 32> **m_ppContraints;
     int field_7C8;
     int field_7CC;
     StateMachineContextPl0010 *m_pStateMachineContext;
@@ -236,7 +251,7 @@ public:
     int field_818;
     int field_81C;
     int field_820;
-    short field_824;
+    __int16 field_824;
     int field_828;
     int field_82C;
     int field_830;
@@ -384,9 +399,9 @@ public:
         return ((bool (__thiscall *)(Behavior *, int))(shared::base + 0x692380))(this, a2);
     }
 
-    int requestAnimationByMap(int animId, Entity *pAnimEntity, int a4, float a5, float a6, unsigned int animFlags, float a8, float a9)
+    int requestAnimationByMap(int animId, Entity* pEntityFrom, int a4, float fInterpolation, float a6, unsigned int flags, float fStartFrame, float a9)
     {
-        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, pAnimEntity, a4, a5, a6, animFlags, a8, a9);
+        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, pEntityFrom, a4, fInterpolation, a6, flags, fStartFrame, a9);
     }
 
     int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float a9, unsigned int flags)

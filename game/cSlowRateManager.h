@@ -81,11 +81,6 @@ public:
 		return ((float(__cdecl*)(int))(shared::base + 0x532000))(type);
 	}
 
-	static inline void Destruct()
-	{
-		((void(__cdecl*)())(shared::base + 0x11EDC20))();
-	}
-
 	static inline cSlowRateManager* Get()
 	{
 		return ((cSlowRateManager * (__cdecl*)())(shared::base + 0xA03960))();
