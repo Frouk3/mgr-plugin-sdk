@@ -62,14 +62,71 @@ namespace Hw
             T m_value;
             Node* m_prev;
             Node* m_next;
-        } *m_pStart;
+        } *m_pBegin;
         size_t m_nCapacity;
         size_t m_nSize;
         Node* m_pLast;
         Node* m_pFirst;
         Node* m_pEnd;
 
-        // unfortunatelly we need the iterator to do the for each loop
+        class iterator
+        {
+        private:
+            Node* m_current;
+        public:
+            explicit iterator(Node* node) : m_current(node) {};
+
+            iterator& operator++()
+            {
+                if (this->m_current)
+                    this->m_current = this->m_current->m_next;
+
+                return *this;
+            }
+
+            iterator& operator--()
+            {
+                if (this->m_current)
+                    this->m_current = this->m_current->m_prev;
+
+                return *this;
+            }
+
+            T& operator*() const
+            {
+                return this->m_current->m_value;
+            }
+
+            bool operator==(const iterator& other) const
+            {
+                return this->m_current == other.m_current;
+            }
+
+            bool operator!=(const iterator& other) const
+            {
+                return !(*this == other);
+            }
+        };
+
+        auto begin()
+        {
+            return iterator(this->m_pFirst);
+        }
+
+        auto begin() const
+        {
+            return iterator(this->m_pFirst);
+        }
+
+        auto end() const
+        {
+            return iterator(this->m_pEnd);
+        }
+
+        auto end()
+        {
+            return iterator(this->m_pEnd); // if we check the node with last, it'll crash for some unknown reason
+        }
     };
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);

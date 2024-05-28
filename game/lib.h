@@ -149,7 +149,7 @@ template <typename T, int Size>
 class lib::StaticArray : public lib::Array<T>
 {
 public:
-    T m_Array[Size] = {};
+    T m_Array[Size];
 
     StaticArray() : Array<T>()
     {
