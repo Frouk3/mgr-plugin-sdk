@@ -280,7 +280,6 @@ class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
-    
 };
 
 class Hw::cTexture
@@ -686,5 +685,10 @@ public:
 
     virtual ~cOtWork() {};
 };
+
+inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
+{
+    return ((void*(__cdecl *)(size_t, Hw::cHeap *))(shared::base + 0x9D3500))(s, allocator);
+}
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);
