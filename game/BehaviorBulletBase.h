@@ -484,6 +484,8 @@ public:
     {
         ((void (__thiscall *)(BehaviorBulletBase *))(shared::base + 0x6CCE00))(this);
     }
+
+    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C94);
 };
 
 VALIDATE_SIZE(BehaviorBulletBase, 0x1210);

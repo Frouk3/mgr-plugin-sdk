@@ -418,6 +418,8 @@ public:
     {
         ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, _bone);
     }
+
+    static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x17E9C20);
 };
 
 struct BehaviorData

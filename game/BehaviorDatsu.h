@@ -123,6 +123,8 @@ public:
     {
         ((void (__thiscall *)(BehaviorDatsu *))(shared::base + 0x6A6130))(this);
     }
+
+    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9CA8);
 };
 
 VALIDATE_SIZE(BehaviorDatsu, 0xAE0);

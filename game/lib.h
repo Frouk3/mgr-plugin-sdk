@@ -40,7 +40,7 @@ public:
     /// @brief Pushes object into the back of array, after the last object
     /// @param[in] pObject Object that will be pushed
     /// @return false on fail, true on success
-    virtual bool pushBack(const T &element) 
+    virtual bool push_back(const T &element) 
     {
         if (!this->m_pStart)
             return false;
@@ -59,8 +59,8 @@ public:
         if (this->m_nSize >= this->m_nCapacity)
             return;
 
-        size_t insertIndex = *(char**)&position - (char*)this->m_pStart; // FIXME: Not sure what size is
-        if ((insertIndex >> 2) > this->m_nSize)
+        size_t insertIndex = &position - this->m_pStart;
+        if (insertIndex > this->m_nSize)
             return;
 
         for (int i = this->m_nSize; i > insertIndex; --i)
@@ -70,7 +70,7 @@ public:
         ++this->m_nSize;
     };
 
-    bool pushFront(const T& element)
+    bool push_front(const T& element)
     {
         if (!this->m_pStart)
             return false;
@@ -128,20 +128,25 @@ public:
         --this->m_nSize; // compensate the loss
     }
 
+    auto& get(size_t at)
+    {
+        return this->m_pStart[at];
+    }
+
     auto& operator [](size_t index)
     {
-        return this->m_pStart[index];
+        return this->get(index);
     }
 
     auto& operator [](size_t index) const
     {
-        return this->m_pStart[index];
+        return this->get(index);
     }
 
     void clear()
     {
-        this->m_nSize = 0;
-        ZeroMemory(this->m_pStart, sizeof(T) * this->m_nSize);
+        if (this->m_pStart)
+            this->m_nSize = 0;
     }
 };
 

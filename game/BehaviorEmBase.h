@@ -110,4 +110,6 @@ public:
     {
         CallVMTFunc<214, BehaviorEmBase *, int, cEspControler *>(this, effId, pEsp);
     }
+
+    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C78);
 };

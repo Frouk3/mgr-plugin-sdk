@@ -5,6 +5,9 @@
 #include "Entity.h"
 #include "shared.h"
 #include "eObjID.h"
+#include "common.h"
+
+#define OBJ_CONTEXT(c) &c::Context
 
 class cObj : public cModel
 {
@@ -45,9 +48,9 @@ public:
   int field_52C;
 
   // vft
-  void *GetContext()
+  ContextInstance *GetContext()
   {
-    return ReturnCallVMTFunc<void *, 1, cObj*>(this);
+    return ReturnCallVMTFunc<ContextInstance *, 1, cObj*>(this);
   }
 
   bool CreateDummy()
@@ -80,6 +83,8 @@ public:
   {
     ((void (__thiscall *)(cObj *))(shared::base + 0x5FD150))(this);
   }
+
+  static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x177B380);
 };
 
 VALIDATE_SIZE(cObj, 0x530);

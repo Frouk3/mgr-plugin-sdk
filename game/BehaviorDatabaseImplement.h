@@ -31,7 +31,7 @@ public:
 
     static inline BehaviorDatabaseImplement *&pInstance = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
     
-    static inline BehaviorDatabaseImplement *Get()
+    static inline BehaviorDatabaseImplement *get()
     {
         return ((BehaviorDatabaseImplement *(__cdecl *)())(shared::base + 0x68B0B0))();
     }

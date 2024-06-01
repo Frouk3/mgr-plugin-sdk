@@ -3,6 +3,8 @@
 #include <d3d9.h>
 #include "shared.h"
 
+extern void(__cdecl* ePrintf)(const char* fmt, ...);
+
 namespace Hw
 {
     class cHeap;
@@ -23,111 +25,12 @@ namespace Hw
     class cRenderTargetInfo;
     class cOtWork;
     class CriticalSection;
-    template <typename T>
-    struct cFixedVector
-    {
-        int field_0;
-        T* m_pStart;
-        size_t m_nCapacity;
-        size_t m_nSize;
-        int field_10;
-
-        auto begin()
-        {
-            return &this->m_pStart[0];
-        }
-
-        auto begin() const
-        {
-            return &this->m_pStart[0];
-        }
-
-        auto end()
-        {
-            return &this->m_pStart[this->m_nSize];
-        }
-        
-        auto end() const
-        {
-            return &this->m_pStart[this->m_nSize];
-        }
-    };
 
     template <typename T>
-    struct cFixedList
-    {
-        int field_0;
-        struct Node
-        {
-            T m_value;
-            Node* m_prev;
-            Node* m_next;
-        } *m_pBegin;
-        size_t m_nCapacity;
-        size_t m_nSize;
-        Node* m_pLast;
-        Node* m_pFirst;
-        Node* m_pEnd;
+    struct cFixedVector;
 
-        class iterator
-        {
-        private:
-            Node* m_current;
-        public:
-            explicit iterator(Node* node) : m_current(node) {};
-
-            iterator& operator++()
-            {
-                if (this->m_current)
-                    this->m_current = this->m_current->m_next;
-
-                return *this;
-            }
-
-            iterator& operator--()
-            {
-                if (this->m_current)
-                    this->m_current = this->m_current->m_prev;
-
-                return *this;
-            }
-
-            T& operator*() const
-            {
-                return this->m_current->m_value;
-            }
-
-            bool operator==(const iterator& other) const
-            {
-                return this->m_current == other.m_current;
-            }
-
-            bool operator!=(const iterator& other) const
-            {
-                return !(*this == other);
-            }
-        };
-
-        auto begin()
-        {
-            return iterator(this->m_pFirst);
-        }
-
-        auto begin() const
-        {
-            return iterator(this->m_pFirst);
-        }
-
-        auto end() const
-        {
-            return iterator(this->m_pEnd);
-        }
-
-        auto end()
-        {
-            return iterator(this->m_pEnd); // if we check the node with last, it'll crash for some unknown reason
-        }
-    };
+    template <typename T>
+    struct cFixedList;
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
@@ -261,6 +164,11 @@ public:
     void free(void* block, size_t size)
     {
         CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size);
+    }
+
+    void *AllocateMemory(size_t size, size_t preserved, int a2, int a3)
+    {
+        return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, int, int))(shared::base + 0x9D29B0))(this, size, preserved, a2, a3);
     }
 };
 
@@ -608,7 +516,10 @@ public:
     int field_58;
     int field_5C;
 
-
+    void* AllocateMemory()
+    {
+        return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
+    }
 };
 
 class Hw::cHeapOneTime : public Hw::cHeap
@@ -690,5 +601,316 @@ inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
 {
     return ((void*(__cdecl *)(size_t, Hw::cHeap *))(shared::base + 0x9D3500))(s, allocator);
 }
+
+template <typename T>
+struct Hw::cFixedVector
+{
+    int field_0;
+    T* m_pBegin;
+    size_t m_nCapacity;
+    size_t m_nSize;
+    int field_10;
+
+    BOOL create(size_t capacity, Hw::cHeap* allocator)
+    {
+        if (this->m_pBegin)
+            return 0;
+
+        this->m_pBegin = allocator->AllocateMemory(sizeof(T) * capacity);
+        if (this->m_pBegin)
+        {
+            this->m_nCapacity = capacity;
+            this->m_nSize = 0;
+            this->field_10 = 1; // is initialized?
+            return 1;
+        }
+        else
+        {
+            ePrintf("cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", allocator->m_TargetAlloc, sizeof(T) * capacity, allocator->getFreeMemory());
+            return 0;
+        }
+        return 0;
+    }
+
+    bool push_back(const T& element)
+    {
+        if (!this->m_pBegin)
+            return false;
+
+        if (this->m_nSize >= this->m_nCapacity)
+            return false;
+
+        this->m_pBegin[this->m_nSize++] = element;
+        return true;
+    }
+
+    bool push_front(const T& element)
+    {
+        if (!this->m_pBegin)
+            return false;
+
+        if (this->m_nSize >= this->m_nCapacity)
+            return false;
+
+        for (int i = this->m_nSize; i > 0; --i)
+            this->m_pBegin[i] = this->m_pBegin[i - 1];
+
+        this->m_pBegin[0] = element;
+        ++this->m_nSize;
+        return true;
+    }
+
+    void insert(T& insIndex, const T& element)
+    {
+        if (!this->m_pBegin)
+            return;
+
+        if (this->m_nSize >= this->m_nCapacity)
+            return;
+
+        size_t insertIndex = &insIndex - this->m_pBegin;
+        if (insertIndex > this->m_nSize)
+            return;
+
+        for (int i = this->m_nSize; i > insertIndex; --i)
+            this->m_pBegin[i] = this->m_pBegin[i - 1];
+
+        this->m_pBegin[insertIndex] = element;
+        ++this->m_nSize;
+    }
+
+    void remove(T& element)
+    {
+        if (!this->m_pBegin)
+            return;
+
+        if (&element - this->m_pBegin >= this->m_nSize)
+            return;
+
+        for (auto i = &element; i != this->m_pBegin[this->m_nSize - 1]; ++i)
+            *i = i[1];
+
+        --this->m_nSize;
+    }
+
+    auto& get(size_t index)
+    {
+        return this->m_pBegin[index];
+    }
+
+    auto& get(size_t index) const
+    {
+        return this->m_pBegin[index];
+    }
+
+    auto& operator[](size_t index)
+    {
+        return this->get(index);
+    }
+
+    auto& operator[](size_t index) const
+    {
+        return this->get(index);
+    }
+
+    auto begin()
+    {
+        return &this->m_pBegin[0];
+    }
+
+    auto begin() const
+    {
+        return &this->m_pBegin[0];
+    }
+
+    auto end()
+    {
+        return &this->m_pBegin[this->m_nSize];
+    }
+
+    auto end() const
+    {
+        return &this->m_pBegin[this->m_nSize];
+    }
+};
+
+template <typename T>
+struct Hw::cFixedList
+{
+    struct Node
+    {
+        T m_value;
+        Node* m_prev;
+        Node* m_next;
+    };
+
+    Node* m_pHead;
+    Node* m_pBegin;
+    size_t m_nCapacity;
+    size_t m_nSize;
+    Node* m_pLast;
+    Node* m_pFirst;
+    Node* m_pEnd;
+
+    class iterator
+    {
+    private:
+        Node* m_current;
+    public:
+        explicit iterator(Node* node) : m_current(node) {};
+
+        iterator& operator++()
+        {
+            if (this->m_current)
+                this->m_current = this->m_current->m_next;
+
+            return *this;
+        }
+
+        iterator& operator--()
+        {
+            if (this->m_current)
+                this->m_current = this->m_current->m_prev;
+
+            return *this;
+        }
+
+        T& operator*() const
+        {
+            return this->m_current->m_value;
+        }
+
+        bool operator==(const iterator& other) const
+        {
+            return this->m_current == other.m_current;
+        }
+
+        bool operator!=(const iterator& other) const
+        {
+            return !(*this == other);
+        }
+    };
+
+    auto begin()
+    {
+        return iterator(this->m_pFirst);
+    }
+
+    auto begin() const
+    {
+        return iterator(this->m_pFirst);
+    }
+
+    auto end() const
+    {
+        return iterator(this->m_pEnd);
+    }
+
+    auto end()
+    {
+        return iterator(this->m_pEnd); // if we check the node with last, it'll crash for some unknown reason
+    }
+
+    void setupNodes()
+    {
+        if (this->m_nCapacity > 0)
+        {
+            Node* current = this->m_pBegin;
+            for (int i = 0; i < this->m_nCapacity; i++)
+            {
+                current->m_prev = (current - 1);
+                current->m_next = (current + 1);
+                ++current;
+            }
+        }
+
+        this->m_pBegin->m_prev = nullptr;
+
+        this->m_pBegin[this->m_nCapacity - 1].m_next = 0;
+
+        this->m_pEnd->m_prev = nullptr;
+        this->m_pEnd->m_next = nullptr;
+
+        this->m_pFirst = this->m_pEnd;
+        this->m_pLast = this->m_pBegin;
+
+        this->m_nSize = 0;
+    }
+
+    BOOL create(size_t capacity, Hw::cHeap * allocator)
+    {
+        if (this->m_pBegin)
+            return 0;
+
+        this->m_pBegin = (Node*)allocator->AllocateMemory(sizeof(Node) * capacity + sizeof(Node), 32, 0, 0);
+        if (this->m_pBegin)
+        {
+            this->m_nCapacity = capacity;
+            this->m_nSize = 0;
+            this->m_pEnd = &this->m_pBegin[capacity];
+            this->setupNodes();
+
+            return 1;
+        }
+        return 0;
+    }
+
+    void insert(Node* &retNode, Node* const& where, const T & element)
+    {
+        Node *m_pLast = this->m_pLast;
+        if (m_pLast == this->m_pHead)
+        {
+            m_pLast = this->m_pHead;
+        }
+        else
+        {
+            Node *m_prev = m_pLast->m_prev;
+            Node *m_next = m_pLast->m_next;
+            if (m_prev)
+                m_prev->m_next = m_next;
+            if (m_next)
+                m_next->m_prev = m_prev;
+            this->m_pLast = m_next;
+            ++this->m_nSize;
+        }
+        if (m_pLast == this->m_pHead)
+        {
+            ePrintf("cFixedList<tC>::insert  list max over!");
+            retNode = this->m_pHead;
+        }
+        else
+        {
+            if (m_pLast)
+                m_pLast->m_value = element;
+            Node *v8 = where;
+            Node* v9;
+            if (where)
+                v9 = v8->m_prev;
+            else
+                v9 = 0;
+            m_pLast->m_prev = v9;
+            m_pLast->m_next = v8;
+            if (v9)
+                v9->m_next = m_pLast;
+            if (v8)
+                v8->m_prev = m_pLast;
+            if (this->m_pFirst == where)
+                this->m_pFirst = m_pLast;
+            retNode = m_pLast;
+        }
+    }
+
+    void push_back(const T& element)
+    {
+        Node* node;
+        this->insert(node, this->m_pEnd, element);
+    }
+
+    void push_front(const T& element)
+    {
+        Node* node;
+        this->insert(node, this->m_pBegin, element);
+    }
+};
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);

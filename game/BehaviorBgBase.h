@@ -135,6 +135,8 @@ public:
   {
     ((void (__thiscall *)(BehaviorBgBase *))(shared::base + 0x6A4D50))(this);
   }
+
+  static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x17E9C50);
 };
 
 VALIDATE_SIZE(BehaviorBgBase, 0xA70);

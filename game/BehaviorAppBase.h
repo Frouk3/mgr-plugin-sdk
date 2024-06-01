@@ -126,6 +126,8 @@ public:
     {
         return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
     }
+
+    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C24);
 };
 
 VALIDATE_SIZE(BehaviorAppBase, 0x9F4);

@@ -3,6 +3,21 @@
 #include "shared.h"
 #include "Hw.h"
 
+struct ContextInstance
+{
+	ContextInstance *m_inheritance;
+
+	BOOL hasInheritance(ContextInstance *other)
+	{
+		return ((BOOL(__thiscall*)(ContextInstance*, ContextInstance*))(shared::base + 0x9D6D80))(this, other);
+	}
+
+	ContextInstance(ContextInstance &inheritance)
+	{
+		this->m_inheritance = &inheritance;
+	}
+};
+
 // e prefix is indicated that it is used by the engine
 
 inline void Core_PlaySound(const char* se, int unused)
@@ -27,9 +42,9 @@ inline void * __cdecl eFree(void *block)
 	return ((void *(__cdecl *)(void *))(shared::base + 0x9D4920))(block);
 }
 
-[[NODISCARD]] inline void *__cdecl AllocateMemory(size_t size)
+inline void *__cdecl AllocateMemory(size_t size)
 {
-	auto mem = Hw::cHeapGlobal::get()->allocate(size, 32u, 0, 0);
+	void *mem = Hw::cHeapGlobal::get()->allocate(size, 32u, 0, 0);
 	if (mem)
 		memset(mem, 0, size);
 	return mem;
