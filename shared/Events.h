@@ -16,13 +16,11 @@ private:
         uintptr_t returnAddress;
         std::vector<void(*)()>* listPtr;
         void(__cdecl* mainhookptr)() = nullptr;
-        void(__stdcall* run)(IEvent *) = nullptr;
 
         IEvent()
         {
             this->returnAddress = 0;
             this->mainhookptr = nullptr;
-            this->run = nullptr;
             this->listPtr = nullptr;
         }
 
@@ -31,7 +29,6 @@ private:
             this->returnAddress = 0;
             this->listPtr = listVec;
             this->mainhookptr = func;
-            this->run = nullptr;
         }
 
         IEvent(std::vector<void(*)()>* listVec, void(__cdecl* mainhook)(), unsigned int address)
@@ -44,11 +41,6 @@ private:
         {
             this->listPtr = new std::vector<void(__cdecl*)()>();
             this->mainhookptr = mainhook;
-            this->run = [](IEvent* self)
-                {
-                    for (auto& f : *self->listPtr)
-                        f();
-                };
             this->Patch(address);
         }
 
@@ -67,6 +59,12 @@ private:
         {
             this->returnAddress = (uintptr_t)injector::MakeCALL(address, this->mainhookptr, true);
         }
+
+        void Run()
+        {
+            for (auto& f : *this->listPtr)
+                f();
+        }
     };
 
     class IEventTwoState
@@ -82,71 +80,6 @@ private:
         }
     };
 private:
-    /*static inline void OnUpdateRun()
-    {
-        for (auto& f : OnUpdateList)
-            f();
-    }
-
-    static inline void OnGameStartupRun()
-    {
-        for (auto& f : OnGameStartupList)
-            f();
-    }
-
-    static inline void OnSceneStartupRun()
-    {
-        for (auto& f : OnSceneStartupList)
-            f();
-    }
-
-    static inline void OnSceneCleanupRun()
-    {
-        for (auto& f : OnSceneCleanupList)
-            f();
-    }
-
-    static inline void OnTickEventRun()
-    {
-        for (auto& f : OnTickEventList)
-            f();
-    }
-
-    static inline void OnPauseEventRun()
-    {
-        for (auto& f : OnPauseEventList)
-            f();
-    }
-
-    static inline void OnEndSceneRun()
-    {
-        for (auto& f : OnEndSceneList)
-            f();
-    }
-
-    static inline void OnResetBeforeRun()
-    {
-        for (auto& f : OnResetBeforeList)
-            f();
-    }
-
-    static inline void OnResetAfterRun()
-    {
-        for (auto& f : OnResetAfterList)
-            f();
-    }
-
-    static inline void OnApplicationStartRun()
-    {
-        for (auto& f : OnApplicationStartList)
-            f();
-    }
-
-    static inline void OnPresentRun()
-    {
-        for (auto &f : OnPresentList)
-            f();
-    }*/
 
     struct Caves
     {
@@ -190,8 +123,7 @@ void __declspec(naked) Events::Caves::OnApplicationStartup()
     {
         pushad
         lea ecx, OnApplicationStartEvent
-        push ecx
-        call OnApplicationStartEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnApplicationStartEvent.returnAddress
     }
@@ -203,8 +135,7 @@ void __declspec(naked) Events::Caves::OnEndSceneMainHook()
     {
         pushad
         lea ecx, OnEndScene
-        push ecx
-        call OnEndScene.run
+        call IEvent::Run
         popad
         jmp Events::OnEndScene.returnAddress
     }
@@ -216,8 +147,7 @@ void __declspec(naked) Events::Caves::OnPauseEventMainHook()
     {
         pushad
         lea ecx, OnPauseEvent
-        push ecx
-        call OnPauseEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnPauseEvent.returnAddress
     }
@@ -229,8 +159,7 @@ void __declspec(naked) Events::Caves::OnResetBeforeMainHook()
     {
         pushad
         lea ecx, OnDeviceReset.before
-        push ecx
-        call OnDeviceReset.before.run
+        call IEvent::Run
         popad
         jmp Events::OnDeviceReset.before.returnAddress
     }
@@ -242,8 +171,7 @@ void __declspec(naked) Events::Caves::OnTickEventMainHook()
     {
         pushad
         lea ecx, OnTickEvent
-        push ecx
-        call OnTickEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnTickEvent.returnAddress
     }
@@ -255,8 +183,7 @@ void __declspec(naked) Events::Caves::OnSceneCleanupMainHook()
     {
         pushad
         lea ecx, OnSceneCleanupEvent
-        push ecx
-        call OnSceneCleanupEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnSceneCleanupEvent.returnAddress
     }
@@ -268,8 +195,7 @@ void __declspec(naked) Events::Caves::OnResetAfterMainHook()
     {
         pushad
         lea ecx, OnDeviceReset.after
-        push ecx
-        call OnDeviceReset.after.run
+        call IEvent::Run
         popad
         jmp Events::OnDeviceReset.after.returnAddress
     }
@@ -281,8 +207,7 @@ void __declspec(naked) Events::Caves::OnSceneStartupMainHook()
     {
         pushad
         lea ecx, OnSceneStartupEvent
-        push ecx
-        call OnSceneStartupEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnSceneStartupEvent.returnAddress
     }
@@ -294,8 +219,7 @@ void __declspec(naked) Events::Caves::OnGameStartupMainHook()
     {
         pushad
         lea ecx, OnGameStartupEvent
-        push ecx
-        call OnGameStartupEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnGameStartupEvent.returnAddress
     }
@@ -307,8 +231,7 @@ void __declspec(naked) Events::Caves::OnUpdateMainHook()
     {
         pushad
         lea ecx, OnUpdateEvent
-        push ecx
-        call OnUpdateEvent.run
+        call IEvent::Run
         popad
         jmp Events::OnUpdateEvent.returnAddress
     }
@@ -320,8 +243,7 @@ void __declspec(naked) Events::Caves::OnPresentHook()
     {
         pushad
         lea ecx, OnPresent
-        push ecx
-        call OnPresent.run
+        call IEvent::Run
         popad
         jmp Events::OnPresent.returnAddress
     }
@@ -333,8 +255,7 @@ void __declspec(naked) Events::Caves::OnApplicationStartMid()
     {
         pushad
         lea ecx, OnApplicationStartEventMid
-        push ecx
-        call OnApplicationStartEventMid.run
+        call IEvent::Run
         popad
         jmp Events::OnApplicationStartEventMid.returnAddress
     }
