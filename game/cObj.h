@@ -12,79 +12,81 @@
 class cObj : public cModel
 {
 public:
-  int field_490;
-  int m_nAnimationHandle;
-  int field_498;
-  int field_49C;
-  int m_nSetType;
-  int m_nType;
-  int m_nSetFlag;
-  int m_nSetRtn;
-  eObjID m_nModelIndex;
-  eObjID m_nClothIndex;
-  int field_4B8;
-  int m_nAnimIndex;
-  int field_4C0;
-  int field_4C4;
-  char field_4C8;
-  char field_4C9;
-  int field_4CC;
-  int field_4D0;
-  int field_4D4;
-  int field_4D8;
-  int field_4DC;
-  int field_4E0;
-  int field_4E4;
-  int field_4E8;
-  int field_4EC;
-  Entity *m_pEntity;
-  cXmlBinary field_4F4;
-  int field_514;
-  int field_518;
-  int field_51C;
-  int field_520;
-  int field_524;
-  int field_528;
-  int field_52C;
+    int field_490;
+    int field_494;
+    int field_498;
+    int m_pModel;
+    int m_nSetType;
+    int m_nType;
+    int m_nSetFlag;
+    int m_nSetRtn;
+    eObjID m_nObjId;
+    eObjID m_nModelIndex;
+    int field_4B8;
+    int field_4BC;
+    int field_4C0;
+    int field_4C4;
+    char field_4C8;
+    char field_4C9;
+    int* m_pGroupId;
+    int field_4D0;
+    int field_4D4;
+    int field_4D8;
+    cEspControler* field_4DC;
+    int field_4E0;
+    int field_4E4;
+    int field_4E8;
+    int m_nHashNo;
+    Entity* m_pEntity;
+    cXmlBinary field_4F4;
+    int field_514;
+    cObj* m_pOwner;
+    int field_51C;
+    int field_520;
+    float field_524;
+    int field_528;
+    int field_52C;
 
-  // vft
-  ContextInstance *GetContext()
-  {
-    return ReturnCallVMTFunc<ContextInstance *, 1, cObj*>(this);
-  }
+    // vft
 
-  bool CreateDummy()
-  {
-    return ReturnCallVMTFunc<bool, 2, cObj *>(this);
-  }
+    ContextInstance* getContext()
+    {
+        return ReturnCallVMTFunc<ContextInstance*, 1, cObj*>(this);
+    }
 
-  void EnableRender()
-  {
-    CallVMTFunc<7, cObj*>(this);
-  }
+    BOOL createDummy()
+    {
+        return ReturnCallVMTFunc<BOOL, 2, cObj*>(this);
+    }
 
-  void DisableRender()
-  {
-    CallVMTFunc<8, cObj *>(this);
-  }
+    void fadeOut()
+    {
+        CallVMTFunc<3, cObj*>(this);
+    }
 
-  int GetRenderable()
-  {
-    return ReturnCallVMTFunc<int, 14, cObj *>(this);
-  }
-  // Maybe add collision?
-  void UpdateCollision(int a2)
-  {
-    CallVMTFunc<15, cObj *, int>(this, a2);
-  }
-  // vft end 
+    void enableRender()
+    {
+        CallVMTFunc<7, cObj*>(this);
+    }
 
-  cObj()
-  {
-    ((void (__thiscall *)(cObj *))(shared::base + 0x5FD150))(this);
-  }
+    void disableRender()
+    {
+        CallVMTFunc<8, cObj*>(this);
+    }
 
-  static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x177B380);
+    void setGroupId(int* idPtr)
+    {
+        CallVMTFunc<15, cObj*, int*>(this, idPtr);
+    }
+
+    // vft end 
+
+    cObj()
+    {
+        ((void(__thiscall*)(cObj*))(shared::base + 0x5FD150))(this);
+    }
+
+    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x177B380);
 };
 
 VALIDATE_SIZE(cObj, 0x530);

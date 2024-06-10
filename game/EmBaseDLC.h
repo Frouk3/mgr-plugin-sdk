@@ -20,3 +20,5 @@ public:
         CallVMTFunc<220, EmBaseDLC *, void *>(this, a2); 
     }
 };
+
+VALIDATE_SIZE(EmBaseDLC, 0xE8C);

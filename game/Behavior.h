@@ -251,7 +251,7 @@ public:
     int field_818;
     int field_81C;
     int field_820;
-    __int16 field_824;
+    int field_824;
     int field_828;
     int field_82C;
     int field_830;
@@ -295,7 +295,7 @@ public:
     {
         CallVMTFunc<19, Behavior *>(this);
     }
-    void updateBodyParts()
+    void updateModel()
     {
         CallVMTFunc<21, Behavior *>(this);
     }
@@ -378,6 +378,11 @@ public:
     cVec4 getOffsetPosition()
     {
         return ReturnCallVMTFunc<cVec4, 159, Behavior *>(this);
+    }
+
+    void forceDie()
+    {
+        CallVMTFunc<190, Behavior*>(this);
     }
 
 // vft end

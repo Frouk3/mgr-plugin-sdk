@@ -28,7 +28,7 @@ public:
     int field_A40;
     char field_A44;
     int field_A48;
-    int field_A4C;
+    EntityHandle m_BodyHandle;
     int field_A50;
     int field_A54;
     int field_A58;
@@ -42,19 +42,18 @@ public:
     int field_A78;
     int field_A7C;
     int field_A80;
-    Behavior* m_pEnemy;
-    Entity *m_pEntityEnemy;
-    int field_A88;
-    int field_A8C;
-    int field_A90;
-    int field_A94;
-    int field_A98;
-    int field_A9C;
-    int field_AA0;
+    Pl0000* m_pEnemy;
+    Entity* m_pEnemyEntity;
+    float m_fDistance;
+    float m_fDistanceNoHeight;
+    float field_A94;
+    float field_A98;
+    float m_fRotationToEnemy;
+    float field_AA0;
     int field_AA4;
     int field_AA8;
     int field_AAC;
-    EntitySystem::EntityInfo field_AB0;
+    EntitySystem::SetInfo field_AB0;
     int field_BC8;
     int field_BCC;
     float field_BD0;
@@ -97,7 +96,7 @@ public:
     int field_DA0;
     int field_DA4;
     int field_DA8;
-    short field_DAC;
+    __int16 field_DAC;
     int field_DB0;
     char field_DB4;
 
@@ -113,3 +112,5 @@ public:
 
     static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C78);
 };
+
+VALIDATE_SIZE(BehaviorEmBase, 0xDB8);

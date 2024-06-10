@@ -151,6 +151,11 @@ public:
     {
         return ((float(__thiscall*)(cModelBase*, cVec4*))(shared::base + 0x68EC30))(this, position);
     }
+    // you get the idea
+    void updateBones()
+    {
+        ((void(__thiscall*)(cModelBase*))(shared::base + 0x617A40))(this);
+    }
 };
 
 VALIDATE_SIZE(cModelBase, 0x370);

@@ -126,7 +126,7 @@ namespace lib
                 this->m_pCoreImpl = nullptr;
             }
 
-            void shutdownIfNecessary()
+            void cleanup()
             {
                 if (this->m_pCoreImpl && !InterlockedDecrement((LONG*)&this->m_pCoreImpl->field_4))
                 {
@@ -317,18 +317,18 @@ public:
                     this->m_nSize = 0;
                 this->m_nCapacity = sizeof(T) * capacity / sizeof(T);
                 this->m_pStart = (T*)mem;
-                helpa.shutdownIfNecessary();
+                helpa.cleanup();
                 return 1;
             }
             else
             {
-                helpa.shutdownIfNecessary();
+                helpa.cleanup();
                 return 0;
             }
         }
         else
         {
-            helpa.shutdownIfNecessary();
+            helpa.cleanup();
             return 0;
         }
     }
@@ -342,7 +342,7 @@ public:
             if (this->m_Helper.m_pAllocator)
                 this->m_Helper.m_pAllocator->free(this->m_pStart);
             this->m_pStart = nullptr;
-            this->m_Helper.shutdownIfNecessary();
+            this->m_Helper.cleanup();
             this->m_Helper.m_pAllocator = nullptr;
             this->m_Helper.m_pCoreImpl = nullptr;
         }

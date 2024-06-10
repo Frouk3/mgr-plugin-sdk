@@ -1,5 +1,5 @@
-#include "cGameUIManager.h"
-#include "Events.h"
+#include <cGameUIManager.h>
+#include <Events.h>
 
 class OnBladeModeRipper
 {
@@ -12,7 +12,7 @@ public:
 
             if (player)
             {
-                if (player->m_nCurrentAction == 69 || player->m_nCurrentAction == 70) // Raiden only
+                if (player->IsBladeModeActive()) // Raiden only
                     if (!player->m_nRipperModeEnabled)
                         player->EnableRipperMode();
             }

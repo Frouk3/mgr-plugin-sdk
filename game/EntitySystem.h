@@ -44,7 +44,7 @@ struct EntitySystem
     int field_124;
     int field_128;
 
-    struct EnemySpawnInfo;
+    struct SetInfo;
     struct EntityInfo;
     struct ObjectInfo;
 
@@ -159,7 +159,7 @@ struct EntitySystem
     static inline EntitySystem& Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
 };
 
-struct EntitySystem::EnemySpawnInfo
+struct EntitySystem::SetInfo
 {
     short field_0;
     short field_2;
@@ -226,9 +226,9 @@ struct EntitySystem::EnemySpawnInfo
     float m_fScoutViewDist;
     int field_114;
 
-    EnemySpawnInfo()
+    SetInfo()
     {
-        ((void(__thiscall*)(EntitySystem::EnemySpawnInfo*))(shared::base + 0xEC5C0))(this);
+        ((void(__thiscall*)(EntitySystem::SetInfo*))(shared::base + 0xEC5C0))(this);
     };
 };
 
