@@ -6,6 +6,7 @@
 #include "shared.h"
 #include "eObjID.h"
 #include "common.h"
+#include <cEspControler.h>
 
 #define OBJ_CONTEXT(c) &c::Context
 
