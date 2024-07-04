@@ -24,7 +24,7 @@ struct Entity
     int field_30;
     int field_34;
     SceneModelSystem* m_pSceneModelSystem;
-    void* m_pSpecifiedInstance;
+    void *m_pSceneModel;
     Animation* m_pAnimation;
     int field_44;
     void* m_pInstance;
@@ -40,22 +40,28 @@ struct Entity
     {
         return ((BOOL(__thiscall*)(Entity*, ConstructInfo*))(shared::base + 0x680E70))(this, pConstructInfo);
     }
+
+    BOOL createAnimation()
+    {
+        return ((BOOL(__thiscall*)(Entity*))(shared::base + 0x67C810))(this);
+    }
+
     template <typename T>
     T *getEntityInstance()
     {
         return ((T *(__thiscall*)(Entity*))(shared::base + 0x67C8A0))(this);
     }
-    void updateSlowRateUnit()
+    void updateDelta()
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0xA049A0))(this);
     }
-    float getCalculatedSlowRate()
+    float getDeltaTime()
     {
         return ((float(__thiscall*)(Entity*))(shared::base + 0xA049B0))(this);
     }
-    void setEntitySlowRateType(int SlowRateType)
+    BOOL setEntitySlowRateType(int SlowRateType)
     {
-        ((void(__thiscall*)(Entity*, int))(shared::base + 0xA08640))(this, SlowRateType);
+        return ((BOOL(__thiscall*)(Entity*, int))(shared::base + 0xA08640))(this, SlowRateType);
     }
     void setTransPos(cVec4* transPos)
     {
@@ -85,11 +91,28 @@ struct Entity
     {
         return ((cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8F0))(this);
     }
+
+    Animation* getAnimation()
+    {
+        return ((Animation * (__thiscall*)(Entity*))(shared::base + 0x67C890))(this);
+    }
+
+    BOOL isValid()
+    {
+        return ((BOOL(__thiscall*)(Entity*))(shared::base + 0x67C7E0))(this);
+    }
+
     ~Entity()
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0x6805F0))(this);
     }
-    void shutdownInstance()
+
+    void shutdownAnimation()
+    {
+        ((void(__thiscall*)(Entity*))(shared::base + 0x67CE60))(this);
+    }
+
+    void shutdown()
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0x681290))(this);
     }

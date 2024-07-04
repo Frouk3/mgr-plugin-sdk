@@ -3303,92 +3303,92 @@ public:
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x6C0310))(this);
     }
 
-    bool IsBladeModeActive()
+    BOOL isBladeModeActive()
     {
         return ReturnCallVMTFunc<bool, 203, Pl0000*>(this);
     }
-    bool IsRunning()
+    BOOL isRunning()
     {
         return ReturnCallVMTFunc<bool, 204, Pl0000*>(this);
     }
-    bool IsIdle()
+    BOOL isIdle()
     {
         return ReturnCallVMTFunc<bool, 206, Pl0000*>(this);
     }
-    bool IsInAir()
+    BOOL isInAir()
     {
         return ReturnCallVMTFunc<bool, 208, Pl0000*>(this);
     }
-    bool CanActivateRipperMode()
+    BOOL canActivateRipperMode()
     {
         return ReturnCallVMTFunc<bool, 209, Pl0000*>(this);
     }
-    bool IsCodecTalk()
+    BOOL isCodecTalk()
     {
         return ReturnCallVMTFunc<bool, 211, Pl0000*>(this);
     }
-    bool IsParrying()
+    BOOL isParrying()
     {
         ReturnCallVMTFunc<bool, 216, Pl0000*>(this);
     }
-    bool IsOnGround()
+    BOOL isOnGround()
     {
         return ReturnCallVMTFunc<bool, 220, Pl0000*>(this);
     }
-    void ForceKill()
+    void forceKill()
     {
         CallVMTFunc<227, Pl0000*>(this);
     }
-    float GetDefenseDamage()
+    float getDefenseDamage()
     {
         return ReturnCallVMTFunc<float, 237, Pl0000*>(this);
     }
-    void UpdateInput()
+    void updateInput()
     {
         CallVMTFunc<241, Pl0000*>(this);
     }
-    void HandleActions()
+    void handleActions()
     {
         CallVMTFunc<242, Pl0000*>(this);
     }
-    void ChangeSubWeapon()
+    void changeSubWeapon()
     {
         CallVMTFunc<246, Pl0000*>(this);
     }
     // duplicate at field_3DC(247th virtual function)
-    void CreateEffect(int id, cEspControler* esp)
+    void createEffect(int id, cEspControler* effController)
     {
-        CallVMTFunc<248, Pl0000*, int, cEspControler*>(this, id, esp);
+        CallVMTFunc<248, Pl0000*, int, cEspControler*>(this, id, effController);
     }
-    void SetSlowMo(float Duration, float SlowRate)
+    void setSlowMo(float Duration, float SlowRate)
     {
         ((void(__thiscall*)(Pl0000*, float, float))(shared::base + 0x77AB80))(this, Duration, SlowRate);
     }
-    void EnableRipperMode()
+    void enableRipperMode()
     {
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x785190))(this);
     }
-    void SetFuelCapacity(float FuelContainer)
+    void setFuelCapacity(float FuelContainer)
     {
         ((void(__thiscall*)(Pl0000*, float))(shared::base + 0x7C3100))(this, FuelContainer);
     }
-    void DisableRipperMode(bool bUseFade)
+    void disableRipperMode(bool bUseFade)
     {
         ((void(__thiscall*)(Pl0000*, bool))(shared::base + 0x7D9590))(this, bUseFade);
     }
-    float GetCurrentFuelCapacity()
+    float getCurrentFuelCapacity()
     {
         return ((float(__thiscall*)(Pl0000*))(shared::base + 0x7DA020))(this);
     }
-    int GetMaxHealth(int unused = 0)
+    int getMaxHealth(int unused = 0)
     {
         return ((int(__thiscall*)(Pl0000*, int))(shared::base + 0x77C980))(this, unused);
     }
-    void SetSwordLost(BOOL bShouldLose)
+    void setSwordLost(BOOL bShouldLose)
     {
         ((void(__thiscall*)(Pl0000*, BOOL))(shared::base + 0x77E210))(this, bShouldLose);
     }
-    BOOL IsUnarmed()
+    BOOL isUnarmed()
     {
         return ((BOOL(__thiscall*)(Pl0000*))(shared::base + 0x780980))(this);
     }

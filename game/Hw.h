@@ -166,9 +166,9 @@ public:
         CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size);
     }
 
-    void *AllocateMemory(size_t size, size_t preserved, int a2, int a3)
+    void *AllocateMemory(size_t size, size_t preserved, int alignment, int a3)
     {
-        return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, int, int))(shared::base + 0x9D29B0))(this, size, preserved, a2, a3);
+        return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, int, int))(shared::base + 0x9D29B0))(this, size, preserved, alignment, a3);
     }
 };
 
