@@ -29,7 +29,6 @@ namespace shared
 	 * @brief Better key press check
 	 * 
 	 * It uses previous state and current state of keys to check it only once.
-	 * RESET BEFORE KEY CHECK OR AFTER
 	 * 
 	 * @param[in] key - Virtual key
 	 * @param[in] repeat - Should it check only once, default is true
