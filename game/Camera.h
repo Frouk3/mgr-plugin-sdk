@@ -1,6 +1,7 @@
 #pragma once
 #include "BehaviorEmBase.h"
 #include <d3dx9math.h>
+#include "common.h"
 
 namespace Camera
 {
@@ -24,7 +25,7 @@ class Camera::StateNode
 {
 public:
 
-    virtual void Function0() {};
+    virtual ContextInstance* getContext() { return nullptr; };
     virtual ~StateNode() {};
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <d3d9.h>
+#include <d3dx9.h>
 #include "shared.h"
 
 extern void(__cdecl* ePrintf)(const char* fmt, ...);
@@ -206,15 +206,40 @@ public:
 class Hw::CameraProj
 {
 public:
+    int field_4;
+    int field_8;
+    int field_C;
+    D3DXMATRIX m_projectionMatrix;
+    D3DXMATRIX field_50;
+    float m_fAspectRatio;
+    float m_fFOV;
+    float m_fNearClip;
+    float m_fFarClip;
+    int field_A0;
+    int field_A4;
+    int field_A8;
+    int field_AC;
 
     virtual ~CameraProj() {};
 };
 
-class Hw::cCameraBase : public Hw::CameraProj
+VALIDATE_SIZE(Hw::CameraProj, 0xB0);
+
+class Hw::cCameraBase
 {
 public:
-
+    D3DXMATRIX m_viewMatrix;
+    D3DXMATRIX field_40;
+    D3DXMATRIX field_80;
+    D3DXMATRIX field_C0;
+    D3DXMATRIX field_100;
+    int field_140;
+    float field_144;
+    float field_148;
+    float field_14C;
 };
+
+VALIDATE_SIZE(Hw::cCameraBase, 0x150);
 
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {

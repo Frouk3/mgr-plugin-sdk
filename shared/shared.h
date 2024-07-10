@@ -40,15 +40,15 @@ namespace shared
 	inline bool IsKeyPressed(int key, bool repeat = true, int ownerId = -1)
 	{
 		if (repeat)
-			return (GetAsyncKeyState(key) & 0x8000) != 0;
+			return (GetKeyState(key) & 0x8000) != 0;
 
 		if (!repeat && ownerId == -1)
-			return (GetAsyncKeyState(key) & 1) != 0;
+			return (GetKeyState(key) & 1) != 0;
 
 		if (ownerId == -1)
 			return false;
 
-		bool keystat = (GetAsyncKeyState(key) & 0x8000) != 0;
+		bool keystat = (GetKeyState(key) & 0x8000) != 0;
 
 		if (keystat != key_state[ownerId])
 		{
