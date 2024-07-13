@@ -32,10 +32,239 @@ namespace Hw
     template <typename T>
     struct cFixedList;
 
+    struct cVec2;
+    struct cVec3;
+    struct cVec4;
+
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C); 
 }
+
+struct Hw::cVec2
+{
+    float x;
+    float y;
+};
+
+struct Hw::cVec3
+{
+    float x;
+    float y;
+    float z;
+
+    cVec3(float x = 0.0f, float y = 0.0f, float z = 0.0f)
+    {
+        this->x = x;
+        this->y = y;
+        this->z = z;
+    }
+
+    void operator=(const cVec3& lhs)
+    {
+        x = lhs.x;
+        y = lhs.y;
+        z = lhs.z;
+    }
+
+    cVec3 operator+(const cVec3& lhs) const
+    {
+        return cVec3(x + lhs.x, y + lhs.y, z + lhs.z);
+    }
+
+    cVec3& operator+=(const cVec3& lhs)
+    {
+        x += lhs.x;
+        y += lhs.y;
+        z += lhs.z;
+        return *this;
+    }
+
+    cVec3 operator-(const cVec3& lhs) const
+    {
+        return cVec3(x - lhs.x, y - lhs.y, z - lhs.z);
+    }
+
+    cVec3& operator-=(const cVec3& lhs)
+    {
+        x -= lhs.x;
+        y -= lhs.y;
+        z -= lhs.z;
+        return *this;
+    }
+
+    cVec3 operator*(float scale) const
+    {
+        return cVec3(x * scale, y * scale, z * scale);
+    }
+
+    cVec3 operator*(const cVec3& lhs) const
+    {
+        return cVec3(x * lhs.x, y * lhs.y, z * lhs.z);
+    }
+
+    cVec3& operator*=(float scale)
+    {
+        x *= scale;
+        y *= scale;
+        z *= scale;
+        return *this;
+    }
+
+    cVec3& operator*=(const cVec3& lhs)
+    {
+        x *= lhs.x;
+        y *= lhs.y;
+        z *= lhs.z;
+        return *this;
+    }
+
+    cVec3 operator/(float scale) const
+    {
+        return cVec3(x / scale, y / scale, z / scale);
+    }
+
+    cVec3 operator/(const cVec3& lhs) const
+    {
+        return cVec3(x / lhs.x, y / lhs.y, z / lhs.z);
+    }
+
+    cVec3& operator/=(float scale)
+    {
+        x /= scale;
+        y /= scale;
+        z /= scale;
+        return *this;
+    }
+
+    cVec3& operator /=(const cVec3& lhs)
+    {
+        x /= lhs.x;
+        y /= lhs.y;
+        z /= lhs.z;
+        return *this;
+    }
+};
+
+struct Hw::cVec4
+{
+    float x;
+    float y;
+    float z;
+    float w;
+
+    static inline void Normalize(cVec4* v1, cVec4* v2)
+    {
+        ((void(__cdecl*)(cVec4*, cVec4*))(shared::base + 0x9DF460))(v1, v2);
+    }
+
+    void operator=(const cVec4& right)
+    {
+        this->x = right.x;
+        this->y = right.y;
+        this->z = right.z;
+        this->w = right.w;
+    }
+
+    cVec4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f)
+    {
+        this->x = x;
+        this->y = y;
+        this->z = z;
+        this->w = w;
+    };
+
+    float Magnitude()
+    {
+        return sqrtf(powf(this->x, 2) + powf(this->y, 2) + powf(this->z, 2));
+    }
+
+    cVec4 operator+(const cVec4& rhs) const
+    {
+        return cVec4(x + rhs.x, y + rhs.y, z + rhs.z, 1.0f);
+    }
+
+    cVec4& operator+=(const cVec4& rhs)
+    {
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        return *this;
+    }
+
+    cVec4 operator-(const cVec4& rhs) const
+    {
+        return cVec4(x - rhs.x, y - rhs.y, z - rhs.z, w);
+    }
+
+    cVec4& operator-=(const cVec4& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        return *this;
+    }
+
+    cVec4 operator*(float scale) const
+    {
+        return cVec4(x * scale, y * scale, z * scale, w);
+    }
+
+    cVec4 operator*(const cVec4& rhs) const
+    {
+        return cVec4(x * rhs.x, y * rhs.y, z * rhs.z, w);
+    }
+
+    cVec4& operator*=(float scale)
+    {
+        x *= scale;
+        y *= scale;
+        z *= scale;
+        return *this;
+    }
+
+    cVec4& operator*=(const cVec4& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        return *this;
+    }
+
+    cVec4 operator/(float scale) const
+    {
+        return cVec4(x / scale, y / scale, z / scale, w);
+    }
+
+    cVec4 operator/(const cVec4& rhs) const
+    {
+        return cVec4(x / rhs.x, y / rhs.y, z / rhs.z, w);
+    }
+
+    cVec4& operator/=(float scale)
+    {
+        x /= scale;
+        y /= scale;
+        z /= scale;
+        return *this;
+    }
+
+    cVec4& operator/=(const cVec4& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        return *this;
+    }
+
+    cVec4 Normalize()
+    {
+        Normalize(this, this);
+        return *this;
+    }
+};
+
+VALIDATE_SIZE(Hw::cVec4, 0x10);
 
 class Hw::CriticalSection
 {
@@ -939,3 +1168,7 @@ struct Hw::cFixedList
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);
+
+using cVec4 = Hw::cVec4;
+using cVec3 = Hw::cVec3;
+using cVec2 = Hw::cVec2;

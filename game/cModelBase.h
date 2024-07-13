@@ -9,10 +9,10 @@ class cModelBase : public cParts
 public:
     D3DXMATRIX field_B0;
     D3DXMATRIX field_F0;
-    cVec4 m_vecModelRenderPos;
-    cVec4 m_vecRotationRenderPos;
-    cVec4 m_vecBoundingBoxMin;
-    cVec4 m_vecBoundingBoxMax;
+    Hw::cVec4 m_vecModelRenderPos;
+    Hw::cVec4 m_vecRotationRenderPos;
+    Hw::cVec4 m_vecBoundingBoxMin;
+    Hw::cVec4 m_vecBoundingBoxMax;
     float field_170;
     float field_174;
     float field_178;
@@ -141,15 +141,16 @@ public:
     int m_nModelFlags;
     int field_368;
     int field_36C;
+
     // returns bone without raw index
     cParts *getBone(unsigned int bone)
     {
         return ((cParts *(__thiscall *)(cModelBase *, unsigned int))(shared::base + 0x612210))(this, bone);
     }
     // get rotation according where model is looking based on position?
-    float getRotationYaw(cVec4 *position)
+    float getRotationYaw(Hw::cVec4 *position)
     {
-        return ((float(__thiscall*)(cModelBase*, cVec4*))(shared::base + 0x68EC30))(this, position);
+        return ((float(__thiscall*)(cModelBase*, Hw::cVec4*))(shared::base + 0x68EC30))(this, position);
     }
     // you get the idea
     void updateBones()

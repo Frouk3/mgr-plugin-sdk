@@ -1,6 +1,5 @@
 #pragma once
 #include "cCameraViewProj.h"
-#include "cVec4.h"
 #include <D3dx9math.h>
 #include "EntityHandle.h"
 #include "cCameraFrustum.h"

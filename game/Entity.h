@@ -1,7 +1,6 @@
 #pragma once
 #include "cSlowRateUnit.h"
 #include "SceneModelSystem.h"
-#include "cVec4.h"
 #include "Hw.h"
 #include "Animation.h"
 #include "shared.h"
@@ -63,33 +62,33 @@ struct Entity
     {
         return ((BOOL(__thiscall*)(Entity*, int))(shared::base + 0xA08640))(this, SlowRateType);
     }
-    void setTransPos(cVec4* transPos)
+    void setTransPos(Hw::cVec4* transPos)
     {
-        ((void(__thiscall*)(Entity*, cVec4*))(shared::base + 0x67CE90))(this, transPos);
+        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CE90))(this, transPos);
     }
-    cVec4* getTransPos()
+    Hw::cVec4* getTransPos()
     {
-        return ((cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8B0))(this);
+        return ((Hw::cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8B0))(this);
     }
-    void offsetTransPos(cVec4* offset)
+    void offsetTransPos(Hw::cVec4* offset)
     {
-        ((void(__thiscall*)(Entity*, cVec4*))(shared::base + 0x67CEC0))(this, offset);
+        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CEC0))(this, offset);
     }
-    void setRotation(cVec4* rotation)
+    void setRotation(Hw::cVec4* rotation)
     {
-        ((void(__thiscall*)(Entity*, cVec4*))(shared::base + 0x67CF00))(this, rotation);
+        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CF00))(this, rotation);
     }
-    cVec4* getRotation()
+    Hw::cVec4* getRotation()
     {
-        return ((cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8D0))(this);
+        return ((Hw::cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8D0))(this);
     }
-    void setSize(cVec4* size)
+    void setSize(Hw::cVec4* size)
     {
-        ((void(__thiscall*)(Entity*, cVec4*))(shared::base + 0x67CF90))(this, size);
+        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CF90))(this, size);
     }
-    cVec4* getSize()
+    Hw::cVec4* getSize()
     {
-        return ((cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8F0))(this);
+        return ((Hw::cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8F0))(this);
     }
 
     Animation* getAnimation()

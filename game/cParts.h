@@ -1,5 +1,5 @@
 #pragma once
-#include "cVec4.h"
+#include "Hw.h"
 #include "shared.h"
 #include <d3dx9math.h>
 
@@ -10,17 +10,17 @@ public:
     int field_8;
     int field_C;
     D3DXMATRIX m_PartsMatrix;
-    cVec4 m_vecTransPos;
+    Hw::cVec4 m_vecTransPos;
     float field_60;
     float field_64;
     float field_68;
     float field_6C;
-    cVec4 m_vecSize;
+    Hw::cVec4 m_vecSize;
     float field_80;
     float field_84;
     float field_88;
     int field_8C;
-    cVec4 m_vecRotation;
+    Hw::cVec4 m_vecRotation;
     short m_nPartIndex;
     struct PartsProperties
     {

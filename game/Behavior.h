@@ -24,8 +24,8 @@ struct Constraints
     int field_14;
     int field_18;
     int field_1C;
-    cVec4 m_vecRotation;
-    cVec4 m_vecOffset;
+    Hw::cVec4 m_vecRotation;
+    Hw::cVec4 m_vecOffset;
     int field_40;
     int field_44;
     int field_48;
@@ -80,7 +80,7 @@ public:
     int field_534;
     int field_538;
     int field_53C;
-    cVec4 field_540;
+    Hw::cVec4 field_540;
     int field_550;
     int field_554;
     int field_558;
@@ -299,45 +299,45 @@ public:
     {
         CallVMTFunc<21, Behavior *>(this);
     }
-    cVec4 *getTransPos()
+    Hw::cVec4 *getTransPos()
     {
-        return ReturnCallVMTFunc<cVec4 *, 26, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4 *, 26, Behavior *>(this);
     }
-    void setTransPos(cVec4 *transPos)
+    void setTransPos(Hw::cVec4*transPos)
     {
-        CallVMTFunc<27, Behavior *, cVec4 *>(this, transPos);
+        CallVMTFunc<27, Behavior *, Hw::cVec4*>(this, transPos);
     }
-    void offsetTransPos(cVec4 *offset)
+    void offsetTransPos(Hw::cVec4*offset)
     {
-        CallVMTFunc<28, Behavior *, cVec4 *>(this, offset);
+        CallVMTFunc<28, Behavior *, Hw::cVec4*>(this, offset);
     }
     void changeHeight(float height)
     {
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
-    void place(cVec4 *pos, cVec4* rotation, cVec4 *size)
+    void place(Hw::cVec4*pos, Hw::cVec4* rotation, Hw::cVec4*size)
     {
-        CallVMTFunc<30, Behavior *, cVec4 *, cVec4 *, cVec4 *>(this, pos, rotation, size);
+        CallVMTFunc<30, Behavior *, Hw::cVec4*, Hw::cVec4*, Hw::cVec4*>(this, pos, rotation, size);
     }
-    void place(cVec4 *pos, cVec4* rotation)
+    void place(Hw::cVec4*pos, Hw::cVec4* rotation)
     {
-        CallVMTFunc<31, Behavior *, cVec4 *, cVec4 *>(this, pos, rotation);
+        CallVMTFunc<31, Behavior *, Hw::cVec4*, Hw::cVec4*>(this, pos, rotation);
     }
-    cVec4 *getRotation()
+    Hw::cVec4*getRotation()
     {
-        return ReturnCallVMTFunc<cVec4 *, 33, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4*, 33, Behavior *>(this);
     }
-    void setRotation(cVec4 *rotation)
+    void setRotation(Hw::cVec4*rotation)
     {
-        CallVMTFunc<34, Behavior *, cVec4 *>(this, rotation);
+        CallVMTFunc<34, Behavior *, Hw::cVec4*>(this, rotation);
     }
-    cVec4 *getSize()
+    Hw::cVec4*getSize()
     {
-        return ReturnCallVMTFunc<cVec4 *, 35, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4*, 35, Behavior *>(this);
     }
-    void setSize(cVec4 *size)
+    void setSize(Hw::cVec4*size)
     {
-        CallVMTFunc<36, Behavior *, cVec4 *>(this, size);
+        CallVMTFunc<36, Behavior *, Hw::cVec4*>(this, size);
     }
     int getSequence()
     {
@@ -375,9 +375,9 @@ public:
     {
         return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
     }
-    cVec4 getOffsetPosition()
+    Hw::cVec4 getOffsetPosition()
     {
-        return ReturnCallVMTFunc<cVec4, 159, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4, 159, Behavior *>(this);
     }
 
     void forceDie()

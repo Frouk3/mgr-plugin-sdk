@@ -1,8 +1,9 @@
 #pragma once
 #include "CharacterProxy.h"
 #include "CharacterProxyListener.h"
-#include "cVec4.h"
 #include "lib.h"
+
+#include "Hw.h"
 
 struct CharacterControl
 {
@@ -62,7 +63,7 @@ struct CharacterControl
   int field_D4;
   int field_D8;
   int field_DC;
-  cVec4 field_E0;
+  Hw::cVec4 field_E0;
   void* m_pOwner;
   float field_F4;
   float m_fHeight;
@@ -123,6 +124,6 @@ struct CharacterControl
 
   bool IsOnGround()
   {
-    return ((bool (__thiscall *)(CharacterControl *))(shared::base + 0x4E2740))(this);
+      return ((bool(__thiscall*)(CharacterControl*))(shared::base + 0x4E2740))(this);
   }
 };

@@ -2,7 +2,6 @@
 #include "Hw.h"
 #include "SceneModelSystem.h"
 #include "Entity.h"
-#include "cVec3.h"
 #include "Behavior.h"
 
 struct EntitySystem
@@ -87,9 +86,9 @@ struct EntitySystem
         return ((int(__thiscall*)(EntitySystem*, eObjID))(shared::base + 0x67F5B0))(this, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const cVec4* position, const float distance)
+    Entity* getClosestEntity(eObjID objId, const Hw::cVec4* position, const float distance)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const cVec4*, const float))(shared::base + 0x67F660))(this, objId, position, distance);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4*, const float))(shared::base + 0x67F660))(this, objId, position, distance);
     }
 
     Entity* findEntity(const char* name, eObjID objId)
@@ -97,9 +96,9 @@ struct EntitySystem
         return ((Entity * (__thiscall*)(EntitySystem*, const char*, eObjID))(shared::base + 0x67F710))(this, name, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const cVec4* position)
+    Entity* getClosestEntity(eObjID objId, const Hw::cVec4* position)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const cVec4*))(shared::base + 0x67F7B0))(this, objId, position);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4*))(shared::base + 0x67F7B0))(this, objId, position);
     }
 
     int getAmountOfEntities()
@@ -166,10 +165,10 @@ struct EntitySystem::SetInfo
     short field_4;
     int field_8;
     int m_nEntityId;
-    cVec3 m_vecBaseRot;
-    cVec3 m_vecTrans;
-    cVec3 m_vecBaseRotL;
-    cVec3 m_vecTransL;
+    Hw::cVec3 m_vecBaseRot;
+    Hw::cVec3 m_vecTrans;
+    Hw::cVec3 m_vecBaseRotL;
+    Hw::cVec3 m_vecTransL;
     float m_fRotation;
     int m_nSetType;
     int m_nType;
@@ -209,7 +208,7 @@ struct EntitySystem::SetInfo
     int field_D0;
     int m_nInitialRtn;
     float m_fInitialTime;
-    cVec3 m_vecInitialPos;
+    Hw::cVec3 m_vecInitialPos;
     float m_fInitialPosDirY;
     int field_EC;
     int field_F0;
@@ -275,9 +274,9 @@ struct EntitySystem::ObjectInfo
     float field_44;
     float field_48;
     float field_4C;
-    cVec3 m_vecTransformPosition;
-    cVec3 m_vecRotation;
-    cVec3 m_vecSize;
+    Hw::cVec3 m_vecTransformPosition;
+    Hw::cVec3 m_vecRotation;
+    Hw::cVec3 m_vecSize;
     int field_74;
     int field_78;
     int field_7C;

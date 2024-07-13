@@ -169,8 +169,8 @@ public:
 
     static inline cCameraGame& Instance = *(cCameraGame*)(shared::base + 0x17EA1D0);
     // returns 1 if successful
-    BOOL worldToScreen(cVec4 *screenPos, D3DXVECTOR3 *worldPos)
+    BOOL worldToScreen(Hw::cVec4 *screenPos, const D3DXVECTOR3 *worldPos)
     {
-        return ((BOOL (__thiscall *)(cCameraGame *, cVec4 *, D3DXVECTOR3 *))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+        return ((BOOL (__thiscall *)(cCameraGame *, Hw::cVec4*, const D3DXVECTOR3 *))(shared::base + 0x99FA80))(this, screenPos, worldPos);
     }
 };
