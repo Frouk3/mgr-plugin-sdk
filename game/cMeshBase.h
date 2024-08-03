@@ -4,21 +4,26 @@
 class cMeshBase
 {
 public:
-  int field_4;
-  int field_8;
-  int field_C;
-  ARGB32 m_rgbForceColor;
-  ARGB32 m_rgbColor;
-  int field_30;
-  int field_34;
-  int m_nMeshFlags;
-  int field_3C;
-  ARGB32 field_40;
-  ARGB32 field_50;
-  int field_60;
-  int field_64;
-  int field_68;
-  int field_6C;
+    int field_4;
+    int field_8;
+    int field_C;
+    ARGB32 m_rgbForceColor;
+    ARGB32 m_rgbColor;
+    int field_30;
+    int field_34;
+    int m_nMeshFlags;
+    int field_3C;
+    ARGB32 field_40;
+    ARGB32 field_50;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
 
-  virtual ~cMeshBase() {};
+    inline const char *getName()
+    {
+        return *(const char**)(field_60 + 0x40);
+    }
+
+    virtual ~cMeshBase() {};
 };

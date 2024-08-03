@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <d3dx9.h>
+#include <dinput.h>
 #include "shared.h"
 
 extern void(__cdecl* ePrintf)(const char* fmt, ...);
@@ -38,6 +39,8 @@ namespace Hw
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
+    inline LPDIRECTINPUT8& InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
+    inline LPDIRECTINPUTDEVICE8W& InputDeviceW = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
     inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C); 
 }
 
@@ -45,6 +48,14 @@ struct Hw::cVec2
 {
     float x;
     float y;
+
+    cVec2()
+    {
+        x = 0.f;
+        y = 0.f;
+    }
+
+    cVec2(float x, float y) : x(x), y(y) {}
 };
 
 struct Hw::cVec3
@@ -53,11 +64,16 @@ struct Hw::cVec3
     float y;
     float z;
 
-    cVec3(float x = 0.0f, float y = 0.0f, float z = 0.0f)
+    cVec3()
     {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+        x = 0.f;
+        y = 0.f;
+        z = 0.f;
+    }
+
+    cVec3(float x, float y, float z) : x(x), y(y), z(z)
+    {
+
     }
 
     void operator=(const cVec3& lhs)
@@ -166,17 +182,21 @@ struct Hw::cVec4
         this->w = right.w;
     }
 
-    cVec4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f)
+    cVec4()
     {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        this->w = w;
+        x = 0.0f;
+        y = 0.0f;
+        z = 0.0f;
+        w = 1.f;
+    }
+
+    cVec4(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w)
+    {
     };
 
     float Magnitude()
     {
-        return sqrtf(powf(this->x, 2) + powf(this->y, 2) + powf(this->z, 2));
+        return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
     }
 
     cVec4 operator+(const cVec4& rhs) const
@@ -1102,6 +1122,7 @@ struct Hw::cFixedList
             this->m_nCapacity = capacity;
             this->m_nSize = 0;
             this->m_pEnd = &this->m_pBegin[capacity];
+
             this->setupNodes();
 
             return 1;

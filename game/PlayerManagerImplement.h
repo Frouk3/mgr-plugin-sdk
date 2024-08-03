@@ -1,6 +1,5 @@
 #pragma once
 #include "PlayerManager.h"
-#include "cVec4.h"
 #include "Hw.h"
 #include "lib.h"
 #include "Entity.h"

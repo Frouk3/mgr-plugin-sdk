@@ -278,6 +278,16 @@ public:
         if (this->m_pStart)
             this->m_nSize = 0;
     }
+
+    void pop_front()
+    {
+        this->remove(*this->m_pStart);
+    }
+
+    void pop_back()
+    {
+        this->remove(this->m_pStart[this->m_nSize - 1]);
+    }
 };
 
 template <typename T, int Size>

@@ -227,7 +227,7 @@ public:
     lib::AllocatedArray<Collision*> *m_pAllocatedCollisionArray;
     int field_7BC;
     float field_7C0;
-    lib::StaticArray<Constraints, 32> **m_ppContraints;
+    lib::StaticArray<Constraints, 32> **m_ppConstraints;
     int field_7C8;
     int field_7CC;
     StateMachineContextPl0010 *m_pStateMachineContext;
@@ -283,98 +283,127 @@ public:
     {
         return ReturnCallVMTFunc<BOOL, 16, Behavior *>(this);
     }
+
     BOOL shutdown()
     {
         return ReturnCallVMTFunc<BOOL, 17, Behavior *>(this);
     }
+
     void updateLogic()
     {
         CallVMTFunc<18, Behavior*>(this);
     }
+
     void tick()
     {
         CallVMTFunc<19, Behavior *>(this);
     }
+
     void updateModel()
     {
-        CallVMTFunc<21, Behavior *>(this);
+        CallVMTFunc<20, Behavior *>(this);
     }
+    
+    void updateEntity()
+    {
+        CallVMTFunc<21, Behavior*>(this);
+    }
+
     Hw::cVec4 *getTransPos()
     {
         return ReturnCallVMTFunc<Hw::cVec4 *, 26, Behavior *>(this);
     }
-    void setTransPos(Hw::cVec4*transPos)
+
+    void setTransPos(const Hw::cVec4& transPos)
     {
-        CallVMTFunc<27, Behavior *, Hw::cVec4*>(this, transPos);
+        CallVMTFunc<27, Behavior *, const Hw::cVec4&>(this, transPos);
     }
-    void offsetTransPos(Hw::cVec4*offset)
+
+    void offsetTransPos(const Hw::cVec4& offset)
     {
-        CallVMTFunc<28, Behavior *, Hw::cVec4*>(this, offset);
+        CallVMTFunc<28, Behavior *, const Hw::cVec4&>(this, offset);
     }
-    void changeHeight(float height)
+
+    void changeHeight(const float height)
     {
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
-    void place(Hw::cVec4*pos, Hw::cVec4* rotation, Hw::cVec4*size)
+
+    void place(const Hw::cVec4 &pos, const Hw::cVec4& rotation, const Hw::cVec4& size)
     {
-        CallVMTFunc<30, Behavior *, Hw::cVec4*, Hw::cVec4*, Hw::cVec4*>(this, pos, rotation, size);
+        CallVMTFunc<30, Behavior *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation, size);
     }
-    void place(Hw::cVec4*pos, Hw::cVec4* rotation)
+
+    void place(const Hw::cVec4 &pos, const Hw::cVec4 &rotation)
     {
-        CallVMTFunc<31, Behavior *, Hw::cVec4*, Hw::cVec4*>(this, pos, rotation);
+        CallVMTFunc<31, Behavior *, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation);
     }
-    Hw::cVec4*getRotation()
+
+    Hw::cVec4* getRotation()
     {
         return ReturnCallVMTFunc<Hw::cVec4*, 33, Behavior *>(this);
     }
-    void setRotation(Hw::cVec4*rotation)
+
+    void setRotation(const Hw::cVec4& rotation)
     {
-        CallVMTFunc<34, Behavior *, Hw::cVec4*>(this, rotation);
+        CallVMTFunc<34, Behavior *, const Hw::cVec4&>(this, rotation);
     }
-    Hw::cVec4*getSize()
+
+    Hw::cVec4* getSize()
     {
         return ReturnCallVMTFunc<Hw::cVec4*, 35, Behavior *>(this);
     }
-    void setSize(Hw::cVec4*size)
+
+    void setSize(const Hw::cVec4& size)
     {
-        CallVMTFunc<36, Behavior *, Hw::cVec4*>(this, size);
+        CallVMTFunc<36, Behavior *, const Hw::cVec4&>(this, size);
     }
+
     int getSequence()
     {
         return ReturnCallVMTFunc<int, 37, Behavior *>(this);
     }
+
     int getIndex()
     {
         return ReturnCallVMTFunc<int, 38, Behavior *>(this);
     }
+
     int getSequenceFile(const char *a2)
     {
         return ReturnCallVMTFunc<int, 39, Behavior *, const char*>(this, a2);
     }
+
     void transform(D3DXMATRIX *matrix)
     {
         CallVMTFunc<45, Behavior *, D3DXMATRIX *>(this, matrix);
     }
+
     void inverse(D3DXMATRIX *matrix)
     {
         CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
     }
+
     void setStealthCamoEnabled(bool bEnable)
     {
         CallVMTFunc<68, Behavior *, bool>(this, bEnable);
     }
+
     void setSeqAtk()
     {
         CallVMTFunc<74, Behavior *>(this);
     }
+
     void *setCutCreateInfo()
     {
         return ReturnCallVMTFunc<void *, 110, Behavior *>(this);
     }
+
     bool isAlive()
     {
         return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
     }
+
     Hw::cVec4 getOffsetPosition()
     {
         return ReturnCallVMTFunc<Hw::cVec4, 159, Behavior *>(this);
@@ -391,27 +420,30 @@ public:
     {
         ((void (__thiscall *)(Behavior *, int, int, int, int))(shared::base + 0x68CAF0))(this, action, actId, a3, a4);
     }
+
     int getCurrentActionId()
     {
         return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAC0))(this);
     }
+
     int getCurrentAction()
     {
         return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
     }
+
     bool setupCloth(int a2)
     {
         return ((bool (__thiscall *)(Behavior *, int))(shared::base + 0x692380))(this, a2);
     }
 
-    int requestAnimationByMap(int animId, Entity* pEntityFrom, int a4, float fInterpolation, float a6, unsigned int flags, float fStartFrame, float a9)
+    int requestAnimationByMap(int animId, Entity* pEntityFrom, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)
     {
-        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, pEntityFrom, a4, fInterpolation, a6, flags, fStartFrame, a9);
+        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, pEntityFrom, a4, fInterpolation, a6, nFlags, fStartFrame, a9);
     }
 
-    int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float a9, unsigned int flags)
+    int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float a9, unsigned int nFlags)
     {
-        return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, a9, flags);
+        return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, a9, nFlags);
     }
 
     void removeConstraint(int constraintId)
@@ -422,6 +454,63 @@ public:
     void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int _bone)
     {
         ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, _bone);
+    }
+
+    void shutdownBattleParameter()
+    {
+        ((void(__thiscall*)(Behavior*))(shared::base + 0x692A00))(this);
+    }
+
+    Animation* getAnimation()
+    {
+        return ((Animation * (__thiscall*)(Behavior*))(shared::base + 0x692F90))(this);
+    }
+
+    float getSpeedRate()
+    {
+        return ((float(__thiscall*)(Behavior*))(shared::base + 0x692FF0))(this);
+    }
+
+    float getDelta()
+    {
+        return ((float(__thiscall*)(Behavior*))(shared::base + 0x693060))(this);
+    }
+
+    Constraints* getConstraints(int id)
+    {
+        return ((Constraints * (__thiscall*)(Behavior*, int))(shared::base + 0x6943E0))(this, id);
+    }
+
+    Entity* getConstraintsEntity(int id)
+    {
+        return ((Entity * (__thiscall*)(Behavior*, int))(shared::base + 0x694480))(this, id);
+    }
+
+    void shutdownConstraints()
+    {
+        ((void(__thiscall*)(Behavior*))(shared::base + 0x6944D0))(this);
+    }
+
+    void setConstraintsBone(int id, unsigned int bone, unsigned int _bone)
+    {
+        ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, _bone);
+    }
+
+    int setDirectAnimation(void* mot, void* seq, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)
+    {
+       return ((int(__thiscall*)(Behavior*, void*, void*, int, float, float, unsigned int, float, float))(shared::base + 0x69EFB0))(this, mot, seq, a4, fInterpolation, a6, nFlags, fStartFrame, a9);
+    }
+
+    // Takes all values from the animation map and plays the animation
+    int requestAnimationByMap(int id)
+    {
+        return ((int(__thiscall*)(Behavior*, int))(shared::base + 0x6A3F60))(this, id);
+    }
+    
+    // Unlike others, motion file is taken from the data file of this object
+    int rqeuestAnimationByName(const char* anim, int a3, float fInterpolation, int a5, unsigned int nFlags, float fStartFrame, float a8)
+    {
+        return ((int(__thiscall*)(Behavior*, const char*, int, float, int, unsigned int, float, float))(shared::base + 0x69E290))(this, anim, a3, fInterpolation, a5, nFlags, fStartFrame, a8);
     }
 
     static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x17E9C20);

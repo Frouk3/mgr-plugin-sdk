@@ -168,9 +168,12 @@ public:
     virtual ~cCameraGame() override {};
 
     static inline cCameraGame& Instance = *(cCameraGame*)(shared::base + 0x17EA1D0);
-    // returns 1 if successful
-    BOOL worldToScreen(Hw::cVec4 *screenPos, const D3DXVECTOR3 *worldPos)
+    
+    // screenPos - Vector of screen position
+    // screenPos.z - How far away it from the screen rect
+    // screenPos.w - Distance between given worldPos position and camera position
+    BOOL worldToScreen(Hw::cVec4 *screenPos, const Hw::cVec4 &worldPos)
     {
-        return ((BOOL (__thiscall *)(cCameraGame *, Hw::cVec4*, const D3DXVECTOR3 *))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+        return ((BOOL (__thiscall *)(cCameraGame *, Hw::cVec4*, const Hw::cVec4 &))(shared::base + 0x99FA80))(this, screenPos, worldPos);
     }
 };

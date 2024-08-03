@@ -10,68 +10,90 @@
 // giving issues with size in Visual Studio Code(should not interact with code generation or compiling)
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
 
-namespace shared
+class shared
 {
-	inline bool key_state[512] = {}; // should be enough
+private:
+	// used for simple key checking
+	static inline bool key_state[256] = {};
 
-	inline DWORD base = (DWORD)GetModuleHandleA(NULL);
+#ifdef SHARED_USE_EX_FUNCS
+	// used for extended usage of key pressing(requires updating)
+	static inline bool key_state_ex[256] = {};
+	static inline bool prev_key_state[256] = {};
+#endif
+public:
+	static inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
-	inline unsigned int random(unsigned int min, unsigned int max)
+	static inline unsigned int random(unsigned int min, unsigned int max)
 	{
 		return min + (rand() % (max - min + 1));
 	}
 
-	inline float random(float min, float max)
+	static inline int random(int min, int max)
+	{
+		return min + (rand() % (max - min + 1));
+	}
+
+	static inline float random(float min, float max)
 	{
 		return min + (max - min) * (rand() / float(RAND_MAX + 1));
 	}
 	/**
 	 * @brief Better key press check
-	 * 
+	 *
 	 * It uses previous state and current state of keys to check it only once.
-	 * 
+	 *
 	 * @param[in] key - Virtual key
 	 * @param[in] repeat - Should it check only once, default is true
-	 * @param[in] ownerId - Used for owner
-	 * 
+	 *
 	 * @return Returns bool according the key press
-	 * */ 
-	inline bool IsKeyPressed(int key, bool repeat = true, int ownerId = -1)
+	 * */
+	static inline bool IsKeyPressed(int key, bool repeat = true)
 	{
+		auto state = (GetAsyncKeyState(key) & 0x8000) != 0;
+
 		if (repeat)
-			return (GetAsyncKeyState(key) & 0x8000) != 0;
+			return state;
 
-		if (!repeat && ownerId == -1)
-			return (GetAsyncKeyState(key) & 1) != 0;
-
-		if (ownerId == -1)
-			return false;
-
-		bool keystat = (GetAsyncKeyState(key) & 0x8000) != 0;
-
-		if (keystat != key_state[ownerId])
+		if (state != key_state[key])
 		{
-			key_state[ownerId] = keystat;
-			return key_state[ownerId];
+			key_state[key] = state;
+			return state;
 		}
-
-		if (keystat == key_state[ownerId])
-			return false;
 
 		return false;
 	}
 
+#ifdef SHARED_USE_EX_FUNCS
+	static inline bool IsKeyPressedEx(int vKey, bool bRepeat = false)
+	{
+		if (bRepeat)
+			return key_state_ex[vKey];
+
+		return key_state_ex[vKey] && key_state_ex[vKey] != prev_key_state[vKey];
+	}
+
+	// should be passed after the update of everything(OnUpdateEvent.after for example)
+	static inline void ExPressKeyUpdate()
+	{
+		memcpy(prev_key_state, key_state_ex, 256u);
+
+		for (int i = 0; i < 256; i++)
+			key_state_ex[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
+	}
+#endif
+
 	template <typename T>
-	inline T clamp(T x, T min, T max)
+	static inline T clamp(T x, T min, T max)
 	{
 		if (x < min)
 			return min;
 		else if (x > max)
 			return max;
-		
+
 		return x;
 	}
-}
+};
 
 inline void** GetVMT(const void* self)
 {

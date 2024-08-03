@@ -121,12 +121,12 @@ public:
     int field_314;
     int field_318;
     int field_31C;
-    cMesh *m_pcMesh;
-    __int16 m_nMaxcMeshCount;
+    cMesh *m_pMesh;
+    unsigned short m_nTotalMeshes;
     int field_328;
-    __int16 field_32C;
-    void *m_pWmb;
-    cParts *m_pcBodyParts;
+    unsigned short field_32C;
+    void *m_pModelData;
+    cParts *m_pBodyParts;
     int field_338;
     int field_33C;
     int m_nAnisotropicType;
@@ -135,12 +135,36 @@ public:
     Hw::cTexture *field_34C;
     cParts *m_pBones;
     cParts **m_ppBones;
-    __int16 m_nTotalOfBones;
+    unsigned short m_nAmountOfBones;
     int field_35C;
     int field_360;
     int m_nModelFlags;
     int field_368;
     int field_36C;
+
+    inline void toggleAnyMesh(const char *meshName, bool bToggle)
+    {
+        if (m_nTotalMeshes)
+        {
+            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nTotalMeshes]; mesh++)
+            {
+                if (mesh->getName() && strstr(mesh->getName(), meshName))
+                    mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
+            }
+        }
+    }
+
+    inline void toggleMesh(const char *meshName, bool bToggle)
+    {
+        if (m_nTotalMeshes)
+        {
+            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nTotalMeshes]; mesh++)
+            {
+                if (mesh->getName() && !strcmp(mesh->getName(), meshName))
+                    mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
+            }
+        }
+    }
 
     // returns bone without raw index
     cParts *getBone(unsigned int bone)
