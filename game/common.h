@@ -7,9 +7,9 @@ struct ContextInstance
 {
 	ContextInstance *m_inheritance;
 
-	BOOL hasInheritance(ContextInstance *other)
+	BOOL hasInheritance(const ContextInstance &other)
 	{
-		return ((BOOL(__thiscall*)(ContextInstance*, ContextInstance*))(shared::base + 0x9D6D80))(this, other);
+		return ((BOOL(__thiscall*)(ContextInstance*, const ContextInstance&))(shared::base + 0x9D6D80))(this, other);
 	}
 
 	ContextInstance(ContextInstance &inheritance)

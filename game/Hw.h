@@ -431,12 +431,20 @@ public:
     int m_nFreeMemory;
     int m_nUsedMemory;
 
+    cHeapVariableBase()
+    {
+        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
+    }
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
+    cHeapVariable()
+    {
+        ((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this);
+    }
 };
 
 class Hw::cTexture
@@ -762,13 +770,21 @@ public:
     int field_468;
     int field_46C;
 
+
+    cHeapPhysicalBase()
+    {
+        ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
+    }
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
 {
 public:
 
-    
+    cHeapPhysical()
+    {
+        ((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this);
+    }
 };
 
 class Hw::cHeapHook
