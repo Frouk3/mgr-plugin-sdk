@@ -20,5 +20,5 @@ And after that, you should be successful to run the [framework](https://github.c
 
 ## Making a mod
 There's example how to make a basic mod for the game, but, the code itself and sdk will change with some time<br/>
-[MGR Plugin SDK Template](https://github.com/user-attachments/files/15522223/MGR.Plugin.SDK.Template.zip)<br />
+[MGR Plugin SDK Framework](https://github.com/user-attachments/files/16689277/MGR.Plugin.Framework.zip)<br />
 Use it to make mods with plugin sdk
