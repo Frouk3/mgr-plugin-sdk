@@ -3,20 +3,23 @@
 #include "cParts.h"
 #include "cMesh.h"
 #include "Hw.h"
+#include "cModelDataManager.h"
 
 class cModelBase : public cParts
 {
 public:
+    struct RenderMatrix
+    {
+        cVec4 m_vecPos;
+        cVec4 m_vecRotation;
+        cVec4 m_vecBBMin;
+        cVec4 m_vecBBMax;
+        cVec4 field_40;
+    };
+
     D3DXMATRIX field_B0;
     D3DXMATRIX field_F0;
-    Hw::cVec4 m_vecModelRenderPos;
-    Hw::cVec4 m_vecRotationRenderPos;
-    Hw::cVec4 m_vecBoundingBoxMin;
-    Hw::cVec4 m_vecBoundingBoxMax;
-    float field_170;
-    float field_174;
-    float field_178;
-    float field_17C;
+    RenderMatrix m_RenderMatrix;
     float m_fDistRate0;
     float m_fDistRate1;
     float m_fDistRate2;
@@ -63,8 +66,10 @@ public:
     int field_22C;
     int field_230;
     int field_234;
-    int field_238;
-    int field_23C;
+    unsigned short field_238;
+    unsigned short field_23A;
+    unsigned short field_23C;
+    unsigned short field_23E;
     int field_240;
     int field_244;
     int field_248;
@@ -117,30 +122,35 @@ public:
     int field_304;
     int field_308;
     int field_30C;
-    BOOL m_bStealthCamoToggle;
-    int field_314;
+    int m_bStealthCamoToggle;
+    float field_314;
     int field_318;
     int field_31C;
-    cMesh *m_pMesh;
+    cMesh* m_pMesh;
     unsigned short m_nTotalMeshes;
     int field_328;
     unsigned short field_32C;
-    void *m_pModelData;
-    cParts *m_pBodyParts;
+    cModelData::ModelData* m_pModelData;
+    cParts* m_pRootBone;
     int field_338;
     int field_33C;
     int m_nAnisotropicType;
     int field_344;
     int field_348;
-    Hw::cTexture *field_34C;
-    cParts *m_pBones;
-    cParts **m_ppBones;
+    Hw::cTexture* field_34C;
+    cParts* m_pBones;
+    cParts** m_ppBones;
     unsigned short m_nAmountOfBones;
     int field_35C;
-    int field_360;
+    cModelBase* m_pParent;
     int m_nModelFlags;
-    int field_368;
+    int m_nRootBone;
     int field_36C;
+
+    cModelBase()
+    {
+        ((void(__thiscall*)(cModelBase*))(shared::base + 0x619210))(this);
+    }
 
     inline void toggleAnyMesh(const char *meshName, bool bToggle)
     {

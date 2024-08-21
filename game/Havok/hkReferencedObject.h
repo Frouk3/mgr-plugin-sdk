@@ -5,7 +5,8 @@
 class hkReferencedObject : public hkBaseObject
 {
 public:
-  int field_4;
+	short m_memAndSizeFlags;
+	short m_referenceCount;
 
-  virtual void* getClassType() {};
+	virtual void* getClassType() {};
 };

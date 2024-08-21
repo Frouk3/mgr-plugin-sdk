@@ -15,14 +15,15 @@ public:
     int field_3C;
     ARGB32 field_40;
     ARGB32 field_50;
-    int field_60;
-    int field_64;
+    int m_pMaterialInfo;
+    cParts* m_pAttachBone;
     int field_68;
     int field_6C;
 
     inline const char *getName()
     {
-        return *(const char**)(field_60 + 0x40);
+        if (*(int*)m_pMaterialInfo)
+            return *(const char**)(m_pMaterialInfo + 0x40);
     }
 
     virtual ~cMeshBase() {};

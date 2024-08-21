@@ -36,6 +36,7 @@ namespace Hw
     struct cVec2;
     struct cVec3;
     struct cVec4;
+    struct cQuaternion;
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
@@ -282,6 +283,17 @@ struct Hw::cVec4
         Normalize(this, this);
         return *this;
     }
+};
+
+struct Hw::cQuaternion
+{
+    float x;
+    float y;
+    float z;
+    float w;
+
+    cQuaternion(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
+    cQuaternion() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
 };
 
 VALIDATE_SIZE(Hw::cVec4, 0x10);
@@ -1206,6 +1218,7 @@ struct Hw::cFixedList
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);
 
-using cVec4 = Hw::cVec4;
-using cVec3 = Hw::cVec3;
-using cVec2 = Hw::cVec2;
+typedef Hw::cVec2 cVec2;
+typedef Hw::cVec3 cVec3;
+typedef Hw::cVec4 cVec4;
+typedef Hw::cQuaternion cQuaternion;

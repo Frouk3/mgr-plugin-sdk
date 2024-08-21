@@ -86,9 +86,9 @@ struct EntitySystem
         return ((int(__thiscall*)(EntitySystem*, eObjID))(shared::base + 0x67F5B0))(this, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const Hw::cVec4* position, const float distance)
+    Entity* getClosestEntity(eObjID objId, const Hw::cVec4& position, const float distance)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4*, const float))(shared::base + 0x67F660))(this, objId, position, distance);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4&, const float))(shared::base + 0x67F660))(this, objId, position, distance);
     }
 
     Entity* findEntity(const char* name, eObjID objId)
@@ -96,9 +96,9 @@ struct EntitySystem
         return ((Entity * (__thiscall*)(EntitySystem*, const char*, eObjID))(shared::base + 0x67F710))(this, name, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const Hw::cVec4* position)
+    Entity* getClosestEntity(eObjID objId, const Hw::cVec4& position)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4*))(shared::base + 0x67F7B0))(this, objId, position);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4&))(shared::base + 0x67F7B0))(this, objId, position);
     }
 
     int getAmountOfEntities()
@@ -164,11 +164,11 @@ struct EntitySystem::SetInfo
     short field_2;
     short field_4;
     int field_8;
-    int m_nEntityId;
-    Hw::cVec3 m_vecBaseRot;
-    Hw::cVec3 m_vecTrans;
-    Hw::cVec3 m_vecBaseRotL;
-    Hw::cVec3 m_vecTransL;
+    eObjID m_nEntityId;
+    cVec3 m_vecBaseRot;
+    cVec3 m_vecTrans;
+    cVec3 m_vecBaseRotL;
+    cVec3 m_vecTransL;
     float m_fRotation;
     int m_nSetType;
     int m_nType;
@@ -189,7 +189,7 @@ struct EntitySystem::SetInfo
     int field_84;
     int field_88;
     int field_8C;
-    int field_90;
+    Entity* m_pEntity;
     int field_94;
     int field_98;
     int field_9C;
@@ -205,10 +205,10 @@ struct EntitySystem::SetInfo
     int field_C4;
     int field_C8;
     int field_CC;
-    int field_D0;
+    Entity* m_pRoomUnitEntity;
     int m_nInitialRtn;
     float m_fInitialTime;
-    Hw::cVec3 m_vecInitialPos;
+    cVec3 m_vecInitialPos;
     float m_fInitialPosDirY;
     int field_EC;
     int field_F0;

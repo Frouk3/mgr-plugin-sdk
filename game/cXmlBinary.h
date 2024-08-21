@@ -7,7 +7,7 @@ class cXmlBinary : public cXml
 public:
     int field_4;
     int field_8;
-    int field_C;
+    void* m_pFile;
     int field_10;
     int field_14;
     int field_18;

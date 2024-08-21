@@ -30,30 +30,21 @@ public:
     int field_8D0;
     int field_8D4;
     float field_8D8;
-    int field_8DC;
-    int field_8E0;
-    int field_8E4;
-    int field_8E8;
-    int field_8EC;
-    int field_8F0;
-    int field_8F4;
-    int field_8F8;
-    int field_8FC;
-    float field_900;
-    float field_904;
-    float field_908;
-    float field_90C;
-    float field_910;
+    float field_8DC;
+    cVec4 field_8E0;
+    cVec4 field_8F0;
+    cVec4 field_900;
+    float m_fEntityTickRate;
     int field_914;
-    int field_918;
-    int field_91C;
+    Animation* field_918;
+    EntityHandle field_91C;
     float field_920;
-    int field_924;
+    float field_924;
     float field_928;
-    int field_92C;
-    int field_930;
-    int field_934;
-    int field_938;
+    float field_92C;
+    float field_930;
+    float field_934;
+    float field_938;
     int field_93C;
     int field_940;
     int field_944;
@@ -63,10 +54,7 @@ public:
     int field_954;
     int field_958;
     int field_95C;
-    int field_960;
-    int field_964;
-    int field_968;
-    int field_96C;
+    cVec4 field_960;
     int field_970;
     float field_974;
     int field_978;
@@ -100,6 +88,7 @@ public:
     float field_9E8;
     float field_9EC;
     float field_9F0;
+
     // empty constructor
     // vftable at 0x123F724
     BehaviorAppBase()

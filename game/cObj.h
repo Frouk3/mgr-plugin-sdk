@@ -14,7 +14,7 @@ class cObj : public cModel
 {
 public:
     int field_490;
-    int field_494;
+    void* m_DataFile;
     int field_498;
     int m_pModel;
     int m_nSetType;
@@ -25,7 +25,7 @@ public:
     eObjID m_nModelIndex;
     int field_4B8;
     int field_4BC;
-    int field_4C0;
+    int m_nObjectFlags;
     int field_4C4;
     char field_4C8;
     char field_4C9;

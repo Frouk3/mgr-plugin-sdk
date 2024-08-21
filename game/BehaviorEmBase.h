@@ -72,7 +72,7 @@ public:
     int field_C04;
     int field_C08;
     int field_C0C;
-    cEnemyCautionStateManager field_C10;
+    cEnemyCautionStateManager m_EnemyCaution;
     int field_D50;
     int field_D54;
     int field_D58;
@@ -100,12 +100,12 @@ public:
     int field_DB0;
     char field_DB4;
 
-    void SetWait()
+    void setWait()
     {
         CallVMTFunc<211, BehaviorEmBase *>(this);
     }
 
-    void CreateEffect(int effId, cEspControler *pEsp)
+    void createEffect(int effId, cEspControler *pEsp)
     {
         CallVMTFunc<214, BehaviorEmBase *, int, cEspControler *>(this, effId, pEsp);
     }

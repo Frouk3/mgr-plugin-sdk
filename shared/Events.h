@@ -8,9 +8,7 @@
 
 class Events
 {
-private:
-
-private:
+public:
     template <int mPriority>
     class IEvent
     {
@@ -52,8 +50,8 @@ private:
             this->returnAddress = 0;
             this->mainhookptr = nullptr;
 
-            before = Key(nullptr);
-            after = Key(nullptr);
+            before = Key(new std::vector<std::function<void()>>);
+            after = Key(new std::vector<std::function<void()>>);
         }
 
         IEvent(std::vector<std::function<void()>>* before, std::vector<std::function<void()>>* after, void(__cdecl* func)())
@@ -154,12 +152,12 @@ void __declspec(naked) Cave() \
 {                                                   \
     __asm pushad                                    \
     __asm lea ecx, Event                            \
-    __asm call IEvent<0>::RunBefore                    \
+    __asm call Events::IEvent<0>::RunBefore                    \
     __asm popad                                     \
     __asm call Event.returnAddress                  \
     __asm pushad                                    \
     __asm lea ecx, Event                            \
-    __asm call IEvent<0>::RunAfter                     \
+    __asm call Events::IEvent<0>::RunAfter                     \
     __asm popad                                     \
     __asm ret          \
 }

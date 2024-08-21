@@ -10,17 +10,11 @@ public:
     int field_8;
     int field_C;
     D3DXMATRIX m_PartsMatrix;
-    Hw::cVec4 m_vecTransPos;
-    float field_60;
-    float field_64;
-    float field_68;
-    float field_6C;
-    Hw::cVec4 m_vecSize;
-    float field_80;
-    float field_84;
-    float field_88;
-    int field_8C;
-    Hw::cVec4 m_vecRotation;
+    cVec4 m_vecTransPos;
+    cQuaternion m_rotationQuat;
+    cVec4 m_vecSize;
+    cVec4 field_80;
+    cVec4 m_vecRotation;
     short m_nPartIndex;
     struct PartsProperties
     {
@@ -43,8 +37,13 @@ public:
         unsigned short b16 : 1;
     } m_nPartsFlag;
     int field_A4;
-    int field_A8;
+    cParts* m_pParentBone;
     int field_AC;
+
+    cParts()
+    {
+        ((void(__thiscall*)(cParts*))(shared::base + 0x607410))(this);
+    }
 
     void updateMatrix()
     {
