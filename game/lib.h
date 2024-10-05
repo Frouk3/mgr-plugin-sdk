@@ -9,6 +9,7 @@ namespace lib
     template <typename T> class Array;
     template <typename T, int size> class StaticArray;
     template <typename T> class AllocatedArray;
+    template <typename T, class allocator> class DynamicArray;
     struct Noncopyable {}; // undefined
 
     namespace detail
@@ -143,22 +144,22 @@ template <typename T>
 class lib::Array
 {
 public:
-    T *m_pStart;
+    T *m_pBegin;
     unsigned int m_nSize;
     unsigned int m_nCapacity;
 
     Array()
     {
-        this->m_pStart = nullptr;
+        this->m_pBegin = nullptr;
         this->m_nSize = 0;
         this->m_nCapacity = 0;
     }
 
     virtual ~Array() 
     {
-        if (this->m_pStart)
+        if (this->m_pBegin)
             this->m_nSize = 0;
-        this->m_pStart = nullptr;
+        this->m_pBegin = nullptr;
         this->m_nCapacity = 0;
     };
     /// @brief How much array can hold
@@ -172,13 +173,13 @@ public:
     /// @return false on fail, true on success
     virtual bool push_back(const T &element) 
     {
-        if (!this->m_pStart)
+        if (!this->m_pBegin)
             return false;
 
         if (this->m_nSize >= this->m_nCapacity)
             return false;
 
-        this->m_pStart[this->m_nSize++] = element;
+        this->m_pBegin[this->m_nSize++] = element;
         return true;
     };
     /// @brief Inserts element after position
@@ -189,29 +190,29 @@ public:
         if (this->m_nSize >= this->m_nCapacity)
             return;
 
-        size_t insertIndex = &position - this->m_pStart;
+        size_t insertIndex = ((char*)&position - (char*)this->m_pBegin) / sizeof(T);
         if (insertIndex > this->m_nSize)
             return;
 
         for (int i = this->m_nSize; i > insertIndex; --i)
-            this->m_pStart[i] = this->m_pStart[i - 1];
+            this->m_pBegin[i] = this->m_pBegin[i - 1];
 
-        this->m_pStart[insertIndex] = element;
+        this->m_pBegin[insertIndex] = element;
         ++this->m_nSize;
     };
 
     bool push_front(const T& element)
     {
-        if (!this->m_pStart)
+        if (!this->m_pBegin)
             return false;
 
         if (this->m_nSize >= this->m_nCapacity)
             return false;
 
         for (auto size = this->m_nSize; size > 0; --size)
-            this->m_pStart[size] = this->m_pStart[size - 1];
+            this->m_pBegin[size] = this->m_pBegin[size - 1];
 
-        this->m_pStart[0] = element;
+        this->m_pBegin[0] = element;
 
         ++this->m_nSize;
         return true;
@@ -220,39 +221,43 @@ public:
     /// @param[in, out] array To switch with 
     virtual void swap(lib::Array<T> *array) 
     {
-        std::swap(this->m_pStart, array->m_pStart);
+        std::swap(this->m_pBegin, array->m_pBegin);
         std::swap(this->m_nCapacity, array->m_nCapacity);
         std::swap(this->m_nSize, array->m_nSize);
     };
-    virtual void unused(void *) {};
+
+    virtual void reallocate(size_t newSize) 
+    {
+
+    };
 
     auto begin()
     {
-        return &this->m_pStart[0];
+        return &this->m_pBegin[0];
     }
     auto begin() const
     {
-        return &this->m_pStart[0];
+        return &this->m_pBegin[0];
     }
 
     auto end()
     {
-        return &this->m_pStart[this->m_nSize];
+        return &this->m_pBegin[this->m_nSize];
     }
     auto end() const
     {
-        return &this->m_pStart[this->m_nSize];
+        return &this->m_pBegin[this->m_nSize];
     }
 
     void remove(T& element)
     {
-        if (!this->m_pStart)
+        if (!this->m_pBegin)
             return;
 
-        if (&element - this->m_pStart >= this->m_nSize) // if element is out of our array, do not proceed further
+        if (&element - this->m_pBegin >= this->m_nSize) // if element is out of our array, do not proceed further
             return;
         
-        for (auto i = &element; i != &this->m_pStart[this->m_nSize - 1]; ++i)
+        for (auto i = &element; i != &this->m_pBegin[this->m_nSize - 1]; ++i)
             *i = i[1]; // remove element by inserting elements that are in front of it
         
         --this->m_nSize; // compensate the loss
@@ -260,7 +265,7 @@ public:
 
     auto& get(size_t at)
     {
-        return this->m_pStart[at];
+        return this->m_pBegin[at];
     }
 
     auto& operator [](size_t index)
@@ -275,18 +280,18 @@ public:
 
     void clear()
     {
-        if (this->m_pStart)
+        if (this->m_pBegin)
             this->m_nSize = 0;
     }
 
     void pop_front()
     {
-        this->remove(*this->m_pStart);
+        this->remove(*this->m_pBegin);
     }
 
     void pop_back()
     {
-        this->remove(this->m_pStart[this->m_nSize - 1]);
+        this->remove(this->m_pBegin[this->m_nSize - 1]);
     }
 };
 
@@ -298,7 +303,7 @@ public:
 
     StaticArray() : Array<T>()
     {
-        this->m_pStart = this->m_Array;
+        this->m_pBegin = this->m_Array;
         this->m_nCapacity = Size;
     }
 };
@@ -323,10 +328,10 @@ public:
             if (auto mem = helpa.m_pAllocator->allocate(sizeof(T) * capacity); mem)
             {
                 this->m_Helper = helpa;
-                if (this->m_pStart)
+                if (this->m_pBegin)
                     this->m_nSize = 0;
                 this->m_nCapacity = sizeof(T) * capacity / sizeof(T);
-                this->m_pStart = (T*)mem;
+                this->m_pBegin = (T*)mem;
                 helpa.cleanup();
                 return 1;
             }
@@ -345,16 +350,124 @@ public:
 
     void cleanup()
     {
-        if (this->m_pStart)
+        if (this->m_pBegin)
         {
             this->m_nSize = 0;
             this->m_nCapacity = 0;
             if (this->m_Helper.m_pAllocator)
-                this->m_Helper.m_pAllocator->free(this->m_pStart);
-            this->m_pStart = nullptr;
+                this->m_Helper.m_pAllocator->free(this->m_pBegin);
+            this->m_pBegin = nullptr;
             this->m_Helper.cleanup();
             this->m_Helper.m_pAllocator = nullptr;
             this->m_Helper.m_pCoreImpl = nullptr;
         }
+    }
+};
+
+template <typename T, class allocator>
+class lib::DynamicArray : public lib::Array<T>
+{
+public:
+
+    DynamicArray() : Array<T>()
+    {
+
+    }
+
+    bool push_back(const T& element)
+    {
+        if (this->m_nSize > this->m_nCapacity)
+            return false;
+
+        if (this->m_nCapacity)
+        {
+            if (this->m_nSize == this->m_nCapacity)
+                this->reallocate(2 * this->m_nCapacity);
+        }
+        else
+        {
+            this->reallocate(32u);
+        }
+
+        if (!this->m_pBegin)
+            return false;
+
+        if (this->m_nSize >= this->m_nCapacity)
+            return false;
+
+        this->m_pBegin[this->m_nSize++] = element;
+
+        return true;
+    }
+
+    void insert(T& position, const T& element)
+    {
+        if (!this->m_pBegin)
+            return; // Just to be safe
+
+        size_t memPos = ((char*)&position - (char*)this->m_pBegin) / sizeof(T);
+
+        if (memPos <= this->m_nSize)
+        {
+            if (this->m_nSize == this->m_nCapacity)
+            {
+                if (this->m_nCapacity)
+                    this->reallocate(2 * this->m_nCapacity);
+                else
+                    this->reallocate(32u);
+
+                this->lib::Array<T>::insert(this->m_pBegin[memPos], element);
+            }
+            this->lib::Array<T>::insert(position, element);
+        }
+    }
+
+    int getCapacity() // And why we return -1?
+    {
+        return -1;
+    }
+
+    //void reallocate(size_t newSize)
+    //{
+    //    if (m_nCapacity < newSize)
+    //    {
+    //        auto previousSize = m_nSize;
+
+    //        if (newSize <= 0x20) // Minimum for 32? Why?
+    //            newSize = 0x20;
+
+    //        auto newArray = (T*)allocator.AllocateMemory(sizeof(T) * newSize, 32, 0, 0);
+
+    //        if (newArray)
+    //        {
+    //            if (m_nSize)
+    //            {
+    //                for (int i = 0; i < m_nSize; i++)
+    //                    newArray[i] = m_pBegin[i];
+    //            }
+
+    //            if (m_pBegin)
+    //            {
+    //                m_nSize = 0;
+    //                FreeMemory(m_pBegin, 0);
+    //                m_pBegin = 0;
+    //                m_nCapacity = 0;
+    //            }
+
+    //            clear();
+
+    //            m_nSize = previousSize;
+    //            m_pBegin = newArray;
+    //            m_nCapacity = sizeof(T) * newSize / sizeof(T);
+
+    //        }
+    //    }
+    //}
+
+    virtual void _swap(lib::DynamicArray<T, allocator>& other) // duplicate?
+    {
+        std::swap(this->m_pBegin, other.m_pBegin);
+        std::swap(this->m_nSize, other.m_nSize);
+        std::swap(this->m_nCapacity, other.m_nCapacity);
     }
 };

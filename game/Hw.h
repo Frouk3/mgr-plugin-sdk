@@ -913,6 +913,15 @@ struct Hw::cFixedVector
     size_t m_nSize;
     int field_10;
 
+    cFixedVector()
+    {
+        field_0 = 0;
+        m_pBegin = nullptr;
+        m_nCapacity = 0;
+        m_nSize = 0;
+        field_10 = 0;
+    }
+
     BOOL create(size_t capacity, Hw::cHeap* allocator)
     {
         if (this->m_pBegin)
