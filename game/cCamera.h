@@ -6,7 +6,7 @@
 
 class Pl0000;
 
-class cCamera : public cCameraViewProj, cCameraFrustum
+class cCamera : public cCameraViewProj, public cCameraFrustum
 {
 public:
 
