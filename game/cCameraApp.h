@@ -2,7 +2,7 @@
 #include "cCamera.h"
 #include "cCameraTypes.h"
 
-class cCameraApp : public cCamera, cCameraTypes
+class cCameraApp : public cCamera, public cCameraTypes
 {
 public:
 	D3DXMATRIX field_3D0;
