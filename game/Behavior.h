@@ -1090,7 +1090,7 @@ public:
     lib::AllocatedArray<Collision *>* m_pAllocatedCollisionArray;
     int field_7BC;
     float field_7C0;
-    lib::StaticArray<Constraints, 32>** m_ppContraints;
+    lib::StaticArray<Constraints, 32>** m_ppConstraints;
     int field_7C8;
     int field_7CC;
     StateMachineContextPl0010* m_pStateMachineContext;

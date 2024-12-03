@@ -6,19 +6,12 @@ class cCameraApp : public cCamera, public cCameraTypes
 {
 public:
 	D3DXMATRIX field_3D0;
-	Hw::cVec4 field_410[3];
-	float field_440;
-	float field_444;
-	float field_448;
-	cCameraViewProj* field_44C;
-	D3DXMATRIX field_450;
-	Hw::cVec4 field_490;
-	int field_4A0;
-	float field_4A4;
-	int field_4A8;
+	CameraMatrix field_410;
+	int field_45C;
+	CameraMatrix m_CurrentViewMatrix;
 	int field_4AC;
-	D3DXMATRIX m_TranslationMatrix;
-	Hw::cVec4 field_4F0;
+	CameraMatrix m_TranslationMatrix;
+	int field_4FC;
 	int field_500;
 	float field_504;
 	int field_508;

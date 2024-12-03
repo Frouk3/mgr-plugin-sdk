@@ -298,6 +298,11 @@ struct Hw::cQuaternion
 
 VALIDATE_SIZE(Hw::cVec4, 0x10);
 
+typedef Hw::cVec2 cVec2;
+typedef Hw::cVec3 cVec3;
+typedef Hw::cVec4 cVec4;
+typedef Hw::cQuaternion cQuaternion;
+
 class Hw::CriticalSection
 {
 public:
@@ -479,7 +484,7 @@ public:
     int field_8;
     int field_C;
     D3DXMATRIX m_projectionMatrix;
-    D3DXMATRIX field_50;
+    D3DXMATRIX m_invertedProjectionMatrix;
     float m_fAspectRatio;
     float m_fFOV;
     float m_fNearClip;
@@ -497,15 +502,74 @@ VALIDATE_SIZE(Hw::CameraProj, 0xB0);
 class Hw::cCameraBase
 {
 public:
+    struct CameraMatrix
+    {
+        cVec4 m_vecPosition;
+        cVec4 m_vecLookAtPosition;
+        cVec4 m_vecOffset;
+        cVec4 m_vecCameraOffset;
+        float m_fRoll;
+        float m_fDistance;
+        float m_fFOV;
+
+        CameraMatrix &operator=(const CameraMatrix &lvalue)
+        {
+            ((void(__thiscall *)(CameraMatrix *, const CameraMatrix &))(shared::base + 0x9A01F0))(this, lvalue);
+            return *this;
+        }
+
+        cVec4 calculateViewOffset()
+        {
+            ((cVec4(__thiscall*)(CameraMatrix*))(shared::base + 0x9B9090))(this);
+        }
+    };
+
     D3DXMATRIX m_viewMatrix;
     D3DXMATRIX field_40;
-    D3DXMATRIX field_80;
+    D3DXMATRIX m_invertedViewMatrix;
     D3DXMATRIX field_C0;
-    D3DXMATRIX field_100;
-    int field_140;
-    float field_144;
-    float field_148;
+    CameraMatrix m_CameraMatrix;
     float field_14C;
+
+    void setPosition(const cVec4& position)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5F20))(this, position);
+    }
+
+    void setOffset(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6060))(this, offset);
+    }
+
+    void setLookAt(const cVec4& lookAt)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5FC0))(this, lookAt);
+    }
+
+    void place(const cVec4& position, const cVec4& lookAt, const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, const cVec4&))(shared::base + 0x9E5D10))(this, position, lookAt, offset);
+    }
+
+    void updatePosition()
+    {
+        ((void(__thiscall *)(cCameraBase*))(shared::base + 0x9E51B0))(this);
+    }
+
+    void calculateCameraOffset()
+    {
+        ((void(__thiscall *)(cCameraBase*))(shared::base + 0x9E5380))(this);
+    }
+
+    void calculateCameraDistance()
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E54E0))(this);
+    }
+
+    void updateCameraViewMatrix()
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E6410))(this);
+    }
 };
 
 VALIDATE_SIZE(Hw::cCameraBase, 0x150);
@@ -1226,8 +1290,3 @@ struct Hw::cFixedList
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);
-
-typedef Hw::cVec2 cVec2;
-typedef Hw::cVec3 cVec3;
-typedef Hw::cVec4 cVec4;
-typedef Hw::cQuaternion cQuaternion;

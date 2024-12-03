@@ -6,9 +6,9 @@ class Pl0000;
 
 struct cCameraTypes
 {
-	float field_0;
-	float field_4;
-	int field_8;
+	float m_fVerticalAngle; // pitch
+	float m_fHorizontalAngle; // yaw
+	int m_fZAngle;
 	int field_C;
 	EntityHandle m_nPlayerHandle;
 	Pl0000* m_pPlayer[2];

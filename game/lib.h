@@ -164,7 +164,7 @@ public:
     };
     /// @brief How much array can hold
     /// @return Number of maximum objects array can hold
-    virtual int getCapacity() 
+    virtual unsigned int getCapacity() 
     {
         return this->m_nCapacity;
     };
@@ -194,7 +194,7 @@ public:
         if (insertIndex > this->m_nSize)
             return;
 
-        for (int i = this->m_nSize; i > insertIndex; --i)
+        for (auto i = this->m_nSize; i > insertIndex; --i)
             this->m_pBegin[i] = this->m_pBegin[i - 1];
 
         this->m_pBegin[insertIndex] = element;
