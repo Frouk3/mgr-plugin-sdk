@@ -1,5 +1,7 @@
 #pragma once
 
+#include <hkBaseTypes.h>
+
 class hkBaseObject
 {
 public:

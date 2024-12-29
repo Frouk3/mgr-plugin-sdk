@@ -16,4 +16,10 @@ struct EntityHandle
     {
         return *((EntityHandle * (__thiscall*)(EntityHandle*, Entity*))(shared::base + 0x67C970))(this, entity);
     }
+
+    EntityHandle& operator=(unsigned int newHandle)
+    {
+        m_nHandle = newHandle;
+        return *this;
+    }
 };

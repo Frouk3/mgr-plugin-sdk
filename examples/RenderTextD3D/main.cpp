@@ -7,7 +7,7 @@
 #pragma comment(lib, "d3dx9.lib")
 LPD3DXFONT font;
 bool canRender = false;
-tagPOINT res = *(tagPOINT*)(shared::base + 0x14CE9A4);
+tagPOINT &res = *(tagPOINT*)(shared::base + 0x14CE9A4);
 
 class RenderTextD3DX9
 {

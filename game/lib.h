@@ -190,7 +190,7 @@ public:
         if (this->m_nSize >= this->m_nCapacity)
             return;
 
-        size_t insertIndex = ((char*)&position - (char*)this->m_pBegin) / sizeof(T);
+        size_t insertIndex = ((char*)&position - (char*)&this->m_pBegin) / sizeof(T);
         if (insertIndex > this->m_nSize)
             return;
 
@@ -203,18 +203,7 @@ public:
 
     bool push_front(const T& element)
     {
-        if (!this->m_pBegin)
-            return false;
-
-        if (this->m_nSize >= this->m_nCapacity)
-            return false;
-
-        for (auto size = this->m_nSize; size > 0; --size)
-            this->m_pBegin[size] = this->m_pBegin[size - 1];
-
-        this->m_pBegin[0] = element;
-
-        ++this->m_nSize;
+        insert(this->m_pBegin[0], element);
         return true;
     }
     /// @brief Swaps members with another array

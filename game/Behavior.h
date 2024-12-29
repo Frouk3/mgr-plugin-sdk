@@ -1371,7 +1371,7 @@ public:
     }
     
     // Unlike others, motion file is taken from the data file of this object
-    int rqeuestAnimationByName(const char* anim, int a3, float fInterpolation, int a5, unsigned int nFlags, float fStartFrame, float a8)
+    int requestAnimationByName(const char* anim, int a3, float fInterpolation, int a5, unsigned int nFlags, float fStartFrame, float a8)
     {
         return ((int(__thiscall*)(Behavior*, const char*, int, float, int, unsigned int, float, float))(shared::base + 0x69E290))(this, anim, a3, fInterpolation, a5, nFlags, fStartFrame, a8);
     }

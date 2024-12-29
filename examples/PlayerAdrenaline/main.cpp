@@ -1,7 +1,7 @@
-#include "cGameUIManager.h"
-#include "cSlowRateManager.h"
-#include "Trigger.h"
-#include "Events.h"
+#include <cGameUIManager.h>
+#include <cSlowRateManager.h>
+#include <Trigger.h>
+#include <Events.h>
 
 class PlayerAdrenaline
 {
@@ -10,10 +10,10 @@ class PlayerAdrenaline
         Events::OnTickEvent += []()
         {
             cSlowRateManager* SlowRateManager = cSlowRateManager::pInstance;
-            Pl0000 *player = (Pl0000*)cGameUIManager::Instance.m_pPlayer;
+            Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
             static bool once = false;
 
-            if (player->m_nHealth / player->GetMaxHealth() <= 0.4)
+            if (player->m_nHealth / player->GetMaxHealth() <= 0.4f)
             {
                 Trigger::GameFlags.GAME_MUGEN_ZANGEKI = true;
                 player->EnableRipperMode();
@@ -24,7 +24,7 @@ class PlayerAdrenaline
 
                 once = false;
             }
-            else if (player->m_nHealth / player->GetMaxHealth() > 0.4 && !once)
+            else if (player->m_nHealth / player->GetMaxHealth() > 0.4f && !once)
             {
                 Trigger::GameFlags.GAME_MUGEN_ZANGEKI = false;
 

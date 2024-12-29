@@ -18,3 +18,19 @@ public:
 	int m_size;
 	int m_capacityAndFlags;
 };
+
+template <typename T>
+class hkArray : public hkArrayBase<T>
+{
+public:
+
+};
+
+template <typename T, unsigned N>
+class hkInplaceArray : public hkArrayBase<T>
+{
+public:
+	int field_C;
+
+	T m_storage[N];
+};
