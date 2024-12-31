@@ -7,10 +7,6 @@
 #define PI 3.14159265359f
 #define DegreeToRadian(x) (x * PI / 180)
 #define RadianToDegree(x) (x * 180 / PI)
-<<<<<<< Updated upstream
-// giving issues with size in Visual Studio Code(should not interact with code generation or compiling)
-=======
->>>>>>> Stashed changes
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
 
 class shared
