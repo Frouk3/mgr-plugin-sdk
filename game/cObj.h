@@ -8,7 +8,7 @@
 #include "common.h"
 #include <cEspControler.h>
 
-#define OBJ_CONTEXT(c) &c::Context
+#define OBJ_CONTEXT(c) c::Context
 
 class cObj : public cModel
 {

@@ -50,45 +50,55 @@ struct Entity
     {
         return ((T *(__thiscall*)(Entity*))(shared::base + 0x67C8A0))(this);
     }
+
     void updateDelta()
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0xA049A0))(this);
     }
+
     float getDeltaTime()
     {
         return ((float(__thiscall*)(Entity*))(shared::base + 0xA049B0))(this);
     }
+
     BOOL setEntitySlowRateType(int SlowRateType)
     {
         return ((BOOL(__thiscall*)(Entity*, int))(shared::base + 0xA08640))(this, SlowRateType);
     }
-    void setTransPos(Hw::cVec4* transPos)
+
+    void setTransPos(const cVec4& transPos)
     {
-        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CE90))(this, transPos);
+        ((void(__thiscall*)(Entity*, const cVec4&))(shared::base + 0x67CE90))(this, transPos);
     }
-    Hw::cVec4* getTransPos()
+
+    const cVec4& getTransPos()
     {
-        return ((Hw::cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8B0))(this);
+        return ((const cVec4&(__thiscall*)(Entity*))(shared::base + 0x67C8B0))(this);
     }
-    void offsetTransPos(Hw::cVec4* offset)
+
+    void offsetTransPos(const cVec4& offset)
     {
-        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CEC0))(this, offset);
+        ((void(__thiscall*)(Entity*, const cVec4&))(shared::base + 0x67CEC0))(this, offset);
     }
-    void setRotation(Hw::cVec4* rotation)
+
+    void setRotation(const cVec4& rotation)
     {
-        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CF00))(this, rotation);
+        ((void(__thiscall*)(Entity*, const cVec4&))(shared::base + 0x67CF00))(this, rotation);
     }
-    Hw::cVec4* getRotation()
+
+    const cVec4& getRotation()
     {
-        return ((Hw::cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8D0))(this);
+        return ((const cVec4&(__thiscall*)(Entity*))(shared::base + 0x67C8D0))(this);
     }
-    void setSize(Hw::cVec4* size)
+
+    void setSize(const cVec4& size)
     {
-        ((void(__thiscall*)(Entity*, Hw::cVec4*))(shared::base + 0x67CF90))(this, size);
+        ((void(__thiscall*)(Entity*, const cVec4&))(shared::base + 0x67CF90))(this, size);
     }
-    Hw::cVec4* getSize()
+
+    const cVec4& getSize()
     {
-        return ((Hw::cVec4 * (__thiscall*)(Entity*))(shared::base + 0x67C8F0))(this);
+        return ((const cVec4&(__thiscall*)(Entity*))(shared::base + 0x67C8F0))(this);
     }
 
     Animation* getAnimation()
@@ -115,14 +125,16 @@ struct Entity
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0x681290))(this);
     }
+
     void shutdownSlowRateUnit()
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0xA085E0))(this);
     }
-    EntityHandle *getEntityHandle()
+
+    EntityHandle& getEntityHandle()
     {
-        return ((EntityHandle *(__thiscall *)(Entity *))(shared::base + 0x67C7F0))(this);
-    } 
+        return ((EntityHandle & (__thiscall*)(Entity*))(shared::base + 0x67C7F0))(this);
+    }
 };
 
 VALIDATE_SIZE(Entity, 0x60);

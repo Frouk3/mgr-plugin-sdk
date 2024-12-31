@@ -4,5 +4,5 @@
 namespace sys
 {
 
-	static inline Hw::cHeap* AllocatorByHeap;
-}
+	typedef Hw::cHeapVariableBase* AllocatorByHeap;
+};

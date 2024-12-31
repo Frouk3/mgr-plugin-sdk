@@ -4,6 +4,8 @@
 #include "Hw.h"
 #include "sys.h"
 
+extern void FreeMemory(void* block, int a2);
+
 namespace lib
 {
     template <typename T> class Array;
@@ -26,31 +28,37 @@ namespace lib
             }
 
             virtual ~SharedCoreImplBase() {};
-
-            void destroyAllocator()
-            {
-                CallVMTFunc<1, SharedCoreImplBase*>(this);
-            }
-
-            void shutdown()
-            {
-                CallVMTFunc<2, SharedCoreImplBase*>(this);
-            }
+            virtual void destroyAllocator() = 0;
+            virtual void shutdown() = 0;
         };
 
         template <typename allocatorProxy, typename deallocator, typename allocator>
         class SharedCoreImpl : public SharedCoreImplBase
         {
         public:
-            allocatorProxy *m_pAllocatorProxy;
+            allocatorProxy *m_AllocatorProxy;
             deallocator m_Deallocator;
-            allocator m_pAllocator;
+            allocator m_Allocator;
 
-            SharedCoreImpl()
+            SharedCoreImpl() : SharedCoreImplBase()
+			{
+                m_AllocatorProxy = nullptr;
+			}
+
+            SharedCoreImpl(allocatorProxy allocatorProxy, deallocator dealloc, allocator alloc) : SharedCoreImplBase(), m_AllocatorProxy(*allocatorProxy), m_Deallocator(dealloc), m_Allocator(alloc)
             {
-                this->m_pAllocatorProxy = &allocatorProxy;
-                this->m_Deallocator = deallocator;
-                this->m_pAllocator = allocator;
+                
+            }
+
+            virtual void destroyAllocator()
+            {
+                FreeMemory(this->m_AllocatorProxy, 0);
+            }
+
+            virtual void shutdown()
+            {
+                this->~SharedCoreImpl();
+                FreeMemory(this, 0);
             }
         };
 
@@ -63,7 +71,6 @@ namespace lib
             class Core : public Noncopyable
             {
             public:
-                Hw::cHeap* m_pAllocator;
 
                 Core()
                 {
@@ -72,68 +79,84 @@ namespace lib
 
                 virtual ~Core() {};
 
-                void* allocate(size_t size)
-                {
-                    return ReturnCallVMTFunc<void*, 1, Core*, size_t>(this, size);
-                }
-
-                void free(void* block)
-                {
-                    CallVMTFunc<2, Core*, void*>(this, block);
-                }
+                virtual void* allocate(size_t size) = 0;
+                virtual void free(void* block) = 0;
             };
 
-            template <Hw::cHeap* allocator>
+            template <typename allocator>
             class CoreT : public Core
             {
             public:
-                CoreT(Hw::cHeap** Allocator) : Core()
+                allocator m_Allocator;
+
+                CoreT(allocator* Allocator) : Core()
                 {
-                    this->m_pAllocator = *Allocator;
+                    this->m_Allocator = *Allocator;
                 }
 
-                CoreT()
+                virtual void* allocate(size_t size)
                 {
-                    this->m_pAllocator = allocator;
+                    return this->m_Allocator->AllocateMemory(size, 32, 0, 0);
+                }
+
+                virtual void free(void* block)
+                {
+                    FreeMemory(block, 0);
                 }
             };
         };
 
-        template <Hw::cHeap *deallocator>
+        template <typename deallocator>
         struct DeleterByAllocator
         {
-            Hw::cHeap *m_pDeallocator = deallocator;
-        };
+            deallocator m_Deallocator;
 
-        struct AllocatorHelper
-        {
-            lib::helper::AllocatorProxy::Core* m_pAllocator;
-            lib::detail::SharedCoreImplBase* m_pCoreImpl;
-
-            bool create(const Hw::cHeap* allocator)
+            DeleterByAllocator(deallocator* deallocator) : m_Deallocator(*deallocator)
             {
-                return ((bool(__thiscall*)(AllocatorHelper*, const Hw::cHeap*))(shared::base + 0x20E0))(this, allocator);
+
             }
 
-            AllocatorHelper& operator=(AllocatorHelper& other)
+            DeleterByAllocator() : m_Deallocator(nullptr)
+			{
+
+			}
+        };
+
+        template <typename allocator>
+        struct AllocatorHelper
+        {
+            lib::helper::AllocatorProxy::CoreT<allocator>* m_Allocator;
+            lib::detail::SharedCoreImpl<lib::helper::AllocatorProxy::CoreT<allocator>, DeleterByAllocator<allocator>, allocator> *m_Core;
+
+            AllocatorHelper(allocator* pAllocator) : m_Allocator(nullptr), m_Core(nullptr)
+			{
+
+			}
+
+            bool create(allocator pAllocator)
             {
-                ((void(__thiscall*)(AllocatorHelper*, AllocatorHelper*))(shared::base + 0x1F90))(this, &other);
+                return ((bool(__thiscall *)(AllocatorHelper<allocator>*, allocator))(shared::base + 0x20E0))(this, pAllocator); // A bit too complex to recreate
+            }
+
+            AllocatorHelper<allocator>& operator=(const AllocatorHelper<allocator>& other)
+            {
+                ((void(__thiscall*)(AllocatorHelper<allocator>*, const AllocatorHelper<allocator>&))(shared::base + 0x1F90))(this, other);
                 return *this;
             }
 
             AllocatorHelper()
             {
-                this->m_pAllocator = nullptr;
-                this->m_pCoreImpl = nullptr;
+                this->m_Allocator = nullptr;
+                this->m_Core = nullptr;
             }
 
             void cleanup()
             {
-                if (this->m_pCoreImpl && !InterlockedDecrement((LONG*)&this->m_pCoreImpl->field_4))
+                if (this->m_Core && !InterlockedDecrement((LONG*)&this->m_Core->field_4))
                 {
-                    this->m_pCoreImpl->destroyAllocator();
-                    if (!InterlockedDecrement((LONG*)&this->m_pCoreImpl->field_8))
-                        this->m_pCoreImpl->shutdown();
+                    this->m_Core->destroyAllocator();
+                    if (!InterlockedDecrement((LONG*)&this->m_Core->field_8))
+                        this->m_Core->shutdown();
                 }
             }
         };
@@ -301,20 +324,21 @@ template <typename T>
 class lib::AllocatedArray : public lib::Array<T>
 {
 public:
-    helper::AllocatorHelper m_Helper;
+    helper::AllocatorHelper<sys::AllocatorByHeap> m_Helper;
 
     AllocatedArray() : Array<T>()
     {
         
     }
 
-    bool create(size_t capacity, Hw::cHeap const *&allocator)
+    template <typename Allocator>
+    bool create(size_t capacity, Allocator *allocator)
     {
         this->cleanup();
-        helper::AllocatorHelper helpa;
-        if (helpa.create(allocator) && helpa.m_pAllocator)
+        helper::AllocatorHelper<Allocator> helpa(allocator);
+        if (helpa.create(*allocator) && helpa.m_Allocator)
         {
-            if (auto mem = helpa.m_pAllocator->allocate(sizeof(T) * capacity); mem)
+            if (auto mem = helpa.m_Allocator->allocate(sizeof(T) * capacity); mem)
             {
                 this->m_Helper = helpa;
                 if (this->m_pBegin)
@@ -343,25 +367,28 @@ public:
         {
             this->m_nSize = 0;
             this->m_nCapacity = 0;
-            if (this->m_Helper.m_pAllocator)
-                this->m_Helper.m_pAllocator->free(this->m_pBegin);
+            if (this->m_Helper.m_Allocator)
+                this->m_Helper.m_Allocator->free(this->m_pBegin);
             this->m_pBegin = nullptr;
             this->m_Helper.cleanup();
-            this->m_Helper.m_pAllocator = nullptr;
-            this->m_Helper.m_pCoreImpl = nullptr;
+            this->m_Helper.m_Allocator = nullptr;
+            this->m_Helper.m_Core = nullptr;
         }
     }
 };
 
-template <typename T, class allocator>
+template <typename T, typename allocator>
 class lib::DynamicArray : public lib::Array<T>
 {
 public:
+    allocator m_Allocator;
 
     DynamicArray() : Array<T>()
     {
 
     }
+
+    DynamicArray(allocator* allocator) : Array<T>(), m_Allocator(allocator) {};
 
     bool push_back(const T& element)
     {
@@ -416,42 +443,41 @@ public:
         return -1;
     }
 
-    //void reallocate(size_t newSize)
-    //{
-    //    if (m_nCapacity < newSize)
-    //    {
-    //        auto previousSize = m_nSize;
+    void reallocate(size_t newSize)
+    {
+       if (this->m_nCapacity < newSize)
+       {
+           auto previousSize = this->m_nSize;
 
-    //        if (newSize <= 0x20) // Minimum for 32? Why?
-    //            newSize = 0x20;
+           if (newSize <= 0x20) // Minimum for 32? Why?
+               newSize = 0x20;
 
-    //        auto newArray = (T*)allocator.AllocateMemory(sizeof(T) * newSize, 32, 0, 0);
+           auto newArray = (T*)this->m_Allocator->AllocateMemory(sizeof(T) * newSize, 32, 0, 0);
 
-    //        if (newArray)
-    //        {
-    //            if (m_nSize)
-    //            {
-    //                for (int i = 0; i < m_nSize; i++)
-    //                    newArray[i] = m_pBegin[i];
-    //            }
+           if (newArray)
+           {
+               if (this->m_nSize)
+               {
+                   for (int i = 0; i < this->m_nSize; i++)
+                       newArray[i] = this->m_pBegin[i];
+               }
 
-    //            if (m_pBegin)
-    //            {
-    //                m_nSize = 0;
-    //                FreeMemory(m_pBegin, 0);
-    //                m_pBegin = 0;
-    //                m_nCapacity = 0;
-    //            }
+               if (this->m_pBegin)
+               {
+                   this->m_nSize = 0;
+                   FreeMemory(this->m_pBegin, 0);
+                   this->m_pBegin = 0;
+                   this->m_nCapacity = 0;
+               }
 
-    //            clear();
+               this->clear();
 
-    //            m_nSize = previousSize;
-    //            m_pBegin = newArray;
-    //            m_nCapacity = sizeof(T) * newSize / sizeof(T);
-
-    //        }
-    //    }
-    //}
+               this->m_nSize = previousSize;
+               this->m_pBegin = newArray;
+               this->m_nCapacity = sizeof(T) * newSize / sizeof(T);
+           }
+       }
+    }
 
     virtual void _swap(lib::DynamicArray<T, allocator>& other) // duplicate?
     {

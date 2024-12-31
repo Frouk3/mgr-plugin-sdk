@@ -7,19 +7,22 @@
 #define PI 3.14159265359f
 #define DegreeToRadian(x) (x * PI / 180)
 #define RadianToDegree(x) (x * 180 / PI)
+<<<<<<< Updated upstream
 // giving issues with size in Visual Studio Code(should not interact with code generation or compiling)
+=======
+>>>>>>> Stashed changes
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
 
 class shared
 {
 private:
-	// used for simple key checking
-	static inline bool key_state[256] = {};
-
 #ifdef SHARED_USE_EX_FUNCS
 	// used for extended usage of key pressing(requires updating)
 	static inline bool key_state_ex[256] = {};
 	static inline bool prev_key_state[256] = {};
+#else
+	// used for simple key checking
+	static inline bool key_state[256] = {};
 #endif
 public:
 	static inline DWORD base = (DWORD)GetModuleHandleA(NULL);
@@ -38,34 +41,8 @@ public:
 	{
 		return min + (max - min) * (rand() / float(RAND_MAX + 1));
 	}
-	/**
-	 * @brief Better key press check
-	 *
-	 * It uses previous state and current state of keys to check it only once.
-	 *
-	 * @param[in] key - Virtual key
-	 * @param[in] repeat - Should it check only once, default is true
-	 *
-	 * @return Returns bool according the key press
-	 * */
-	static inline bool IsKeyPressed(int key, bool repeat = true)
-	{
-		auto state = (GetAsyncKeyState(key) & 0x8000) != 0;
-
-		if (repeat)
-			return state;
-
-		if (state != key_state[key])
-		{
-			key_state[key] = state;
-			return state;
-		}
-
-		return false;
-	}
-
 #ifdef SHARED_USE_EX_FUNCS
-	static inline bool IsKeyPressedEx(int vKey, bool bRepeat = false)
+	static inline bool IsKeyPressed(int vKey, bool bRepeat = false)
 	{
 		if (bRepeat)
 			return key_state_ex[vKey];
@@ -80,6 +57,22 @@ public:
 
 		for (int i = 0; i < 256; i++)
 			key_state_ex[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
+	}
+#else
+	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
+	{
+		auto state = (GetAsyncKeyState(vKey) & 0x8000) != 0;
+
+		if (bRepeat)
+			return state;
+
+		if (state != key_state[vKey])
+		{
+			key_state[vKey] = state;
+			return state;
+		}
+
+		return false;
 	}
 #endif
 
