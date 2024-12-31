@@ -38,6 +38,7 @@ public:
 		return min + (max - min) * (rand() / float(RAND_MAX + 1));
 	}
 #ifdef SHARED_USE_EX_FUNCS
+	
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = false)
 	{
 		if (bRepeat)
@@ -54,6 +55,7 @@ public:
 		for (int i = 0; i < 256; i++)
 			key_state_ex[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
 	}
+
 #else
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
