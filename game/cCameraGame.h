@@ -172,8 +172,8 @@ public:
     // screenPos - Vector of screen position
     // screenPos.z - How far away it from the screen rect
     // screenPos.w - Distance between given worldPos position and camera position
-    BOOL worldToScreen(Hw::cVec4 *screenPos, const Hw::cVec4 &worldPos)
+    BOOL worldToScreen(cVec4 &screenPos, const cVec4 &worldPos)
     {
-        return ((BOOL (__thiscall *)(cCameraGame *, Hw::cVec4*, const Hw::cVec4 &))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+        return ((BOOL (__thiscall *)(cCameraGame *, cVec4&, const cVec4 &))(shared::base + 0x99FA80))(this, screenPos, worldPos);
     }
 };
