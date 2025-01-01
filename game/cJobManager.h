@@ -9,7 +9,7 @@ struct cJobManager
 		cJobManager* m_pOwner;
 		int m_nThreadIndex;
 		HANDLE m_hSemaphore;
-		HANDLE field_C;
+		HANDLE m_hTask;
 		void(__cdecl *m_pFunc)(LPVOID reserved, void *arg);
 		void* m_pFuncParameter;
 	};

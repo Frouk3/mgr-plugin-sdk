@@ -16,6 +16,7 @@ private:
 	// used for extended usage of key pressing(requires updating)
 	static inline bool key_state_ex[256] = {};
 	static inline bool prev_key_state[256] = {};
+
 #else
 	// used for simple key checking
 	static inline bool key_state[256] = {};
@@ -39,7 +40,7 @@ public:
 	}
 #ifdef SHARED_USE_EX_FUNCS
 	
-	static inline bool IsKeyPressed(int vKey, bool bRepeat = false)
+	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
 		if (bRepeat)
 			return key_state_ex[vKey];
@@ -57,6 +58,7 @@ public:
 	}
 
 #else
+
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
 		auto state = (GetAsyncKeyState(vKey) & 0x8000) != 0;
@@ -72,6 +74,7 @@ public:
 
 		return false;
 	}
+
 #endif
 
 	template <typename T>

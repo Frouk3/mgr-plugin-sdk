@@ -176,4 +176,19 @@ public:
     {
         return ((BOOL (__thiscall *)(cCameraGame *, cVec4&, const cVec4 &))(shared::base + 0x99FA80))(this, screenPos, worldPos);
     }
+
+    void safePositionTargetXz(const cVec4& pos, const cVec4& lookAt, const cVec4& offset, float fov)
+    {
+        ((void(__thiscall*)(cCameraGame*, const cVec4&, const cVec4&, const cVec4&, float))(shared::base + 0x9B8CB0))(this, pos, lookAt, offset, fov);
+    }
+    
+    void updateView()
+    {
+        ((void(__thiscall*)(cCameraGame*))(shared::base + 0x9B8090))(this);
+    }
+
+    void setSmoothness(float smoothness)
+    {
+        ((void(__thiscall*)(cCameraGame*, float))(shared::base + 0x9A8810))(this, smoothness);
+    }
 };

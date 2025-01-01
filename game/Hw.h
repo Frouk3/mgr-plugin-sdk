@@ -146,6 +146,16 @@ struct Hw::cVec2
         float length = this->length();
         return cVec2(x / length, y / length);
     }
+
+    bool operator==(const cVec2& rhs) const
+    {
+        return x == rhs.x && y == rhs.y;
+    }
+
+    bool operator!=(const cVec2& rhs) const
+    {
+        return !(*this == rhs);
+    }
 };
 
 struct Hw::cVec3
@@ -258,6 +268,16 @@ struct Hw::cVec3
         float length = this->length();
         return cVec3(x / length, y / length, z / length);
     }
+
+    bool operator==(const cVec3& rhs) const
+	{
+		return x == rhs.x && y == rhs.y && z == rhs.z;
+	}
+
+    bool operator!=(const cVec3& rhs) const
+	{
+		return !(*this == rhs);
+	}
 };
 
 struct Hw::cVec4
@@ -373,6 +393,16 @@ struct Hw::cVec4
         y /= rhs.y;
         z /= rhs.z;
         return *this;
+    }
+
+    bool operator==(const cVec4& rhs) const
+	{
+        return x == rhs.x && y == rhs.y && z == rhs.z; // && w == rhs.w; <-- I'm not sure about using w here
+	}
+
+    bool operator!=(const cVec4& rhs) const
+    {
+        return !(*this == rhs);
     }
 
     cVec4 Normalize()
