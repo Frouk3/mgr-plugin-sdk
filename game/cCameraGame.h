@@ -191,4 +191,9 @@ public:
     {
         ((void(__thiscall*)(cCameraGame*, float))(shared::base + 0x9A8810))(this, smoothness);
     }
+
+    void setCameraType(int type)
+    {
+        ((void(__thiscall*)(cCameraGame*, int))(shared::base + 0x9C1300))(this, type);
+    }
 };

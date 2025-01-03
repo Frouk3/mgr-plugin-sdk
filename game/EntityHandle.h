@@ -22,4 +22,14 @@ struct EntityHandle
         m_nHandle = newHandle;
         return *this;
     }
+
+    EntityHandle &operator=(const EntityHandle &other)
+    {
+        return *((EntityHandle *(__thiscall*)(EntityHandle*, const EntityHandle&))(shared::base + 0x67C940))(this, other);
+    }
+
+    void reset()
+    {
+        ((void(__thiscall*)(EntityHandle*))(shared::base + 0x67C950))(this);
+    }
 };

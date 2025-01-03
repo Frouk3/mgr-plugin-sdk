@@ -893,6 +893,7 @@ struct Hw::cFixedVector
     bool push_front(const T& element)
     {
         this->insert(this->m_pBegin[0], element);
+        return true;
     }
 
     void insert(T& insIndex, const T& element)
@@ -983,9 +984,9 @@ struct Hw::cFixedList
     Node* m_pBegin;
     size_t m_nCapacity;
     size_t m_nSize;
-    Node* m_pLast;
-    Node* m_pFirst;
     Node* m_pEnd;
+    Node* m_pFirst;
+    Node* m_pLast;
 
     class iterator
     {
@@ -1038,12 +1039,32 @@ struct Hw::cFixedList
 
     auto end() const
     {
-        return iterator(this->m_pEnd);
+        return iterator(this->m_pLast);
     }
 
     auto end()
     {
-        return iterator(this->m_pEnd);
+        return iterator(this->m_pLast);
+    }
+
+    auto rbegin()
+    {
+        return iterator(this->m_pLast);
+    }
+
+    auto rbegin() const
+    {
+        return iterator(this->m_pLast);
+    }
+
+    auto rend()
+    {
+        return iterator(this->m_pFirst);
+    }
+
+    auto rend() const
+    {
+        return iterator(this->m_pFirst);
     }
 
     void setupNodes()
@@ -1063,11 +1084,11 @@ struct Hw::cFixedList
 
         this->m_pBegin[this->m_nCapacity - 1].m_next = 0;
 
-        this->m_pEnd->m_prev = nullptr;
-        this->m_pEnd->m_next = nullptr;
+        this->m_pLast->m_prev = nullptr;
+        this->m_pLast->m_next = nullptr;
 
-        this->m_pFirst = this->m_pEnd;
-        this->m_pLast = this->m_pBegin;
+        this->m_pFirst = this->m_pLast;
+        this->m_pEnd = this->m_pBegin;
 
         this->m_nSize = 0;
     }
@@ -1082,7 +1103,7 @@ struct Hw::cFixedList
         {
             this->m_nCapacity = capacity;
             this->m_nSize = 0;
-            this->m_pEnd = &this->m_pBegin[capacity];
+            this->m_pLast = &this->m_pBegin[capacity];
 
             this->setupNodes();
 
@@ -1093,7 +1114,7 @@ struct Hw::cFixedList
 
     void insert(Node* &retNode, Node* const& where, const T & element)
     {
-        Node *m_pLast = this->m_pLast;
+        Node *m_pLast = this->m_pEnd;
         if (m_pLast == this->m_pHead)
         {
             m_pLast = this->m_pHead;
@@ -1106,7 +1127,7 @@ struct Hw::cFixedList
                 m_prev->m_next = m_next;
             if (m_next)
                 m_next->m_prev = m_prev;
-            this->m_pLast = m_next;
+            this->m_pEnd = m_next;
             ++this->m_nSize;
         }
         if (m_pLast == this->m_pHead)
@@ -1139,13 +1160,54 @@ struct Hw::cFixedList
     void push_back(const T& element)
     {
         Node* node;
-        this->insert(node, this->m_pEnd, element);
+        this->insert(node, this->m_pLast, element);
     }
 
     void push_front(const T& element)
     {
         Node* node;
-        this->insert(node, this->m_pBegin, element);
+        this->insert(node, this->m_pFirst, element);
+    }
+
+    void remove(const Node*& node)
+    {
+        Node* m_prev = node->m_prev;
+        Node* m_next = node->m_next;
+        if (m_prev)
+            m_prev->m_next = m_next;
+        if (m_next)
+            m_next->m_prev = m_prev;
+        if (this->m_pFirst == node)
+            this->m_pFirst = m_next;
+        --this->m_nSize;
+        Node* m_pLast = this->m_pLast;
+        Node* v10;
+        if (m_pLast)
+            v10 = m_pLast->m_prev;
+        else
+            v10 = nullptr;
+        node->m_prev = v10;
+        node->m_next = m_pLast;
+        if (v10)
+            v10->m_next = node;
+        if (m_pLast)
+            m_pLast->m_prev = node;
+        this->m_pLast = node;
+    }
+
+    void remove(const T& value)
+    {
+        Node *current = this->m_pFirst;
+        while (current)
+        {
+            if (current->m_value == value)
+            {
+                this->remove(current);
+                return;
+            }
+
+            current = current->m_next;
+        }
     }
 };
 

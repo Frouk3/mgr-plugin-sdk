@@ -66,29 +66,29 @@ struct EntitySystem
         return ((BOOL(__thiscall*)(EntitySystem*, Entity*))(shared::base + 0x67F3B0))(this, datsuEnt);
     }
 
-    void getEntitiesByObjId(eObjID id, lib::Array<Entity*>* pArray)
+    void getEntities(eObjID id, lib::Array<Entity*>* pArray)
     {
         ((void(__thiscall*)(EntitySystem*, eObjID, lib::Array<Entity*>*))(shared::base + 0x67F440))(this, id, pArray);
     }
 
-    void getEntitiesByObjId(eObjID id, lib::Array<EntityHandle>* pArray)
+    void getEntities(eObjID id, lib::Array<EntityHandle>* pArray)
     {
         ((void(__thiscall*)(EntitySystem*, eObjID, lib::Array<EntityHandle>*))(shared::base + 0x67F4A0))(this, id, pArray);
     }
 
-    void getEntitiesByObjId(eObjID objId, unsigned int a3, lib::Array<EntityHandle>* pArray)
+    void getEntities(eObjID objId, unsigned int hashNo, lib::Array<EntityHandle>* pArray)
     {
-        ((void(__thiscall*)(EntitySystem*, eObjID, unsigned int, lib::Array<EntityHandle> *))(shared::base + 0x67F520))(this, objId, a3, pArray);
+        ((void(__thiscall*)(EntitySystem*, eObjID, unsigned int, lib::Array<EntityHandle> *))(shared::base + 0x67F520))(this, objId, hashNo, pArray);
     }
 
-    int getAmountOfEntitesByObjId(eObjID objId)
+    size_t getAmountOfEntitesByObjId(eObjID objId)
     {
-        return ((int(__thiscall*)(EntitySystem*, eObjID))(shared::base + 0x67F5B0))(this, objId);
+        return ((size_t(__thiscall*)(EntitySystem*, eObjID))(shared::base + 0x67F5B0))(this, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const Hw::cVec4& position, const float distance)
+    Entity* getClosestEntity(eObjID objId, const cVec4& position, const float distance)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4&, const float))(shared::base + 0x67F660))(this, objId, position, distance);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const cVec4&, const float))(shared::base + 0x67F660))(this, objId, position, distance);
     }
 
     Entity* findEntity(const char* name, eObjID objId)
@@ -96,27 +96,27 @@ struct EntitySystem
         return ((Entity * (__thiscall*)(EntitySystem*, const char*, eObjID))(shared::base + 0x67F710))(this, name, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const Hw::cVec4& position)
+    Entity* getClosestEntity(eObjID objId, const cVec4& position)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4&))(shared::base + 0x67F7B0))(this, objId, position);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const cVec4&))(shared::base + 0x67F7B0))(this, objId, position);
     }
 
-    int getAmountOfEntities()
+    size_t getAmountOfEntities()
     {
-        return ((int(__thiscall*)(EntitySystem*))(shared::base + 0x67F860))(this);
+        return ((size_t(__thiscall*)(EntitySystem*))(shared::base + 0x67F860))(this);
     }
 
-    Entity* getEntityAtSlot(int slot)
+    Entity* getEntityAt(size_t at)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*))(shared::base + 0x67F870))(this);
+        return ((Entity * (__thiscall*)(EntitySystem*, size_t))(shared::base + 0x67F870))(this, at);
     }
 
-    void shutdownEntity(eObjID objId)
+    void destroyEntity(eObjID objId)
     {
         ((void(__thiscall*)(EntitySystem*, eObjID))(shared::base + 0x680AD0))(this, objId);
     }
 
-    BOOL shutdownDatsuEntity(Entity* datsuEntity)
+    BOOL destroyDatsuEntity(Entity* datsuEntity)
     {
         return ((BOOL(__thiscall*)(EntitySystem*, Entity*))(shared::base + 0x681410))(this, datsuEntity);
     }
