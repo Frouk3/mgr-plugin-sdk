@@ -4,6 +4,7 @@
 #include <hkpAllRayHitCollector.h>
 #include <Entity.h>
 #include "Hw.h"
+#include <shared.h>
 
 namespace BehaviorUtility
 {
@@ -15,7 +16,7 @@ namespace BehaviorUtility
         int field_C;
         cVec4 m_vecOut;
         cVec4 m_vecOutDirection;
-        Entity* m_pEntity;
+        int field_30;
         int field_34;
         int field_38;
         int field_3C;
@@ -44,8 +45,8 @@ namespace BehaviorUtility
     {
         cVec4 m_vecOrigin;
         cVec4 m_vecEndRayPoint;
-        int m_nRayId;
-        int field_24;
+        int m_nCollisionFilter;
+        int m_nIgnoreOjbect;
         float m_fRadius;
         int m_bMultiHit;
         int m_bLinearCast;

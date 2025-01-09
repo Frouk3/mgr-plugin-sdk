@@ -174,7 +174,12 @@ public:
     // screenPos.w - Distance between given worldPos position and camera position
     BOOL worldToScreen(cVec4 &screenPos, const cVec4 &worldPos)
     {
-        return ((BOOL (__thiscall *)(cCameraGame *, cVec4&, const cVec4 &))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+        return ((BOOL(__thiscall*)(cCameraGame*, cVec4&, const cVec4&))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+    }
+
+    void screenToWorld(cVec4& worldPos, const cVec4& screenPos)
+    {
+        ((void(__thiscall*)(cCameraGame*, cVec4&, const cVec4&))(shared::base + 0x99FAB0))(this, worldPos, screenPos);
     }
 
     void safePositionTargetXz(const cVec4& pos, const cVec4& lookAt, const cVec4& offset, float fov)

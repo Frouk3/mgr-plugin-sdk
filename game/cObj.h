@@ -29,7 +29,7 @@ public:
     int field_4C4;
     char field_4C8;
     char field_4C9;
-    int* m_pGroupId;
+    int* m_pCollisionFilter;
     int field_4D0;
     int field_4D4;
     int field_4D8;
@@ -75,9 +75,9 @@ public:
         CallVMTFunc<8, cObj*>(this);
     }
 
-    void setGroupId(int* idPtr)
+    void setCollisionFilter(int* pCollisionFilter)
     {
-        CallVMTFunc<15, cObj*, int*>(this, idPtr);
+        CallVMTFunc<15, cObj*, int*>(this, pCollisionFilter);
     }
 
     // vft end 

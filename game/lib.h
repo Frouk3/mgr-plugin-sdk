@@ -381,7 +381,7 @@ template <typename T, typename allocator>
 class lib::DynamicArray : public lib::Array<T>
 {
 public:
-    allocator m_Allocator;
+    allocator *m_Allocator;
 
     DynamicArray() : Array<T>()
     {
@@ -421,7 +421,7 @@ public:
         if (!this->m_pBegin)
             return; // Just to be safe
 
-        size_t memPos = ((char*)&position - (char*)this->m_pBegin) / sizeof(T);
+        size_t memPos = &position - this->m_pBegin;
 
         if (memPos <= this->m_nSize)
         {
@@ -438,7 +438,7 @@ public:
         }
     }
 
-    int getCapacity() // And why we return -1?
+    size_t getCapacity() // And why we return -1?
     {
         return -1;
     }

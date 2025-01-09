@@ -33,16 +33,28 @@ namespace Hw
     template <typename T>
     struct cFixedList;
 
+    template <typename tC, typename tHeapBinder>
+    struct cExpandableVector;
+
     struct cVec2;
     struct cVec3;
     struct cVec4;
     struct cQuaternion;
 
+    inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
+    {
+        return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
+    } 
+
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline LPDIRECTINPUT8& InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
     inline LPDIRECTINPUTDEVICE8W& InputDeviceW = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
-    inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C); 
+    inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C);
+    inline HWND &SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
+
+    inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
+    inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
 }
 
 struct Hw::cVec2
@@ -155,6 +167,11 @@ struct Hw::cVec2
     bool operator!=(const cVec2& rhs) const
     {
         return !(*this == rhs);
+    }
+
+    float dot(const cVec2& lhs) const 
+    {
+        return x * lhs.x + y * lhs.y;
     }
 };
 
@@ -278,6 +295,20 @@ struct Hw::cVec3
 	{
 		return !(*this == rhs);
 	}
+
+    float dot(const cVec3& lhs) const 
+    {
+        return x * lhs.x + y * lhs.y + z * lhs.z;
+    }
+
+    cVec3 cross(const cVec3& lhs) const 
+    {
+        return cVec3(
+            y * lhs.z - z * lhs.y,
+            z * lhs.x - x * lhs.z,
+            x * lhs.y - y * lhs.x
+        );
+    }
 };
 
 struct Hw::cVec4
@@ -404,11 +435,26 @@ struct Hw::cVec4
     {
         return !(*this == rhs);
     }
-
+    
     cVec4 Normalize()
     {
         Normalize(this, this);
         return *this;
+    }
+
+    float dot(const cVec4& lhs) const 
+    {
+        return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w;
+    }
+
+    cVec4 cross(const cVec4& lhs) const 
+    {
+        return cVec4(
+            y * lhs.z - z * lhs.y,
+            z * lhs.x - x * lhs.z,
+            x * lhs.y - y * lhs.x,
+            1.0f
+        );
     }
 };
 
@@ -568,7 +614,7 @@ public:
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
-    HANDLE* m_pHandle;
+    HANDLE m_HeapHandle;
     int field_44;
     int field_48;
     int m_nMemoryLimit;
@@ -579,6 +625,15 @@ public:
     {
         ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
     }
+
+    struct HeapBlock
+    {
+        HeapBlock* m_pPrevious;
+        HeapBlock* m_pNext;
+        void* m_pMemoryBlock;
+        size_t m_nMemorySize;
+        cHeapVariableBase* m_pAllocator;
+    };
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
@@ -589,6 +644,101 @@ public:
     {
         ((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this);
     }
+};
+
+class Hw::cHeapPhysicalBase : public Hw::cHeap
+{
+public:
+    HANDLE m_HeapHandle;
+    int filed_44;
+    int field_48;
+    int m_nMemoryLimit;
+    int m_nFreeMemory;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    void* m_pBlocks[256];
+
+    cHeapPhysicalBase()
+    {
+        ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
+    }
+
+    struct HeapBlock
+    {
+        HeapBlock* m_pPrevious;
+        HeapBlock* m_pNext;
+        size_t m_nTotalSize;
+        size_t m_nSize;
+        int field_10;
+        int field_14;
+        Hw::cHeapPhysicalBase* m_pAllocator;
+    };
+};
+
+class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
+{
+public:
+
+    cHeapPhysical()
+    {
+        ((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this);
+    }
+};
+
+class Hw::cHeapHook
+{
+public:
+
+    virtual ~cHeapHook() {};
+};
+
+class Hw::cHeapFixed : public Hw::cHeap
+{
+public:
+    HANDLE m_HeapHandle;
+    int field_44;
+    int m_nFixedSize;
+    int field_4C;
+    int m_nFixedReservedSize;
+    int m_nFixedAmount;
+    int field_58;
+    int field_5C;
+
+    void* AllocateMemory()
+    {
+        return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
+    }
+};
+
+class Hw::cHeapOneTime : public Hw::cHeap
+{
+public:
+
+
+};
+
+class Hw::cHeapGlobal : public Hw::cHeapVariableBase
+{
+public:
+
+    static inline cHeapGlobal* get()
+    {
+        return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
+    }
+
+    static inline Hw::cHeapGlobal& Instance = *(Hw::cHeapGlobal*)(shared::base + 0x1783AF0);
+};
+
+class Hw::cShareHeapPhysical : Hw::cHeapPhysical
+{
+public:
+
+
 };
 
 class Hw::cTexture
@@ -701,90 +851,6 @@ public:
 
 VALIDATE_SIZE(Hw::cCameraBase, 0x150);
 
-class Hw::cHeapPhysicalBase : public Hw::cHeap
-{
-public:
-    HANDLE* m_pHandle;
-    int filed_44;
-    int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
-    int field_54;
-    int field_58;
-    int field_5C;
-    int field_60;
-    int field_64;
-    int field_68;
-    int field_6C;
-    void *m_pBlocks[256];
-
-    cHeapPhysicalBase()
-    {
-        ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
-    }
-};
-
-class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
-{
-public:
-
-    cHeapPhysical()
-    {
-        ((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this);
-    }
-};
-
-class Hw::cHeapHook
-{
-public:
-
-    virtual ~cHeapHook() {};
-};
-
-class Hw::cHeapFixed : public Hw::cHeap
-{
-public:
-    HANDLE* m_pHandle;
-    int field_44;
-    int m_nFixedSize;
-    int field_4C;
-    int m_nFixedReservedSize;
-    int m_nFixedAmount;
-    int field_58;
-    int field_5C;
-
-    void* AllocateMemory()
-    {
-        return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
-    }
-};
-
-class Hw::cHeapOneTime : public Hw::cHeap
-{
-public:
-
-    
-};
-
-class Hw::cHeapGlobal : public Hw::cHeapVariableBase
-{
-public:
-
-    static inline cHeapGlobal* get()
-    {
-        return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
-    }
-
-    static inline Hw::cHeapGlobal& Instance = *(Hw::cHeapGlobal*)(shared::base + 0x1783AF0);
-};
-
-class Hw::cShareHeapPhysical : Hw::cHeapPhysical
-{
-public:
-
-    
-};
-
 class Hw::cPrimHeap
 {
 public:
@@ -793,7 +859,17 @@ public:
     int field_C;
     int field_10;
 
+    cPrimHeap()
+    {
+        ((void(__thiscall*)(Hw::cPrimHeap*))(shared::base + 0xB97EC0))(this);
+    }
+
     virtual ~cPrimHeap() {};
+
+    void* allocBuffer(size_t size, size_t reserved = 0x20)
+    {
+        return ((void* (__thiscall*)(cPrimHeap*, size_t, size_t))(shared::base + 0xB9B1F0))(this, size, reserved);
+    }
 };
 
 class Hw::cIndexBufferHeap
@@ -805,6 +881,11 @@ public:
     int field_10;
     int field_14;
     int field_18;
+
+    cIndexBufferHeap()
+    {
+        ((void(__thiscall*)(cIndexBufferHeap*))(shared::base + 0xB9C7F0))(this);
+    }
 
     virtual ~cIndexBufferHeap() {};
 };
@@ -832,11 +913,33 @@ class Hw::cOtWork
 public:
 
     virtual ~cOtWork() {};
+
+    void draw()
+    {
+        CallVMTFunc<1, Hw::cOtWork*>(this);
+    }
 };
 
 inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
 {
     return ((void*(__cdecl *)(size_t, Hw::cHeap *))(shared::base + 0x9D3500))(s, allocator);
+}
+
+inline void __cdecl operator delete(void* block, Hw::cHeap* allocator) // to separate the delete operator
+{
+    return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
+}
+
+// Usage after heap startup
+inline void* __cdecl memAlloc(size_t s)
+{
+    return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s);
+}
+
+// Usage after heap startup
+inline void __cdecl memDealloc(void* block)
+{
+    ((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block);
 }
 
 template <typename T>
@@ -1208,6 +1311,257 @@ struct Hw::cFixedList
 
             current = current->m_next;
         }
+    }
+};
+
+template <typename tC, typename tHeapBinder>
+struct Hw::cExpandableVector
+{
+    int field_0;
+    tC *m_pBegin;
+    size_t m_nCapacity;
+    size_t m_nSize;
+    BOOL m_bArrayInitialized;
+    tHeapBinder* m_Allocator; // Why use the allocator member?? It cannot bind directly to the declared heap, so it's the solver
+
+    cExpandableVector()
+    {
+        field_0 = 0;
+        m_pBegin = nullptr;
+        m_nCapacity = 0;
+        m_nSize = 0;
+        m_bArrayInitialized = FALSE;
+    };
+
+    cExpandableVector(tHeapBinder* allocator) : m_Allocator(allocator) 
+    {
+        field_0 = 0;
+        m_pBegin = nullptr;
+        m_nCapacity = 0;
+        m_nSize = 0;
+        m_bArrayInitialized = FALSE;
+    }
+
+    ~cExpandableVector()
+    {
+        operator delete(m_pBegin, m_Allocator);
+        m_pBegin = nullptr;
+
+        m_nCapacity = 0;
+        m_nSize = 0;
+        m_bArrayInitialized = FALSE;
+    }
+
+    BOOL create(size_t size)
+    {
+        if (m_pBegin)
+            return FALSE;
+
+        m_pBegin = (tC*)m_Allocator->AllocateMemory(sizeof(tC) * size, 32, 0, 0);
+        if (m_pBegin)
+        {
+            m_nSize = 0;
+            m_nCapacity = size;
+            m_bArrayInitialized = TRUE;
+
+            return TRUE;
+        }
+
+        ePrintf("Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_TargetAlloc, sizeof(tC) * size, m_Allocator->getFreeMemory());
+        return FALSE;
+    }
+
+    void insert(tC& where, const tC& element)
+    {
+        if (!m_pBegin)
+            return;
+
+        size_t index = m_pBegin - &where;
+
+        if (index > m_nSize)
+            return;
+
+        if (m_nSize >= m_nCapacity)
+        {
+            if (!m_nCapacity)
+                create(32u);
+            else
+                reallocate(m_nCapacity * 2);
+        }
+
+        for (size_t i = index; i < m_nSize; i++)
+            m_pBegin[i] = m_pBegin[i - 1];
+
+        m_pBegin[index] = element;
+        ++m_nSize;
+    }
+
+    void push_back(const tC& element)
+    {
+        if (!m_pBegin)
+            return;
+
+        if (m_nSize >= m_nCapacity)
+        {
+            if (!m_nCapacity)
+                create(32u);
+            else
+                reallocate(m_nCapacity * 2);
+        }
+
+        m_pBegin[m_nSize++] = element;
+    }
+
+    void push_front(const tC& element)
+    {
+        insert(m_pBegin[0], element);
+    }
+
+    void remove(tC& element)
+    {
+        if (!m_pBegin)
+            return;
+
+        if (&element - m_pBegin >= m_nSize)
+            return;
+
+        size_t index = &element - m_pBegin;
+
+        for (auto elem = &m_pBegin[index]; elem != &m_pBegin[m_nSize - 1]; elem++)
+            *elem = elem[1];
+
+        --m_nSize;
+    }
+
+    void clear()
+    {
+        if (m_pBegin)
+        {
+            for (size_t i = m_nSize - 1; i > 0; i--)
+                m_pBegin[i].~tC();
+
+            m_nSize = 0;
+        }
+    }
+
+    auto &get(size_t index)
+    {
+        return m_pBegin[index];
+    }
+
+    auto &get(size_t index) const
+    {
+        return m_pBegin[index];
+    }
+
+    auto &operator[](size_t index)
+    {
+        return get(index);
+    }
+
+    auto &operator[](size_t index) const
+    {
+        return get(index);
+    }
+
+    auto begin()
+    {
+        return m_pBegin;
+    }
+
+    auto begin() const
+    {
+        return m_pBegin;
+    }
+
+    auto end()
+    {
+        return &m_pBegin[m_nSize];
+    }
+
+    auto end() const
+    {
+        return &m_pBegin[m_nSize];
+    }
+
+    auto rbegin()
+    {
+        return &m_pBegin[m_nSize];
+    }
+
+    auto rbegin() const
+    {
+        return &m_pBegin[m_nSize];
+    }
+
+    auto rend()
+    {
+        return m_pBegin;
+    }
+
+    auto rend() const
+    {
+        return m_pBegin;
+    }
+
+    BOOL reallocate(size_t newSize)
+    {
+        if (m_nCapacity == newSize)
+            return TRUE;
+
+        tC* newArray = (tC*)m_Allocator->AllocateMemory(sizeof(tC) * newSize, 32, 0, 0);
+
+        if (newArray)
+        {
+            if (m_nSize >= newSize)
+            {
+                if (m_nSize > 0)
+                {
+                    for (size_t elementIndex = 0; elementIndex < m_nSize; elementIndex++)
+                        newArray[elementIndex] = m_pBegin[elementIndex];
+                }
+                m_nSize = newSize;
+            }
+            else
+            {
+                for (size_t elementIndex = 0; elementIndex < m_nSize; elementIndex++)
+                    newArray[elementIndex] = m_pBegin[elementIndex];
+            }
+            if (m_bArrayInitialized)
+            {
+                operator delete(m_pBegin, m_Allocator);
+                m_bArrayInitialized = FALSE;
+            }
+
+            m_pBegin = newArray;
+            m_nCapacity = newSize;
+            m_bArrayInitialized = TRUE;
+
+            return TRUE;
+        }
+        else
+        {
+            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+            return FALSE;
+        }
+
+        return FALSE;
+    }
+
+    BOOL resize(size_t size)
+    {
+        if (size <= m_nCapacity || reallocate(size))
+        {
+            if (size != m_nSize)
+                m_nSize = size;
+            return TRUE;
+        }
+        else
+        {
+            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+            return FALSE;
+        }
+        return FALSE;
     }
 };
 

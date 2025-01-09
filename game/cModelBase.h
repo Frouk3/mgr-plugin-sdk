@@ -181,12 +181,12 @@ public:
     {
         return ((cParts *(__thiscall *)(cModelBase *, unsigned int))(shared::base + 0x612210))(this, bone);
     }
-    // get rotation according where model is looking based on position?
-    float getRotationYaw(Hw::cVec4 *position)
+
+    float calculateHeadingToTarget(const cVec4& target)
     {
-        return ((float(__thiscall*)(cModelBase*, Hw::cVec4*))(shared::base + 0x68EC30))(this, position);
+        return ((float(__thiscall*)(cModelBase*, const cVec4&))(shared::base + 0x68EC30))(this, target);
     }
-    // you get the idea
+
     void updateBones()
     {
         ((void(__thiscall*)(cModelBase*))(shared::base + 0x617A40))(this);

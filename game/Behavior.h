@@ -1172,9 +1172,9 @@ public:
         CallVMTFunc<21, Behavior*>(this);
     }
 
-    Hw::cVec4 *getTransPos()
+    Hw::cVec4 &getTransPos()
     {
-        return ReturnCallVMTFunc<Hw::cVec4 *, 26, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4 &, 26, Behavior *>(this);
     }
 
     void setTransPos(const Hw::cVec4& transPos)
@@ -1202,9 +1202,9 @@ public:
         CallVMTFunc<31, Behavior *, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation);
     }
 
-    Hw::cVec4* getRotation()
+    Hw::cVec4& getRotation()
     {
-        return ReturnCallVMTFunc<Hw::cVec4*, 33, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4&, 33, Behavior *>(this);
     }
 
     void setRotation(const Hw::cVec4& rotation)
@@ -1212,9 +1212,9 @@ public:
         CallVMTFunc<34, Behavior *, const Hw::cVec4&>(this, rotation);
     }
 
-    Hw::cVec4* getSize()
+    Hw::cVec4& getSize()
     {
-        return ReturnCallVMTFunc<Hw::cVec4*, 35, Behavior *>(this);
+        return ReturnCallVMTFunc<Hw::cVec4&, 35, Behavior *>(this);
     }
 
     void setSize(const Hw::cVec4& size)
@@ -1374,6 +1374,11 @@ public:
     int requestAnimationByName(const char* anim, int a3, float fInterpolation, int a5, unsigned int nFlags, float fStartFrame, float a8)
     {
         return ((int(__thiscall*)(Behavior*, const char*, int, float, int, unsigned int, float, float))(shared::base + 0x69E290))(this, anim, a3, fInterpolation, a5, nFlags, fStartFrame, a8);
+    }
+
+    int getCollisionFilter()
+    {
+        return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
     }
 
     static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x17E9C20);
