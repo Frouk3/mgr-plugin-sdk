@@ -15,7 +15,7 @@ IDEs:
 When using Visual Studio Code you can't compile your project into .asi mod<br/>
 
 Firstly, after downloading the ZIP you need to unpack it in the folder where the Plugin-SDK will be located(Create new folder if necessary)<br/>
-After unpacking, make sure to run "SetAsEnvironmentVariable.bat"<br/>
+After unpacking, make sure to run "install.bat"<br/>
 And after that, you should be successful to run the [framework]((https://github.com/user-attachments/files/18361389/MGRPluginFramework.zip))<br/>
 
 ## Making a mod
