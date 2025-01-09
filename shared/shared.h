@@ -146,3 +146,19 @@ inline void Stdcall(Args... args)
 {
 	((void (__stdcall *)(Args...))address)(args...);
 }
+
+#define NO_DEFAULT_CONSTRUCTION(className) \
+    public: \
+    className() = default;\
+    className(className const &) = default;\
+    className(className &&) = default;\
+    ~className() = default;\
+    className &operator=(className &&) = default;
+
+#define NO_DEFAULT_CONSTRUCTION_VIRTUALBASE(className) \
+    public: \
+    className() = default;\
+    className(className const &) = default;\
+    className(className &&) = default;\
+    virtual ~className() = default;\
+    className &operator=(className &&) = default;
