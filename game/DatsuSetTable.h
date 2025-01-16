@@ -4,7 +4,7 @@
 
 class DatsuSetTable
 {
-private:
+public:
 
-	virtual void field_0() {};
+	virtual void dummyVM() {};
 };

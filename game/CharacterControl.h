@@ -1,19 +1,20 @@
 #pragma once
-#include "CharacterProxy.h"
-#include "CharacterProxyListener.h"
-#include "lib.h"
-#include "Hw.h"
+
+#include <CharacterProxyListener.h>
+#include <lib.h>
+#include <Hw.h>
 #include <hkpAllCdPointCollector.h>
+#include <CharacterProxy.h>
 
 class Behavior;
 
 struct CharacterControl
 {
-    CharacterProxy* m_pCharacterProxy;
-    CharacterProxyListener* m_pCharacterProxyListener;
+    CharacterProxy* m_CharacterProxy;
+    CharacterProxyListener* m_CharacterProxyListener;
     int field_8;
     int field_C;
-    int m_nOnGroundState;
+    int m_OnGroundState;
     int field_14;
     int field_18;
     int field_1C;
@@ -29,7 +30,7 @@ struct CharacterControl
     int field_44;
     int field_48;
     int field_4C;
-    lib::StaticArray<CharacterControl *, 8> m_pAddonCharacters;
+    lib::StaticArray<CharacterControl *, 8> m_AddonCharacters;
     int field_80;
     int field_84;
     int field_88;
@@ -43,7 +44,7 @@ struct CharacterControl
     int field_D8;
     int field_DC;
     cVec4 field_E0;
-    Behavior* m_pOwner;
+    Behavior* m_Owner;
     float field_F4;
     float m_fHeight;
     float m_fRadius;
@@ -58,7 +59,7 @@ struct CharacterControl
     int field_120;
     CharacterControl* field_124;
     int field_128;
-    hkpAllCdPointCollector* m_pCdPointCollector;
+    hkpAllCdPointCollector* m_CdPointCollector;
     int field_130;
     int field_134;
     int field_138;

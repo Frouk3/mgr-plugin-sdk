@@ -46,13 +46,13 @@ public:
     class ExplosionSlot : public Slot
     {
     public:
-        BehaviorDebrisBase* m_pOwner;
-    } m_pExplosionSlot;
+        BehaviorDebrisBase* m_Owner;
+    } m_ExplosionSlot;
     class DiscreateSlot : public Slot
     {
     public:
-        BehaviorDebrisBase *m_pOwner;
-    } m_pDiscreateSlot;
+        BehaviorDebrisBase *m_Owner;
+    } m_DiscreateSlot;
     int field_90C;
     int field_910;
     int field_914;

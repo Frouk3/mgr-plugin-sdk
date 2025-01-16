@@ -4,6 +4,7 @@
 namespace Trigger
 {
     class cCondition;
+    class cAction;
 
     inline struct gameFlags {
         unsigned int GAME_QTE_UI_DISABLE : 1;
@@ -233,7 +234,7 @@ namespace Trigger
 class Trigger::cCondition
 {
 public:
-    int field_4;
+    void* m_parameters;
     int field_8;
     int field_C;
 

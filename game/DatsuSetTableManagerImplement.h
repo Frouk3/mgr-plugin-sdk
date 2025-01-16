@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DatsuSetTableManager.h"
-#include "lib.h"
+#include <DatsuSetTableManager.h>
+#include <lib.h>
 
 class DatsuSetTableManagerImplement : public DatsuSetTableManager
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "BattleParameter.h"
+#include <BattleParameter.h>
 
 class BattleParameterImplement : public BattleParameter
 {
 public:
-  int field_4;
-  int field_8;
+    Hw::cHeapVariable *m_Allocator;
+    int field_8;
 };

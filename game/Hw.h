@@ -1,10 +1,11 @@
 #pragma once
+#define DIRECTINPUT_VERSION 0x800u
 #include <Windows.h>
 #include <d3dx9.h>
 #include <dinput.h>
-#include "shared.h"
+#include <shared.h>
 
-extern void(__cdecl* ePrintf)(const char* fmt, ...);
+extern void PrintfLog(const char* fmt, ...);
 
 namespace Hw
 {
@@ -12,6 +13,7 @@ namespace Hw
     class cHeapVariableBase;
     class cHeapVariable;
     class cTexture;
+    class cTextureInstance;
     class CameraProj;
     class cCameraBase;
     class cHeapPhysical;
@@ -26,6 +28,8 @@ namespace Hw
     class cRenderTargetInfo;
     class cOtWork;
     class CriticalSection;
+
+    class cVertexFormat;
 
     template <typename T>
     struct cFixedVector;
@@ -44,6 +48,31 @@ namespace Hw
     inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
     {
         return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
+    }
+
+    namespace TextureManager
+    {
+        struct Texture
+        {
+            LPDIRECT3DTEXTURE9 m_pTexture;
+            LPDIRECT3DTEXTURE9 *m_ppTexture;
+            int field_8;
+            int m_nWidth;
+            int m_nHeight;
+            int field_14;
+            D3DFORMAT m_Format;
+            D3DPOOL m_Pool;
+            int field_20;
+            int field_24;
+        };
+
+        inline void removeTexture(Texture& texture)
+        {
+            ((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture);
+        }
+
+        inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
+        inline CriticalSection &TextureCriticalSection = *(CriticalSection*)(shared::base + 0x1B20740);
     } 
 
     inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
@@ -469,8 +498,6 @@ struct Hw::cQuaternion
     cQuaternion() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
 };
 
-VALIDATE_SIZE(Hw::cVec4, 0x10);
-
 typedef Hw::cVec2 cVec2;
 typedef Hw::cVec3 cVec3;
 typedef Hw::cVec4 cVec4;
@@ -614,18 +641,6 @@ public:
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
-    HANDLE m_HeapHandle;
-    int field_44;
-    int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
-    int m_nUsedMemory;
-
-    cHeapVariableBase()
-    {
-        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
-    }
-
     struct HeapBlock
     {
         HeapBlock* m_pPrevious;
@@ -634,6 +649,18 @@ public:
         size_t m_nMemorySize;
         cHeapVariableBase* m_pAllocator;
     };
+
+    HANDLE m_HeapHandle;
+    HeapBlock* m_pFirstBlock;
+    HeapBlock* m_pLastBlock;
+    size_t m_nMemoryLimit;
+    size_t m_nFreeMemory;
+    size_t m_nUsedMemory;
+
+    cHeapVariableBase()
+    {
+        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
+    }
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
@@ -652,8 +679,8 @@ public:
     HANDLE m_HeapHandle;
     int filed_44;
     int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
+    size_t m_nMemoryLimit;
+    size_t m_nFreeMemory;
     int field_54;
     int field_58;
     int field_5C;
@@ -702,16 +729,26 @@ class Hw::cHeapFixed : public Hw::cHeap
 public:
     HANDLE m_HeapHandle;
     int field_44;
-    int m_nFixedSize;
+    size_t m_nFixedSize;
     int field_4C;
-    int m_nFixedReservedSize;
-    int m_nFixedAmount;
+    size_t m_nFixedReservedSize;
+    size_t m_nFixedAmount;
     int field_58;
     int field_5C;
+
+    cHeapFixed()
+    {
+        ((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this);
+    }
 
     void* AllocateMemory()
     {
         return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
+    }
+
+    BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name)
+    {
+        return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name);
     }
 };
 
@@ -726,9 +763,35 @@ class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
+    cHeapGlobal()
+    {
+        ((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this);
+    }
+
     static inline cHeapGlobal* get()
     {
         return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
+    }
+
+    BOOL create(size_t size, const char *target) // Got optimised away
+    {
+        if (hasHandle())
+            return FALSE;
+
+        if (!this->m_CriticalSection.init())
+            return FALSE;
+
+        this->m_HeapHandle = HeapCreate(1u, 0u, 0u);
+
+        if (!this->m_HeapHandle)
+            return FALSE;
+
+        this->m_nMemoryLimit = size;
+        this->m_nFreeMemory = size;
+        this->m_TargetAlloc = target;
+        this->m_pFirstBlock = nullptr;
+        this->m_pLastBlock = nullptr;
+        return TRUE;
     }
 
     static inline Hw::cHeapGlobal& Instance = *(Hw::cHeapGlobal*)(shared::base + 0x1783AF0);
@@ -744,14 +807,32 @@ public:
 class Hw::cTexture
 {
 public:
-    int field_4;
+    void *m_Texture;
+    int m_bInitialized;
+    int field_C;
+    int field_10;
+    int field_14;
+    void *m_TextureAttributes;
+
+    virtual ~cTexture() {};
+};
+
+class Hw::cTextureInstance
+{
+public:
+    IDirect3DTexture9 *m_Texture;
     int field_8;
     int field_C;
     int field_10;
     int field_14;
     int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
 
-    virtual ~cTexture() {};
+    virtual ~cTextureInstance() {};
 };
 
 class Hw::CameraProj
@@ -797,7 +878,9 @@ public:
 
         cVec4 calculateViewOffset()
         {
-            ((cVec4(__thiscall*)(CameraMatrix*))(shared::base + 0x9B9090))(this);
+            cVec4 result;
+            result = *((cVec4*(__thiscall*)(CameraMatrix*, cVec4*))(shared::base + 0x9B9090))(this, &result);
+            return result;
         }
     };
 
@@ -918,6 +1001,16 @@ public:
     {
         CallVMTFunc<1, Hw::cOtWork*>(this);
     }
+};
+
+class Hw::cVertexFormat
+{
+public:
+
+    IDirect3DVertexDeclaration9 *m_VertexDeclaration;
+    int m_UsageFlags;
+
+    virtual void dummyVM() {};
 };
 
 inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
@@ -1100,28 +1193,28 @@ struct Hw::cFixedList
 
         iterator& operator++()
         {
-            if (this->m_current)
-                this->m_current = this->m_current->m_next;
+            if (m_current)
+                m_current = m_current->m_next;
 
             return *this;
         }
 
         iterator& operator--()
         {
-            if (this->m_current)
-                this->m_current = this->m_current->m_prev;
+            if (m_current)
+                m_current = m_current->m_prev;
 
             return *this;
         }
 
         T& operator*() const
         {
-            return this->m_current->m_value;
+            return m_current->m_value;
         }
 
         bool operator==(const iterator& other) const
         {
-            return this->m_current == other.m_current;
+            return m_current == other.m_current;
         }
 
         bool operator!=(const iterator& other) const
@@ -1235,7 +1328,7 @@ struct Hw::cFixedList
         }
         if (m_pLast == this->m_pHead)
         {
-            ePrintf("cFixedList<tC>::insert  list max over!");
+            PrintfLog("cFixedList<tC>::insert  list max over!");
             retNode = this->m_pHead;
         }
         else
@@ -1541,7 +1634,7 @@ struct Hw::cExpandableVector
         }
         else
         {
-            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+            PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
             return FALSE;
         }
 
@@ -1558,7 +1651,7 @@ struct Hw::cExpandableVector
         }
         else
         {
-            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+            PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
             return FALSE;
         }
         return FALSE;

@@ -9,7 +9,7 @@
 class BattleCollisionManagerImplement : public BattleCollisionManager
 {
 public:
-    Hw::cHeapVariable *m_pHeapVariable;
+    Hw::cHeapVariable *m_Allocator;
     lib::StaticArray<Collision *, 128> *field_8;
     lib::StaticArray<Collision *, 128> *field_C;
     lib::StaticArray<Collision *, 1024> *field_10;
@@ -25,8 +25,8 @@ public:
     struct MainUpdateForPauseSlot : Slot
     {
 
-    } *m_pMainUpdateForPauseSlot;
+    } *m_MainUpdateForPauseSlot;
     int field_3C;
 
-    static inline BattleCollisionManagerImplement *&pInstance = *(BattleCollisionManagerImplement**)(shared::base + 0x19C52EC);
+    static inline BattleCollisionManagerImplement *&ms_Instance = *(BattleCollisionManagerImplement**)(shared::base + 0x19C52EC);
 };

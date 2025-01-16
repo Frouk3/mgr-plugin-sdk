@@ -29,7 +29,7 @@ public:
         ((void (__thiscall *)(BehaviorDatabaseImplement *))(shared::base + 0x6C18F0))(this);
     }
 
-    static inline BehaviorDatabaseImplement *&pInstance = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
+    static inline BehaviorDatabaseImplement *&ms_Instance = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
     
     static inline BehaviorDatabaseImplement *get()
     {

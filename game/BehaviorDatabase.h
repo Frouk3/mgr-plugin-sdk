@@ -4,5 +4,5 @@ class BehaviorDatabase
 {
 public:
 
-    virtual ~BehaviorDatabase() {}; 
+    virtual void dummyVM() {}; 
 };

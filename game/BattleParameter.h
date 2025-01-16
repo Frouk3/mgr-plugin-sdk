@@ -4,5 +4,5 @@ class BattleParameter
 {
 public:
 
-  virtual ~BattleParameter() {};
+    virtual ~BattleParameter() {};
 };

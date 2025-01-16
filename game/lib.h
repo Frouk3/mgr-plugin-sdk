@@ -9,10 +9,18 @@ extern void FreeMemory(void* block, int a2);
 namespace lib
 {
     template <typename T> class Array;
-    template <typename T, int size> class StaticArray;
+    template <typename T, unsigned int size> class StaticArray;
     template <typename T> class AllocatedArray;
     template <typename T, class allocator> class DynamicArray;
-    struct Noncopyable {}; // undefined
+
+    struct Noncopyable
+    {
+        Noncopyable() = default;
+        ~Noncopyable() = default;
+
+        Noncopyable(const Noncopyable&) = delete;
+        Noncopyable& operator=(const Noncopyable&) = delete;
+    };
 
     namespace detail
     {
@@ -45,7 +53,7 @@ namespace lib
                 m_AllocatorProxy = nullptr;
 			}
 
-            SharedCoreImpl(allocatorProxy allocatorProxy, deallocator dealloc, allocator alloc) : SharedCoreImplBase(), m_AllocatorProxy(*allocatorProxy), m_Deallocator(dealloc), m_Allocator(alloc)
+            SharedCoreImpl(allocatorProxy *allocatorProxy, deallocator dealloc, allocator alloc) : SharedCoreImplBase(), m_AllocatorProxy(allocatorProxy), m_Deallocator(dealloc), m_Allocator(alloc)
             {
                 
             }
@@ -133,7 +141,7 @@ namespace lib
 
 			}
 
-            bool create(allocator pAllocator)
+            bool create(allocator* pAllocator)
             {
                 return ((bool(__thiscall *)(AllocatorHelper<allocator>*, allocator))(shared::base + 0x20E0))(this, pAllocator); // A bit too complex to recreate
             }
@@ -173,69 +181,63 @@ public:
 
     Array()
     {
-        this->m_pBegin = nullptr;
-        this->m_nSize = 0;
-        this->m_nCapacity = 0;
+        m_pBegin = nullptr;
+        m_nSize = 0;
+        m_nCapacity = 0;
+    }
+
+    Array(const Array<T>& other)
+    {
+        m_nSize = other.m_nSize;
+        m_nCapacity = other.m_nCapacity;
     }
 
     virtual ~Array() 
     {
-        if (this->m_pBegin)
-            this->m_nSize = 0;
-        this->m_pBegin = nullptr;
-        this->m_nCapacity = 0;
+        if (m_pBegin)
+            m_nSize = 0;
+        m_pBegin = nullptr;
+        m_nCapacity = 0;
     };
-    /// @brief How much array can hold
-    /// @return Number of maximum objects array can hold
+
     virtual unsigned int getCapacity() 
     {
-        return this->m_nCapacity;
+        return m_nCapacity;
     };
-    /// @brief Pushes object into the back of array, after the last object
-    /// @param[in] pObject Object that will be pushed
-    /// @return false on fail, true on success
+
     virtual bool push_back(const T &element) 
     {
-        if (!this->m_pBegin)
+        if (!m_pBegin)
             return false;
 
-        if (this->m_nSize >= this->m_nCapacity)
+        if (m_nSize >= m_nCapacity)
             return false;
 
-        this->m_pBegin[this->m_nSize++] = element;
+        m_pBegin[m_nSize++] = element;
         return true;
     };
-    /// @brief Inserts element after position
-    /// @param[in] position Where to insert 
-    /// @param[in] element Element that will be inserted
+
     virtual void insert(T &position, const T &element)
     {
-        if (this->m_nSize >= this->m_nCapacity)
+        if (m_nSize >= m_nCapacity)
             return;
 
-        size_t insertIndex = ((char*)&position - (char*)&this->m_pBegin) / sizeof(T);
-        if (insertIndex > this->m_nSize)
+        size_t insertIndex = &position - m_pBegin;
+        if (insertIndex > m_nSize)
             return;
 
-        for (auto i = this->m_nSize; i > insertIndex; --i)
-            this->m_pBegin[i] = this->m_pBegin[i - 1];
+        for (size_t i = m_nSize; i > insertIndex; --i)
+            m_pBegin[i] = m_pBegin[i - 1];
 
-        this->m_pBegin[insertIndex] = element;
-        ++this->m_nSize;
+        m_pBegin[insertIndex] = element;
+        ++m_nSize;
     };
 
-    bool push_front(const T& element)
+    virtual void swap(lib::Array<T> &array) 
     {
-        insert(this->m_pBegin[0], element);
-        return true;
-    }
-    /// @brief Swaps members with another array
-    /// @param[in, out] array To switch with 
-    virtual void swap(lib::Array<T> *array) 
-    {
-        std::swap(this->m_pBegin, array->m_pBegin);
-        std::swap(this->m_nCapacity, array->m_nCapacity);
-        std::swap(this->m_nSize, array->m_nSize);
+        std::swap(m_pBegin, array.m_pBegin);
+        std::swap(m_nCapacity, array.m_nCapacity);
+        std::swap(m_nSize, array.m_nSize);
     };
 
     virtual void reallocate(size_t newSize) 
@@ -243,71 +245,146 @@ public:
 
     };
 
+    bool push_front(const T& element)
+    {
+        insert(m_pBegin[0], element);
+        return true;
+    }
+
     auto begin()
     {
-        return &this->m_pBegin[0];
+        return m_pBegin;
     }
     auto begin() const
     {
-        return &this->m_pBegin[0];
+        return m_pBegin;
     }
 
     auto end()
     {
-        return &this->m_pBegin[this->m_nSize];
+        return m_pBegin + m_nSize;
     }
     auto end() const
     {
-        return &this->m_pBegin[this->m_nSize];
+        return m_pBegin + m_nSize;
+    }
+    
+    auto rbegin()
+    {
+        return m_pBegin + m_nSize - 1;
+    }
+    auto rbegin() const
+    {
+        return m_pBegin + m_nSize - 1;
+    }
+
+    auto rend()
+    {
+        return m_pBegin;
+    }
+    auto rend() const
+    {
+        return m_pBegin;
     }
 
     void remove(T& element)
     {
-        if (!this->m_pBegin)
+        if (!m_pBegin)
             return;
 
-        if (&element - this->m_pBegin >= this->m_nSize) // if element is out of our array, do not proceed further
+        if ((unsigned int)(&element - m_pBegin) >= m_nSize)
             return;
-        
-        for (auto i = &element; i != &this->m_pBegin[this->m_nSize - 1]; ++i)
-            *i = i[1]; // remove element by inserting elements that are in front of it
-        
-        --this->m_nSize; // compensate the loss
+
+        for (T* elem = &element; elem != end() - 1; elem++)
+            *elem = elem[1];
+
+        --m_nSize;
     }
 
-    auto& get(size_t at)
+    void move(T& where, T& element)
     {
-        return this->m_pBegin[at];
+        size_t elementFrom = &element - m_pBegin;
+        size_t elementTo = &where - m_pBegin;
+        if (elementFrom >= m_nSize || elementTo >= m_nSize)
+            return;
+
+        T temp = element;
+        if (elementFrom < elementTo)
+        {
+            for (size_t i = elementFrom; i < elementTo; ++i)
+                m_pBegin[i] = m_pBegin[i + 1];
+        }
+        else if (elementFrom > elementTo)
+        {
+            for (size_t i = elementFrom; i > elementTo; --i)
+                m_pBegin[i] = m_pBegin[i - 1];
+        }
+        m_pBegin[elementTo] = temp;
     }
 
-    auto& operator [](size_t index)
+    void swap(T& lhs, T& rhs)
     {
-        return this->get(index);
+        std::swap(lhs, rhs);
     }
 
-    auto& operator [](size_t index) const
+    T& get(size_t at)
     {
-        return this->get(index);
+        return m_pBegin[at];
+    }
+
+    T& operator [](size_t index)
+    {
+        return get(index);
+    }
+
+    T& operator [](size_t index) const
+    {
+        return get(index);
     }
 
     void clear()
     {
-        if (this->m_pBegin)
-            this->m_nSize = 0;
+        if (m_pBegin)
+            m_nSize = 0;
+    }
+
+    T& front()
+    {
+        return m_pBegin[0];
+    }
+
+    T& back()
+    {
+        return m_pBegin + m_nSize - 1;
     }
 
     void pop_front()
     {
-        this->remove(*this->m_pBegin);
+        remove(front());
     }
 
     void pop_back()
     {
-        this->remove(this->m_pBegin[this->m_nSize - 1]);
+        remove(back());
+    }
+
+    bool empty()
+    {
+        return m_nSize == 0;
+    }
+
+    unsigned int size()
+    {
+        return m_nSize;
+    }
+
+    Array<T> copy()
+    {
+        return Array<T>(*this);
     }
 };
 
-template <typename T, int Size>
+template <typename T, unsigned int Size>
 class lib::StaticArray : public lib::Array<T>
 {
 public:
@@ -317,6 +394,19 @@ public:
     {
         this->m_pBegin = this->m_Array;
         this->m_nCapacity = Size;
+    }
+
+    StaticArray(const StaticArray<T, Size>& other) : Array<T>(other)
+    {
+        this->m_pBegin = m_Array;
+        this->m_nCapacity = Size;
+
+        memcpy(m_Array, other.m_Array, sizeof(T) * Size);
+    }
+
+    StaticArray<T, Size> copy()
+    {
+        return StaticArray<T, Size>(*this);
     }
 };
 
@@ -329,6 +419,17 @@ public:
     AllocatedArray() : Array<T>()
     {
         
+    }
+
+    ~AllocatedArray()
+    {
+        cleanup();
+    }
+
+    AllocatedArray(const AllocatedArray<T> &other) : Array<T>(other)
+    {
+        if (create(other.m_nCapacity, other.m_Helper.m_Allocator->m_Allocator))
+            memcpy(this->m_pBegin, other.m_pBegin, sizeof(T) * other.m_nCapacity);
     }
 
     template <typename Allocator>
@@ -375,8 +476,15 @@ public:
             this->m_Helper.m_Core = nullptr;
         }
     }
+
+    AllocatedArray<T> copy()
+    {
+        return AllocatedArray<T>(*this);
+    }
 };
 
+/// TODO: Fix allocator binding
+/// EDIT: It already contains the allocator member in the game, so it's all good
 template <typename T, typename allocator>
 class lib::DynamicArray : public lib::Array<T>
 {
@@ -388,7 +496,20 @@ public:
 
     }
 
+    ~DynamicArray()
+    {
+        operator delete(this->m_pBegin, (Hw::cHeap*)m_Allocator);
+    }
+
     DynamicArray(allocator* allocator) : Array<T>(), m_Allocator(allocator) {};
+
+    DynamicArray(const DynamicArray<T, allocator>& other) : Array<T>(other)
+    {
+        this->m_Allocator = other.m_Allocator;
+        reallocate(other.m_nCapacity);
+
+        memcpy(this->m_pBegin, other.m_pBegin, sizeof(T) * other.m_nCapacity);
+    }
 
     bool push_back(const T& element)
     {
@@ -456,9 +577,9 @@ public:
 
            if (newArray)
            {
-               if (this->m_nSize)
+               if (this->m_nSize && this->m_pBegin)
                {
-                   for (int i = 0; i < this->m_nSize; i++)
+                   for (size_t i = 0; i < this->m_nSize; i++)
                        newArray[i] = this->m_pBegin[i];
                }
 
@@ -484,5 +605,10 @@ public:
         std::swap(this->m_pBegin, other.m_pBegin);
         std::swap(this->m_nSize, other.m_nSize);
         std::swap(this->m_nCapacity, other.m_nCapacity);
+    }
+
+    DynamicArray<T, allocator> copy()
+    {
+        return DynamicArray<T, allocator>(*this);
     }
 };

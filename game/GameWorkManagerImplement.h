@@ -14,9 +14,9 @@ public:
     int field_1C;
     int m_nKills;
     float m_fComboTime;
-    int m_bTakeDamage;
+    int m_bTookDamage;
     int field_2C;
-    int field_30;
+    int m_bIsKilledAnyone;
     int field_34;
     int field_38;
     int field_3C;
@@ -73,6 +73,6 @@ public:
     int field_108;
     int field_10C;
 
-    static inline GameWorkManagerImplement *&pInstance = *(GameWorkManagerImplement**)(shared::base + 0x17EA184);
+    static inline GameWorkManagerImplement *&ms_Instance = *(GameWorkManagerImplement**)(shared::base + 0x17EA184);
 };
 

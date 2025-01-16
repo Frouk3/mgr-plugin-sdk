@@ -1,7 +1,7 @@
 #pragma once
-#include "BehaviorAppBase.h"
-#include "cEnemyCautionStateManager.h"
-#include "EntitySystem.h"
+#include <BehaviorAppBase.h>
+#include <cEnemyCautionStateManager.h>
+#include <EntitySystem.h>
 
 class BehaviorEmBase : public BehaviorAppBase
 {
@@ -42,8 +42,8 @@ public:
     int field_A78;
     int field_A7C;
     int field_A80;
-    Pl0000* m_pEnemy;
-    Entity* m_pEnemyEntity;
+    BehaviorAppBase *m_pEnemy;
+    Entity *m_pEnemyEntity;
     float m_fDistance;
     float m_fDistanceNoHeight;
     float field_A94;
@@ -72,7 +72,7 @@ public:
     int field_C04;
     int field_C08;
     int field_C0C;
-    cEnemyCautionStateManager m_EnemyCaution;
+    cEnemyCautionStateManager field_C10;
     int field_D50;
     int field_D54;
     int field_D58;
@@ -96,7 +96,7 @@ public:
     int field_DA0;
     int field_DA4;
     int field_DA8;
-    __int16 field_DAC;
+    short field_DAC;
     int field_DB0;
     char field_DB4;
 

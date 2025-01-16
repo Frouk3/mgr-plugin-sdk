@@ -1,9 +1,9 @@
 #pragma once
 
-#include "cParts.h"
-#include "cMesh.h"
-#include "Hw.h"
-#include "cModelDataManager.h"
+#include <cParts.h>
+#include <cMesh.h>
+#include <Hw.h>
+#include <cModelDataManager.h>
 
 class cModelBase : public cParts
 {
@@ -126,26 +126,26 @@ public:
     float field_314;
     int field_318;
     int field_31C;
-    cMesh* m_pMesh;
-    unsigned short m_nTotalMeshes;
-    int field_328;
-    unsigned short field_32C;
-    cModelData::ModelData* m_pModelData;
-    cParts* m_pRootBone;
+    cMesh *m_pMesh;
+    short m_nMeshAmount;
+    cModelData::cMaterial *m_pMaterials;
+    short m_nMaterialAmount;
+    cModelData::ModelData *m_pModelData;
+    cParts *m_pRootBone;
     int field_338;
     int field_33C;
     int m_nAnisotropicType;
-    int field_344;
-    int field_348;
-    Hw::cTexture* field_34C;
-    cParts* m_pBones;
-    cParts** m_ppBones;
-    unsigned short m_nAmountOfBones;
-    int field_35C;
-    cModelBase* m_pParent;
+    void *m_pWTB;
+    void *m_pTextureRawData;
+    Hw::cTexture *m_pTexture;
+    cParts *m_pBones;
+    cParts **m_ppBones;
+    short m_nTotalOfBones;
+    void *m_pBoneOffsetData;
+    cModelBase *m_pParent;
     int m_nModelFlags;
     int m_nRootBone;
-    int field_36C;
+    void *m_pMeshData;
 
     cModelBase()
     {
@@ -154,9 +154,9 @@ public:
 
     inline void toggleAnyMesh(const char *meshName, bool bToggle)
     {
-        if (m_nTotalMeshes)
+        if (m_nMeshAmount)
         {
-            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nTotalMeshes]; mesh++)
+            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && strstr(mesh->getName(), meshName))
                     mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
@@ -166,9 +166,9 @@ public:
 
     inline void toggleMesh(const char *meshName, bool bToggle)
     {
-        if (m_nTotalMeshes)
+        if (m_nMeshAmount)
         {
-            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nTotalMeshes]; mesh++)
+            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && !strcmp(mesh->getName(), meshName))
                     mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;

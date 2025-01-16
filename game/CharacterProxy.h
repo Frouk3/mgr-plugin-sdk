@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hkpCharacterProxy.h"
+#include <hkpCharacterProxy.h>
 
 class CharacterProxy : public hkpCharacterProxy
 {

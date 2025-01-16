@@ -4,5 +4,5 @@ class TargetManager
 {
 public:
 
-    virtual ~TargetManager() {};
+    virtual void dummyVM() {};
 };

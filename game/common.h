@@ -25,7 +25,15 @@ inline void Core_PlaySound(const char* se, int unused)
 	((void(__cdecl*)(const char*, int))(shared::base + 0xA5E050))(se, unused);
 }
 
-inline void(*ePrintf)(const char* fmt, ...) = (void(*)(const char *, ...))(shared::base + 0x9D5650);
+inline void __declspec(naked) PrintfLog(const char* fmt, ...)
+{
+	__asm
+	{
+		mov eax, shared::base
+		add eax, 0x9D5650
+		jmp eax
+	}
+}
 
 inline unsigned int stringhash32(const char* str, size_t length) // then later used for function that doesn't uses length
 {

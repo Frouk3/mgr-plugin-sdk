@@ -55,8 +55,6 @@ public:
     int field_38;
     float field_3C;
     float field_40;
-
-    virtual ~StateBattle() override {};
 };
 
 class Camera::StatePerpetrator : public Camera::StateNode
@@ -93,8 +91,6 @@ public:
     float field_74;
     float field_78;
     float field_7C;
-
-    virtual ~StatePerpetrator() override {};
 };
 
 class Camera::StateBattleFixed : public Camera::StateNode
@@ -127,8 +123,6 @@ public:
     float field_94;
     int field_98;
     int field_9C;
-
-    virtual ~StateBattleFixed() override {};
 };
 
 class Camera::StateGallery : public Camera::StateNode
@@ -139,8 +133,6 @@ public:
     int field_C;
     cVec4 field_10;
     cVec4 field_20;
-
-    virtual ~StateGallery() override {};
 };
 
 class Camera::StateDiveKill : public Camera::StateNode
@@ -200,8 +192,6 @@ public:
     int field_F4;
     int field_F8;
     int field_FC;
-
-    virtual ~StateDiveKill() override {};
 };
 
 class Camera::StateSlashingTarget : public Camera::StateNode
@@ -222,8 +212,6 @@ public:
     int field_74;
     int field_78;
     int field_7C;
-
-    virtual ~StateSlashingTarget() override {};
 };
 
 class Camera::StateSubWeaponAiming : public Camera::StateNode
@@ -240,13 +228,11 @@ public:
     float field_24;
     float field_28;
     int field_2C;
-
-    virtual ~StateSubWeaponAiming() override {};
 };
 
 class Camera::StateAnimation : public Camera::StateNode
 {
 public:
     
-    virtual ~StateAnimation() override {};
+
 };

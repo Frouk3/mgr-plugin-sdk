@@ -1,18 +1,20 @@
 #pragma once
 
-#include "cObj.h"
-#include "hkpRigidBody.h"
-#include "cLockonPartsList.h"
-#include "BattleParameterImplement.h"
-#include "EspCtrlCustomImpl.h"
-#include "CharacterControl.h"
-#include "lib.h"
-#include "StateMachineContextPl0010.h"
-#include "StateMachineFactoryPl0010.h"
+#include <cObj.h>
+#include <hkpRigidBody.h>
+#include <cLockonPartsList.h>
+#include <BattleParameterImplement.h>
+#include <EspCtrlCustomImpl.h>
+#include <CharacterControl.h>
+#include <lib.h>
+#include <StateMachineContextPl0010.h>
+#include <StateMachineFactoryPl0010.h>
 #include <D3dx9math.h>
 #include <AnimationMapManagerImplement.h>
-#include "Collision.h"
-#include "RigidBodyCollision.h"
+#include <Collision.h>
+#include <RigidBodyCollision.h>
+#include <RigidBodyList.h>
+#include <NodeManager.h>
 
 struct ClothSimulation
 {
@@ -883,7 +885,7 @@ struct Constraints
     EntityHandle m_nMainEntity;
     EntityHandle m_nObjectEntityHandle;
     unsigned int m_nBone;
-    int field_10;
+    unsigned int m_nRotationBone;
     int field_14;
     int field_18;
     int field_1C;
@@ -1064,7 +1066,7 @@ public:
     int field_750;
     BattleParameterImplement* m_pBattleParameterImplement;
     int field_758;
-    lib::AllocatedArray<AnimationMap::Unit>** m_ppAnimationUnit;
+    lib::AllocatedArray<AnimationMap::Unit>** m_ppAnimationMap;
     int field_760;
     CharacterControl* m_pCharacterControl;
     int field_768;
@@ -1086,7 +1088,7 @@ public:
     lib::StaticArray<Collision *, 64> *m_pDefenseCollisions;
     int field_7AC;
     RigidBodyCollision* m_pRigidBodyCollision;
-    void* m_pRigidBodyList;
+    RigidBodyList* m_pRigidBodyList;
     lib::AllocatedArray<Collision *>* m_pAllocatedCollisionArray;
     int field_7BC;
     float field_7C0;
@@ -1095,7 +1097,7 @@ public:
     int field_7CC;
     StateMachineContextPl0010* m_pStateMachineContext;
     StateMachineFactoryPl0010* m_pStateMachineFactory;
-    int field_7D8;
+    NodeNavigation* m_NodeNavigation;
     int field_7DC;
     int field_7E0;
     int field_7E4;
@@ -1232,9 +1234,9 @@ public:
         return ReturnCallVMTFunc<int, 38, Behavior *>(this);
     }
 
-    int getSequenceFile(const char *a2)
+    void* getSequenceFile(const char *name)
     {
-        return ReturnCallVMTFunc<int, 39, Behavior *, const char*>(this, a2);
+        return ReturnCallVMTFunc<void*, 39, Behavior *, const char*>(this, name);
     }
 
     void transform(D3DXMATRIX *matrix)

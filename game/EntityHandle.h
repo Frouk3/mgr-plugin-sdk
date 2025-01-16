@@ -28,6 +28,11 @@ struct EntityHandle
         return *((EntityHandle *(__thiscall*)(EntityHandle*, const EntityHandle&))(shared::base + 0x67C940))(this, other);
     }
 
+    operator Entity*()
+    {
+        return getEntity();
+    }
+
     void reset()
     {
         ((void(__thiscall*)(EntityHandle*))(shared::base + 0x67C950))(this);

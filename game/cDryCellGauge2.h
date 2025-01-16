@@ -1,7 +1,8 @@
 #pragma once
 
-#include "cCustomObjCtrlManagerEx.h"
-#include "cEspControler.h"
+#include <cCustomObjCtrlManagerEx.h>
+#include <cEspControler.h>
+#include <cDamageDisp.h>
 
 class cDryCellGauge2 : public cCustomObjCtrlManagerEx
 {
@@ -139,7 +140,7 @@ public:
     int field_3BC;
     int field_3C0;
     cCustomObjCtrlManager field_3C4;
-    int field_3E0;
+    cDamageDisp *field_3E0;
     int field_3E4;
     int field_3E8;
     int field_3EC;
