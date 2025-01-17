@@ -19,6 +19,9 @@ namespace Camera
     class StateDiveKill;
     class StateSlashingTarget;
     class StateSubWeaponAiming;
+
+    template <typename tC>
+    class StateNodeTraitType;
 };
 
 class Camera::StateNode
@@ -34,6 +37,14 @@ class Camera::StateNodeTrait
 public:
 
     virtual ~StateNodeTrait() {};
+    virtual StateNode *allocate() = 0;
+};
+
+template <typename tC>
+class Camera::StateNodeTraitType : public Camera::StateNodeTrait
+{
+
+    tC *allocate() { return nullptr; };
 };
 
 class Camera::StateBattle : public Camera::StateNode

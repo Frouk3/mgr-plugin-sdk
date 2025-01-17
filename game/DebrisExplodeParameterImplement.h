@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DebrisExplodeParameter.h"
+#include <DebrisExplodeParameter.h>
 
 class DebrisExplodeParameterImplement : public DebrisExplodeParameter
 {

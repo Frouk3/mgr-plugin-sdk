@@ -4,5 +4,5 @@ class ScenarioManager
 {
 public:
 
-    virtual void dummyVM() {};
+    virtual void tick() {};
 };

@@ -4,5 +4,5 @@ class NinjaRunEventManager
 {
 public:
 
-    virtual void dummyVM() {};
+    virtual void tick() {};
 };

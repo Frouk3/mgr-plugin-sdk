@@ -15,6 +15,7 @@
 #include <RigidBodyCollision.h>
 #include <RigidBodyList.h>
 #include <NodeManager.h>
+#include <CollisionAttackData.h>
 
 struct ClothSimulation
 {
@@ -902,26 +903,26 @@ class Behavior : public cObj
 public:
     struct AnimationSlot
     {
-        int field_0;
+        int m_nSlotId;
         int field_4;
         char m_AnimName[16];
         Behavior* m_Parent;
         int field_1C;
         AnimationMap::Unit* m_AnimationMap;
         int field_24;
-        float m_fAnimTimer;
+        float m_fCycle;
         int field_2C;
     };
 
     struct EffectIntegrationContainer
     {
-        int field_0;
-        int field_4;
+        int m_nContainerId;
+        int m_nEffObjId;
         int field_8;
-        int field_C;
-        int field_10;
-        int field_14;
-        int field_18;
+        int m_nEffectId;
+        cEspControler *field_10;
+        float m_fFadeTime;
+        float m_fFadeEndAlpha;
     };
 
     struct InstructionContainer
@@ -1174,19 +1175,24 @@ public:
         CallVMTFunc<21, Behavior*>(this);
     }
 
-    Hw::cVec4 &getTransPos()
+    void updateAnimation()
     {
-        return ReturnCallVMTFunc<Hw::cVec4 &, 26, Behavior *>(this);
+        CallVMTFunc<25, Behavior*>(this);
     }
 
-    void setTransPos(const Hw::cVec4& transPos)
+    cVec4 &getTransPos()
     {
-        CallVMTFunc<27, Behavior *, const Hw::cVec4&>(this, transPos);
+        return ReturnCallVMTFunc<cVec4 &, 26, Behavior *>(this);
     }
 
-    void offsetTransPos(const Hw::cVec4& offset)
+    void setTransPos(const cVec4& transPos)
     {
-        CallVMTFunc<28, Behavior *, const Hw::cVec4&>(this, offset);
+        CallVMTFunc<27, Behavior *, const cVec4&>(this, transPos);
+    }
+
+    void offsetTransPos(const cVec4& offset)
+    {
+        CallVMTFunc<28, Behavior *, const cVec4&>(this, offset);
     }
 
     void changeHeight(const float height)
@@ -1194,34 +1200,34 @@ public:
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
 
-    void place(const Hw::cVec4 &pos, const Hw::cVec4& rotation, const Hw::cVec4& size)
+    void place(const cVec4 &pos, const cVec4& rotation, const cVec4& size)
     {
-        CallVMTFunc<30, Behavior *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation, size);
+        CallVMTFunc<30, Behavior *, const cVec4&, const cVec4&, const cVec4&>(this, pos, rotation, size);
     }
 
-    void place(const Hw::cVec4 &pos, const Hw::cVec4 &rotation)
+    void place(const cVec4 &pos, const cVec4 &rotation)
     {
-        CallVMTFunc<31, Behavior *, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation);
+        CallVMTFunc<31, Behavior *, const cVec4&, const cVec4&>(this, pos, rotation);
     }
 
-    Hw::cVec4& getRotation()
+    cVec4& getRotation()
     {
-        return ReturnCallVMTFunc<Hw::cVec4&, 33, Behavior *>(this);
+        return ReturnCallVMTFunc<cVec4&, 33, Behavior *>(this);
     }
 
-    void setRotation(const Hw::cVec4& rotation)
+    void setRotation(const cVec4& rotation)
     {
-        CallVMTFunc<34, Behavior *, const Hw::cVec4&>(this, rotation);
+        CallVMTFunc<34, Behavior *, const cVec4&>(this, rotation);
     }
 
-    Hw::cVec4& getSize()
+    cVec4& getSize()
     {
-        return ReturnCallVMTFunc<Hw::cVec4&, 35, Behavior *>(this);
+        return ReturnCallVMTFunc<cVec4&, 35, Behavior *>(this);
     }
 
     void setSize(const Hw::cVec4& size)
     {
-        CallVMTFunc<36, Behavior *, const Hw::cVec4&>(this, size);
+        CallVMTFunc<36, Behavior *, const cVec4&>(this, size);
     }
 
     int getSequence()
@@ -1229,9 +1235,9 @@ public:
         return ReturnCallVMTFunc<int, 37, Behavior *>(this);
     }
 
-    int getIndex()
+    eObjID getObjectId()
     {
-        return ReturnCallVMTFunc<int, 38, Behavior *>(this);
+        return ReturnCallVMTFunc<eObjID, 38, Behavior *>(this);
     }
 
     void* getSequenceFile(const char *name)
@@ -1259,19 +1265,26 @@ public:
         CallVMTFunc<74, Behavior *>(this);
     }
 
+    CollisionAttackData *createAttackData()
+    {
+        return ReturnCallVMTFunc<CollisionAttackData*, 76, Behavior*>(this);
+    }
+
     void *setCutCreateInfo()
     {
         return ReturnCallVMTFunc<void *, 110, Behavior *>(this);
     }
 
-    bool isAlive()
+    BOOL isAlive()
     {
         return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
     }
 
-    Hw::cVec4 getOffsetPosition()
+    cVec4 getOffsetPosition()
     {
-        return ReturnCallVMTFunc<Hw::cVec4, 159, Behavior *>(this);
+        cVec4 result;
+        result = ReturnCallVMTFunc<cVec4&, 159, Behavior *, cVec4&>(this, result);
+        return result;
     }
 
     void forceDie()
@@ -1383,13 +1396,95 @@ public:
         return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
     }
 
-    static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x17E9C20);
+    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);
 };
 
 struct BehaviorData
 {
-
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    float field_1C;
+    int field_20;
+    float field_24;
+    float field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    float field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    float field_80;
+    float field_84;
+    float field_88;
+    int field_8C;
+    int field_90;
+    float field_94;
+    int field_98;
+    float field_9C;
+    int field_A0;
+    int field_A4;
+    int field_A8;
+    int field_AC;
+    int field_B0;
+    int field_B4;
+    int field_B8;
+    int field_BC;
+    float field_C0;
+    int field_C4;
+    int field_C8;
+    int field_CC;
+    int field_D0;
+    int field_D4;
+    int field_D8;
+    int field_DC;
+    int field_E0;
+    float field_E4;
+    int field_E8;
+    int field_EC;
+    float field_F0;
+    float field_F4;
+    float field_F8;
+    float field_FC;
+    float field_100;
+    float field_104;
+    float field_108;
+    float field_10C;
+    float field_110;
+    float field_114;
+    float field_118;
+    float field_11C;
+    float field_120;
+    float field_124;
+    float field_128;
+    float field_12C;
+    int field_130;
+    int field_134;
+    Hw::CriticalSection field_138;
+    int field_154;
+    int field_158;
+    int field_15C;
 };
 
 VALIDATE_SIZE(Behavior::AnimationSlot, 0x30);
 VALIDATE_SIZE(Behavior, 0x870);
+VALIDATE_SIZE(BehaviorData, 0x160);

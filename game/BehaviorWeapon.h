@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
 
 class BehaviorWeapon : public Behavior
 {
@@ -26,3 +26,5 @@ public:
     int field_8B8;
     int field_8BC;
 };
+
+VALIDATE_SIZE(BehaviorWeapon, 0x8C0);

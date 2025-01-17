@@ -1,6 +1,6 @@
 #pragma once
-#include "GameWorkManager.h"
-#include "shared.h"
+
+#include <GameWorkManager.h>
 
 class GameWorkManagerImplement : public GameWorkManager
 {

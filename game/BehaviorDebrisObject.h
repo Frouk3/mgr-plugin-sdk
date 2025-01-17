@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BehaviorDebrisBase.h"
+#include <BehaviorDebrisBase.h>
 
 class BehaviorDebrisObject : public BehaviorDebrisBase
 {
@@ -22,4 +22,6 @@ public:
     {
         ((void (__thiscall *)(BehaviorDebrisObject *))(shared::base + 0x1DA7D0))(this);
     }
-}
+};
+
+VALIDATE_SIZE(BehaviorDebrisObject, 0x9A0);

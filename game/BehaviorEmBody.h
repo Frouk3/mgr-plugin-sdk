@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
 
 class BehaviorEmBody : public Behavior
 {
@@ -9,3 +9,5 @@ class BehaviorEmBody : public Behavior
     int field_878;
     int field_87C;
 };
+
+VALIDATE_SIZE(BehaviorEmBody, 0x880);

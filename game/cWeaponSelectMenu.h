@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
-#include "cWeaponSelectItemMessageParts.h"
-#include "cMenuKeyInfo.h"
+#include <cCustomObjCtrlManager.h>
+#include <cWeaponSelectItemMessageParts.h>
+#include <cMenuKeyInfo.h>
 
 class cWeaponSelectMenu : public cCustomObjCtrlManager
 {
@@ -308,6 +308,6 @@ public:
     float field_564;
     int field_568;
     int field_56C;
-
-    virtual ~cWeaponSelectMenu() override {};
 };
+
+VALIDATE_SIZE(cWeaponSelectMenu, 0x570);

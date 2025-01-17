@@ -4,5 +4,5 @@ class SceneBgManager
 {
 public:
 
-    virtual void dummyVF() {}; 
+    virtual void tick() {}; 
 };

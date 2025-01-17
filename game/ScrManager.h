@@ -4,5 +4,5 @@ class ScrManager
 {
 public:
 
-    virtual void dummyVM() {};
+    virtual void tick() {};
 };

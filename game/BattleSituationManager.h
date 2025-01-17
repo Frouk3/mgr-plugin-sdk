@@ -3,6 +3,6 @@
 class BattleSituationManager
 {
 public:
-    virtual ~BattleSituationManager() {};
 
+    virtual ~BattleSituationManager() {};
 };

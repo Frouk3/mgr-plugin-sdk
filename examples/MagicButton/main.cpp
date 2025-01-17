@@ -25,7 +25,7 @@ public:
 
 						auto enemy = entity->getEntityInstance<BehaviorEmBase>();
 
-						if (enemy->getContext()->hasInheritance(BehaviorEmBase::Context))
+						if (enemy->getContext().hasInheritance(BehaviorEmBase::ms_Context))
 						{
 							enemy->m_vecTransPos.y = -1000.0f;
 							enemy->place(enemy->m_vecTransPos, enemy->m_vecRotation);

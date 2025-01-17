@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Behavior.h"
-#include "Slot.h"
+#include <Behavior.h>
+#include <Slot.h>
 
 class BehaviorDebrisBase : public Behavior
 {
@@ -47,15 +47,15 @@ public:
     {
     public:
         BehaviorDebrisBase* m_Owner;
-    } m_ExplosionSlot;
+    } *m_ExplosionSlot;
     class DiscreateSlot : public Slot
     {
     public:
         BehaviorDebrisBase *m_Owner;
-    } m_DiscreateSlot;
+    } *m_DiscreateSlot;
     int field_90C;
     int field_910;
-    int field_914;
+    EntityHandle field_914;
     int field_918;
     float field_91C;
     int field_920;
@@ -78,6 +78,6 @@ public:
     int field_964;
     int field_968;
     int field_96C;
-
-    virtual ~BehaviorDebrisBase() override {};
 };
+
+VALIDATE_SIZE(BehaviorDebrisBase, 0x970);

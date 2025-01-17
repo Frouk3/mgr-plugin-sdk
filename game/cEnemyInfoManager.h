@@ -13,6 +13,7 @@
 #include <cGrenadeMark.h>
 #include <cNpcInfo.h>
 #include <cWeakPointDisp.h>
+#include <cWeakPointLineDisp.h>
 #include <cItemTargetCursor.h>
 #include <cSlashFinishLine.h>
 #include <cLockOnMarkerDisp.h>
@@ -73,4 +74,6 @@ public:
     int field_CC;
 
     virtual ~cEnemyInfoManager() {};
+
+    static inline cEnemyInfoManager& ms_Instance = *(cEnemyInfoManager*)(shared::base + 0x1737940);
 };

@@ -13,10 +13,10 @@ class PlayerAdrenaline
             Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
             static bool once = false;
 
-            if (player->m_nHealth / player->GetMaxHealth() <= 0.4f)
+            if (player->m_nHealth / player->getMaxHealth() <= 0.4f)
             {
                 Trigger::GameFlags.GAME_MUGEN_ZANGEKI = true;
-                player->EnableRipperMode();
+                player->enableRipperMode();
 
                 SlowRateManager->SetSlowRate(SLOWRATE_GLOBAL, 0.6);
                 SlowRateManager->SetSlowRate(SLOWRATE_PL, 1.66667);
@@ -24,7 +24,7 @@ class PlayerAdrenaline
 
                 once = false;
             }
-            else if (player->m_nHealth / player->GetMaxHealth() > 0.4f && !once)
+            else if (player->m_nHealth / player->getMaxHealth() > 0.4f && !once)
             {
                 Trigger::GameFlags.GAME_MUGEN_ZANGEKI = false;
 

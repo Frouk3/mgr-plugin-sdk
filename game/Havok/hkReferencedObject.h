@@ -10,3 +10,5 @@ public:
 
 	virtual hkClass* getClassType() {};
 };
+
+VALIDATE_SIZE(hkReferencedObject, 0x8);

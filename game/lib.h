@@ -175,9 +175,12 @@ template <typename T>
 class lib::Array
 {
 public:
+    typedef T* iterator;
+    typedef const T* const_iterator;
+
     T *m_pBegin;
-    unsigned int m_nSize;
-    unsigned int m_nCapacity;
+    size_t m_nSize;
+    size_t m_nCapacity;
 
     Array()
     {
@@ -200,7 +203,7 @@ public:
         m_nCapacity = 0;
     };
 
-    virtual unsigned int getCapacity() 
+    virtual size_t getCapacity() 
     {
         return m_nCapacity;
     };
@@ -251,38 +254,38 @@ public:
         return true;
     }
 
-    auto begin()
+    iterator begin()
     {
         return m_pBegin;
     }
-    auto begin() const
+    iterator begin() const
     {
         return m_pBegin;
     }
 
-    auto end()
+    iterator end()
     {
         return m_pBegin + m_nSize;
     }
-    auto end() const
+    iterator end() const
     {
         return m_pBegin + m_nSize;
     }
     
-    auto rbegin()
+    iterator rbegin()
     {
         return m_pBegin + m_nSize - 1;
     }
-    auto rbegin() const
+    iterator rbegin() const
     {
         return m_pBegin + m_nSize - 1;
     }
 
-    auto rend()
+    iterator rend()
     {
         return m_pBegin;
     }
-    auto rend() const
+    iterator rend() const
     {
         return m_pBegin;
     }
@@ -373,7 +376,7 @@ public:
         return m_nSize == 0;
     }
 
-    unsigned int size()
+    size_t size()
     {
         return m_nSize;
     }

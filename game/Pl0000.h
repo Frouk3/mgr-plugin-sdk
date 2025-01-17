@@ -1,12 +1,12 @@
 #pragma once
 
-#include "BehaviorAppBase.h"
-#include "shared.h"
+#include <BehaviorAppBase.h>
+#include <shared.h>
 
-#include "NinjaRunEventManagerImplement.h"
+#include <NinjaRunEventManagerImplement.h>
 
-#include "Slot.h"
-#include "cQteArea.h"
+#include <Slot.h>
+#include <cQteArea.h>
 
 class cCameraGame;
 
@@ -3305,42 +3305,52 @@ public:
 
     BOOL isBladeModeActive()
     {
-        return ReturnCallVMTFunc<bool, 203, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 203, Pl0000*>(this);
     }
 
     BOOL isRunning()
     {
-        return ReturnCallVMTFunc<bool, 204, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 204, Pl0000*>(this);
     }
 
     BOOL isIdle()
     {
-        return ReturnCallVMTFunc<bool, 206, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 206, Pl0000*>(this);
     }
 
     BOOL isInAir()
     {
-        return ReturnCallVMTFunc<bool, 208, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 208, Pl0000*>(this);
     }
 
     BOOL canActivateRipperMode()
     {
-        return ReturnCallVMTFunc<bool, 209, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 209, Pl0000*>(this);
     }
 
     BOOL isCodecTalk()
     {
-        return ReturnCallVMTFunc<bool, 211, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 211, Pl0000*>(this);
     }
 
     BOOL isParrying()
     {
-        ReturnCallVMTFunc<bool, 216, Pl0000*>(this);
+        ReturnCallVMTFunc<BOOL, 216, Pl0000*>(this);
     }
 
     BOOL isOnGround()
     {
-        return ReturnCallVMTFunc<bool, 220, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 220, Pl0000*>(this);
+    }
+
+    void applyWeaponChanges()
+    {
+        CallVMTFunc<225, Pl0000*>(this);
+    }
+
+    void setIdle(int a2)
+    {
+        CallVMTFunc<226, Pl0000*, int>(this, a2);
     }
 
     void forceKill()
@@ -3363,7 +3373,7 @@ public:
         CallVMTFunc<242, Pl0000*>(this);
     }
 
-    void changeSubWeapon()
+    void rebuildCustomWeapon()
     {
         CallVMTFunc<246, Pl0000*>(this);
     }

@@ -707,6 +707,8 @@ public:
     int field_D7C;
 
     virtual ~cUISystem() {};
+
+    static inline cUISystem& ms_Instance = *(cUISystem*)(shared::base + 0x19C2010);
 };
 
 class cUICtrl

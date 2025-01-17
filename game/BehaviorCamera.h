@@ -38,5 +38,5 @@ public:
         ((void (__thiscall *)(BehaviorCamera *))(shared::base + 0x6AF350))(this);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C80);
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C80);
 };

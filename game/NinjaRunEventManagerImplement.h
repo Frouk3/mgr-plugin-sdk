@@ -1,8 +1,8 @@
 #pragma once
-#include "NinjaRunEventManager.h"
 
-#include "Hw.h"
-#include "lib.h"
+#include <NinjaRunEventManager.h>
+#include <Hw.h>
+#include <lib.h>
 
 namespace FreeRunActivity
 {
@@ -38,8 +38,7 @@ namespace FreeRunActivity
         int field_6C;
     };
 };
-// -fix me
-// -later
+
 class NinjaRunEventManagerImplement : public NinjaRunEventManager
 {
 public:
@@ -143,7 +142,6 @@ public:
         int field_17C;
 
         virtual void field_0() {};
-        virtual ~PhantomUnit() {};
     };
 
     class EventUnit : PhantomUnit
@@ -162,12 +160,14 @@ public:
     public:
     };
 
-    Hw::cHeapVariable *m_pHeapVariable;
+    Hw::cHeapVariable *m_Allocator;
     lib::AllocatedArray<EventUnit *> *m_pAllocatedEventUnitArray;
     int field_C;
     int field_10;
     int field_14;
     int field_18;
 
-    static inline NinjaRunEventManagerImplement*& pInstance = *(NinjaRunEventManagerImplement**)(shared::base + 0x17EA188);
+    static inline NinjaRunEventManagerImplement*& ms_Instance = *(NinjaRunEventManagerImplement**)(shared::base + 0x17EA188);
 };
+
+VALIDATE_SIZE(NinjaRunEventManagerImplement, 0x1C);

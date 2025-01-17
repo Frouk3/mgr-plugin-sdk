@@ -1,0 +1,12 @@
+#pragma once
+
+#include <Behavior.h>
+
+class Em060c : public Behavior
+{
+public:
+
+    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17351A4);
+};
+
+VALIDATE_SIZE(Em060c, 0x870);

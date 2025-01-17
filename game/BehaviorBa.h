@@ -16,7 +16,7 @@ public:
         ((void (__thiscall *)(BehaviorBa *))(shared::base + 0x6C3E80))(this);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C58);
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C58);
 };
 
 VALIDATE_SIZE(BehaviorBa, 0xB30);

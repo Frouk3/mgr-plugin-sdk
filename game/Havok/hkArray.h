@@ -107,7 +107,7 @@ template <typename T>
 class hkArray : public hkArrayBase<T>
 {
 public:
-
+	int field_C;
 };
 
 template <typename T, unsigned N>

@@ -14,6 +14,9 @@ namespace Hw
     class cHeapVariable;
     class cTexture;
     class cTextureInstance;
+    class cLockableTexture;
+    class cTargetTexture;
+    class cShareTargetTexture;
     class CameraProj;
     class cCameraBase;
     class cHeapPhysical;
@@ -676,9 +679,20 @@ public:
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
+    struct HeapBlock
+    {
+        HeapBlock* m_previous;
+        HeapBlock* m_next;
+        size_t m_nTotalSize;
+        size_t m_nSize;
+        int field_10;
+        int field_14;
+        cHeapPhysicalBase* m_Allocator;
+    };
+public:
     HANDLE m_HeapHandle;
-    int filed_44;
-    int field_48;
+    HeapBlock* m_First;
+    HeapBlock *m_Last;
     size_t m_nMemoryLimit;
     size_t m_nFreeMemory;
     int field_54;
@@ -688,23 +702,12 @@ public:
     int field_64;
     int field_68;
     int field_6C;
-    void* m_pBlocks[256];
+    HeapBlock* m_pBlocks[256];
 
     cHeapPhysicalBase()
     {
         ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
     }
-
-    struct HeapBlock
-    {
-        HeapBlock* m_pPrevious;
-        HeapBlock* m_pNext;
-        size_t m_nTotalSize;
-        size_t m_nSize;
-        int field_10;
-        int field_14;
-        Hw::cHeapPhysicalBase* m_pAllocator;
-    };
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
@@ -726,6 +729,13 @@ public:
 
 class Hw::cHeapFixed : public Hw::cHeap
 {
+public:
+    struct HeapBlock 
+    {
+        HeapBlock *m_previous;
+        HeapBlock *m_next;
+        cHeapFixed *m_Allocator;
+    };
 public:
     HANDLE m_HeapHandle;
     int field_44;
@@ -833,6 +843,24 @@ public:
     int field_2C;
 
     virtual ~cTextureInstance() {};
+};
+
+class Hw::cLockableTexture : public Hw::cTexture
+{
+public:
+    Hw::cTextureInstance m_Texture;
+};
+
+class Hw::cTargetTexture : public Hw::cTexture
+{
+public:
+    Hw::cTextureInstance m_Texture;
+};
+
+class Hw::cShareTargetTexture : public Hw::cTargetTexture
+{
+public:
+    int field_4C;
 };
 
 class Hw::CameraProj

@@ -1,14 +1,12 @@
 #pragma once
 
-#include "cXmlBinary.h"
-#include "cModel.h"
-#include "Entity.h"
-#include "shared.h"
-#include "eObjID.h"
-#include "common.h"
+#include <cXmlBinary.h>
+#include <cModel.h>
+#include <Entity.h>
+#include <shared.h>
+#include <eObjID.h>
+#include <common.h>
 #include <cEspControler.h>
-
-#define OBJ_CONTEXT(c) c::Context
 
 class cObj : public cModel
 {
@@ -50,9 +48,9 @@ public:
 
     // vft
 
-    ContextInstance* getContext()
+    ContextInstance& getContext()
     {
-        return ReturnCallVMTFunc<ContextInstance*, 1, cObj*>(this);
+        return ReturnCallVMTFunc<ContextInstance&, 1, cObj*>(this);
     }
 
     BOOL createDummy()
@@ -92,7 +90,7 @@ public:
         ((void(__thiscall*)(cObj*, BOOL))(shared::base + 0x60BA60))(this, disabled);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x177B380);
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x177B380);
 };
 
 VALIDATE_SIZE(cObj, 0x530);

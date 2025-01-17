@@ -138,7 +138,7 @@ public:
 
   virtual ~cPlayerInfoManager() {};
 
-  static inline cPlayerInfoManager &Instance = *(cPlayerInfoManager*)(shared::base + 0x1737A10);
+  static inline cPlayerInfoManager &ms_Instance = *(cPlayerInfoManager*)(shared::base + 0x1737A10);
 };
 
 VALIDATE_SIZE(cPlayerInfoManager, 0x1A0);

@@ -3,7 +3,7 @@
 #include <Animation.h>
 #include <cEspControler.h>
 
-class EspCtrlCustomImpl : Animation::EspCtrlCustom
+class EspCtrlCustomImpl : public Animation::EspCtrlCustom
 {
 public:
     int field_4;

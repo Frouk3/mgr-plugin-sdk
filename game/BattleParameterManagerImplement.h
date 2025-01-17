@@ -1,21 +1,27 @@
 #pragma once
-#include "BattleParameterManager.h"
-#include "Hw.h"
+
+#include <BattleParameterManager.h>
+#include <Hw.h>
+#include <lib.h>
+
+struct BattleParameterResource
+{
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+};
 
 class BattleParameterManagerImplement : public BattleParameterManager
 {
 public:
-    Hw::cHeapVariable *m_pHeapVariable;
-    int field_8;
-    int field_C;
-    int field_10;
-    int field_14;
-    int field_18;
-    int field_1C;
-    int field_20;
+    Hw::cHeapVariable *m_Allocator;
+    Hw::CriticalSection field_8;
     int field_24;
-    int field_28;
+    lib::AllocatedArray<BattleParameterResource *> *m_BattleParameterResources;
     int field_2C;
 
-    static inline BattleParameterManagerImplement*& pInstance = *(BattleParameterManagerImplement**)(shared::base + 0x19C5260);
+    static inline BattleParameterManagerImplement*& ms_Instance = *(BattleParameterManagerImplement**)(shared::base + 0x19C5260);
 };
+
+VALIDATE_SIZE(BattleParameterManagerImplement, 0x30);

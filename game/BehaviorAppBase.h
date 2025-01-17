@@ -99,24 +99,33 @@ public:
     {
         CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
     }
+
     void setupHealth(int health)
     {
         ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EDF0))(this, health);
     }
+
     void setHealth(int health)
     {
         ((void (__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE20))(this, health);
     }
+
     void damage(int damage, bool leave1Hp)
     {
         CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
     }
+
     int getHealth()
     {
         return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C24);
+    void updateVelocity(float deltaTime)
+    {
+        CallVMTFunc<200, BehaviorAppBase *, float>(this, deltaTime);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C24);
 };
 
 VALIDATE_SIZE(BehaviorAppBase, 0x9F4);

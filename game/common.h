@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
-#include "shared.h"
-#include "Hw.h"
+#include <shared.h>
+#include <Hw.h>
 
 struct ContextInstance
 {
@@ -12,9 +12,19 @@ struct ContextInstance
 		return ((BOOL(__thiscall*)(ContextInstance*, const ContextInstance&))(shared::base + 0x9D6D80))(this, other);
 	}
 
+	bool operator==(const ContextInstance& other)
+	{
+		return this == &other;
+	}
+
 	ContextInstance(ContextInstance &inheritance)
 	{
-		this->m_inheritance = &inheritance;
+		m_inheritance = &inheritance;
+	}
+
+	ContextInstance()
+	{
+		m_inheritance = nullptr;
 	}
 };
 
