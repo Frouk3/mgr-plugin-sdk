@@ -488,7 +488,7 @@ public:
 
 /// TODO: Fix allocator binding
 /// EDIT: It already contains the allocator member in the game, so it's all good
-template <typename T, typename allocator>
+template <typename T, typename allocator = Hw::cHeap>
 class lib::DynamicArray : public lib::Array<T>
 {
 public:
@@ -509,7 +509,7 @@ public:
     DynamicArray(const DynamicArray<T, allocator>& other) : Array<T>(other)
     {
         this->m_Allocator = other.m_Allocator;
-        reallocate(other.m_nCapacity);
+        resize(other.m_nCapacity);
 
         memcpy(this->m_pBegin, other.m_pBegin, sizeof(T) * other.m_nCapacity);
     }
@@ -571,8 +571,6 @@ public:
     {
        if (this->m_nCapacity < newSize)
        {
-           auto previousSize = this->m_nSize;
-
            if (newSize <= 0x20) // Minimum for 32? Why?
                newSize = 0x20;
 
@@ -582,21 +580,18 @@ public:
            {
                if (this->m_nSize && this->m_pBegin)
                {
-                   for (size_t i = 0; i < this->m_nSize; i++)
-                       newArray[i] = this->m_pBegin[i];
+                   memcpy(newArray, this->m_pBegin, sizeof(T) * newSize);
                }
 
                if (this->m_pBegin)
                {
-                   this->m_nSize = 0;
-                   FreeMemory(this->m_pBegin, 0);
+                   operator delete(this->m_pBegin, m_Allocator);
                    this->m_pBegin = 0;
                    this->m_nCapacity = 0;
                }
 
                this->clear();
 
-               this->m_nSize = previousSize;
                this->m_pBegin = newArray;
                this->m_nCapacity = sizeof(T) * newSize / sizeof(T);
            }
@@ -608,6 +603,36 @@ public:
         std::swap(this->m_pBegin, other.m_pBegin);
         std::swap(this->m_nSize, other.m_nSize);
         std::swap(this->m_nCapacity, other.m_nCapacity);
+    }
+
+    void resize(size_t size)
+    {
+        if (size > this->m_nCapacity)
+        {
+            reallocate(size);
+        }
+        else
+        {
+            auto newArray = (T*)this->m_Allocator->AllocateMemory(sizeof(T) * size, 32, 0, 0);
+            if (newArray)
+            {
+                if (this->m_nSize && this->m_pBegin)
+                    memcpy(newArray, this->m_pBegin, sizeof(T) * size);
+
+                if (this->m_pBegin)
+                {
+                    operator delete(this->m_pBegin, this->m_Allocator);
+
+                    this->m_pBegin = nullptr;
+                    this->m_nCapacity = 0;
+                }
+
+                this->clear();
+
+                this->m_pBegin = newArray;
+                this->m_nCapacity = sizeof(T) * size / sizeof(T);
+            }
+        }
     }
 
     DynamicArray<T, allocator> copy()

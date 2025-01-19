@@ -94,8 +94,13 @@ struct CharacterControl
     int field_1D8;
     int field_1DC;
 
-    bool IsOnGround()
+    bool isOnGround()
     {
         return ((bool(__thiscall*)(CharacterControl*))(shared::base + 0x4E2740))(this);
+    }
+
+    void toggleCollisionInteraction(BOOL bEnabledCollision)
+    {
+        ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E6C60))(this, bEnabledCollision);
     }
 };

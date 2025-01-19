@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Hw.h>
+#include <ARGB32.h>
 
 class cUIDrawBase;
 class cUIWorkBase;

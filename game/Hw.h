@@ -312,6 +312,11 @@ struct Hw::cVec3
         return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
     }
 
+    float length2D()
+    {
+        return sqrtf(powf(x, 2) + powf(z, 2));
+    }
+
     cVec3 Normalize()
     {
         float length = this->length();
@@ -350,11 +355,6 @@ struct Hw::cVec4
     float z;
     float w;
 
-    static inline void Normalize(cVec4* v1, cVec4* v2)
-    {
-        ((void(__cdecl*)(cVec4*, cVec4*))(shared::base + 0x9DF460))(v1, v2);
-    }
-
     void operator=(const cVec4& right)
     {
         this->x = right.x;
@@ -378,6 +378,11 @@ struct Hw::cVec4
     float length()
     {
         return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
+    }
+
+    float length2D()
+    {
+        return sqrtf(powf(x, 2) + powf(z, 2));
     }
 
     cVec4 operator+(const cVec4& rhs) const
@@ -470,8 +475,8 @@ struct Hw::cVec4
     
     cVec4 Normalize()
     {
-        Normalize(this, this);
-        return *this;
+        float length = this->length();
+        return cVec4(x / length, y / length, z / length, w);
     }
 
     float dot(const cVec4& lhs) const 
@@ -580,7 +585,7 @@ public:
         return ReturnCallVMTFunc<size_t, 4, cHeap*>(this);
     }
 
-    size_t getAvailableMemory()
+    size_t getUsedMemory()
     {
         return ReturnCallVMTFunc<size_t, 5, cHeap*>(this);
     }
