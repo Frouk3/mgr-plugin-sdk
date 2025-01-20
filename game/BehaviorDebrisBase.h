@@ -2,9 +2,28 @@
 
 #include <Behavior.h>
 #include <Slot.h>
+#include <hkpPhantomOverlapListener.h>
 
 class BehaviorDebrisBase : public Behavior
 {
+public:
+    class DebrisPhantomListener : public hkpPhantomOverlapListener
+    {
+    public:
+
+    };
+
+    class DiscreateSlot : public Slot
+    {
+    public:
+        BehaviorDebrisBase *m_Owner;
+    };
+
+    class ExplosionSlot : public Slot
+    {
+    public:
+        BehaviorDebrisBase* m_Owner;
+    };
 public:
     int field_870;
     int field_874;
@@ -43,16 +62,8 @@ public:
     int field_8F8;
     int field_8FC;
     float field_900;
-    class ExplosionSlot : public Slot
-    {
-    public:
-        BehaviorDebrisBase* m_Owner;
-    } *m_ExplosionSlot;
-    class DiscreateSlot : public Slot
-    {
-    public:
-        BehaviorDebrisBase *m_Owner;
-    } *m_DiscreateSlot;
+    ExplosionSlot *m_ExplosionSlot;
+    DiscreateSlot *m_DiscreateSlot;
     int field_90C;
     int field_910;
     EntityHandle field_914;

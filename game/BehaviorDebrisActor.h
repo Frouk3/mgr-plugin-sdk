@@ -1,9 +1,21 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
+#include <hkpPhantomOverlapListener.h>
+#include <Slot.h>
 
 class BehaviorDebrisActor : public Behavior
 {
+public:
+    class DebrisPhantomListener : public hkpPhantomOverlapListener
+    {
+    public:
+    };
+
+    class ExplosionSlot : public Slot
+    {
+    public:
+    };
 public:
     int field_870;
     int field_874;

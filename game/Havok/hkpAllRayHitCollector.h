@@ -29,3 +29,5 @@ public:
         return m_hits;
     }
 };
+
+VALIDATE_SIZE(hkpAllRayHitCollector, 0x320);

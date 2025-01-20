@@ -1,7 +1,7 @@
 #pragma once
 
-#include "lib.h"
-#include "hkpAllCdPointCollector.h"
+#include <lib.h>
+#include <hkpAllCdPointCollector.h>
 
 class Collision
 {
@@ -161,7 +161,7 @@ public:
     float field_414;
     int field_418;
     int field_41C;
-    int field_420;
+    float field_420;
     int field_424;
     int field_428;
     int field_42C;
@@ -170,5 +170,7 @@ public:
     lib::StaticArray<WithinOneFrame, 5> *m_pCollisionWithinOneFrame;
     int field_43C;
 
-    virtual ContextInstance& getContext() {};
+    virtual ContextInstance& getContext() {ContextInstance context; return context;};
 };
+
+VALIDATE_SIZE(Collision, 0x440);

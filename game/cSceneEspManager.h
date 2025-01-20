@@ -1,12 +1,101 @@
 #pragma once
 
 #include <Hw.h>
+#include <cEspControler.h>
 
 struct EspReadWriteLock
 {
     int field_0;
     int field_4;
     Hw::CriticalSection m_LockSection;
+};
+
+struct EffectCallParam
+{
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+    int field_90;
+    cEspControler *m_pEsp;
+    int field_98;
+    int field_9C;
+    int field_A0;
+    int field_A4;
+    float m_fScale;
+    float field_AC;
+    float field_B0;
+    float field_B4;
+    float field_B8;
+    float field_BC;
+    float field_C0;
+    float field_C4;
+    float field_C8;
+    float field_CC;
+    float field_D0;
+    float field_D4;
+    float field_D8;
+    float field_DC;
+    float field_E0;
+    float field_E4;
+    float field_E8;
+    float field_EC;
+    int field_F0;
+    int field_F4;
+    int field_F8;
+    int field_FC;
+    int field_100;
+    int field_104;
+    int field_108;
+    int field_10C;
+    int m_nEffectId;
+    int field_114;
+    int field_118;
+    int field_11C;
+    float field_120;
+    float field_124;
+    float field_128;
+    float field_12C;
+    float field_130;
+    float field_134;
+    float field_138;
+    float field_13C;
+    int field_140;
+    cEspControler *field_144;
+    int field_148;
+    int field_14C;
 };
 
 class cEspBase
@@ -326,6 +415,7 @@ public:
 class cSceneEspManager
 {
 public:
+
 };
 
 VALIDATE_SIZE(EspReadWriteLock, 0x24);

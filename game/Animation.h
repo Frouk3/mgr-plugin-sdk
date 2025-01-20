@@ -32,6 +32,20 @@ public:
 
             };
         };
+
+        class Node
+        {
+        public:
+            int field_4;
+            int field_8;
+            int field_C;
+            int field_10;
+            int field_14;
+            int field_18;
+            int field_1C;
+
+            virtual ~Node() {};
+        };
     };
 
     class PostControl
@@ -272,6 +286,36 @@ public:
             int field_88;
 
             virtual ~Node() {};
+
+            void setCurrentTime(float time, float *data)
+            {
+                CallVMTFunc<11, Node *, float, float *>(this, time, data);
+            }
+
+            void setCurrentTimeSlide(float timeSlide, float *data)
+            {
+                CallVMTFunc<12, Node *, float, float *>(this, timeSlide, data);
+            }
+
+            float getCurrentTime()
+            {
+                return ReturnCallVMTFunc<float, 13, Node*>(this);
+            }
+
+            float getElapsedTime()
+            {
+                return ReturnCallVMTFunc<float, 14, Node*>(this);
+            }
+
+            float getMaxTime()
+            {
+                return ReturnCallVMTFunc<float, 15, Node*>(this);
+            }
+
+            void setLocalWeight(float *a2, float* a3)
+            {
+                CallVMTFunc<16, Node*, float *, float*>(this, a2, a3);
+            }
         };
 
         class NodeBlend : public Node
@@ -307,8 +351,8 @@ public:
         {
         public:
             int field_8C;
-            int field_90;
-            int field_94;
+            float field_90;
+            float field_94;
         };
 
         class NodeSequence : public Node

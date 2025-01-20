@@ -580,7 +580,7 @@ public:
            {
                if (this->m_nSize && this->m_pBegin)
                {
-                   memcpy(newArray, this->m_pBegin, sizeof(T) * newSize);
+                   memcpy(newArray, this->m_pBegin, sizeof(T) * this->m_nSize);
                }
 
                if (this->m_pBegin)
@@ -617,7 +617,7 @@ public:
             if (newArray)
             {
                 if (this->m_nSize && this->m_pBegin)
-                    memcpy(newArray, this->m_pBegin, sizeof(T) * size);
+                    memcpy(newArray, this->m_pBegin, sizeof(T) * this->m_nSize);
 
                 if (this->m_pBegin)
                 {

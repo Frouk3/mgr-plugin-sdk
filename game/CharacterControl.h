@@ -4,7 +4,14 @@
 #include <lib.h>
 #include <Hw.h>
 #include <hkpAllCdPointCollector.h>
+#include <hkpCharacterRigidBodyListener.h>
 #include <CharacterProxy.h>
+
+class CharacterControlPointCollector : public hkpAllCdPointCollector{};
+
+class CharacterControlPointCollectorEm0111 : public hkpAllCdPointCollector{};
+
+class CharacterRigidBodyListener : public hkpCharacterRigidBodyListener{};
 
 class Behavior;
 

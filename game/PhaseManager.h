@@ -2,6 +2,13 @@
 
 #include <cXmlBinary.h>
 #include <shared.h>
+#include <Slot.h>
+
+class SubPhaseSlot : public Slot
+{
+public:
+    int field_4;
+};
 
 struct PhaseManager
 {

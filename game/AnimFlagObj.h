@@ -1,7 +1,7 @@
 #pragma once
 
-#include "BehaviorBa.h"
-#include "shared.h"
+#include <BehaviorBa.h>
+#include <shared.h>
 
 class AnimFlagObj : public BehaviorBa
 {

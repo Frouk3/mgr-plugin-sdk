@@ -108,13 +108,15 @@ class hkArray : public hkArrayBase<T>
 {
 public:
 	int field_C;
+	
 };
 
 template <typename T, unsigned N>
 class hkInplaceArray : public hkArray<T>
 {
 public:
-	int field_C;
 
 	T m_storage[N];
 };
+
+VALIDATE_SIZE(hkArrayBase<int>, 0xC);

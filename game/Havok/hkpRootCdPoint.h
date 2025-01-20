@@ -12,3 +12,5 @@ struct hkpRootCdPoint
     const hkpCollidable *m_rootCollidableB;
     hkpShapeKey m_shapeKeyB;
 };
+
+VALIDATE_SIZE(hkpRootCdPoint, 0x30);

@@ -1,0 +1,1 @@
+Move each class into their appropriate manager or else
