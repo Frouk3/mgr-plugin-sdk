@@ -385,6 +385,23 @@ public:
     {
         return Array<T>(*this);
     }
+
+    // Bubble sort
+    void sort(bool(* callback)(T& current, T& next))
+    {
+        for (size_t i = 0; i < m_nSize - 1; ++i)
+        {
+            for (size_t j = 0; j < m_nSize - i - 1; ++j)
+            {
+                if (callback(m_pBegin[j], m_pBegin[j + 1]))
+                {
+                    T &temp = m_pBegin[j];
+                    m_pBegin[j] = m_pBegin[j + 1];
+                    m_pBegin[j + 1] = temp;
+                }
+            }
+        }
+    }
 };
 
 template <typename T, unsigned int Size>
