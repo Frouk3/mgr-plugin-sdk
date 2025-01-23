@@ -4,11 +4,32 @@
 #include <d3dx9.h>
 #include <dinput.h>
 #include <shared.h>
+#include <Xinput.h>
 
 extern void PrintfLog(const char* fmt, ...);
 
+struct cInput
+{
+    struct ControllerState
+    {
+        XINPUT_STATE m_XInputState;
+        int m_bSuccessful;
+        float field_14;
+        float field_18;
+        float field_1C;
+        float field_20;
+        float m_fLeftMotorSpeed;
+        float m_fRightMotorSpeed;
+        int field_2C;
+        int field_30;
+        int field_34;
+    };
+};
+
 namespace Hw
 {
+    struct Thread;
+
     class cHeap;
     class cHeapVariableBase;
     class cHeapVariable;
@@ -31,8 +52,15 @@ namespace Hw
     class cRenderTargetInfo;
     class cOtWork;
     class CriticalSection;
+    class cShader;
+    class cPixelShader;
+    class cVertexShader;
+    struct cVertexInfo;
+    struct cPixelInfo;
 
     class cVertexFormat;
+
+    struct RenderBufferHeapManager;
 
     template <typename T>
     struct cFixedVector;
@@ -78,7 +106,7 @@ namespace Hw
         inline CriticalSection &TextureCriticalSection = *(CriticalSection*)(shared::base + 0x1B20740);
     } 
 
-    inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+    inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline LPDIRECTINPUT8& InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
     inline LPDIRECTINPUTDEVICE8W& InputDeviceW = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
@@ -87,7 +115,31 @@ namespace Hw
 
     inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
     inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+
+    inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 }
+
+
+
+class cShaderDataManager
+{
+    Hw::cFixedList<Hw::cShader*> m_ShaderList; // A custom class, declared as Hw::cShader due to inheritance
+    Hw::cFixedList<Hw::cPixelShader*> m_PixelDataList; // A custom class, declared as Hw::cPixelShader due to inheritance
+    Hw::cHeapVariable *m_Allocator;
+
+    virtual ~cShaderDataManager() {};
+
+    static inline cShaderDataManager &ms_Instance = *(cShaderDataManager*)(shared::base + 0x14E84D0);
+};
+
+struct Hw::Thread
+{
+    int m_ThreadId;
+    int field_4;
+    int m_ThreadIndex;
+    void (__cdecl *m_func)(void *);
+    void *m_arg;
+};
 
 struct Hw::cVec2
 {
@@ -1006,6 +1058,35 @@ public:
     virtual ~cIndexBufferHeap() {};
 };
 
+struct Hw::RenderBufferHeapManager
+{
+    cPrimHeap *field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    cPrimHeap field_20[2];
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    cIndexBufferHeap field_80[2];
+    int field_B8;
+};
+
 class Hw::cRenderTargetInfo
 {
 public:
@@ -1034,6 +1115,47 @@ public:
     {
         CallVMTFunc<1, Hw::cOtWork*>(this);
     }
+};
+
+class Hw::cShader
+{
+public:
+    Hw::cVertexShader m_cVertexShader;
+    Hw::cPixelShader m_cPixelShader;
+    int field_24;
+
+    virtual ~cShader() {};
+};
+
+class Hw::cVertexShader
+{
+public:
+    cVertexInfo m_VertexData;
+
+    virtual ~cVertexShader() {};
+};
+
+class Hw::cPixelShader
+{
+public:
+
+    cPixelInfo m_PixelData;
+    
+    virtual ~cPixelShader() {};
+};
+
+struct Hw::cVertexInfo
+{
+    LPDIRECT3DVERTEXSHADER9 m_VertexShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
+};
+
+struct Hw::cPixelInfo
+{
+    LPDIRECT3DPIXELSHADER9 m_PixelShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
 };
 
 class Hw::cVertexFormat

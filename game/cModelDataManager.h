@@ -13,6 +13,8 @@ struct cModelData
 	struct VertexGroupBatchData;
 	struct Batch;
 	struct VertexGroup;
+	struct MaterialInfo;
+	struct VertexGroupHolder;
 };
 
 struct cModelData::VertexGroup
@@ -557,4 +559,19 @@ struct cModelData::cMaterial
 	int field_554;
 	int field_558;
 	int field_55C;
+};
+
+struct cModelData::MaterialInfo
+{
+	int field_0;
+	int field_4;
+	int field_8;
+	int field_C;
+	cMaterial m_materials[];
+};
+
+struct cModelData::VertexGroupHolder
+{
+	unsigned int m_nAmount;
+  	VertexGroup m_VertexGroup[];
 };
