@@ -119,19 +119,6 @@ namespace Hw
     inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 }
 
-
-
-class cShaderDataManager
-{
-    Hw::cFixedList<Hw::cShader*> m_ShaderList; // A custom class, declared as Hw::cShader due to inheritance
-    Hw::cFixedList<Hw::cPixelShader*> m_PixelDataList; // A custom class, declared as Hw::cPixelShader due to inheritance
-    Hw::cHeapVariable *m_Allocator;
-
-    virtual ~cShaderDataManager() {};
-
-    static inline cShaderDataManager &ms_Instance = *(cShaderDataManager*)(shared::base + 0x14E84D0);
-};
-
 struct Hw::Thread
 {
     int m_ThreadId;
@@ -1117,17 +1104,19 @@ public:
     }
 };
 
-class Hw::cShader
+struct Hw::cVertexInfo
 {
-public:
-    Hw::cVertexShader m_VertexShader;
-    Hw::cPixelShader m_PixelShader;
-    int field_24;
-
-    virtual ~cShader() {};
+    LPDIRECT3DVERTEXSHADER9 m_VertexShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
 };
 
-VALIDATE_SIZE(Hw::cShader, 0x28);
+struct Hw::cPixelInfo
+{
+    LPDIRECT3DPIXELSHADER9 m_PixelShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
+};
 
 class Hw::cVertexShader
 {
@@ -1142,23 +1131,21 @@ class Hw::cPixelShader
 public:
 
     cPixelInfo m_PixelData;
-    
+
     virtual ~cPixelShader() {};
 };
 
-struct Hw::cVertexInfo
+class Hw::cShader
 {
-    LPDIRECT3DVERTEXSHADER9 m_VertexShader;
-    LPD3DXCONSTANTTABLE m_ConstantTable;
-    unsigned short field_C;
+public:
+    Hw::cVertexShader m_VertexShader;
+    Hw::cPixelShader m_PixelShader;
+    int field_24;
+
+    virtual ~cShader() {};
 };
 
-struct Hw::cPixelInfo
-{
-    LPDIRECT3DPIXELSHADER9 m_PixelShader;
-    LPD3DXCONSTANTTABLE m_ConstantTable;
-    unsigned short field_C;
-};
+VALIDATE_SIZE(Hw::cShader, 0x28);
 
 class Hw::cVertexFormat
 {
