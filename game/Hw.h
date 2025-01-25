@@ -1120,12 +1120,14 @@ public:
 class Hw::cShader
 {
 public:
-    Hw::cVertexShader m_cVertexShader;
-    Hw::cPixelShader m_cPixelShader;
+    Hw::cVertexShader m_VertexShader;
+    Hw::cPixelShader m_PixelShader;
     int field_24;
 
     virtual ~cShader() {};
 };
+
+VALIDATE_SIZE(Hw::cShader, 0x28);
 
 class Hw::cVertexShader
 {
