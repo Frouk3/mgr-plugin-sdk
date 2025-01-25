@@ -386,8 +386,8 @@ public:
         return Array<T>(*this);
     }
 
-    // Bubble sort
-    void sort(bool(* callback)(T& current, T& next))
+    // Bubble sort: Sorts the array using the bubble sort algorithm
+    void bubbleSort(bool(*callback)(T& current, T& next)) // do not let the user modify the array
     {
         for (size_t i = 0; i < m_nSize - 1; ++i)
         {
@@ -395,11 +395,78 @@ public:
             {
                 if (callback(m_pBegin[j], m_pBegin[j + 1]))
                 {
-                    T &temp = m_pBegin[j];
-                    m_pBegin[j] = m_pBegin[j + 1];
-                    m_pBegin[j + 1] = temp;
+                    std::swap(m_pBegin[j], m_pBegin[j + 1]);
                 }
             }
+        }
+    }
+
+    // Quick sort: Sorts the array using the quick sort algorithm
+    void quickSort(bool(*callback)(T& current, T& next))
+    {
+        quickSortRecursive(0, m_nSize - 1, callback);
+    }
+
+    int partition(int low, int high, bool(*callback)(T& current, T& next))
+    {
+        T &pivot = m_pBegin[high];
+        int i = low - 1;
+
+        for (int j = low; j <= high - 1; j++)
+        {
+            if (callback(m_pBegin[j], pivot))
+            {
+                i++;
+                std::swap(m_pBegin[i], m_pBegin[j]);
+            }
+        }
+
+        std::swap(m_pBegin[i + 1], m_pBegin[high]);
+        return (i + 1);
+    }
+
+    void quickSortRecursive(int low, int high, bool(*callback)(T& current, T& next))
+    {
+        if (low < high)
+        {
+            int pivotIndex = partition(low, high, callback);
+            quickSortRecursive(low, pivotIndex - 1, callback);
+            quickSortRecursive(pivotIndex + 1, high, callback);
+        }
+    }
+
+    // Selection sort: Sorts the array using the selection sort algorithm
+    void selectionSort(bool(*callback)(T& current, T& next))
+    {
+        for (int i = 0; i < m_nSize - 1; i++)
+        {
+            int minIndex = i;
+            for (int j = i + 1; j < m_nSize; j++)
+            {
+                if (callback(m_pBegin[j], m_pBegin[minIndex]))
+                {
+                    minIndex = j;
+                }
+            }
+            std::swap(m_pBegin[i], m_pBegin[minIndex]);
+        }
+    }
+
+    // Insertion sort: Sorts the array using the insertion sort algorithm
+    void insertionSort(bool(*callback)(T& current, T& next))
+    {
+        for (int i = 1; i < m_nSize; i++)
+        {
+            T &key = m_pBegin[i];
+            int j = i - 1;
+
+            while (j >= 0 && callback(m_pBegin[j], key))
+            {
+                m_pBegin[j + 1] = m_pBegin[j];
+                j--;
+            }
+
+            m_pBegin[j + 1] = key;
         }
     }
 };

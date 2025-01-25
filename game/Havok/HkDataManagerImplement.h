@@ -16,11 +16,16 @@ struct DataArchiveEntry
 
 struct DataArchiveHolder
 {
-    void *m_data;
+    char* m_data;
 
     DataArchiveHolder()
     {
-        ((void(__thiscall *)(DataArchiveHolder*))(shared::base + 0x9E3530))(this);
+        ((void(__thiscall*)(DataArchiveHolder*))(shared::base + 0x9E3530))(this);
+    }
+
+    DataArchiveEntry* asEntry()
+    {
+        return (DataArchiveEntry*)m_data;
     }
 
     size_t getFileAmount()
