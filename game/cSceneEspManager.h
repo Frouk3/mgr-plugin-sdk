@@ -3965,6 +3965,34 @@ public:
     int field_48;
 };
 
+class cEspShaderMask : public cEspShaderBase{};
+
+class cEspShaderAlMask : public cEspShaderMask{};
+
+class cEspShaderShimmer : public cEspShaderBase{};
+
+class cEspShaderMono : public cEspShaderBase{};
+
+class cEspShaderMultiMoveParticleBillbord : public cEspShaderBase{};
+
+class cEspShaderSoftPT : public cEspShaderBase{};
+
+class cEspShaderSoftPT3D : public cEspShaderSoftPT{};
+
+class cEspShaderSoftPT3DMask : public cEspShaderSoftPT3D{};
+
+class cEspShaderSoftPT3DAlMask : public cEspShaderSoftPT3DMask{};
+
+class cEspShaderToneCurve : public cEspShaderBase{};
+
+class cEspShaderToneCurveMask : public cEspShaderToneCurve{};
+
+class cEspShaderToneCurveMaskSp : public cEspShaderToneCurveMask{};
+
+class cEspShaderToneCurveAlMaskSp : public cEspShaderToneCurveMaskSp{};
+
+class cEspShaderToneCurveAlpha : public cEspShaderToneCurve{};
+
 class EffectShaderWaterDraw : public cEspShaderBase
 {
 public:
@@ -4059,6 +4087,162 @@ public:
     int field_D8;
     int field_DC;
 };
+
+class EspAtkController : public cEspControler{};
+
+class EspEmtBase : public cEspBase{};
+
+class EspModelShaderBase : public Hw::cShader{};
+
+class cShaderSetting
+{
+public:
+
+    virtual ~cShaderSetting() {};
+};
+
+class EspModelShaderSetting : public cShaderSetting {};
+
+class EspModelShaderShellPolygon : public EspModelShaderBase{};
+
+class EspModelShaderShellPolygon2 : public EspModelShaderShellPolygon{};
+
+class EspPrimitiveWorkBase
+{
+public:
+
+    virtual ~EspPrimitiveWorkBase() {};
+};
+
+class EspPrimitiveWorkBillboard : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkBox : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkCircleBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkCrossBillboard : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkCrossBillboardX3 : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkCrossBillboardX4 : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkGridMeshBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkMirrorX2 : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkMirrorX4 : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkMultiBillboardBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkMultiLineBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkMultiParticleBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkMultiParticel_Esp64 : public EspPrimitiveWorkMultiParticleBase{};
+
+class EspPrimitiveWorkMultiStripBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkRadialCircleBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkTileBase : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkTile3x3 : public EspPrimitiveWorkTileBase{};
+
+class EspPrimitiveWorkTile4x4 : public EspPrimitiveWorkTileBase{};
+
+class EspPrimitiveWorkTile6x6 : public EspPrimitiveWorkTileBase{};
+
+class EspPrimitiveWorkTriangle : public EspPrimitiveWorkBase{};
+
+class EspPrimitiveWorkVolumeMeshBase : public EspPrimitiveWorkBase{};
+
+class EspShaderAlMask_TexBlend : public cEspShaderAlMask{};
+
+class EspShaderAlMaskVC_TexBlend : public EspShaderAlMask_TexBlend{};
+
+class EspShaderDrawMirror : public cEspShaderShimmer{};
+
+class EspShaderDrawMirrorRot : public EspShaderDrawMirror{};
+
+class EspShaderLaplacianRangeLight : public cEspShaderBase{};
+
+class EspShaderLuminance : public cEspShaderBase{};
+
+class EspShaderLuminanceMask : public EspShaderLuminance{};
+
+class EspShaderLuminanceAlMask : public EspShaderLuminanceMask{};
+
+class EspShaderLuminanceAlMaskVC : public EspShaderLuminanceAlMask{};
+
+class EspShaderLuminanceMaskVC : public EspShaderLuminanceMask{};
+
+class EspShaderLuminanceShimmer : public EspShaderLuminance{};
+
+class EspShaderMask_TexBlind : public cEspShaderMask{};
+
+class EspShaderMonoBrightness : public cEspShaderMono{};
+
+class EspShaderMonoBrightnessAlmaskTexblend : public cEspShaderMono{};
+
+class EspShaderMonoBrightnessAlmaskTexblendSoftPT : public cEspShaderMono{};
+
+class EspShaderMosaic : public cEspShaderBase{};
+
+class EspShaderMultiMoveParticleBillboard_Shimmer : public cEspShaderMultiMoveParticleBillbord{};
+
+class EspShaderMultiMoveParticleSSB : public cEspShaderBase{};
+
+class EspShaderMultiMoveParticleSSBAtl : public EspShaderMultiMoveParticleSSB{};
+
+class EspShaderOutlineExtraction : public cEspShaderBase{};
+
+class EspShaderOutlineExtractionMask : public EspShaderOutlineExtraction{};
+
+class EspShaderScreenDirtDetection : public cEspShaderMask{};
+
+class EspShaderScreenMaskDetection : public EspShaderScreenDirtDetection{};
+
+class EspShaderShimmer_TexBlend : public cEspShaderShimmer{};
+
+class EspShaderSoftPT3DAlMask_TexBlend : public cEspShaderSoftPT3DAlMask{};
+
+class EspShaderSoftPT3DToneCurve_TexBlend : public cEspShaderSoftPT3D{};
+
+class EspShaderSoftPT3D_TexBlend : public cEspShaderSoftPT{};
+
+class EspShaderTexBlend : public cEspShaderBase{};
+
+class EspShaderTexBlend_G : public EspShaderTexBlend{};
+
+class EspShaderToneCurve_TA : public cEspShaderToneCurve{};
+
+class EspShaderToneCurveMask_TA : public EspShaderToneCurve_TA{};
+
+class EspShaderToneCurveMaskSp_TA : public EspShaderToneCurveMask_TA{};
+
+class EspShaderToneCurveAlMaskSp_TA : public EspShaderToneCurveMaskSp_TA{};
+
+class EspShaderToneCurveAlMaskSp_TexBlend : public cEspShaderToneCurveAlMaskSp{};
+
+class EspShaderToneCurveAlMaskVC : public cEspShaderToneCurveMask{};
+
+class EspShaderToneCurveAlMask_TA : public EspShaderToneCurveMask_TA{};
+
+class EspShaderToneCurveAlpha_TexBlend : public cEspShaderToneCurveAlpha{};
+
+class EspShaderToneCurveMaskSp_TexBlend : public cEspShaderToneCurveMaskSp{};
+
+class EspShaderToneCurveSp_TA : public EspShaderToneCurve_TA{};
+
+class EspShaderToneCurve_TexBlend : public cEspShaderToneCurve{};
+
+class EspWorkParentMeshControlBase : public cEsp{};
+
+class EspWorkParentMeshControl : public EspWorkParentMeshControlBase{};
+
+class EspWorkParentMeshControlWtr : public EspWorkParentMeshControlBase{};
+
+class EspWorkShellPolygon : public cEsp{};
 
 VALIDATE_SIZE(EspReadWriteLock, 0x24);
 VALIDATE_SIZE(cEspBase, 0x4E0);

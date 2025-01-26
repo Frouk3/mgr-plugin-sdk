@@ -1,40 +1,18 @@
 #pragma once
-#include "shared.h"
+#include <shared.h>
+#include <common.h>
 
 struct Entity;
+struct EntitySystem;
 
-struct EntityHandle
+class EntityHandle : public sHandle<Entity>
 {
-    unsigned int m_nHandle;
+public:
 
-    Entity* getEntity()
-    {
-        return ((Entity *(__thiscall*)(EntityHandle*))(shared::base + 0x681330))(this);
-    }
+    operator Entity*();
 
-    EntityHandle &operator=(Entity* entity)
+    Entity *getEntity()
     {
-        return *((EntityHandle * (__thiscall*)(EntityHandle*, Entity*))(shared::base + 0x67C970))(this, entity);
-    }
-
-    EntityHandle& operator=(unsigned int newHandle)
-    {
-        m_nHandle = newHandle;
         return *this;
-    }
-
-    EntityHandle &operator=(const EntityHandle &other)
-    {
-        return *((EntityHandle *(__thiscall*)(EntityHandle*, const EntityHandle&))(shared::base + 0x67C940))(this, other);
-    }
-
-    operator Entity*()
-    {
-        return getEntity();
-    }
-
-    void reset()
-    {
-        ((void(__thiscall*)(EntityHandle*))(shared::base + 0x67C950))(this);
     }
 };

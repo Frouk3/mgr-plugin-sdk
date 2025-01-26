@@ -250,6 +250,14 @@ public:
     virtual ~cCondition() {};
 };
 
+class Trigger::cActionAbstract
+{
+private:
+    virtual void dummyVM() {};
+public:
+
+};
+
 class Trigger::cCondPhaseJump : public Trigger::cCondition
 {
 public:

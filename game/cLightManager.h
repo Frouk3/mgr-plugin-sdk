@@ -2,13 +2,7 @@
 
 #include <shared.h>
 #include <Hw.h>
-
-class cObject
-{
-public:
-
-    virtual const char** getClassName() {const char *name = "\0"; return &name; };
-};
+#include <cObject.h>
 
 class cLightApplyScale : public cObject
 {

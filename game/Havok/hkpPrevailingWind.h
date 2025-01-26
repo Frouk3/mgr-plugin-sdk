@@ -18,6 +18,13 @@ public:
         virtual ~Oscillator() {};
     };
 
+    struct Triple
+    {
+        hkVector4 m_diff;
+        Oscillator m_oscillator;
+        hkReal m_power;
+    };
+
     int pad[1];
     hkVector4 m_mid;
     hkArray<Oscillator> m_oscillator;

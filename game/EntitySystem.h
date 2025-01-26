@@ -4,6 +4,8 @@
 #include <SceneModelSystem.h>
 #include <Entity.h>
 #include <Behavior.h>
+#include <EntityHandle.h>
+#include <common.h>
 
 struct EntitySystem
 {
@@ -138,8 +140,24 @@ struct EntitySystem
     EntitySystem(EntitySystem const &) = delete;
     EntitySystem(EntitySystem&&) = delete;
 
-    static inline EntitySystem& Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
+    static inline HandleManager<Entity> &ms_HandleManager = *(HandleManager<Entity>*)(shared::base + 0x17E9A60); // now it makes sense
+    static inline EntitySystem& ms_Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
 };
+
+EntityHandle::operator Entity *()
+{
+    unsigned int shifted = (this->m_Handle >> 8);
+    if (shifted >= EntitySystem::ms_HandleManager.m_capacity)
+    {
+        PrintfLog("[HandleManage] Handle error: Invalid handle");
+        return nullptr;
+    }
+    
+    if (((this->m_Handle ^ EntitySystem::ms_HandleManager.m_HandleArrayValue[shifted].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
+        return nullptr;
+        
+    return EntitySystem::ms_HandleManager.m_HandleArrayValue[shifted].m_value;
+}
 
 struct EntitySystem::SetInfo
 {

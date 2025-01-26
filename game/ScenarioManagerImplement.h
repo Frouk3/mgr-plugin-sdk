@@ -2,6 +2,7 @@
 
 #include <ScenarioManager.h>
 #include <Hw.h>
+#include <Slot.h>
 
 class ScenarioManagerImplement : public ScenarioManager
 {
@@ -55,4 +56,10 @@ public:
     int field_BC;
 
     static inline ScenarioManagerImplement* &ms_Instance = *(ScenarioManagerImplement**)(shared::base + 0x17E9A30);
+};
+
+class ScenarioEnemeySetCompletedSlot : public Slot
+{
+public:
+    void *field_4;
 };

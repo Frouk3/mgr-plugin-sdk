@@ -148,4 +148,15 @@ struct hkColor
         GREY50 = 0xFF808080,
         GREY75 = 0xFFC0C0C0
     };
+
+    enum ProductColors
+    {
+        PHYSICS = 0xFFFFB300,
+        DESTRUCTION = 0xFFDB0020,
+        ANIMATION = 0xFF02A22B,
+        BEHAVIOR = 0xFF3370B8,
+        CLOTH = 0xFFB29CDC,
+        AI = 0xFFACCEF0,
+        SCRIPT = 0xFFBFB630,
+    };
 };

@@ -161,7 +161,7 @@ public:
     };
 
     Hw::cHeapVariable *m_Allocator;
-    lib::AllocatedArray<EventUnit *> *m_pAllocatedEventUnitArray;
+    lib::AllocatedArray<EventUnit *> *m_EventUnits;
     int field_C;
     int field_10;
     int field_14;

@@ -2410,6 +2410,56 @@ public:
     int field_FFC;
 };
 
+class cUIDrawMask : public cUIDrawBase
+{
+public:
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+};
+
+class cUIDrawHit : public cUIDrawBase
+{
+public:
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+};
+
+class cUIDraw3Grid : public cUIDrawBase
+{
+public:
+    float field_4;
+    float field_8;
+    float field_C;
+    float field_10;
+    float field_14;
+    float field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+};
+
 class cMsgPrimWorkBase : public Hw::cOtWork
 {
 public:
@@ -2510,4 +2560,19 @@ public:
     int field_204;
     int field_208;
     int field_20C;
+};
+
+class cUITextureManager
+{
+public:
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+
+    virtual ~cUITextureManager() {};
 };

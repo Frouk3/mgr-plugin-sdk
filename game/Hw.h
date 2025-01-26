@@ -57,8 +57,34 @@ namespace Hw
     class cVertexShader;
     struct cVertexInfo;
     struct cPixelInfo;
+    class cDepthSurface;
 
+    class cOtManagerBase;
+
+    class cPrimF;
+    class cPrimFT;
+    class cPrimFTyuv;
+    class cPrimFV;
+    class cPrimG;
+    class cPrimIF;
+    class cPrimIFT;
+
+    class cRenderPredicate;
+
+    class cShaderPreset;
+    class cShaderCharacter;
+    class cShaderPF;
+    class cShaderPFT;
+    class cShaderPFTyuv;
+    class cShaderPFTyuva;
+    class cShaderPFV;
+    class cShaderPG;
     class cVertexFormat;
+    class cVertexFormatP;
+    class cVertexFormatPG;
+    class cVertexFormatPT;
+    class cVertexFormatPV;
+    class cZTexture;
 
     struct RenderBufferHeapManager;
 
@@ -106,6 +132,51 @@ namespace Hw
         inline CriticalSection &TextureCriticalSection = *(CriticalSection*)(shared::base + 0x1B20740);
     } 
 
+    namespace Wwise
+    {
+        namespace Command
+        {
+            class Work
+            {
+            public:
+                
+                virtual ~Work() {};
+            };
+
+            class ListenerPositionWork : public Work{};
+
+            class ListenerSpatializationWork : public Work{};
+
+            class ObjectEnvironmentDryLevelWork : public Work{};
+
+            class ObjectEnvironmentValuesWork : public Work{};
+
+            class ObjectListenerMaskWork : public Work{};
+
+            class ObjectOutputMaskWork : public Work{};
+
+            class ObjectPositionWork : public Work{};
+
+            class ObjectRTPCValueWork : public Work{};
+
+            class ObjectRegisterWork : public Work{};
+
+            class ObjectReleaseWork : public Work{};
+
+            class ObjectSwitchWork : public Work{};
+
+            class PostEventWork : public Work{};
+
+            class ReleaseEventWork : public Work{};
+
+            class ScalingFactorWork : public Work{};
+
+            class StateWork : public Work{};
+
+            class StopEventWork : public Work{};
+        }
+    }
+
     inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline LPDIRECTINPUT8& InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
@@ -118,6 +189,20 @@ namespace Hw
 
     inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 }
+
+class Hw::cDepthSurface
+{
+public:
+
+    virtual ~cDepthSurface() {};
+};
+
+class Hw::cOtManagerBase
+{
+public:
+
+    virtual ~cOtManagerBase() {};
+};
 
 struct Hw::Thread
 {
@@ -1156,6 +1241,108 @@ public:
 
     virtual void dummyVM() {};
 };
+
+class Hw::cPrimF : public Hw::cOtWork
+{
+public:
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+};
+
+class Hw::cPrimFT : public Hw::cOtWork{};
+
+class Hw::cPrimFTyuv : public Hw::cOtWork{};
+
+class Hw::cPrimFV : public Hw::cOtWork{};
+
+class Hw::cPrimG : public Hw::cOtWork{};
+
+class Hw::cPrimIF : public Hw::cOtWork{};
+
+class Hw::cPrimIFT : public Hw::cOtWork{};
+
+class Hw::cRenderPredicate
+{
+public:
+
+    virtual ~cRenderPredicate() {};
+};
+
+class Hw::cShaderPreset : public Hw::cShader{};
+
+class Hw::cShaderCharacter : public Hw::cShaderPreset{};
+
+class Hw::cShaderPF : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFT : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFTyuv : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFTyuva : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFV : public Hw::cShaderPreset{};
+
+class Hw::cShaderPG : public Hw::cShaderPreset{};
+
+class Hw::cVertexFormatP : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPG : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPT : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPV : public Hw::cVertexFormat{};
+
+class Hw::cZTexture : public Hw::cTargetTexture{};
+
+class cFilterShaderCopyTex : public Hw::cShader
+{
+public:
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+};
+
+class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
 
 inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
 {
