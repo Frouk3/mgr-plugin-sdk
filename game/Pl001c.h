@@ -67,7 +67,7 @@ public:
     float field_95C;
     float field_960;
     float field_964;
-    int field_968;
+    EntityHandle field_968;
     int field_96C;
     float field_970;
     float field_974;
@@ -77,6 +77,11 @@ public:
     int field_984;
     int field_988;
     int field_98C;
+
+    Pl001c()
+    {
+        ((void(__thiscall *)(Pl001c*))(shared::base + 0x6A6100))(this);
+    }
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17353E0);
 };

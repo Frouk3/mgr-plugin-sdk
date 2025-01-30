@@ -7,27 +7,27 @@
 #include <eObjID.h>
 #include <common.h>
 #include <cEspControler.h>
+#include <HkDataManagerImplement.h>
 
 class cObj : public cModel
 {
 public:
     int field_490;
-    void *m_DataFile;
-    int field_498;
-    void* m_pModel;
-    int m_nSetType;
-    int m_nType;
-    int m_nSetFlag;
-    int m_nSetRtn;
-    eObjID m_nObjId;
-    eObjID m_nModelIndex;
+    DataArchiveHolder m_DataFile;
+    void* m_Model;
+    int m_SetType;
+    int m_Type;
+    int m_SetFlag;
+    int m_SetRtn;
+    eObjID m_ObjId;
+    eObjID m_ModelIndex;
     int field_4B8;
     int field_4BC;
-    int m_nObjectFlags;
+    int m_ObjectFlags;
     int field_4C4;
     char field_4C8;
     char field_4C9;
-    int *m_pCollisionFilter;
+    int *m_CollisionFilter;
     int field_4D0;
     int field_4D4;
     int field_4D8;
@@ -36,10 +36,10 @@ public:
     int field_4E4;
     int field_4E8;
     int m_nHashNo;
-    Entity *m_pEntity;
+    Entity *m_Entity;
     cXmlBinary m_BxmReader;
     int field_514;
-    cObj *m_pOwner;
+    cObj *m_Owner;
     int field_51C;
     int field_520;
     float field_524;

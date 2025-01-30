@@ -14,6 +14,13 @@ public:
     float field_934;
     int field_938;
     int field_93C;
+
+    Pl0012()
+    {
+        ((void(__thiscall *)(Pl0012 *))(shared::base + 0x6A6040))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9F20);
 };
 
 VALIDATE_SIZE(Pl0012, 0x940);

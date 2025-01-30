@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Hw.h>
+
 class cFade
 {
 public:
@@ -17,4 +19,9 @@ public:
         int field_24;
     };
     
+    int field_0;
+    int field_4;
+    Hw::cHeapFixed m_UnitFactory;
+    Hw::cFixedList<Unit*> m_UnitList;
+    int field_84;
 };

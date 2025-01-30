@@ -152,6 +152,6 @@ public:
     int field_404;
     int field_408;
     int field_40C;
-
-    virtual ~cDryCellGauge2() override {};
 };
+
+class cDryCellGauge2Base : public cCustomObjWorkBase{};

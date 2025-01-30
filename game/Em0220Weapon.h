@@ -5,7 +5,7 @@
 class Em0220Weapon : public BehaviorWeapon
 {
 public:
-    int field_8C0;
+    EntityHandle field_8C0;
     int field_8C4;
     int field_8C8;
     int field_8CC;
@@ -21,6 +21,13 @@ public:
     int field_8F4;
     int field_8F8;
     int field_8FC;
+
+    Em0220Weapon()
+    {
+        ((void(__thiscall *)(Em0220Weapon *))(shared::base + 0x6A6310))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735008);
 };
 
 VALIDATE_SIZE(Em0220Weapon, 0x900);

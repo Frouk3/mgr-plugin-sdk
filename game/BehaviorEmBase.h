@@ -72,7 +72,7 @@ public:
     int field_C04;
     int field_C08;
     int field_C0C;
-    cEnemyCautionStateManager field_C10;
+    cEnemyCautionStateManager m_CautionStateManager;
     int field_D50;
     int field_D54;
     int field_D58;

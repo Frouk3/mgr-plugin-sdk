@@ -25,6 +25,13 @@ public:
     int field_8B4;
     int field_8B8;
     int field_8BC;
+
+    BehaviorWeapon()
+    {
+        ((void(__thiscall *)(BehaviorWeapon *))(shared::base + 0x6A4AD0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C2C);
 };
 
 VALIDATE_SIZE(BehaviorWeapon, 0x8C0);

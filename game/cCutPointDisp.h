@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 class cCutPointDisp
 {
 public:
@@ -54,3 +56,5 @@ public:
 
     virtual ~cCutPointDisp() {};
 };
+
+class cCutPointDispBase : public cCustomObjWorkBase{};

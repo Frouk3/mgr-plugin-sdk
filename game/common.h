@@ -114,14 +114,19 @@ struct ContextInstance
 		return this == &other;
 	}
 
-	ContextInstance(ContextInstance &inheritance)
+	ContextInstance(ContextInstance *inheritance)
 	{
-		m_inheritance = &inheritance;
+		((void(__thiscall *)(ContextInstance *, ContextInstance *))(shared::base + 0x9D6D50))(this, inheritance); // second parameter is actually a pointer??
 	}
 
-	ContextInstance()
+	ContextInstance() : ContextInstance(nullptr)
 	{
-		m_inheritance = nullptr;
+
+	}
+
+	~ContextInstance()
+	{
+		((void(__thiscall *)(ContextInstance *))(shared::base + 0x9D6D60))(this); // Empty destructor, still reference this destructor for SDK
 	}
 };
 

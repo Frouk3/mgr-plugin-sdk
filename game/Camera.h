@@ -5,6 +5,16 @@
 
 namespace Camera
 {
+    struct ProjectionData
+    {
+        int field_0;
+        int field_4;
+        int m_ResX;
+        int m_ResY;
+        float field_10;
+        float field_14;
+    };
+
     namespace Math
     {
 
@@ -39,7 +49,7 @@ class Camera::StateNode
 {
 public:
 
-    virtual ContextInstance& getContext() { ContextInstance context; return context; };
+    virtual ContextInstance& getContext() { static ContextInstance context; return context; };
     virtual ~StateNode() {};
 };
 

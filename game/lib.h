@@ -697,6 +697,9 @@ public:
         }
         else
         {
+            if (size <= this->m_nSize) // new size of array cannot hold old elements
+                return;
+
             auto newArray = (T*)this->m_Allocator->AllocateMemory(sizeof(T) * size, 32, 0, 0);
             if (newArray)
             {

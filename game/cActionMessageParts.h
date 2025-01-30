@@ -45,6 +45,4 @@ public:
     int field_124;
     int field_128;
     int field_12C;
-
-    virtual ~cActionMessageParts() override {};
 };

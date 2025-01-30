@@ -24,10 +24,30 @@ struct cInput
         int field_30;
         int field_34;
     };
+
+    struct KeyInput
+    {
+        int m_KeysPressed[31];
+    };
+
+    struct MouseInput
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        cVec2 m_MousePosition;
+        int field_18;
+        int field_1C;
+        cVec2 m_LastMousePosition;
+    };
 };
 
 namespace Hw
 {
+    struct cDvdFst;
+    struct DvdReadManager;
+
     struct Thread;
 
     class cHeap;
@@ -1987,6 +2007,95 @@ struct Hw::cExpandableVector
         }
         return FALSE;
     }
+};
+
+#include <CriFs.h>
+
+struct Hw::cDvdFst
+{
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+    int field_90;
+    int field_94;
+    int field_98;
+    int field_9C;
+    int field_A0;
+    int field_A4;
+    int field_A8;
+    int field_AC;
+    int field_B0;
+    int field_B4;
+    int field_B8;
+
+    struct Work
+    {
+        int m_nState;
+        CriFsBinderWork *m_CriBinderWork;
+        CriFsLoaderHn *m_CriLoader;
+        char m_Filepath[64];
+        int m_MaxTime;
+        int m_AttemptTime;
+        void *m_Filedata;
+        int m_Buffersize;
+        int m_Priority;
+        int field_60;
+        int field_64;
+        int field_68;
+        Work *m_Next;
+        Work *m_Previous;
+    };
+
+    struct ReadWork : Work // Probably FileReadWork
+    {
+        char m_Filepath[64];
+        void *m_Filedata;
+        int m_nBuffersize;
+        int field_BC;
+        int m_nWaitAmount;
+        int m_ReaderFlags;
+        int m_nPriority;
+    }; 
+};
+
+struct Hw::DvdReadManager
+{
+    int field_0;
+    int field_4;
+    Hw::cHeapFixed m_DvdReadFactory;
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);

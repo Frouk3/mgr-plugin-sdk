@@ -2576,3 +2576,60 @@ public:
 
     virtual ~cUITextureManager() {};
 };
+
+class cMsgCtrl
+{
+public:
+    int field_4;
+    int field_8;
+    Hw::cTexture m_cMsgTexture;
+    int field_28;
+    char field_2C;
+    __int16 field_2D;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+
+    virtual ~cMsgCtrl() {};
+};
+
+class cUIDataManager
+{
+public:
+    struct UIData
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        int field_10;
+        int field_14;
+        int field_18;
+        int field_1C;
+        int field_20;
+        int field_24;
+        int field_28;
+        cMsgCtrl field_2C;
+        int field_70;
+    };
+public:
+    int field_4;
+    int field_8;
+    cUIDataManager::UIData field_C[14];
+    int field_664;
+    int field_668;
+    int field_66C;
+    int field_670;
+    int field_674;
+    int field_678;
+    int field_67C;
+    int field_680;
+    int field_684;
+    DataArchiveHolder field_688;
+    Hw::cHeapPhysical m_PhysicalHeap;
+
+    virtual ~cUIDataManager() {};
+};
+

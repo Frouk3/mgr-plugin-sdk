@@ -57,4 +57,11 @@ public:
     int field_904;
     int field_908;
     int field_90C;
+
+    BehaviorDebrisActor()
+    {
+        ((void(__thiscall *)(BehaviorDebrisActor *))(shared::base + 0x1DA670))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735304);
 };

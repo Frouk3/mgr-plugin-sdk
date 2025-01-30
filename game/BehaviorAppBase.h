@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
 
 // physical object
+
 class BehaviorAppBase : public Behavior
 {
 public:
@@ -89,12 +90,11 @@ public:
     float field_9EC;
     float field_9F0;
 
-    // empty constructor
-    // vftable at 0x123F724
     BehaviorAppBase()
     {
-
+        ((void(__thiscall *)(BehaviorAppBase *))(shared::base + 0xEC370))(this);
     }
+
     void heal(int heal)
     {
         CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 class cEnemyEnergyGauge
 {
 public:
@@ -7,3 +9,6 @@ public:
 
     virtual ~cEnemyEnergyGauge() {};
 };
+
+class cEnemyEnergyGaugeBase : public cCustomObjWorkBase{};
+class cEnemyEnergyGaugePrologueBase : public cCustomObjWorkBase{};

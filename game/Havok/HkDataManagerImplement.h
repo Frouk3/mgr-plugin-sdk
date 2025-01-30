@@ -17,6 +17,7 @@ struct DataArchiveEntry
 struct DataArchiveHolder
 {
     char* m_data;
+    char *m_bigEndianData; // why?
 
     DataArchiveHolder()
     {

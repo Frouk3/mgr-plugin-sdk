@@ -6,12 +6,12 @@ struct cTaskManager
 {
 	struct cTask;
 
-	int m_nTaskCapacity;
-	cTask* m_pTaskBegin;
-	cTask* m_pFirst;
-	cTask* m_pLastTask;
-	cTask* m_pCurrentTask;
-	int m_nTasks;
+	int m_TaskCapacity;
+	cTask* m_TaskBegin;
+	cTask* m_First;
+	cTask* m_LastTask;
+	cTask* m_CurrentTask;
+	int m_Tasks;
 	cTaskManager* field_18;
 
 	cTaskManager()
@@ -57,19 +57,19 @@ struct cTaskManager
 
 struct cTaskManager::cTask
 {
-	cTaskManager* m_pCreator;
+	cTaskManager* m_Creator;
 	void(__cdecl* m_callback)(LPVOID);
 	LPVOID m_callbackparameter;
 	int m_nTaskNum;
 	int m_nTaskPriority;
 	const char* m_TaskName;
-	int m_nTaskStatus;
-	int m_nTaskId;
-	unsigned int m_nTaskStackSize;
+	int m_TaskStatus;
+	int m_TaskId;
+	unsigned int m_TaskStackSize;
 	HANDLE m_hSemaphore;
 	HANDLE m_hTask;
-	cTask* m_pNext;
-	cTask* m_pPrev;
+	cTask* m_Next;
+	cTask* m_Prev;
 	int field_34;
 
 	void cleanup()

@@ -5,8 +5,7 @@
 class Em0045 : public Behavior
 {
 public:
-    int field_870;
-    int field_874;
+    EntityHandle field_870[2];
     int field_878;
     int field_87C;
     float field_880;
@@ -25,6 +24,13 @@ public:
     int field_8B4;
     int field_8B8;
     int field_8BC;
+
+    Em0045()
+    {
+        ((void(__thiscall *)(Em0045 *))(shared::base + 0x6A62C0))(this);
+    }
+
+    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1734C60);
 };
 
 VALIDATE_SIZE(Em0045, 0x8C0);

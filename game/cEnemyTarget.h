@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 #include <cEnemyTargetParts.h>
 
 class cEnemyTarget
@@ -53,3 +55,5 @@ public:
 
     virtual ~cEnemyTarget() {};
 };
+
+class cEnemyTargetBase : public cCustomObjWorkBase{};

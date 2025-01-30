@@ -89,6 +89,13 @@ public:
     int field_964;
     int field_968;
     int field_96C;
+
+    BehaviorDebrisBase()
+    {
+        ((void(__thiscall *)(BehaviorDebrisBase *))(shared::base + 0x1D9E20))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735300); 
 };
 
 VALIDATE_SIZE(BehaviorDebrisBase, 0x970);

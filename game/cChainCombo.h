@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 class cChainCombo
 {
 public:
@@ -21,3 +23,5 @@ public:
 
     virtual ~cChainCombo() {};
 };
+
+class cChainComboBase : public cCustomObjWorkBase{};

@@ -1,9 +1,13 @@
 #pragma once
-#include "PlayerManager.h"
-#include "Hw.h"
-#include "lib.h"
-#include "Entity.h"
-#include "shared.h"
+
+#include <PlayerManager.h>
+#include <Hw.h>
+#include <lib.h>
+#include <Entity.h>
+#include <shared.h>
+#include <Pl0000.h>
+#include <Pl1400.h>
+#include <Pl1500.h>
 
 class PlayerManagerImplement : public PlayerManager
 {

@@ -6,73 +6,10 @@ class Em0310Shield : public Behavior
 {
 public:
     int field_870;
-    int field_874;
+    EntityHandle field_874;
     int field_878;
     int field_87C;
-    int field_880;
-    int field_884;
-    int field_888;
-    int field_88C;
-    int field_890;
-    int field_894;
-    int field_898;
-    int field_89C;
-    int field_8A0;
-    int field_8A4;
-    int field_8A8;
-    int field_8AC;
-    int field_8B0;
-    int field_8B4;
-    int field_8B8;
-    int field_8BC;
-    int field_8C0;
-    int field_8C4;
-    int field_8C8;
-    int field_8CC;
-    int field_8D0;
-    int field_8D4;
-    int field_8D8;
-    int field_8DC;
-    int field_8E0;
-    int field_8E4;
-    int field_8E8;
-    int field_8EC;
-    int field_8F0;
-    int field_8F4;
-    int field_8F8;
-    int field_8FC;
-    int field_900;
-    int field_904;
-    int field_908;
-    int field_90C;
-    int field_910;
-    int field_914;
-    int field_918;
-    int field_91C;
-    int field_920;
-    int field_924;
-    int field_928;
-    int field_92C;
-    int field_930;
-    int field_934;
-    int field_938;
-    int field_93C;
-    int field_940;
-    int field_944;
-    int field_948;
-    int field_94C;
-    int field_950;
-    int field_954;
-    int field_958;
-    int field_95C;
-    int field_960;
-    int field_964;
-    int field_968;
-    int field_96C;
-    int field_970;
-    int field_974;
-    int field_978;
-    int field_97C;
+    CollisionAttackData::AttackData m_AttackData;
     int field_980;
     float field_984;
     int field_988;
@@ -85,6 +22,13 @@ public:
     int field_9A4;
     int field_9A8;
     int field_9AC;
+
+    Em0310Shield()
+    {
+        ((void(__thiscall *)(Em0310Shield *))(shared::base + 0x6A6370))(this);
+    }
+
+    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x173514C);
 };
 
 VALIDATE_SIZE(Em0310Shield, 0x9B0);
