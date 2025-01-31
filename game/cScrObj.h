@@ -18,4 +18,13 @@ public:
     int field_8D4;
     int field_8D8;
     int field_8DC;
+
+    cScrObj()
+    {
+        ((void(__thiscall *)(cScrObj *))(shared::base + 0x6A6900))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x177B37C);
 };
+
+VALIDATE_SIZE(cScrObj, 0x8E0);

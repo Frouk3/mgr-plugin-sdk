@@ -55,4 +55,13 @@ public:
     int field_904;
     int field_908;
     int field_90C;
+
+    Em0010DebrisActor()
+    {
+        ((void(__thiscall *)(Em0010DebrisActor*))(shared::base + 0x6A6BA0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735360);
 };
+
+VALIDATE_SIZE(Em0010DebrisActor, 0x910);

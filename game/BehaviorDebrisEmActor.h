@@ -63,4 +63,8 @@ public:
     {
         ((void (__thiscall *)(BehaviorDebrisEmActor *))(shared::base + 0x6A6B60))(this);
     }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735314);
 };
+
+VALIDATE_SIZE(BehaviorDebrisEmActor, 0x910);

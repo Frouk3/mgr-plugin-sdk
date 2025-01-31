@@ -5,6 +5,7 @@
 #include <dinput.h>
 #include <shared.h>
 #include <Xinput.h>
+#include <Math.h>
 
 extern void PrintfLog(const char* fmt, ...);
 

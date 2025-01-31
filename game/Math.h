@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cmath>
+#include <math.h>
+
 enum RotateMatrixOrder
 {
     ORDER_XYZ = 0x0,
