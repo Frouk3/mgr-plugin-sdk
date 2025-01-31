@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Behavior.h"
-#include "EspControllerBullet.h"
+#include <Behavior.h>
+#include <EspControllerBullet.h>
 
 class BehaviorBulletBase : public Behavior
 {
@@ -37,7 +37,7 @@ public:
     int field_8E0;
     int field_8E4;
     int field_8E8;
-    int field_8EC;
+    EntityHandle field_8EC;
     float field_8F0;
     float field_8F4;
     float field_8F8;
@@ -216,7 +216,7 @@ public:
     int field_BC4;
     int field_BC8;
     int field_BCC;
-    int field_BD0;
+    EntityHandle field_BD0;
     int field_BD4;
     int field_BD8;
     int field_BDC;
@@ -476,7 +476,7 @@ public:
     int field_112C;
     EspControllerBullet field_1130;
     int field_1200;
-    int field_1204;
+    EntityHandle field_1204;
     int field_1208;
     int field_120C;
 
@@ -485,7 +485,7 @@ public:
         ((void (__thiscall *)(BehaviorBulletBase *))(shared::base + 0x6CCE00))(this);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C94);
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C94);
 };
 
 VALIDATE_SIZE(BehaviorBulletBase, 0x1210);

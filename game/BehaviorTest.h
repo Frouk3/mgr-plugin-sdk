@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BehaviorAppBase.h"
+#include <BehaviorAppBase.h>
 
 class BehaviorTest : public BehaviorAppBase
 {

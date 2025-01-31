@@ -22,3 +22,5 @@ public:
         ((void(__thiscall *)(hkpAllCdPointCollector*))(shared::base + 0x388C0))(this);
     }
 };
+
+VALIDATE_SIZE(hkpAllCdPointCollector, 0x1A0);

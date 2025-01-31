@@ -1,10 +1,10 @@
 #pragma once
 
-#include "hkpEntity.h"
+#include <hkpEntity.h>
 
 class hkpRigidBody : public hkpEntity
 {
 public:
 
-    virtual ~hkpRigidBody() override {};
+    
 };

@@ -131,7 +131,7 @@ public:
 					auto pos = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecTransPos : cVec4();
 					auto rot = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecRotation : cVec4();
 
-					instance->place(&pos, &rot);
+					instance->place(pos, rot);
 
 					cObjReadManager::Instance.endWork(instance->m_nObjId, instance->m_nSetType);
 				}
@@ -141,8 +141,11 @@ public:
 
 		Events::OnTickEvent += []()
 			{
-				if (shared::IsKeyPressedEx('H', false)) // spawn boss Sam for example
-					m_EntQueue.push_back({ .mObjId = (eObjID)0x20020, .iSetType = 0, .bWorkFail = !isObjExists(.mObjId) });
+				if (shared::IsKeyPressed('H', false)) // spawn boss Sam for example
+				{
+					eObjID objectId = eObjID(0x20020); 
+					m_EntQueue.push_back({ .mObjId = objectId, .iSetType = 0, .bWorkFail = !isObjExists(objectId) });
+				}
 			};
 	}
 } __spawner;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
+#include <cCustomObjCtrlManager.h>
 
 class cEnergyGaugeWhiteRaiden : public cCustomObjCtrlManager
 {
@@ -58,6 +58,4 @@ public:
     int field_E4;
     int field_E8;
     int field_EC;
-
-    virtual ~cEnergyGaugeWhiteRaiden() override {};
 };

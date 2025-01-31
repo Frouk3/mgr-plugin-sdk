@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 class cBossWeaponInfoDisp
 {
 public:
@@ -7,3 +9,5 @@ public:
     
     virtual ~cBossWeaponInfoDisp() {};
 };
+
+class cBossWeaponInfoDispBase : public cCustomObjWorkBase{};

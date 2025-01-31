@@ -1,5 +1,7 @@
 #pragma once
 
+#include <common.h>
+
 class StateMachineNode
 {
 public:
@@ -16,5 +18,5 @@ public:
     int field_2C;
 
     
-    virtual ~StateMachineNode() { ((void (__thiscall *)(StateMachineNode *))(*(void***)this)[1])(this); };
+    virtual ContextInstance& getContext() { ContextInstance context; return context; };
 };

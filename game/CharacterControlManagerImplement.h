@@ -1,14 +1,14 @@
 #pragma once
 
-#include "lib.h"
-#include "CharacterControl.h"
-#include "CharacterControlManager.h"
-#include "shared.h"
+#include <lib.h>
+#include <CharacterControl.h>
+#include <CharacterControlManager.h>
+#include <shared.h>
 
 class CharacterControlManagerImplement : public CharacterControlManager
 {
 public:
-    lib::AllocatedArray<CharacterControl *> *m_pCharacterControlArray;
+    lib::AllocatedArray<CharacterControl *> *m_CharacterControls;
     int field_8;
     int field_C;
     int field_10;
@@ -20,5 +20,7 @@ public:
     int field_28;
     int field_2C;
 
-    static inline CharacterControlManagerImplement *&pInstance = *(CharacterControlManagerImplement**)(shared::base + 0x1735D9C);
+    static inline CharacterControlManagerImplement *&ms_Instance = *(CharacterControlManagerImplement**)(shared::base + 0x1735D9C);
 };
+
+VALIDATE_SIZE(CharacterControlManagerImplement, 0x30);

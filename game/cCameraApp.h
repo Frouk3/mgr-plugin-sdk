@@ -1,6 +1,7 @@
 #pragma once
-#include "cCamera.h"
-#include "cCameraTypes.h"
+
+#include <cCamera.h>
+#include <cCameraTypes.h>
 
 class cCameraApp : public cCamera, public cCameraTypes
 {

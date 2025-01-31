@@ -1,7 +1,8 @@
 #pragma once
-#include "EntityHandle.h"
-#include "shared.h"
+#include <EntityHandle.h>
+#include <shared.h>
 
+class cParts;
 struct Entity;
 
 class EspCtrlCustomImpl;
@@ -31,6 +32,42 @@ public:
             public:
 
             };
+        };
+
+        class Node
+        {
+        public:
+            int field_4;
+            int field_8;
+            int field_C;
+            int field_10;
+            int field_14;
+            int field_18;
+            int field_1C;
+
+            virtual ~Node() {};
+        };
+
+        struct Unit
+        {
+            int field_0;
+            Node *field_4;
+            int field_8;
+            int field_C;
+            int field_10;
+            int field_14;
+        };
+
+        struct NodeFactory
+        {
+            Hw::CriticalSection m_CriticalSection;
+            int field_1C;
+            Hw::cHeapVariable *m_Factory;
+            size_t m_nCapacity;
+            size_t m_nSize;
+            int field_2C;
+            int field_30;
+            int field_34;
         };
     };
 
@@ -272,6 +309,36 @@ public:
             int field_88;
 
             virtual ~Node() {};
+
+            void setCurrentTime(float time, float *data)
+            {
+                CallVMTFunc<11, Node *, float, float *>(this, time, data);
+            }
+
+            void setCurrentTimeSlide(float timeSlide, float *data)
+            {
+                CallVMTFunc<12, Node *, float, float *>(this, timeSlide, data);
+            }
+
+            float getCurrentTime()
+            {
+                return ReturnCallVMTFunc<float, 13, Node*>(this);
+            }
+
+            float getElapsedTime()
+            {
+                return ReturnCallVMTFunc<float, 14, Node*>(this);
+            }
+
+            float getMaxTime()
+            {
+                return ReturnCallVMTFunc<float, 15, Node*>(this);
+            }
+
+            void setLocalWeight(float *a2, float* a3)
+            {
+                CallVMTFunc<16, Node*, float *, float*>(this, a2, a3);
+            }
         };
 
         class NodeBlend : public Node
@@ -307,8 +374,8 @@ public:
         {
         public:
             int field_8C;
-            int field_90;
-            int field_94;
+            float field_90;
+            float field_94;
         };
 
         class NodeSequence : public Node
@@ -337,12 +404,61 @@ public:
 
             };
         };
+
+        class NodePlay : public NodeSequence
+        {
+            int field_98;
+            int field_9C;
+            int field_A0;
+            int field_A4;
+            int field_A8;
+            int field_AC;
+            int field_B0;
+            int field_B4;
+            int field_B8;
+            int field_BC;
+            int field_C0;
+            int field_C4;
+            int field_C8;
+            int field_CC;
+            int field_D0;
+            int field_D4;
+            int field_D8;
+            int field_DC;
+            int field_E0;
+            int field_E4;
+            int field_E8;
+            int field_EC;
+            int field_F0;
+            int field_F4;
+            int field_F8;
+            int field_FC;
+            int field_100;
+            int field_104;
+            int field_108;
+            int field_10C;
+            int field_110;
+            int field_114;
+            int field_118;
+            int field_11C;
+            int field_120;
+            int field_124;
+            int field_128;
+            int field_12C;
+            int field_130;
+            int field_134;
+            int field_138;
+            int field_13C;
+            int field_140;
+        };
     };
 };
 
 class Animation::PostControl::Work
 {
 public:
+    int field_4;
+    int field_8;
 
     virtual ~Work() {};
 };
@@ -461,13 +577,11 @@ public:
 class Animation::HandIk : public Animation::PostControl::Work
 {
 public:
-    int field_4;
-    int field_8;
     int field_C;
     int field_10;
-    int field_14;
-    int field_18;
-    int field_1C;
+    cParts **field_14;
+    cParts **field_18;
+    cParts **field_1C;
     int field_20;
     int field_24;
     int field_28;
@@ -492,7 +606,7 @@ public:
     int field_74;
     int field_78;
     int field_7C;
-    int field_80;
+    cParts *field_80;
     int field_84;
     int field_88;
     int field_8C;
@@ -522,4 +636,5 @@ public:
     int field_EC;
 };
 
+VALIDATE_SIZE(Animation::HandIk, 0xF0);
 VALIDATE_SIZE(Animation, 0x344);

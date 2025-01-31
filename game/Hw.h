@@ -1,17 +1,64 @@
 #pragma once
+#define DIRECTINPUT_VERSION 0x800u
 #include <Windows.h>
 #include <d3dx9.h>
 #include <dinput.h>
-#include "shared.h"
+#include <shared.h>
+#include <Xinput.h>
+#include <Math.h>
 
-extern void(__cdecl* ePrintf)(const char* fmt, ...);
+extern void PrintfLog(const char* fmt, ...);
+
+struct cInput
+{
+    struct ControllerState
+    {
+        XINPUT_STATE m_XInputState;
+        int m_bSuccessful;
+        float field_14;
+        float field_18;
+        float field_1C;
+        float field_20;
+        float m_fLeftMotorSpeed;
+        float m_fRightMotorSpeed;
+        int field_2C;
+        int field_30;
+        int field_34;
+    };
+
+    struct KeyInput
+    {
+        int m_KeysPressed[31];
+    };
+
+    struct MouseInput
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        cVec2 m_MousePosition;
+        int field_18;
+        int field_1C;
+        cVec2 m_LastMousePosition;
+    };
+};
 
 namespace Hw
 {
+    struct cDvdFst;
+    struct DvdReadManager;
+
+    struct Thread;
+
     class cHeap;
     class cHeapVariableBase;
     class cHeapVariable;
     class cTexture;
+    class cTextureInstance;
+    class cLockableTexture;
+    class cTargetTexture;
+    class cShareTargetTexture;
     class CameraProj;
     class cCameraBase;
     class cHeapPhysical;
@@ -26,6 +73,41 @@ namespace Hw
     class cRenderTargetInfo;
     class cOtWork;
     class CriticalSection;
+    class cShader;
+    class cPixelShader;
+    class cVertexShader;
+    struct cVertexInfo;
+    struct cPixelInfo;
+    class cDepthSurface;
+
+    class cOtManagerBase;
+
+    class cPrimF;
+    class cPrimFT;
+    class cPrimFTyuv;
+    class cPrimFV;
+    class cPrimG;
+    class cPrimIF;
+    class cPrimIFT;
+
+    class cRenderPredicate;
+
+    class cShaderPreset;
+    class cShaderCharacter;
+    class cShaderPF;
+    class cShaderPFT;
+    class cShaderPFTyuv;
+    class cShaderPFTyuva;
+    class cShaderPFV;
+    class cShaderPG;
+    class cVertexFormat;
+    class cVertexFormatP;
+    class cVertexFormatPG;
+    class cVertexFormatPT;
+    class cVertexFormatPV;
+    class cZTexture;
+
+    struct RenderBufferHeapManager;
 
     template <typename T>
     struct cFixedVector;
@@ -44,9 +126,79 @@ namespace Hw
     inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
     {
         return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
+    }
+
+    namespace TextureManager
+    {
+        struct Texture
+        {
+            LPDIRECT3DTEXTURE9 m_pTexture;
+            LPDIRECT3DTEXTURE9 *m_ppTexture;
+            int field_8;
+            int m_nWidth;
+            int m_nHeight;
+            int field_14;
+            D3DFORMAT m_Format;
+            D3DPOOL m_Pool;
+            int field_20;
+            int field_24;
+        };
+
+        inline void removeTexture(Texture& texture)
+        {
+            ((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture);
+        }
+
+        inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
+        inline CriticalSection &TextureCriticalSection = *(CriticalSection*)(shared::base + 0x1B20740);
     } 
 
-    inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+    namespace Wwise
+    {
+        namespace Command
+        {
+            class Work
+            {
+            public:
+                
+                virtual ~Work() {};
+            };
+
+            class ListenerPositionWork : public Work{};
+
+            class ListenerSpatializationWork : public Work{};
+
+            class ObjectEnvironmentDryLevelWork : public Work{};
+
+            class ObjectEnvironmentValuesWork : public Work{};
+
+            class ObjectListenerMaskWork : public Work{};
+
+            class ObjectOutputMaskWork : public Work{};
+
+            class ObjectPositionWork : public Work{};
+
+            class ObjectRTPCValueWork : public Work{};
+
+            class ObjectRegisterWork : public Work{};
+
+            class ObjectReleaseWork : public Work{};
+
+            class ObjectSwitchWork : public Work{};
+
+            class PostEventWork : public Work{};
+
+            class ReleaseEventWork : public Work{};
+
+            class ScalingFactorWork : public Work{};
+
+            class StateWork : public Work{};
+
+            class StopEventWork : public Work{};
+        }
+    }
+
+    inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline LPDIRECTINPUT8& InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
     inline LPDIRECTINPUTDEVICE8W& InputDeviceW = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
@@ -55,7 +207,32 @@ namespace Hw
 
     inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
     inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+
+    inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 }
+
+class Hw::cDepthSurface
+{
+public:
+
+    virtual ~cDepthSurface() {};
+};
+
+class Hw::cOtManagerBase
+{
+public:
+
+    virtual ~cOtManagerBase() {};
+};
+
+struct Hw::Thread
+{
+    int m_ThreadId;
+    int field_4;
+    int m_ThreadIndex;
+    void (__cdecl *m_func)(void *);
+    void *m_arg;
+};
 
 struct Hw::cVec2
 {
@@ -280,6 +457,11 @@ struct Hw::cVec3
         return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
     }
 
+    float length2D()
+    {
+        return sqrtf(powf(x, 2) + powf(z, 2));
+    }
+
     cVec3 Normalize()
     {
         float length = this->length();
@@ -318,11 +500,6 @@ struct Hw::cVec4
     float z;
     float w;
 
-    static inline void Normalize(cVec4* v1, cVec4* v2)
-    {
-        ((void(__cdecl*)(cVec4*, cVec4*))(shared::base + 0x9DF460))(v1, v2);
-    }
-
     void operator=(const cVec4& right)
     {
         this->x = right.x;
@@ -346,6 +523,11 @@ struct Hw::cVec4
     float length()
     {
         return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
+    }
+
+    float length2D()
+    {
+        return sqrtf(powf(x, 2) + powf(z, 2));
     }
 
     cVec4 operator+(const cVec4& rhs) const
@@ -438,8 +620,8 @@ struct Hw::cVec4
     
     cVec4 Normalize()
     {
-        Normalize(this, this);
-        return *this;
+        float length = this->length();
+        return cVec4(x / length, y / length, z / length, w);
     }
 
     float dot(const cVec4& lhs) const 
@@ -468,8 +650,6 @@ struct Hw::cQuaternion
     cQuaternion(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
     cQuaternion() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
 };
-
-VALIDATE_SIZE(Hw::cVec4, 0x10);
 
 typedef Hw::cVec2 cVec2;
 typedef Hw::cVec3 cVec3;
@@ -550,7 +730,7 @@ public:
         return ReturnCallVMTFunc<size_t, 4, cHeap*>(this);
     }
 
-    size_t getAvailableMemory()
+    size_t getUsedMemory()
     {
         return ReturnCallVMTFunc<size_t, 5, cHeap*>(this);
     }
@@ -614,18 +794,6 @@ public:
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
-    HANDLE m_HeapHandle;
-    int field_44;
-    int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
-    int m_nUsedMemory;
-
-    cHeapVariableBase()
-    {
-        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
-    }
-
     struct HeapBlock
     {
         HeapBlock* m_pPrevious;
@@ -634,6 +802,18 @@ public:
         size_t m_nMemorySize;
         cHeapVariableBase* m_pAllocator;
     };
+
+    HANDLE m_HeapHandle;
+    HeapBlock* m_pFirstBlock;
+    HeapBlock* m_pLastBlock;
+    size_t m_nMemoryLimit;
+    size_t m_nFreeMemory;
+    size_t m_nUsedMemory;
+
+    cHeapVariableBase()
+    {
+        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
+    }
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
@@ -649,11 +829,22 @@ public:
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
+    struct HeapBlock
+    {
+        HeapBlock* m_previous;
+        HeapBlock* m_next;
+        size_t m_nTotalSize;
+        size_t m_nSize;
+        int field_10;
+        int field_14;
+        cHeapPhysicalBase* m_Allocator;
+    };
+public:
     HANDLE m_HeapHandle;
-    int filed_44;
-    int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
+    HeapBlock* m_First;
+    HeapBlock *m_Last;
+    size_t m_nMemoryLimit;
+    size_t m_nFreeMemory;
     int field_54;
     int field_58;
     int field_5C;
@@ -661,23 +852,12 @@ public:
     int field_64;
     int field_68;
     int field_6C;
-    void* m_pBlocks[256];
+    HeapBlock* m_pBlocks[256];
 
     cHeapPhysicalBase()
     {
         ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
     }
-
-    struct HeapBlock
-    {
-        HeapBlock* m_pPrevious;
-        HeapBlock* m_pNext;
-        size_t m_nTotalSize;
-        size_t m_nSize;
-        int field_10;
-        int field_14;
-        Hw::cHeapPhysicalBase* m_pAllocator;
-    };
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
@@ -700,18 +880,35 @@ public:
 class Hw::cHeapFixed : public Hw::cHeap
 {
 public:
+    struct HeapBlock 
+    {
+        HeapBlock *m_previous;
+        HeapBlock *m_next;
+        cHeapFixed *m_Allocator;
+    };
+public:
     HANDLE m_HeapHandle;
     int field_44;
-    int m_nFixedSize;
+    size_t m_nFixedSize;
     int field_4C;
-    int m_nFixedReservedSize;
-    int m_nFixedAmount;
+    size_t m_nFixedReservedSize;
+    size_t m_nFixedAmount;
     int field_58;
     int field_5C;
+
+    cHeapFixed()
+    {
+        ((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this);
+    }
 
     void* AllocateMemory()
     {
         return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
+    }
+
+    BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name)
+    {
+        return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name);
     }
 };
 
@@ -726,9 +923,35 @@ class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
+    cHeapGlobal()
+    {
+        ((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this);
+    }
+
     static inline cHeapGlobal* get()
     {
         return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
+    }
+
+    BOOL create(size_t size, const char *target) // Got optimised away
+    {
+        if (hasHandle())
+            return FALSE;
+
+        if (!this->m_CriticalSection.init())
+            return FALSE;
+
+        this->m_HeapHandle = HeapCreate(1u, 0u, 0u);
+
+        if (!this->m_HeapHandle)
+            return FALSE;
+
+        this->m_nMemoryLimit = size;
+        this->m_nFreeMemory = size;
+        this->m_TargetAlloc = target;
+        this->m_pFirstBlock = nullptr;
+        this->m_pLastBlock = nullptr;
+        return TRUE;
     }
 
     static inline Hw::cHeapGlobal& Instance = *(Hw::cHeapGlobal*)(shared::base + 0x1783AF0);
@@ -744,14 +967,50 @@ public:
 class Hw::cTexture
 {
 public:
-    int field_4;
+    void *m_Texture;
+    int m_bInitialized;
+    int field_C;
+    int field_10;
+    int field_14;
+    void *m_TextureAttributes;
+
+    virtual ~cTexture() {};
+};
+
+class Hw::cTextureInstance
+{
+public:
+    IDirect3DTexture9 *m_Texture;
     int field_8;
     int field_C;
     int field_10;
     int field_14;
     int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
 
-    virtual ~cTexture() {};
+    virtual ~cTextureInstance() {};
+};
+
+class Hw::cLockableTexture : public Hw::cTexture
+{
+public:
+    Hw::cTextureInstance m_Texture;
+};
+
+class Hw::cTargetTexture : public Hw::cTexture
+{
+public:
+    Hw::cTextureInstance m_Texture;
+};
+
+class Hw::cShareTargetTexture : public Hw::cTargetTexture
+{
+public:
+    int field_4C;
 };
 
 class Hw::CameraProj
@@ -797,7 +1056,9 @@ public:
 
         cVec4 calculateViewOffset()
         {
-            ((cVec4(__thiscall*)(CameraMatrix*))(shared::base + 0x9B9090))(this);
+            cVec4 result;
+            result = *((cVec4*(__thiscall*)(CameraMatrix*, cVec4*))(shared::base + 0x9B9090))(this, &result);
+            return result;
         }
     };
 
@@ -890,6 +1151,35 @@ public:
     virtual ~cIndexBufferHeap() {};
 };
 
+struct Hw::RenderBufferHeapManager
+{
+    cPrimHeap *field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    cPrimHeap field_20[2];
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    cIndexBufferHeap field_80[2];
+    int field_B8;
+};
+
 class Hw::cRenderTargetInfo
 {
 public:
@@ -919,6 +1209,161 @@ public:
         CallVMTFunc<1, Hw::cOtWork*>(this);
     }
 };
+
+struct Hw::cVertexInfo
+{
+    LPDIRECT3DVERTEXSHADER9 m_VertexShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
+};
+
+struct Hw::cPixelInfo
+{
+    LPDIRECT3DPIXELSHADER9 m_PixelShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
+};
+
+class Hw::cVertexShader
+{
+public:
+    cVertexInfo m_VertexData;
+
+    virtual ~cVertexShader() {};
+};
+
+class Hw::cPixelShader
+{
+public:
+
+    cPixelInfo m_PixelData;
+
+    virtual ~cPixelShader() {};
+};
+
+class Hw::cShader
+{
+public:
+    Hw::cVertexShader m_VertexShader;
+    Hw::cPixelShader m_PixelShader;
+    int field_24;
+
+    virtual ~cShader() {};
+};
+
+VALIDATE_SIZE(Hw::cShader, 0x28);
+
+class Hw::cVertexFormat
+{
+public:
+
+    IDirect3DVertexDeclaration9 *m_VertexDeclaration;
+    int m_UsageFlags;
+
+    virtual void dummyVM() {};
+};
+
+class Hw::cPrimF : public Hw::cOtWork
+{
+public:
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+};
+
+class Hw::cPrimFT : public Hw::cOtWork{};
+
+class Hw::cPrimFTyuv : public Hw::cOtWork{};
+
+class Hw::cPrimFV : public Hw::cOtWork{};
+
+class Hw::cPrimG : public Hw::cOtWork{};
+
+class Hw::cPrimIF : public Hw::cOtWork{};
+
+class Hw::cPrimIFT : public Hw::cOtWork{};
+
+class Hw::cRenderPredicate
+{
+public:
+
+    virtual ~cRenderPredicate() {};
+};
+
+class Hw::cShaderPreset : public Hw::cShader{};
+
+class Hw::cShaderCharacter : public Hw::cShaderPreset{};
+
+class Hw::cShaderPF : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFT : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFTyuv : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFTyuva : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFV : public Hw::cShaderPreset{};
+
+class Hw::cShaderPG : public Hw::cShaderPreset{};
+
+class Hw::cVertexFormatP : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPG : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPT : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPV : public Hw::cVertexFormat{};
+
+class Hw::cZTexture : public Hw::cTargetTexture{};
+
+class cFilterShaderCopyTex : public Hw::cShader
+{
+public:
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+};
+
+class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
 
 inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
 {
@@ -1100,28 +1545,28 @@ struct Hw::cFixedList
 
         iterator& operator++()
         {
-            if (this->m_current)
-                this->m_current = this->m_current->m_next;
+            if (m_current)
+                m_current = m_current->m_next;
 
             return *this;
         }
 
         iterator& operator--()
         {
-            if (this->m_current)
-                this->m_current = this->m_current->m_prev;
+            if (m_current)
+                m_current = m_current->m_prev;
 
             return *this;
         }
 
         T& operator*() const
         {
-            return this->m_current->m_value;
+            return m_current->m_value;
         }
 
         bool operator==(const iterator& other) const
         {
-            return this->m_current == other.m_current;
+            return m_current == other.m_current;
         }
 
         bool operator!=(const iterator& other) const
@@ -1235,7 +1680,7 @@ struct Hw::cFixedList
         }
         if (m_pLast == this->m_pHead)
         {
-            ePrintf("cFixedList<tC>::insert  list max over!");
+            PrintfLog("cFixedList<tC>::insert  list max over!");
             retNode = this->m_pHead;
         }
         else
@@ -1541,7 +1986,7 @@ struct Hw::cExpandableVector
         }
         else
         {
-            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+            PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
             return FALSE;
         }
 
@@ -1558,11 +2003,100 @@ struct Hw::cExpandableVector
         }
         else
         {
-            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+            PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
             return FALSE;
         }
         return FALSE;
     }
+};
+
+#include <CriFs.h>
+
+struct Hw::cDvdFst
+{
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+    int field_90;
+    int field_94;
+    int field_98;
+    int field_9C;
+    int field_A0;
+    int field_A4;
+    int field_A8;
+    int field_AC;
+    int field_B0;
+    int field_B4;
+    int field_B8;
+
+    struct Work
+    {
+        int m_nState;
+        CriFsBinderWork *m_CriBinderWork;
+        CriFsLoaderHn *m_CriLoader;
+        char m_Filepath[64];
+        int m_MaxTime;
+        int m_AttemptTime;
+        void *m_Filedata;
+        int m_Buffersize;
+        int m_Priority;
+        int field_60;
+        int field_64;
+        int field_68;
+        Work *m_Next;
+        Work *m_Previous;
+    };
+
+    struct ReadWork : Work // Probably FileReadWork
+    {
+        char m_Filepath[64];
+        void *m_Filedata;
+        int m_nBuffersize;
+        int field_BC;
+        int m_nWaitAmount;
+        int m_ReaderFlags;
+        int m_nPriority;
+    }; 
+};
+
+struct Hw::DvdReadManager
+{
+    int field_0;
+    int field_4;
+    Hw::cHeapFixed m_DvdReadFactory;
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);

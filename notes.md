@@ -1,0 +1,1 @@
+* Headers/structures that have `VALIDATE_SIZE` macro are already aligned with their structure in game, make sure to not add/remove fields for it

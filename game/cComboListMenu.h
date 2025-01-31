@@ -1,9 +1,9 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
-#include "cControllerHelpMenu.h"
-#include "cMenuKeyInfo.h"
-#include "Hw.h"
+#include <cCustomObjCtrlManager.h>
+#include <cControllerHelpMenu.h>
+#include <cMenuKeyInfo.h>
+#include <Hw.h>
 
 class cComboListMenu : public cCustomObjCtrlManager
 {
@@ -425,3 +425,5 @@ public:
     int field_788;
     int field_78C;
 };
+
+VALIDATE_SIZE(cComboListMenu, 0x790);

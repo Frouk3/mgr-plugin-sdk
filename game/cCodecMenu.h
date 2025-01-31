@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cCodecMenuParts.h"
+#include <cCodecMenuParts.h>
 
 class cCodecMenu
 {

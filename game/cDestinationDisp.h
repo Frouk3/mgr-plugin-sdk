@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 class cDestinationDisp
 {
 public:
@@ -16,3 +18,5 @@ public:
     
     virtual ~cDestinationDisp() {};
 };
+
+class cDestinationDispBase : public cCustomObjWorkBase{};

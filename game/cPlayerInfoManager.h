@@ -1,33 +1,33 @@
 #pragma once
 
-#include "Hw.h"
-#include "cChainCombo.h"
-#include "cEffectDatsuDisp.h"
-#include "cEffectSouDisp.h"
-#include "cEffectZanDisp.h"
-#include "cAttentionDisp.h"
-#include "cQTEButton.h"
-#include "cQTECallAlarm.h"
-#include "cEnergyGaugeWhiteRaiden.h"
-#include "cDryCellGauge2.h"
-#include "cJammingDie.h"
-#include "cJammingWall.h"
-#include "cResultDisp.h"
-#include "cItemGetDisp.h"
-#include "cSubWeaponInfoDisp.h"
-#include "cBossWeaponInfoDisp.h"
-#include "cWeaponInfoDisp.h"
-#include "cGrenadeGuideLine.h"
-#include "cNinjyaRunNavi.h"
-#include "cVisorMode.h"
-#include "cRpgSite.h"
-#include "cSentryGunSite.h"
-#include "cStingerMissileSite.h"
-#include "cStealthKillTarget.h"
-#include "cDestinationDisp.h"
-#include "cFreeMissionDisp.h"
-#include "cUnLockInfoDisp.h"
-#include "cVRMissionBackPanel.h"
+#include <Hw.h>
+#include <cChainCombo.h>
+#include <cEffectDatsuDisp.h>
+#include <cEffectSouDisp.h>
+#include <cEffectZanDisp.h>
+#include <cAttentionDisp.h>
+#include <cQTEButton.h>
+#include <cQTECallAlarm.h>
+#include <cEnergyGaugeWhiteRaiden.h>
+#include <cDryCellGauge2.h>
+#include <cJammingDie.h>
+#include <cJammingWall.h>
+#include <cResultDisp.h>
+#include <cItemGetDisp.h>
+#include <cSubWeaponInfoDisp.h>
+#include <cBossWeaponInfoDisp.h>
+#include <cWeaponInfoDisp.h>
+#include <cGrenadeGuideLine.h>
+#include <cNinjyaRunNavi.h>
+#include <cVisorMode.h>
+#include <cRpgSite.h>
+#include <cSentryGunSite.h>
+#include <cStingerMissileSite.h>
+#include <cStealthKillTarget.h>
+#include <cDestinationDisp.h>
+#include <cFreeMissionDisp.h>
+#include <cUnLockInfoDisp.h>
+#include <cVRMissionBackPanel.h>
 
 class cPlayerInfoManager
 {
@@ -138,7 +138,7 @@ public:
 
   virtual ~cPlayerInfoManager() {};
 
-  static inline cPlayerInfoManager &Instance = *(cPlayerInfoManager*)(shared::base + 0x1737A10);
+  static inline cPlayerInfoManager &ms_Instance = *(cPlayerInfoManager*)(shared::base + 0x1737A10);
 };
 
 VALIDATE_SIZE(cPlayerInfoManager, 0x1A0);

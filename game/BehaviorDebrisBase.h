@@ -1,10 +1,29 @@
 #pragma once
 
-#include "Behavior.h"
-#include "Slot.h"
+#include <Behavior.h>
+#include <Slot.h>
+#include <hkpPhantomOverlapListener.h>
 
 class BehaviorDebrisBase : public Behavior
 {
+public:
+    class DebrisPhantomListener : public hkpPhantomOverlapListener
+    {
+    public:
+
+    };
+
+    class DiscreateSlot : public Slot
+    {
+    public:
+        BehaviorDebrisBase *m_Owner;
+    };
+
+    class ExplosionSlot : public Slot
+    {
+    public:
+        BehaviorDebrisBase* m_Owner;
+    };
 public:
     int field_870;
     int field_874;
@@ -43,19 +62,11 @@ public:
     int field_8F8;
     int field_8FC;
     float field_900;
-    class ExplosionSlot : public Slot
-    {
-    public:
-        BehaviorDebrisBase* m_pOwner;
-    } m_pExplosionSlot;
-    class DiscreateSlot : public Slot
-    {
-    public:
-        BehaviorDebrisBase *m_pOwner;
-    } m_pDiscreateSlot;
+    ExplosionSlot *m_ExplosionSlot;
+    DiscreateSlot *m_DiscreateSlot;
     int field_90C;
     int field_910;
-    int field_914;
+    EntityHandle field_914;
     int field_918;
     float field_91C;
     int field_920;
@@ -79,5 +90,12 @@ public:
     int field_968;
     int field_96C;
 
-    virtual ~BehaviorDebrisBase() override {};
+    BehaviorDebrisBase()
+    {
+        ((void(__thiscall *)(BehaviorDebrisBase *))(shared::base + 0x1D9E20))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735300); 
 };
+
+VALIDATE_SIZE(BehaviorDebrisBase, 0x970);

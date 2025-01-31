@@ -4,5 +4,5 @@ class SituationManager
 {
 public:
 
-    virtual ~SituationManager() {};
+    virtual void tick() {};
 };

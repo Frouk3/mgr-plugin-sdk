@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
+#include <cCustomObjCtrlManager.h>
 
 class cKeyConfigHelpMenu : public cCustomObjCtrlManager
 {
@@ -31,6 +31,4 @@ public:
     int field_78;
     int field_7C;
     float field_80;
-
-    virtual ~cKeyConfigHelpMenu() override {};
 };
