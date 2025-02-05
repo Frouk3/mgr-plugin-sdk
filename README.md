@@ -17,7 +17,7 @@ IDEs:
 When using Visual Studio Code you can't compile your project into .asi mod. *(unless you use an external compiler)* <br/>
 
 Firstly, after downloading the ZIP you need to unpack it in the folder where the SDK will be located, make sure that this folder will not move. (create new folder if necessary)<br/>
-After unpacking, make sure to run "install.bat".<br/>
+After unpacking, make sure to run `install.bat`.<br/>
 And after that, you should be successful to run the framework.<br/>
 
 ## Usage
@@ -32,7 +32,7 @@ public:
     }
 } plugin;
 ```
-The constructor will be your main() function.
+The constructor will be your `main()` function.
 
 To hook into the game's events, you can subscribe to them:<br/>
 ```cpp
