@@ -2,10 +2,10 @@
 Plugin SDK for Metal Gear Rising: Revengeance.
 
 # Compiling
-Right now this is usable as a library that helps you inject and edit the game's memory. <br />
-Language: C++ <br />
-File type: Dynamic Link Library <br />
-File extension: .asi<br />
+Right now this is usable as a **library that helps you inject and edit the game's memory.** <br />
+Language: **C++** <br />
+File type: **Dynamic Link Library** <br />
+File extension: **.asi**<br />
 
 ## Installing
 In order to install, download the code. <br />
@@ -14,7 +14,7 @@ IDEs:
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 
-When using Visual Studio Code you can't compile your project into .asi mod. (unless you use an external compiler) <br/>
+When using Visual Studio Code you can't compile your project into .asi mod. *(unless you use an external compiler)* <br/>
 
 Firstly, after downloading the ZIP you need to unpack it in the folder where the SDK will be located, make sure that this folder will not move. (create new folder if necessary)<br/>
 After unpacking, make sure to run "install.bat".<br/>
