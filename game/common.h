@@ -28,6 +28,7 @@ public:
 	sHandle &operator=(const sHandle &handle)
 	{
 		m_Handle = handle.m_Handle;
+		return *this;
 	}
 
 	void reset()

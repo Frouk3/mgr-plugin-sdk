@@ -2,8 +2,14 @@
 
 #include <Behavior.h>
 
-class Ba00a2 : public Behavior
+class Bh00a2 : public Behavior
 {
 public:
     
+    Bh00a2()
+    {
+        ((void(__thiscall *)(Bh00a2*))(shared::base + 0x777EA0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D74);
 };

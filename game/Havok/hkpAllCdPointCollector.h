@@ -12,6 +12,11 @@ public:
     int field_C;
     hkInplaceArray<hkpRootCdPoint, 8> m_points;
 
+    void sortHits()
+    {
+        ((void(__thiscall*)(hkpAllCdPointCollector*))(shared::base + 0xD2BCF0))(this);
+    }
+
     hkpAllCdPointCollector()
     {
         ((void(__thiscall *)(hkpAllCdPointCollector*))(shared::base + 0x38860))(this);

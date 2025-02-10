@@ -2,6 +2,63 @@
 
 #include <Hw.h>
 
+#define MAKE_JUMPINTOFUNC(address) __asm mov eax, shared::base __asm add eax, address __asm jmp eax
+
+namespace DebugUtils
+{
+	inline void __declspec(naked) AddText(const cVec2 position, float fontsize, unsigned int color, const char* fmt, ...)
+	{
+		MAKE_JUMPINTOFUNC(0xB963B0);
+	}
+
+	inline void __declspec(naked) AddText(const cVec2 position, const char* fmt, ...)
+	{
+		MAKE_JUMPINTOFUNC(0xB96550);
+	}
+
+	inline void __declspec(naked) AddText(const cVec2 position, unsigned int color, int layer, const char* format, ...)
+	{
+		MAKE_JUMPINTOFUNC(0xB96570);
+	}
+
+	inline void __declspec(naked) AddText(const cVec2 position, float fontsize, unsigned int color, int layer, const char* fmt, ...)
+	{
+		MAKE_JUMPINTOFUNC(0xB96580);
+	}
+
+	inline int GetDebugLayer()
+	{
+		return ((int(__cdecl*)())(shared::base + 0xB96420))();
+	}
+
+	inline void AddCircle(const cVec2 center, float size, unsigned int color)
+	{
+		((void(__cdecl*)(const cVec2, float, unsigned int))(shared::base + 0xB95EB0))(center, size, color);
+	}
+
+	inline void AddLine(const cVec2 p1, const cVec2 p2, unsigned int color)
+	{
+		((void(__cdecl*)(const cVec2, const cVec2, unsigned int))(shared::base + 0xB95E40))(p1, p2, color);
+	}
+
+	inline void AddBox(const cVec4& min, const cVec4& max, unsigned int color, int a4)
+	{
+		((void(__cdecl*)(const cVec4&, const cVec4&, unsigned int, int))(shared::base + 0xB95FA0))(min, max, color, a4);
+	}
+
+	inline void AddLine3D(const cVec4& p1, const cVec4& p2, unsigned int color, int a4)
+	{
+		((void(__cdecl*)(const cVec4&, const cVec4&, unsigned int, int))(shared::base + 0xB95F40))(p1, p2, color, a4);
+	}
+
+	inline void AddSphere(const cVec4& center, float fRadius, unsigned int color, float a4, float a5)
+	{
+		((void(__cdecl*)(const cVec4&, float, unsigned int, float, float))(shared::base + 0xB96100))(center, fRadius, color, a4, a5);
+	}
+}
+
+#undef MAKE_JUMPINTOFUNC
+
 struct DebugEventInfo
 {
     int m_nSeTotal;

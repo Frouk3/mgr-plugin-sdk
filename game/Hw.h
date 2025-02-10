@@ -5,44 +5,9 @@
 #include <dinput.h>
 #include <shared.h>
 #include <Xinput.h>
-#include <Math.h>
+#include <cMath.h>
 
 extern void PrintfLog(const char* fmt, ...);
-
-struct cInput
-{
-    struct ControllerState
-    {
-        XINPUT_STATE m_XInputState;
-        int m_bSuccessful;
-        float field_14;
-        float field_18;
-        float field_1C;
-        float field_20;
-        float m_fLeftMotorSpeed;
-        float m_fRightMotorSpeed;
-        int field_2C;
-        int field_30;
-        int field_34;
-    };
-
-    struct KeyInput
-    {
-        int m_KeysPressed[31];
-    };
-
-    struct MouseInput
-    {
-        int field_0;
-        int field_4;
-        int field_8;
-        int field_C;
-        cVec2 m_MousePosition;
-        int field_18;
-        int field_1C;
-        cVec2 m_LastMousePosition;
-    };
-};
 
 namespace Hw
 {
@@ -649,12 +614,56 @@ struct Hw::cQuaternion
 
     cQuaternion(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
     cQuaternion() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
+
+    static inline void Multiply(cQuaternion &out, const cVec4& rotation)
+    {
+        ((void(__cdecl*)(cQuaternion&, const cVec4&))(shared::base + 0x9DB590))(out, rotation);
+    }
 };
 
 typedef Hw::cVec2 cVec2;
 typedef Hw::cVec3 cVec3;
 typedef Hw::cVec4 cVec4;
 typedef Hw::cQuaternion cQuaternion;
+
+struct cInput
+{
+    struct ControllerState
+    {
+        XINPUT_STATE m_XInputState;
+        int m_bSuccessful;
+        float field_14;
+        float field_18;
+        float field_1C;
+        float field_20;
+        float m_fLeftMotorSpeed;
+        float m_fRightMotorSpeed;
+        int field_2C;
+        int field_30;
+        int field_34;
+    };
+
+    struct KeyInput
+    {
+        int m_KeysPressed[31];
+    };
+
+    struct MouseInput
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        cVec2 m_MousePosition;
+        int field_18;
+        int field_1C;
+        cVec2 m_LastMousePosition;
+    };
+
+    static inline MouseInput& ms_MouseInput = *(MouseInput*)(shared::base + 0x177B798);
+    static inline KeyInput& ms_KeyInput = *(KeyInput*)(shared::base + 0x177B7C0);
+    static inline ControllerState *ms_Controllers = (ControllerState*)(shared::base + 0x19D05F0); // Maximum 4 controllers
+};
 
 class Hw::CriticalSection
 {
@@ -2068,11 +2077,11 @@ struct Hw::cDvdFst
         CriFsBinderWork *m_CriBinderWork;
         CriFsLoaderHn *m_CriLoader;
         char m_Filepath[64];
-        int m_MaxTime;
-        int m_AttemptTime;
+        int m_nMaxTime;
+        int m_nAttemptTime;
         void *m_Filedata;
-        int m_Buffersize;
-        int m_Priority;
+        int m_nBuffersize;
+        int m_nPriority;
         int field_60;
         int field_64;
         int field_68;

@@ -17,7 +17,7 @@ public:
         ((void(__thiscall *)(AnimationMapManagerImplement *))(shared::base + 0x4D8180))(this);
     }
 
-    static inline AnimationMapManagerImplement*& pInstance = *(AnimationMapManagerImplement**)(shared::base + 0x1735BF4);
+    static inline AnimationMapManagerImplement*& ms_Instance = *(AnimationMapManagerImplement**)(shared::base + 0x1735BF4);
 };
 
 VALIDATE_SIZE(AnimationMapManagerImplement, 0x30);

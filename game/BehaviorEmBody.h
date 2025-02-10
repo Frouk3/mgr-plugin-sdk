@@ -4,6 +4,7 @@
 
 class BehaviorEmBody : public Behavior
 {
+public:
     EntityHandle field_870;
     int field_874;
     int field_878;

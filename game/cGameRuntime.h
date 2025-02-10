@@ -63,3 +63,5 @@ struct cGameRuntime
     int field_DC;
     int field_E0;
 };
+
+inline cGameRuntime& g_GameRuntime = *(cGameRuntime*)(shared::base + 0x17E8E40);

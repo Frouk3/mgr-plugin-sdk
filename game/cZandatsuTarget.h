@@ -38,3 +38,5 @@ struct cZandatsuTarget
         return *this;
     }
 };
+
+VALIDATE_SIZE(cZandatsuTarget, 0x70);

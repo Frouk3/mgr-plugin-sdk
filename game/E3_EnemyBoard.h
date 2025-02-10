@@ -5,8 +5,6 @@
 class E3_EnemyBoard : public BehaviorEmBase
 {
 public:
-    int field_DB8;
-    int field_DBC;
     int field_DC0;
     int field_DC4;
     int field_DC8;
@@ -17,7 +15,7 @@ public:
     int field_DDC;
     int field_DE0;
     int field_DE4;
-    lib::StaticArray<Entity *, 3> m_Board;
+    lib::StaticArray<Entity *, 3> m_BoardEnemies;
     int field_E04;
     int field_E08;
     int field_E0C;
@@ -44,4 +42,13 @@ public:
     EntitySystem::SetInfo field_E60;
     int field_F78;
     int field_F7C;
+
+    E3_EnemyBoard()
+    {
+        ((void(__thiscall *)(E3_EnemyBoard*))(shared::base + 0x6B0AC0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734B4C);
 };
+
+VALIDATE_SIZE(E3_EnemyBoard, 0xF80);

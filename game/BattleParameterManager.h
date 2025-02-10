@@ -2,7 +2,8 @@
 
 class BattleParameterManager
 {
+private:
+    virtual void dummy() {};
 public:
 
-    virtual ~BattleParameterManager() {};
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <hkBase.h>
+
 template <typename TYPE>
 class hkRefNew
 {

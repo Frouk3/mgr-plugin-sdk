@@ -38,7 +38,7 @@ public:
     float m_fEntityTickRate;
     int field_914;
     Animation* field_918;
-    EntityHandle field_91C;
+    EntityHandle m_QTETargetExecutor;
     float field_920;
     float field_924;
     float field_928;
@@ -89,6 +89,9 @@ public:
     float field_9E8;
     float field_9EC;
     float field_9F0;
+    int field_9F4;
+    int field_9F8;
+    int field_9FC;
 
     BehaviorAppBase()
     {
@@ -128,4 +131,4 @@ public:
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C24);
 };
 
-VALIDATE_SIZE(BehaviorAppBase, 0x9F4);
+VALIDATE_SIZE(BehaviorAppBase, 0xA00);

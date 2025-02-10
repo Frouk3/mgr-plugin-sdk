@@ -9,6 +9,75 @@
 class Events
 {
 public:
+    // Base class for events
+   /* class IEventBase
+    {
+    protected:
+        typedef std::function<void()> FuncCallback;
+        class Key
+        {
+        private:
+            std::vector<FuncCallback> hooks;
+        public:
+
+            std::vector<FuncCallback> &getHooks()
+            {
+                return hooks;
+            }
+
+            Key() {};
+
+            ~Key() {};
+
+            void add(FuncCallback func)
+            {
+                hooks.emplace_back(func);
+            }
+
+            void remove(FuncCallback func)
+            {
+                auto it = std::find(hooks.begin(), hooks.end(), func);
+                if (it != hooks.end())
+                {
+                    hooks.erase(it);
+                }
+            }
+
+            void run()
+            {
+                for (FuncCallback& func : hooks)
+                    func();
+            }
+
+            Key& operator+=(FuncCallback func)
+            {
+                add(func);
+                return *this;
+            }
+
+            Key& operator-=(FuncCallback func)
+            {
+                remove(func);
+                return *this;
+            }
+        };
+
+        uintptr_t callback;
+        void(__cdecl *mainhook)();
+
+        IEventBase()
+        {
+            callback = NULL;
+            mainhook = nullptr;
+        }
+
+        ~IEventBase()
+        {
+            
+        }
+    public:
+    };*/
+public:
     template <int mPriority>
     class IEvent
     {
@@ -16,66 +85,42 @@ public:
         uintptr_t returnAddress;
         void(__cdecl *mainhookptr)() = nullptr;
 
-
         class Key
         {
         private:
-            std::vector<std::function<void()>>* vector;
+            std::vector<std::function<void()>> vector;
         public:
 
             Key()
             {
-                vector = nullptr;
+                
             }
-
-            Key(std::vector<std::function<void()>>* vector) : vector(vector) {};
 
             Key& operator +=(std::function<void()> function)
             {
-                vector->emplace_back(function);
+                vector.emplace_back(function);
                 return *this;
             }
 
-            std::vector<std::function<void()>>* getVector()
+            std::vector<std::function<void()>>& getVector()
             {
                 return vector;
             }
         };
     public:
-        Key before;
-        Key after;
+        Key before; // Use to add events before event occurs
+        Key after; // Use to add events after event occurs
 
         IEvent()
         {
-            this->returnAddress = 0;
-            this->mainhookptr = nullptr;
-
-            before = Key(new std::vector<std::function<void()>>);
-            after = Key(new std::vector<std::function<void()>>);
-        }
-
-        IEvent(std::vector<std::function<void()>>* before, std::vector<std::function<void()>>* after, void(__cdecl* func)())
-        {
-            this->returnAddress = 0;
-            this->mainhookptr = func;
-
-            this->before = Key(before);
-            this->after = Key(after);
-        }
-
-        IEvent(std::vector<std::function<void()>>* before, std::vector<std::function<void()>>* after, void(__cdecl* mainhook)(), unsigned int address)
-        {
-            this->IEvent::IEvent(before, after, mainhook);
-            this->Patch(address);
+            returnAddress = 0;
+            mainhookptr = nullptr;
         }
 
         IEvent(void(__cdecl* mainhook)(), unsigned int address)
         {
-            this->mainhookptr = mainhook;
-            this->Patch(address);
-
-            before = Key(new std::vector<std::function<void()>>());
-            after = Key(new std::vector<std::function<void()>>());
+            mainhookptr = mainhook;
+            Patch(address);
         }
 
         IEvent& operator+=(std::function<void()> funcptr)
@@ -84,7 +129,7 @@ public:
             return *this;
         }
 
-        void SetMainHook(void(__cdecl *funcptr)())
+        void setMainHook(void(__cdecl *funcptr)())
         {
             mainhookptr = funcptr;
         }
@@ -94,15 +139,15 @@ public:
             this->returnAddress = (uintptr_t)injector::MakeCALL(address, mainhookptr, true);
         }
 
-        void RunBefore()
+        void runBefore()
         {
-            for (auto& f : *before.getVector())
+            for (auto& f : before.getVector())
                 f();
         }
         
-        void RunAfter()
+        void runAfter()
         {
-            for (auto& f : *after.getVector())
+            for (auto& f : after.getVector())
                 f();
         }
     };
@@ -147,19 +192,23 @@ public:
     };
 };
 
-#define DEFINE_CAVE(Cave, Event)                          \
-void __declspec(naked) Cave() \
+#define DEFINE_CAVE(Cave, Event)                    \
+void __declspec(naked) Cave()                       \
 {                                                   \
+    __asm pushfd                                    \
     __asm pushad                                    \
     __asm lea ecx, Event                            \
-    __asm call Events::IEvent<0>::RunBefore                    \
+    __asm call Events::IEvent<0>::runBefore         \
     __asm popad                                     \
+    __asm popfd                                     \
     __asm call Event.returnAddress                  \
+    __asm pushfd                                    \
     __asm pushad                                    \
     __asm lea ecx, Event                            \
-    __asm call Events::IEvent<0>::RunAfter                     \
+    __asm call Events::IEvent<0>::runAfter          \
     __asm popad                                     \
-    __asm ret          \
+    __asm popfd                                     \
+    __asm ret                                       \
 }
 
 DEFINE_CAVE(Events::Caves::OnUpdateMainHook, Events::OnUpdateEvent)

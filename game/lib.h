@@ -585,7 +585,13 @@ public:
 
     ~DynamicArray()
     {
-        operator delete(this->m_pBegin, (Hw::cHeap*)m_Allocator);
+        if (this->m_pBegin)
+        {
+            operator delete(this->m_pBegin, (Hw::cHeap*)m_Allocator);
+            this->m_pBegin = nullptr;
+        }
+
+        this->Array<T>::~Array();
     }
 
     DynamicArray(allocator* allocator) : Array<T>(), m_Allocator(allocator) {};

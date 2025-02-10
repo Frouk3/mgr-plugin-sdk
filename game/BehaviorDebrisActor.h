@@ -65,3 +65,5 @@ public:
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735304);
 };
+
+VALIDATE_SIZE(BehaviorDebrisActor, 0x910);

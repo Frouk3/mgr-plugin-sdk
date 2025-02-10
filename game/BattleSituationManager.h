@@ -2,7 +2,7 @@
 
 class BattleSituationManager
 {
+private:
+    virtual void dummy() {};
 public:
-
-    virtual ~BattleSituationManager() {};
 };

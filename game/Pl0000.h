@@ -7,11 +7,12 @@
 
 #include <Slot.h>
 #include <cQteArea.h>
+#include <cZandatsuTarget.h>
 
 class SlashStartSlotPl0010 : public Slot
 {
 public:
-    Pl0000* m_pOwner;
+    Pl0000* m_Owner;
 };
 
 class GetMoneySlotPl0010 : public Slot
@@ -25,9 +26,6 @@ class cCameraGame;
 class Pl0000 : public BehaviorAppBase
 {
 public:
-    int field_9F4;
-    int field_9F8;
-    int field_9FC;
     cEspControler field_A00;
     int field_AB0;
     int field_AB4;
@@ -211,13 +209,13 @@ public:
     Hw::cFixedList<int> field_1054;
     float field_1070;
     int field_1074;
-    __int16 field_1078;
+    short field_1078;
     float field_107C;
     int field_1080;
-    __int16 field_1084;
+    short field_1084;
     int field_1088;
     int field_108C;
-    __int16 field_1090;
+    short field_1090;
     int field_1094;
     int field_1098;
     int field_109C;
@@ -238,12 +236,12 @@ public:
     float field_10D8;
     int field_10DC;
     int field_10E0;
-    void* field_10E4;
+    int *field_10E4;
     int field_10E8;
     int field_10EC;
     int field_10F0;
     int field_10F4;
-    void* field_10F8;
+    int *field_10F8;
     int field_10FC;
     int field_1100;
     int field_1104;
@@ -276,10 +274,10 @@ public:
     int field_117C;
     int field_1180;
     int field_1184;
-    Entity* field_1188;
-    Animation* m_pAnimation;
-    Entity* m_pBladeEntity;
-    Entity* m_pSheathEntity;
+    Entity *field_1188;
+    Animation *m_Animation;
+    Entity *m_BladeEntity;
+    Entity *m_SheathEntity;
     EntityHandle field_1198;
     EntityHandle field_119C;
     int field_11A0;
@@ -297,7 +295,7 @@ public:
     int field_12A8;
     float field_12AC;
     int field_12B0;
-    void* field_12B4;
+    void *field_12B4;
     float field_12B8;
     int field_12BC;
     cEspControler field_12C0;
@@ -310,7 +308,7 @@ public:
     int field_13F4;
     int field_13F8;
     int field_13FC;
-    int m_nSwordState;
+    int m_SwordState;
     int field_1404;
     int field_1408;
     int field_140C;
@@ -977,7 +975,7 @@ public:
     cEspControler field_2110;
     cEspControler field_21C0;
     cEspControler field_2270;
-    cCameraGame* m_pCamera;
+    cCameraGame *m_Camera;
     float field_2324;
     int field_2328;
     int field_232C;
@@ -1002,8 +1000,8 @@ public:
     int field_23A8;
     int field_23AC;
     Animation::FootIk2 field_23B0;
-    int field_255C;
-    int field_2560;
+    int field_23B4;
+    int field_23B8;
     int m_bDisableControl;
     int field_2568;
     int field_256C;
@@ -1084,7 +1082,7 @@ public:
     float field_2698;
     int field_269C;
     int field_26A0;
-    Entity* m_pVrWallCheck;
+    Entity *m_pVrWallCheckEntity;
     int field_26A8;
     int field_26AC;
     float field_26B0;
@@ -1616,8 +1614,8 @@ public:
     float field_31A4;
     float m_fHurtTime;
     float m_fHealTime;
-    __int16 field_31B0;
-    __int16 field_31B2;
+    short field_31B0;
+    short field_31B2;
     int field_31B4;
     int field_31B8;
     int field_31BC;
@@ -2934,7 +2932,7 @@ public:
     int field_5084;
     int field_5088;
     int field_508C;
-    lib::StaticArray<FreeRunActivity::Info*, 64>* m_pFreeRunActivityInfoArray;
+    lib::StaticArray<FreeRunActivity::Info, 64>* m_FreeRunActivityInfoArray;
     int field_5094;
     int field_5098;
     int field_509C;
@@ -3045,9 +3043,9 @@ public:
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x785190))(this);
     }
 
-    void setFuelCapacity(float FuelContainer)
+    void setFuelLevel(float fLevel)
     {
-        ((void(__thiscall*)(Pl0000*, float))(shared::base + 0x7C3100))(this, FuelContainer);
+        ((void(__thiscall*)(Pl0000*, float))(shared::base + 0x7C3100))(this, fLevel);
     }
 
     void disableRipperMode(bool bUseFade)
@@ -3079,6 +3077,8 @@ public:
     {
         return ((float(__thiscall*)(Pl0000*, bool))(shared::base + 0x7C2F00))(this, bIgnoreUnused);
     }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

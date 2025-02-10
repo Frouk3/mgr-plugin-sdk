@@ -1,1 +1,2 @@
 * Headers/structures that have `VALIDATE_SIZE` macro are already aligned with their structure in game, make sure to not add/remove fields for it
+* Structures/classes with declared virtual methods will create a virtual table that won't be even used if there's constructor for it, so if you're adding the class, make sure to **not** follow this mistake

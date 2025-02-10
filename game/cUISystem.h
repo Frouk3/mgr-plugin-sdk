@@ -2,6 +2,7 @@
 
 #include <Hw.h>
 #include <ARGB32.h>
+#include <HkDataManagerImplement.h>
 
 class cUIDrawBase;
 class cUIWorkBase;
@@ -706,6 +707,16 @@ public:
     int field_D74;
     int field_D78;
     int field_D7C;
+
+    float getResolutionXScaleFactor()
+    {
+        return ((float(__thiscall*)(cUISystem*))(shared::base + 0x8AD4B0))(this);
+    }
+
+    float getResolutionYScaleFactor()
+    {
+        return ((float(__thiscall*)(cUISystem*))(shared::base + 0x8AD4D0))(this);
+    }
 
     virtual ~cUISystem() {};
 

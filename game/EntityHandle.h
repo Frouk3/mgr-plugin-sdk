@@ -15,4 +15,10 @@ public:
     {
         return *this;
     }
+
+    EntityHandle& operator=(Entity *entity)
+    {
+        ((void(__thiscall *)(EntityHandle *, Entity *))(shared::base + 0x67C970))(this, entity);
+        return *this;
+    }
 };

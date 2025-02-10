@@ -18,4 +18,17 @@ public:
     int field_EB4;
     int field_EB8;
     int field_EBC;
+    int field_EC0;
+    int field_EC4;
+    int field_EC8;
+    int field_ECC;
+
+    Emc300()
+    {
+        ((void(__thiscall *)(Emc300 *))(shared::base + 0x6B1540))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735A30);
 };
+
+VALIDATE_SIZE(Emc300, 0xED0);

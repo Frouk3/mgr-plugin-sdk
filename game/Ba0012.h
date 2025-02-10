@@ -18,4 +18,13 @@ public:
     EntityHandle field_B58;
     int field_B5C;
     cEspControler field_B60;
+
+    Ba0012()
+    {
+        ((void(__thiscall *)(Ba0012 *))(shared::base + 0x6AFF30))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734B04);
 };
+
+VALIDATE_SIZE(Ba0012, 0xC10);

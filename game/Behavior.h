@@ -890,8 +890,8 @@ struct Constraints
     int field_14;
     int field_18;
     int field_1C;
-    Hw::cVec4 m_vecRotation;
-    Hw::cVec4 m_vecOffset;
+    cVec4 m_vecRotation;
+    cVec4 m_vecOffset;
     int field_40;
     int field_44;
     int field_48;
@@ -903,14 +903,14 @@ class Behavior : public cObj
 public:
     struct AnimationSlot
     {
-        int m_nSlotId;
+        int m_SlotId;
         int field_4;
         char m_AnimName[16];
-        Behavior* m_Parent;
+        Behavior* m_AnimationTarget;
         int field_1C;
         AnimationMap::Unit* m_AnimationMap;
         int field_24;
-        float m_fCycle;
+        float m_Cycle; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
         int field_2C;
     };
 
@@ -1195,7 +1195,7 @@ public:
         CallVMTFunc<28, Behavior *, const cVec4&>(this, offset);
     }
 
-    void changeHeight(const float height)
+    void changeHeight(float height)
     {
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
@@ -1329,9 +1329,9 @@ public:
         ((void (__thiscall *)(Behavior*, int))(shared::base + 0x69E060))(this, constraintId);
     }
 
-    void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int _bone)
+    void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int rotationBone)
     {
-        ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, _bone);
+        ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, rotationBone);
     }
 
     void shutdownBattleParameter()

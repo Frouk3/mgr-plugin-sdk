@@ -1,13 +1,10 @@
 #pragma once
 
-#include "BehaviorAppBase.h"
+#include <BehaviorAppBase.h>
 
 class BehaviorCamera : public BehaviorAppBase
 {
 public:
-   int field_9F4;
-    int field_9F8;
-    int field_9FC;
     Animation *field_A00;
     EntityHandle field_A04;
     int field_A08;
@@ -40,3 +37,5 @@ public:
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C80);
 };
+
+VALIDATE_SIZE(BehaviorCamera, 0xA60);

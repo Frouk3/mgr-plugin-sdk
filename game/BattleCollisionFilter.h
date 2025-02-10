@@ -2,7 +2,7 @@
 
 class BattleCollisionFilter
 {
+private:
+    virtual void dummy() {};
 public:
-
-    virtual void dummyVM() {};
 };

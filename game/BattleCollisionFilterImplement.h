@@ -13,7 +13,7 @@ public:
         int field_4;
     };
     Hw::cHeapVariable *m_Allocator;
-    lib::StaticArray<LayerPair, 1024> *m_pLayerPairArray;
+    lib::StaticArray<LayerPair, 1024> *m_LayersArray;
 
-    static inline BattleCollisionFilterImplement *&ms_Instance = *(BattleCollisionFilterImplement **)(shared::base + 0x19C52E0);
+    static inline BattleCollisionFilterImplement*& ms_Instance = *(BattleCollisionFilterImplement **)(shared::base + 0x19C52E0);
 };

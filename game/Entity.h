@@ -6,28 +6,25 @@
 #include <shared.h>
 #include <eObjID.h>
 #include <EntityHandle.h>
+#include <HkDataManagerImplement.h>
 
 struct EntitySystem;
+class Behavior;
 
 struct Entity
 {
-    cSlowRateUnit* m_pSlowRateUnit;
-    char m_EntityName[16];
-    int field_14;
-    int field_18;
-    int field_1C;
-    int field_20;
-    eObjID m_nEntityIndex;
-    unsigned int m_nEntityFlags;
-    EntityHandle m_nEntityHandle;
-    int field_30;
-    int field_34;
-    SceneModelSystem* m_pSceneModelSystem;
-    void *m_pSceneModel;
-    Animation* m_pAnimation;
-    int field_44;
-    void* m_pInstance;
-    BOOL m_bModelRegistered;
+    cSlowRateUnit *m_SlowRateUnit;
+    char m_EntityName[32];
+    eObjID m_EntityIndex;
+    int m_EntityFlags;
+    EntityHandle m_Handle;
+    DataArchiveHolder m_EntityData;
+    SceneModelSystem *m_SceneManager;
+    Behavior *m_SceneModel;                 ///< There's no difference between m_SceneModel and m_Instance
+    Animation *m_Animation;
+    int field_44; // BehaviorInfo *
+    Behavior *m_Instance;
+    BOOL m_bStartupImmediately; 
     int field_50;
     int field_54;
     int m_nSetType;

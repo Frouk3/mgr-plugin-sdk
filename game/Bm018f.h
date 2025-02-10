@@ -8,6 +8,7 @@ class Bm018f : public BehaviorBm
 public:
     class cCallEfBm018fSlot : public Slot
     {
+    public:
         Bm018f *m_Owner;
     };
 public:

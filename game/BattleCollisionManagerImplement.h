@@ -16,7 +16,7 @@ public:
     lib::StaticArray<Collision *, 1024> *field_14;
     Hw::CriticalSection m_CriticalSection;
     int field_34;
-    struct MainUpdateForPauseSlot : public Slot
+    class MainUpdateForPauseSlot : public Slot
     {
 
     } *m_MainUpdateForPauseSlot;

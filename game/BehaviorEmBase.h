@@ -6,16 +6,7 @@
 class BehaviorEmBase : public BehaviorAppBase
 {
 public:
-    int field_9F4;
-    int field_9F8;
-    int field_9FC;
-    int field_A00;
-    int field_A04;
-    int field_A08;
-    int field_A0C;
-    int field_A10;
-    int field_A14;
-    int field_A18;
+    Hw::CriticalSection field_A00;
     int field_A1C;
     int field_A20;
     float field_A24;
@@ -34,26 +25,23 @@ public:
     int field_A58;
     int field_A5C;
     int field_A60;
-    int field_A64;
-    int field_A68;
-    int field_A6C;
-    int field_A70;
-    int field_A74;
-    int field_A78;
+    DataArchiveHolder field_A64;
+    DataArchiveHolder field_A6C;
+    DataArchiveHolder field_A74;
     int field_A7C;
     int field_A80;
-    BehaviorAppBase *m_pEnemy;
+    Pl0000 *m_pEnemy;
     Entity *m_pEnemyEntity;
     float m_fDistance;
-    float m_fDistanceNoHeight;
+    float m_fDistance2D; // X && Z distance
     float field_A94;
     float field_A98;
-    float m_fRotationToEnemy;
+    float m_fAngleToEnemy;
     float field_AA0;
     int field_AA4;
     int field_AA8;
     int field_AAC;
-    EntitySystem::SetInfo field_AB0;
+    EntitySystem::SetInfo m_SetInfo;
     int field_BC8;
     int field_BCC;
     float field_BD0;
@@ -97,8 +85,16 @@ public:
     int field_DA4;
     int field_DA8;
     short field_DAC;
+    short field_DAE;
     int field_DB0;
     char field_DB4;
+    int field_DB8;
+    int field_DBC;
+
+    BehaviorEmBase()
+    {
+        ((void(__thiscall *)(BehaviorEmBase *))(shared::base + 0xED790))(this);
+    }
 
     void setWait()
     {
@@ -113,4 +109,4 @@ public:
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C78);
 };
 
-VALIDATE_SIZE(BehaviorEmBase, 0xDB8);
+VALIDATE_SIZE(BehaviorEmBase, 0xDC0);

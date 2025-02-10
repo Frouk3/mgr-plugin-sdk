@@ -5,8 +5,6 @@
 class Em0020 : public BehaviorEmBase
 {
 public:
-    int field_DB8;
-    int field_DBC;
     int field_DC0;
     float field_DC4;
     int field_DC8;
@@ -118,10 +116,10 @@ public:
     cMesh *m_DamageCBody;
     cMesh *m_DamageLBody;
     cMesh *m_DamageRBody;
-    Entity *m_pFace;
-    Entity *m_pHair;
-    Entity *m_pScabbard;
-    Entity *m_pBlade;
+    Entity *m_Face;
+    Entity *m_Hair;
+    Entity *m_Scabbard;
+    Entity *m_Blade;
     EntityHandle m_BladeHandle;
     int field_F90;
     int field_F94;
@@ -432,3 +430,5 @@ public:
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1734C30);
 };
+
+VALIDATE_SIZE(Em0020, 0x14F0);

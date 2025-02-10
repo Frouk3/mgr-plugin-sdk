@@ -144,19 +144,9 @@ struct EntitySystem
     static inline EntitySystem& ms_Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
 };
 
-EntityHandle::operator Entity *()
+inline EntityHandle::operator Entity *()
 {
-    unsigned int shifted = (this->m_Handle >> 8);
-    if (shifted >= EntitySystem::ms_HandleManager.m_capacity)
-    {
-        PrintfLog("[HandleManage] Handle error: Invalid handle");
-        return nullptr;
-    }
-    
-    if (((this->m_Handle ^ EntitySystem::ms_HandleManager.m_HandleArrayValue[shifted].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
-        return nullptr;
-        
-    return EntitySystem::ms_HandleManager.m_HandleArrayValue[shifted].m_value;
+    return ((Entity*(__thiscall *)(EntityHandle *))(shared::base + 0x681330))(this);
 }
 
 struct EntitySystem::SetInfo
@@ -235,17 +225,17 @@ struct EntitySystem::SetInfo
 struct EntitySystem::EntityInfo
 {
     const char *m_Name;
-    eObjID m_nModelIndex;
-    eObjID m_nAnimIndex;
-    EntitySystem::ObjectInfo *m_pObjectInfo;
+    eObjID m_ModelIndex;
+    eObjID m_ObjectIndex;
+    EntitySystem::ObjectInfo *m_ObjectInfo;
     int field_10;
     int field_14;
     Behavior *field_18;
     int field_1C;
-    void *m_pModelData;
+    void *m_ModelData; // wmb
     void *m_TexturesFile;
     void *m_WtbFile;
-    void *m_pParam;
+    void *m_Param;
 
     EntityInfo()
     {

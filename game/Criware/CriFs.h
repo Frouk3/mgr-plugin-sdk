@@ -304,11 +304,11 @@ struct CriFsLoaderHn
 
 struct CriFsBinderWork // Platinum addon
 {
-    int m_Status;
+    int m_nStatus;
     CriFsBinderHn *m_CriBinderHn;
     CriFsBindId m_BinderId;
     int m_BindStatus;
-    int m_Priority;
+    int m_nPriority;
 };
 
 struct CriFsBinderHn

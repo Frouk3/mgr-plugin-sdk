@@ -20,11 +20,11 @@ struct NodeManager
         int field_20;
         int field_24;
         Hw::cHeapVariable *m_Allocator;
-        lib::DynamicArray<waypoint::WaypointNode, Hw::cHeapVariable> field_2C;
+        lib::DynamicArray<waypoint::WaypointNode, Hw::cHeapVariable> m_Nodes;
         int field_40;
         int field_44;
         int field_48;
-        NodeLink *field_4C;
+        NodeLink *m_Links;
         int field_50;
         int field_54;
         int field_58;
@@ -9837,20 +9837,20 @@ struct NodeNavigation
 
 struct NodeManager::NodeSystem::NodeLink
 {
-    int m_Id;
-    float m_Width;
+    int m_nId;
+    float m_fWidth;
     int m_Flags;
-    float m_Cost;
+    float m_fCost;
 };
 
 struct NodeManager::NodeSystem::Node
 {
     cVec3 m_vecPosition;
-    int m_Id;
-    float m_Radius;
+    int m_nId;
+    float m_fRadius;
     int m_Flags;
-    unsigned short m_Size;
-    unsigned short m_Room;
-    unsigned short m_GroupNo;
-    unsigned short m_ExtendId;
+    unsigned short m_nSize;
+    unsigned short m_nRoom;
+    unsigned short m_nGroupNo;
+    unsigned short m_nExtendId;
 };

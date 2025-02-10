@@ -2,6 +2,8 @@
 #include <EntityHandle.h>
 #include <shared.h>
 
+class Behavior;
+
 class cParts;
 struct Entity;
 
@@ -13,13 +15,17 @@ public:
     class Control
     {
     public:
-
         class NodeListener
         {
         public:
             int field_4;
             int field_8;
             int field_C;
+
+            NodeListener()
+            {
+                ((void(__thiscall *)(NodeListener *))(shared::base + 0xA27050))(this);
+            }
 
             virtual ~NodeListener() {};
         };
@@ -31,6 +37,10 @@ public:
             {
             public:
 
+                NodeHandler()
+                {
+                    ((void(__thiscall *)(NodeHandler *))(shared::base + 0xA42BC0))(this);
+                }
             };
         };
 
@@ -44,6 +54,11 @@ public:
             int field_14;
             int field_18;
             int field_1C;
+
+            Node()
+            {
+                ((void(__thiscall *)(Node *))(shared::base + 0xA30770))(this);
+            }
 
             virtual ~Node() {};
         };
@@ -63,8 +78,8 @@ public:
             Hw::CriticalSection m_CriticalSection;
             int field_1C;
             Hw::cHeapVariable *m_Factory;
-            size_t m_nCapacity;
-            size_t m_nSize;
+            size_t m_Capacity;
+            size_t m_Size;
             int field_2C;
             int field_30;
             int field_34;
@@ -74,7 +89,31 @@ public:
     class PostControl
     {
     public:
-        class Work;  
+        class Work;
+    };
+
+    class EaseControl
+    {
+    public:
+        int m_SmoothState;
+        float m_CurrentSmooth;
+        float m_TargetEase;
+        float m_CurrentEase;
+
+        void increaseSmooth(float delta)
+        {
+            ((void(__thiscall *)(EaseControl *, float))(shared::base + 0xA22F60))(this, delta);
+        }
+
+        void decreaseSmooth(float delta)
+        {
+            ((void(__thiscall *)(EaseControl *, float))(shared::base + 0xA22FD0))(this, delta);
+        }
+
+        void update(float delta)
+        {
+            ((void(__thiscall *)(EaseControl *, float))(shared::base + 0xA26F40))(this, delta);
+        }
     };
 
     int field_0;
@@ -113,8 +152,8 @@ public:
     int field_90;
     int field_94;
     int field_98;
-    Entity *m_pEntityOwner;
-    void *m_pOwner;
+    Entity *m_EntityOwner;
+    Behavior *m_Owner;
     int field_A4;
     int field_A8;
     int field_AC;
@@ -130,7 +169,7 @@ public:
     int field_D4;
     int field_D8;
     int field_DC;
-    float m_fAnimationSize;
+    float m_AnimationSize;
     float field_E4;
     float field_E8;
     float field_EC;
@@ -257,6 +296,11 @@ public:
     {
     public:
 
+        EspCtrlCustom()
+        {
+            ((void(__thiscall *)(EspCtrlCustom *))(shared::base + 0x5312E0))(this);
+        }
+
         virtual ~EspCtrlCustom() {};
     };
     class FootIk2;
@@ -341,6 +385,18 @@ public:
             }
         };
 
+        class NodeHandle : public sHandle<Node>
+        {
+        public:
+
+            operator Node*();
+
+            Node *getNode()
+            {
+                return *this;
+            }
+        };
+
         class NodeBlend : public Node
         {
         public:
@@ -367,6 +423,11 @@ public:
             int field_8;
             int field_C;
 
+            NodeListener()
+            {
+                ((void(__thiscall *)(NodeListener *))(shared::base + 0xA41B40))(this);
+            }
+
             virtual ~NodeListener() {};
         };
 
@@ -392,6 +453,10 @@ public:
             {
             public:
 
+                NodeHandler()
+                {
+                    ((void(__thiscall *)(NodeHandler *))(shared::base + 0xA41B70))(this);
+                }
             };
         };
 
@@ -402,6 +467,10 @@ public:
             {
             public:
 
+                NodeHandler()
+                {
+                    ((void(__thiscall *)(NodeHandler *))(shared::base + 0xA41BE0))(this);
+                }
             };
         };
 
@@ -461,15 +530,23 @@ public:
     int field_8;
 
     virtual ~Work() {};
+    
+    BOOL startup(void *a2, void* a3)
+    {
+        return ReturnCallVMTFunc<BOOL, 1, Work *, void *, void *>(this, a2, a3);
+    }
+
+    void updateSmoothing(float delta)
+    {
+        CallVMTFunc<2, Work*, float>(this, delta);
+    }
 };
 
 class Animation::FootIk2 : public Animation::PostControl::Work
 {
 public:
-    int field_4;
-    int field_8;
     int field_C;
-    int field_10;
+    Behavior *m_Owner;
     int field_14;
     int field_18;
     int field_1C;
@@ -561,27 +638,31 @@ public:
     int field_174;
     int field_178;
     int field_17C;
-    int field_180;
-    int field_184;
+    int m_TargetBoneIndex;
+    cParts *m_TargetBone;
     int field_188;
     int field_18C;
     float field_190;
     float field_194;
     float field_198;
-    int field_19C;
-    float field_1A0;
-    float field_1A4;
-    float field_1A8;
+    Animation::EaseControl m_EaseController;
+
+    FootIk2()
+    {
+        ((void(__thiscall *)(FootIk2*))(shared::base + 0xA30E60))(this);
+    }
 };
+
+VALIDATE_SIZE(Animation::FootIk2, 0x1AC);
 
 class Animation::HandIk : public Animation::PostControl::Work
 {
 public:
     int field_C;
     int field_10;
-    cParts **field_14;
-    cParts **field_18;
-    cParts **field_1C;
+    cParts *field_14;
+    cParts *field_18;
+    cParts *field_1C;
     int field_20;
     int field_24;
     int field_28;
@@ -594,9 +675,9 @@ public:
     int field_44;
     int field_48;
     int field_4C;
-    int field_50;
-    int field_54;
-    int field_58;
+    float field_50;
+    float field_54;
+    float field_58;
     int field_5C;
     int field_60;
     int field_64;
@@ -626,15 +707,37 @@ public:
     int field_C4;
     int field_C8;
     int field_CC;
-    int field_D0;
-    float field_D4;
-    float field_D8;
-    float field_DC;
+    Animation::EaseControl field_D0;
     int field_E0;
     int field_E4;
     int field_E8;
     int field_EC;
+
+    HandIk()
+    {
+        ((void(__thiscall *)(HandIk *))(shared::base + 0xA2CD70))(this);
+    }
 };
+
+inline HandleManager<Animation::Motion::Node> &g_MotionNodeHandleManager = *(HandleManager<Animation::Motion::Node>*)(shared::base + 0x19D9488);
+
+inline Animation::Motion::NodeHandle::operator Animation::Motion::Node*()
+{
+    if (!this->m_Handle)
+        return nullptr;
+
+    size_t at = (this->m_Handle >> 8);
+
+    if (at >= g_MotionNodeHandleManager.m_capacity)
+    {
+        PrintfLog("[HandleManage] Invalid handle value.");
+        return nullptr;
+    }
+    if (((this->m_Handle ^ g_MotionNodeHandleManager.m_HandleArrayValue[at].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
+        return nullptr;
+
+    return g_MotionNodeHandleManager.m_HandleArrayValue[at].m_value;
+}
 
 VALIDATE_SIZE(Animation::HandIk, 0xF0);
 VALIDATE_SIZE(Animation, 0x344);

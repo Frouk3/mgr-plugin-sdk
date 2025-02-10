@@ -17,13 +17,13 @@ public:
         cVec4 field_40;
     };
 
-    D3DXMATRIX field_B0;
+    D3DXMATRIX m_ViewModelMatrix;
     D3DXMATRIX field_F0;
-    RenderMatrix m_RenderMatrix;
-    float m_fDistRate0;
-    float m_fDistRate1;
-    float m_fDistRate2;
-    float m_fLostDistRate;
+    cModelBase::RenderMatrix m_RenderMatrix;
+    float m_DistRate0;
+    float m_DistRate1;
+    float m_DistRate2;
+    float m_LostDistRate;
     float field_190;
     float field_194;
     float field_198;
@@ -66,10 +66,10 @@ public:
     int field_22C;
     int field_230;
     int field_234;
-    unsigned short field_238;
-    unsigned short field_23A;
-    unsigned short field_23C;
-    unsigned short field_23E;
+    short field_238;
+    short field_23A;
+    short field_23C;
+    short field_23E;
     int field_240;
     int field_244;
     int field_248;
@@ -126,26 +126,26 @@ public:
     float field_314;
     int field_318;
     int field_31C;
-    cMesh *m_pMesh;
-    short m_nMeshAmount;
-    cModelData::cMaterial *m_pMaterials;
-    short m_nMaterialAmount;
-    cModelData::ModelData *m_pModelData;
-    cParts *m_pRootBone;
+    cMesh *m_Meshes;
+    short m_MeshAmount;
+    cModelData::cMaterial *m_Materials;
+    short m_MaterialAmount;
+    cModelData::ModelData *m_ModelData;
+    cParts *m_RootBone;
     int field_338;
     int field_33C;
-    int m_nAnisotropicType;
-    void *m_pWTB;
-    void *m_pTextureRawData;
-    Hw::cTexture *m_pTexture;
+    int m_AnisotropicType;
+    void *m_WTB;
+    void *m_TextureRawData;
+    Hw::cTexture *m_Texture;
     cParts *m_pBones;
     cParts **m_ppBones;
-    short m_nTotalOfBones;
-    void *m_pBoneOffsetData;
-    cModelBase *m_pParent;
-    int m_nModelFlags;
-    int m_nRootBone;
-    void *m_pMeshData;
+    short m_BoneAmount;
+    void *m_BoneOffsetData;
+    cModelBase *m_Parent;
+    int m_ModelFlags;
+    int m_RootBoneIndex;
+    void *m_MeshData;
 
     cModelBase()
     {
@@ -154,24 +154,24 @@ public:
 
     inline void toggleAnyMesh(const char *meshName, bool bToggle)
     {
-        if (m_nMeshAmount)
+        if (m_MeshAmount)
         {
-            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nMeshAmount]; mesh++)
+            for (cMesh* mesh = m_Meshes; mesh != &m_Meshes[m_MeshAmount]; mesh++)
             {
                 if (mesh->getName() && strstr(mesh->getName(), meshName))
-                    mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
+                    mesh->m_MeshFlags = bToggle ? mesh->m_MeshFlags | 1u : mesh->m_MeshFlags & ~1u;
             }
         }
     }
 
     inline void toggleMesh(const char *meshName, bool bToggle)
     {
-        if (m_nMeshAmount)
+        if (m_MeshAmount)
         {
-            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nMeshAmount]; mesh++)
+            for (cMesh* mesh = m_Meshes; mesh != &m_Meshes[m_MeshAmount]; mesh++)
             {
                 if (mesh->getName() && !strcmp(mesh->getName(), meshName))
-                    mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
+                    mesh->m_MeshFlags = bToggle ? mesh->m_MeshFlags | 1u : mesh->m_MeshFlags & ~1u;
             }
         }
     }

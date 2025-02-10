@@ -8,9 +8,6 @@
 class Pl2040 : public BehaviorAppBase
 {
 public:
-    int field_9F4;
-    int field_9F8;
-    int field_9FC;
     cVec4 field_A00;
     float field_A10;
     int field_A14;
@@ -227,4 +224,13 @@ public:
     Entity *field_13E4;
     int field_13E8;
     int field_13EC;
+
+    Pl2040()
+    {
+        ((void(__thiscall *)(Pl2040 *))(shared::base + 0x6AB650))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x1735420);
 };
+
+VALIDATE_SIZE(Pl2040, 0x13F0);

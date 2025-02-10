@@ -1,5 +1,5 @@
 #pragma once
-#include "BehaviorEmBase.h"
+#include <BehaviorEmBase.h>
 #include <d3dx9math.h>
 #include "common.h"
 

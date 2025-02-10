@@ -8,26 +8,27 @@ class BattleParameterImplement : public BattleParameter
 public:
     struct Unit
     {
-        int field_0;
-        int field_4;
-        int field_8;
-        int field_C;
-        int field_10;
-        int field_14;
-        int field_18;
-        int field_1C;
-        int field_20;
-        int field_24;
-        int field_28;
-        int field_2C;
-        int field_30;
-        int field_34;
-        int field_38;
-        int field_3C;
-        int field_40;
-        int field_44;
-        int field_48;
+        int m_id;
+        int m_AtkPower;
+        int m_AtkHavokMulScalar;
+        int m_AtkHavokPow;
+        int m_HitStopTime;
+        int m_Int0;
+        int m_Int1;
+        float m_Float0;
+        float m_Float1;
+        float m_Float2;
+        float m_Float3;
+        int m_No;
+        float m_EasyPowerScale;
+        float m_HardPowerScale;
+        float m_VeryhardPowerScale;
+        float m_RevengeancePowerScale;
+        int m_Int3;
+        int m_Int4;
+        int m_Int5;
     };
+
     Hw::cHeapVariable *m_Allocator;
     lib::AllocatedArray<Unit> *m_Units;
 };

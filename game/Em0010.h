@@ -1,12 +1,175 @@
 #pragma once
 
 #include <BehaviorEmBase.h>
+#include <Slot.h>
+#include <hkpPhantomOverlapListener.h>
+#include <BehaviorPartsModel.h>
+#include <BehaviorWeapon.h>
+#include <BehaviorBgBase.h>
+
+class Em0010DebrisTest : public BehaviorBgBase
+{
+public:
+    int field_A70;
+    EntityHandle field_A74;
+    int field_A78;
+    int field_A7C;
+    int field_A80;
+    int field_A84;
+    int field_A88;
+    int field_A8C;
+    cEspControler field_A90;
+
+    Em0010DebrisTest()
+    {
+        ((void(__thiscall *)(Em0010DebrisTest*))(shared::base + 0x1E4DE0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735364);
+};
+
+class cEm0010Weapon : public BehaviorWeapon
+{
+public:
+    int field_8C0;
+    int field_8C4;
+    int field_8C8;
+    EntityHandle field_8CC;
+
+    cEm0010Weapon()
+    {
+        ((void(__thiscall *)(cEm0010Weapon *))(shared::base + 0x6A6830))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D28);
+};
+
+class cEm0010Magazine : public BehaviorPartsModel
+{
+public:
+    int field_A60;
+    int field_A64;
+    int field_A68;
+    int field_A6C;
+    EntityHandle field_A70;
+    int field_A74;
+    int field_A78;
+    int field_A7C;
+
+    cEm0010Magazine()
+    {
+        ((void(__thiscall *)(cEm0010Magazine*))(shared::base + 0x6AF110))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D24);
+};
+
+class EmC010Weapon : public cEm0010Weapon
+{
+public:
+    
+    EmC010Weapon()
+    {
+        ((void(__thiscall *)(EmC010Weapon *))(shared::base + 0x6B4090))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357A8);
+};
+
+class Em0010WeaponShield : public cEm0010Weapon
+{
+public:
+    int field_8D0;
+    int field_8D4;
+    int field_8D8;
+    int field_8DC;
+
+    Em0010WeaponShield()
+    {
+        ((void(__thiscall *)(Em0010WeaponShield *))(shared::base + 0x6AF1C0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D2C);
+};
+
+class Em0010RPGBullet : public Behavior
+{
+public:
+    EntityHandle field_870;
+    int field_874;
+    int field_878;
+    int field_87C;
+
+    Em0010RPGBullet()
+    {
+        ((void(__thiscall *)(Em0010RPGBullet *))(shared::base + 0x6A68D0))(this);
+    }
+
+    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9D30);
+};
+
+class Em0010DebrisActor : public Behavior
+{
+public:
+    class DebrisPhantomListener : public hkpPhantomOverlapListener{};
+    class ExplosionSlot : public Slot
+    {
+    public:
+        class Em0010 *m_Owner;
+    };
+public:
+    int field_870;
+    int field_874;
+    int field_878;
+    int field_87C;
+    int field_880;
+    int field_884;
+    int field_888;
+    int field_88C;
+    int field_890;
+    int field_894;
+    int field_898;
+    int field_89C;
+    int field_8A0;
+    int field_8A4;
+    int field_8A8;
+    int field_8AC;
+    int field_8B0;
+    int field_8B4;
+    int field_8B8;
+    int field_8BC;
+    int field_8C0;
+    int field_8C4;
+    int field_8C8;
+    int field_8CC;
+    int field_8D0;
+    int field_8D4;
+    int field_8D8;
+    int field_8DC;
+    int field_8E0;
+    int field_8E4;
+    int field_8E8;
+    int field_8EC;
+    int field_8F0;
+    int field_8F4;
+    int field_8F8;
+    int field_8FC;
+    int field_900;
+    int field_904;
+    int field_908;
+    int field_90C;
+
+    Em0010DebrisActor()
+    {
+        ((void(__thiscall *)(Em0010DebrisActor*))(shared::base + 0x6A6BA0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735360);
+};
 
 class Em0010 : public BehaviorEmBase
 {
 public:
-    int field_DB8;
-    int field_DBC;
     int field_DC0;
     int field_DC4;
     int field_DC8;
@@ -453,4 +616,20 @@ public:
     int field_1B64;
     int field_1B68;
     int field_1B6C;
+
+    Em0010()
+    {
+        ((void(__thiscall *)(Em0010 *))(shared::base + 0x6AB940))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D20);
 };
+
+VALIDATE_SIZE(Em0010DebrisTest, 0xB40);
+VALIDATE_SIZE(cEm0010Weapon, 0x8D0);
+VALIDATE_SIZE(cEm0010Magazine, 0xA80);
+VALIDATE_SIZE(EmC010Weapon, 0x8D0);
+VALIDATE_SIZE(Em0010WeaponShield, 0x8E0);
+VALIDATE_SIZE(Em0010RPGBullet, 0x880);
+VALIDATE_SIZE(Em0010DebrisActor, 0x910);
+VALIDATE_SIZE(Em0010, 0x1B70);

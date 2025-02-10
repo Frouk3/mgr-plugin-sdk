@@ -2,13 +2,12 @@
 
 #include <Hw.h>
 
-struct cModelDataResource;
-
 struct cModelData
 {
 	struct ClsInfo;
 	struct CutBoxInfo;
 	struct CutInfo;
+	struct ModelDataResource;
 	struct ModelData
 	{
 		cVec4 field_0;
@@ -64,15 +63,67 @@ struct cModelData
 		int field_EC;
 		int field_F0;
 		int field_F4;
-		cModelDataResource *m_Resource;
+		ModelDataResource *m_Resource;
 	};
 
 	struct cMaterial;
-	struct VertexGroupBatchData;
 	struct Batch;
 	struct VertexGroup;
+	struct VertexGroupBatchData
+	{
+		cModelData::VertexGroup* m_vertexGroups;
+		unsigned int m_nVertexGroupAmount;
+		cModelData::Batch* m_Batch;
+		unsigned int m_nBatchAmount;
+		unsigned int field_10;
+		unsigned int m_nVertexFormat;
+		unsigned int field_18;
+	};
 	struct MaterialInfo;
 	struct VertexGroupHolder;
+	struct ModelDataResource
+	{
+		int m_nReferences;
+		char* m_pWmb;
+		cModelData::VertexGroupBatchData m_VertexGroupBatchData;
+		float field_24;
+		int field_28;
+		int field_2C;
+		int field_30;
+		int field_34;
+		int field_38;
+		int field_3C;
+		int field_40;
+		int field_44;
+		int field_48;
+		int field_4C;
+		int field_50;
+		int field_54;
+		int field_58;
+		int field_5C;
+		int field_60;
+		int field_64;
+		int field_68;
+		int field_6C;
+		int field_70;
+		int field_74;
+		int field_78;
+		int field_7C;
+		int field_80;
+		int field_84;
+		int field_88;
+		int field_8C;
+		int field_90;
+		int field_94;
+		int field_98;
+		int field_9C;
+		int field_A0;
+		int field_A4;
+		int field_A8;
+		int field_AC;
+		cModelData::CutInfo* m_pCutInfo;
+		int field_B4;
+	};
 
 	int field_0;
 	int field_4;
@@ -80,7 +131,7 @@ struct cModelData
 	int field_C;
 	cModelData::ModelData m_ModelData;
 	int field_10C;
-	cModelDataResource field_110;
+	ModelDataResource field_110;
 	int field_1C8;
 	int field_1CC;
 	int field_1D0;
@@ -141,17 +192,6 @@ struct cModelData::VertexGroup
 	int field_AC;
 };
 
-struct cModelData::VertexGroupBatchData
-{
-	cModelData::VertexGroup *m_vertexGroups;
-	unsigned int m_nVertexGroupAmount;
-	cModelData::Batch *m_Batch;
-	unsigned int m_nBatchAmount;
-	unsigned int field_10;
-	unsigned int m_nVertexFormat;
-	unsigned int field_18;
-};
-
 struct cModelData::Batch
 {
 	int field_0;
@@ -159,50 +199,6 @@ struct cModelData::Batch
 	int field_8;
 	int field_C;
 	int field_10;
-};
-
-struct cModelDataResource
-{
-	int m_nReferences;
-	char *m_pWmb;
-	cModelData::VertexGroupBatchData m_VertexGroupBatchData;
-	float field_24;
-	int field_28;
-	int field_2C;
-	int field_30;
-	int field_34;
-	int field_38;
-	int field_3C;
-	int field_40;
-	int field_44;
-	int field_48;
-	int field_4C;
-	int field_50;
-	int field_54;
-	int field_58;
-	int field_5C;
-	int field_60;
-	int field_64;
-	int field_68;
-	int field_6C;
-	int field_70;
-	int field_74;
-	int field_78;
-	int field_7C;
-	int field_80;
-	int field_84;
-	int field_88;
-	int field_8C;
-	int field_90;
-	int field_94;
-	int field_98;
-	int field_9C;
-	int field_A0;
-	int field_A4;
-	int field_A8;
-	int field_AC;
-	cModelData::CutInfo *m_pCutInfo;
-	int field_B4;
 };
 
 struct cModelData::ClsInfo
@@ -229,64 +225,6 @@ struct cModelData::CutBoxInfo
 	int field_24;
 	int field_28;
 	int field_2C;
-};
-
-struct cModelData::ModelData
-{
-	cVec4 field_0;
-	cVec4 m_vecBBMin;
-	cVec4 m_vecBBMax;
-	float field_30;
-	int field_34;
-	int field_38;
-	int field_3C;
-	int field_40;
-	unsigned __int16 m_BoneAmount;
-	unsigned __int16 *m_pBoneSet;
-	int field_4C;
-	int m_nMaterialAmount;
-	int field_54;
-	int field_58;
-	int field_5C;
-	int field_60;
-	int m_pMeshes;
-	int m_nMeshAmount;
-	int field_6C;
-	int field_70;
-	int field_74;
-	int field_78;
-	int field_7C;
-	int field_80;
-	int field_84;
-	int field_88;
-	int field_8C;
-	int field_90;
-	int field_94;
-	int field_98;
-	int field_9C;
-	int field_A0;
-	int field_A4;
-	int field_A8;
-	int field_AC;
-	int field_B0;
-	int field_B4;
-	int field_B8;
-	int field_BC;
-	int field_C0;
-	int field_C4;
-	int field_C8;
-	int field_CC;
-	int field_D0;
-	int field_D4;
-	int field_D8;
-	int field_DC;
-	int field_E0;
-	int field_E4;
-	int field_E8;
-	int field_EC;
-	int field_F0;
-	int field_F4;
-	cModelDataResource *m_pResource;
 };
 
 struct cModelData::cMaterial

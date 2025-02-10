@@ -5,8 +5,6 @@
 class Pl0800 : public BehaviorEmBase
 {
 public:
-    int field_DB8;
-    int field_DBC;
     int field_DC0;
     int field_DC4;
     int field_DC8;
@@ -65,4 +63,11 @@ public:
     int field_FB4;
     int field_FB8;
     int field_FBC;
+
+    Pl0800()
+    {
+        ((void(__thiscall *)(Pl0800 *))(shared::base + 0x6AB5C0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x17353F0);
 };

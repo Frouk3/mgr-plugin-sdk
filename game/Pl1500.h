@@ -1,6 +1,22 @@
 #pragma once
 #include <PlBaseDLC.h>
 
+class Pl1500KnifeSet : public Behavior
+{
+public:
+    int field_870;
+    int field_874;
+    int field_878;
+    int field_87C;
+
+    Pl1500KnifeSet()
+    {
+        ((void(__thiscall *)(Pl1500KnifeSet *))(shared::base + 0x6A6F00))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735B98);
+};
+
 class Pl1500 : public PlBaseDLC
 {
 public:
@@ -191,3 +207,4 @@ public:
 };
 
 VALIDATE_SIZE(Pl1500, 0x5790);
+VALIDATE_SIZE(Pl1500KnifeSet, 0x880);
