@@ -3,8 +3,9 @@
 #include <cmath>
 #include <math.h>
 #include <shared.h>
+#include <Hw.h>
 
-enum RotateMatrixOrder
+enum RotateMatrixOrder : int
 {
     ORDER_XYZ = 0x0,
     ORDER_XZY = 0x1,
@@ -17,4 +18,9 @@ enum RotateMatrixOrder
 inline float __cdecl normalizeAngle(float angle)
 {
     return ((float(__cdecl *)(float))(shared::base + 0x9DBA30))(angle);
+}
+
+inline void __cdecl rotateMatrix(D3DXMATRIX* matrix, const cVec4& rotation, RotateMatrixOrder order = ORDER_ZYX)
+{
+    ((void(__cdecl*)(D3DXMATRIX*, const cVec4&, RotateMatrixOrder))(shared::base + 0x9DC1D0))(matrix, rotation, order);
 }

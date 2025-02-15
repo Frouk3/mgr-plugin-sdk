@@ -15,12 +15,12 @@ public:
     int field_88C;
     int field_890;
     int field_894;
-    int m_nAutoSePlay;
-    int m_nSeId;
+    int m_AutoSePlay;
+    int m_SeId;
     int field_8A0;
     int field_8A4;
     int field_8A8;
-    int m_nCutZanMode;
+    int m_CutZanMode;
     int field_8B0;
     float field_8B4;
     int field_8B8;
@@ -37,7 +37,7 @@ public:
     CollisionAttackData::AttackData field_8F0;
     float field_9F0;
     int field_9F4;
-    int m_bEnemyNoBreak;
+    BOOL m_EnemyNoBreak;
     int field_9FC;
     int field_A00;
     int field_A04;
@@ -57,8 +57,8 @@ public:
     int field_A3C;
     int field_A40;
     int field_A44;
-    float m_fZanTargetEnableRange;
-    float m_fZanTargetRad;
+    float m_ZanTargetEnableRange;
+    float m_ZanTargetRad;
     float field_A50;
     int field_A54;
     int field_A58;

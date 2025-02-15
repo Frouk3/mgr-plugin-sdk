@@ -14,7 +14,7 @@ class cObj : public cModel
 public:
     int field_490;
     DataArchiveHolder m_DataFile;
-    void* m_Model;
+    void* m_pModel;
     int m_SetType;
     int m_Type;
     int m_SetFlag;
@@ -27,7 +27,7 @@ public:
     int field_4C4;
     char field_4C8;
     char field_4C9;
-    int *m_CollisionFilter;
+    int *m_pCollisionFilter;
     int field_4D0;
     int field_4D4;
     int field_4D8;
@@ -36,10 +36,10 @@ public:
     int field_4E4;
     int field_4E8;
     int m_nHashNo;
-    Entity *m_Entity;
+    Entity *m_pEntity;
     cXmlBinary m_BxmReader;
     int field_514;
-    cObj *m_Owner;
+    cObj *m_pOwner;
     int field_51C;
     int field_520;
     float field_524;

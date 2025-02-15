@@ -5,7 +5,6 @@
 #include <dinput.h>
 #include <shared.h>
 #include <Xinput.h>
-#include <cMath.h>
 
 extern void PrintfLog(const char* fmt, ...);
 
@@ -1726,33 +1725,43 @@ struct Hw::cFixedList
         this->insert(node, this->m_pFirst, element);
     }
 
-    void remove(const Node*& node)
+    void remove(Node* node)
     {
         Node* m_prev = node->m_prev;
         Node* m_next = node->m_next;
+
         if (m_prev)
             m_prev->m_next = m_next;
         if (m_next)
             m_next->m_prev = m_prev;
+
         if (this->m_pFirst == node)
             this->m_pFirst = m_next;
+
         --this->m_nSize;
+
         Node* m_pLast = this->m_pLast;
+
         Node* v10;
+
         if (m_pLast)
             v10 = m_pLast->m_prev;
         else
             v10 = nullptr;
+
         node->m_prev = v10;
         node->m_next = m_pLast;
+
         if (v10)
             v10->m_next = node;
+
         if (m_pLast)
             m_pLast->m_prev = node;
+
         this->m_pLast = node;
     }
 
-    void remove(const T& value)
+    void Remove(const T& value)
     {
         Node *current = this->m_pFirst;
         while (current)

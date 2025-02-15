@@ -1,6 +1,7 @@
 #pragma once
 
 #include "injector/injector.hpp"
+#include "injector/hooking.hpp"
 #include "shared.h"
 #include "stdint.h"
 #include <vector>
@@ -9,11 +10,12 @@
 class Events
 {
 public:
-    // Base class for events
-   /* class IEventBase
+   // Base class for events
+    /*template <typename ...Args>
+    class IEventBase
     {
     protected:
-        typedef std::function<void()> FuncCallback;
+        typedef std::function<void(Args...)> FuncCallback;
         class Key
         {
         private:
@@ -27,7 +29,10 @@ public:
 
             Key() {};
 
-            ~Key() {};
+            ~Key() 
+            {
+                hooks.clear();
+            };
 
             void add(FuncCallback func)
             {
@@ -65,15 +70,27 @@ public:
         uintptr_t callback;
         void(__cdecl *mainhook)();
 
+    public:
         IEventBase()
         {
             callback = NULL;
             mainhook = nullptr;
         }
 
+        IEventBase(uintptr_t where)
+        {
+            Patch(where);
+        }
+
         ~IEventBase()
         {
             
+        }
+
+    private:
+        void Patch(uintptr_t where)
+        {
+
         }
     public:
     };*/
@@ -117,9 +134,10 @@ public:
             mainhookptr = nullptr;
         }
 
-        IEvent(void(__cdecl* mainhook)(), unsigned int address)
+        IEvent(void *mainhook, unsigned int address)
         {
-            mainhookptr = mainhook;
+            mainhookptr = (void(__cdecl*)())mainhook;
+
             Patch(address);
         }
 
@@ -139,6 +157,11 @@ public:
             this->returnAddress = (uintptr_t)injector::MakeCALL(address, mainhookptr, true);
         }
 
+        uintptr_t getCallbackAddress()
+        {
+            return returnAddress;
+        }
+
         void runBefore()
         {
             for (auto& f : before.getVector())
@@ -155,20 +178,20 @@ private:
 
     struct Caves
     {
-        static inline void OnUpdateMainHook();
-        static inline void OnGameStartupMainHook();
-        static inline void OnSceneStartupMainHook();
-        static inline void OnSceneCleanupMainHook();
-        static inline void OnTickEventMainHook();
-        static inline void OnPauseEventMainHook();
-        static inline void OnEndSceneMainHook();
-        static inline void OnApplicationStartup();
-        static inline void OnPresentHook();
-        static inline void OnHeapStartupHook();
-        static inline void OnHavokStartupHook();
-        static inline void OnGameCleanupHook();
-        static inline void OnMainCleanupEventHook();
-        static inline void OnDeviceResetHook();
+        static inline void *OnUpdateMainHook();
+        static inline void *OnGameStartupMainHook();
+        static inline void *OnSceneStartupMainHook();
+        static inline void *OnSceneCleanupMainHook();
+        static inline void *OnTickEventMainHook();
+        static inline void *OnPauseEventMainHook();
+        static inline void *OnEndSceneMainHook();
+        static inline void *OnApplicationStartup();
+        static inline void *OnPresentHook();
+        static inline void *OnHeapStartupHook();
+        static inline void *OnHavokStartupHook();
+        static inline void *OnGameCleanupHook();
+        static inline void *OnMainCleanupEventHook();
+        static inline void *OnDeviceResetHook();
     };
 public:
     static inline IEvent OnUpdateEvent = IEvent<0>(Caves::OnUpdateMainHook, shared::base + 0x6526A2); // Every non-game tick
@@ -192,24 +215,18 @@ public:
     };
 };
 
-#define DEFINE_CAVE(Cave, Event)                    \
-void __declspec(naked) Cave()                       \
-{                                                   \
-    __asm pushfd                                    \
-    __asm pushad                                    \
-    __asm lea ecx, Event                            \
-    __asm call Events::IEvent<0>::runBefore         \
-    __asm popad                                     \
-    __asm popfd                                     \
-    __asm call Event.returnAddress                  \
-    __asm pushfd                                    \
-    __asm pushad                                    \
-    __asm lea ecx, Event                            \
-    __asm call Events::IEvent<0>::runAfter          \
-    __asm popad                                     \
-    __asm popfd                                     \
-    __asm ret                                       \
-}
+#define DEFINE_CAVE(Cave, Event)                                        \
+void *Cave()                                                            \
+{                                                                       \
+    __asm { pushad }                                                        \
+    Event.runBefore();                                                  \
+    __asm { popad }                                                         \
+    void *value = ((void*(__cdecl *)())Event.getCallbackAddress())();   \
+    __asm { pushad }                                                        \
+    Event.runAfter();                                                   \
+    __asm { popad }                                                         \
+    return value;                                                       \
+}                                                                       
 
 DEFINE_CAVE(Events::Caves::OnUpdateMainHook, Events::OnUpdateEvent)
 DEFINE_CAVE(Events::Caves::OnGameStartupMainHook, Events::OnGameStartupEvent)

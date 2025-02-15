@@ -2,7 +2,7 @@
 
 class BehaviorDatabase
 {
+private:
+    virtual void dummyVM() {}
 public:
-
-    virtual void dummyVM() {}; 
 };

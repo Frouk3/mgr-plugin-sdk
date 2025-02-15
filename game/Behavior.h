@@ -93,8 +93,8 @@ struct ClothSimulation
         float m_fLimitSpringRate;
         float m_fSpdRate;
         float m_fStretchy;
-        unsigned __int16 m_nBundleNum;
-        unsigned __int16 m_nBundleNum2;
+        unsigned short m_nBundleNum;
+        unsigned short m_nBundleNum2;
         float m_fThick;
         cVec3 m_vecGravity;
         int m_nGravityPartsNo;
@@ -124,6 +124,11 @@ struct ClothSimulation
             cVec3 m_vecOffset;
             float m_fOriginalRate;
         };
+
+        void reset()
+        {
+            ((void(__thiscall *)(ClothSimulation::Physics *))(shared::base + 0x5FAC50))(this);
+        }
     };
 
     int field_0;
@@ -878,15 +883,25 @@ struct ClothSimulation
     int field_BD4;
     int field_BD8;
     int field_BDC;
+
+    ClothSimulation()
+    {
+        ((void(__thiscall *)(ClothSimulation*))(shared::base + 0x5FAD80))(this);
+    }
+
+    void reset(BOOL bUseStretch)
+    {
+        ((void(__thiscall *)(ClothSimulation *, BOOL))(shared::base + 0x5F79C0))(this, bUseStretch);
+    }
 };
 
 struct Constraints
 {
-    int m_nIndex;
-    EntityHandle m_nMainEntity;
-    EntityHandle m_nObjectEntityHandle;
-    unsigned int m_nBone;
-    unsigned int m_nRotationBone;
+    int m_Index;
+    EntityHandle m_MainEntity;
+    EntityHandle m_ObjectEntityHandle;
+    unsigned int m_Bone;
+    unsigned int m_RotationBone;
     int field_14;
     int field_18;
     int field_1C;
@@ -906,9 +921,9 @@ public:
         int m_SlotId;
         int field_4;
         char m_AnimName[16];
-        Behavior* m_AnimationTarget;
+        Behavior* m_pAnimationTarget;
         int field_1C;
-        AnimationMap::Unit* m_AnimationMap;
+        AnimationMap::Unit* m_pAnimationMap;
         int field_24;
         float m_Cycle; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
         int field_2C;
@@ -916,13 +931,13 @@ public:
 
     struct EffectIntegrationContainer
     {
-        int m_nContainerId;
-        int m_nEffObjId;
+        int m_ContainerId;
+        eObjID m_EffObjId;
         int field_8;
-        int m_nEffectId;
-        cEspControler *field_10;
-        float m_fFadeTime;
-        float m_fFadeEndAlpha;
+        int m_EffectId;
+        cEspControler *m_pControler;
+        float m_FadeTime;
+        float m_FadeEndAlpha;
     };
 
     struct InstructionContainer
@@ -997,16 +1012,16 @@ public:
     int m_pBehaviorInfo;
     int field_610;
     int field_614;
-    unsigned int m_nCurrentAction;
-    int m_nCurrentActionId;
+    unsigned int m_CurrentAction;
+    int m_CurrentActionId;
     int field_620;
     int field_624;
-    int m_nPreviousAction;
-    int m_nPreviousActionId;
+    int m_PreviousAction;
+    int m_PreviousActionId;
     int field_630;
     int field_634;
     Hw::CriticalSection* field_638;
-    lib::AllocatedArray<InstructionContainer>* m_pInstructionContainerArray;
+    lib::AllocatedArray<InstructionContainer>* m_pInstructions;
     int field_640;
     int field_644;
     int field_648;
@@ -1047,7 +1062,7 @@ public:
     int field_6E4;
     float field_6E8;
     int field_6EC;
-    cLockonPartsList m_cLockonPartsList;
+    cLockonPartsList m_LockonPartsList;
     int field_710;
     int field_714;
     int field_718;
@@ -1098,7 +1113,7 @@ public:
     int field_7CC;
     StateMachineContextPl0010* m_pStateMachineContext;
     StateMachineFactoryPl0010* m_pStateMachineFactory;
-    NodeNavigation* m_NodeNavigation;
+    NodeNavigation* m_pNodeNavigation;
     int field_7DC;
     int field_7E0;
     int field_7E4;
@@ -1117,7 +1132,7 @@ public:
     int field_818;
     int field_81C;
     int field_820;
-    __int16 field_824;
+    short field_824;
     int field_828;
     int field_82C;
     int field_830;
@@ -1180,9 +1195,9 @@ public:
         CallVMTFunc<25, Behavior*>(this);
     }
 
-    cVec4 &getTransPos()
+    const cVec4 &getTransPos()
     {
-        return ReturnCallVMTFunc<cVec4 &, 26, Behavior *>(this);
+        return ReturnCallVMTFunc<const cVec4 &, 26, Behavior *>(this);
     }
 
     void setTransPos(const cVec4& transPos)
@@ -1210,9 +1225,9 @@ public:
         CallVMTFunc<31, Behavior *, const cVec4&, const cVec4&>(this, pos, rotation);
     }
 
-    cVec4& getRotation()
+    const cVec4& getRotation()
     {
-        return ReturnCallVMTFunc<cVec4&, 33, Behavior *>(this);
+        return ReturnCallVMTFunc<const cVec4&, 33, Behavior *>(this);
     }
 
     void setRotation(const cVec4& rotation)
@@ -1220,12 +1235,12 @@ public:
         CallVMTFunc<34, Behavior *, const cVec4&>(this, rotation);
     }
 
-    cVec4& getSize()
+    const cVec4& getSize()
     {
-        return ReturnCallVMTFunc<cVec4&, 35, Behavior *>(this);
+        return ReturnCallVMTFunc<const cVec4&, 35, Behavior *>(this);
     }
 
-    void setSize(const Hw::cVec4& size)
+    void setSize(const cVec4& size)
     {
         CallVMTFunc<36, Behavior *, const cVec4&>(this, size);
     }
@@ -1293,6 +1308,11 @@ public:
     }
 
 // vft end
+
+    void shutdownEffects()
+    {
+        ((void(__thiscall *)(Behavior *))(shared::base + 0x68C820))(this);
+    }
 
     void setState(int action, int actId, int a3, int a4)
     {
@@ -1369,9 +1389,9 @@ public:
         ((void(__thiscall*)(Behavior*))(shared::base + 0x6944D0))(this);
     }
 
-    void setConstraintsBone(int id, unsigned int bone, unsigned int _bone)
+    void setConstraintsBone(int id, unsigned int bone, unsigned int rotationBone)
     {
-        ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, _bone);
+        ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, rotationBone);
     }
 
     int setDirectAnimation(void* mot, void* seq, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)

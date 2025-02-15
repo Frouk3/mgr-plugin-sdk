@@ -1,7 +1,9 @@
 #pragma once
-#include "Hw.h"
-#include "shared.h"
+
+#include <Hw.h>
+#include <shared.h>
 #include <d3dx9math.h>
+#include <cMath.h>
 
 class cParts
 {

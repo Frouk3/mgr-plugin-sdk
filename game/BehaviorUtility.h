@@ -47,9 +47,9 @@ namespace BehaviorUtility
         cVec4 m_vecEndRayPoint;
         int m_CollisionFilter;
         int m_IgnoreObjectFilter;
-        float m_fRadius;
-        int m_bMultiHit;
-        int m_bLinearCast;
+        float m_Radius;
+        BOOL m_MultiHit;
+        BOOL m_LinearCast;
 
         void drawRayInfo(unsigned int color, int debugLayer, const char* text)
         {
@@ -62,3 +62,6 @@ namespace BehaviorUtility
         return ((int(__cdecl*)(RayCast*, RayInfo*))(shared::base + 0x686290))(rayCast, rayInfo);
     }
 }
+
+VALIDATE_SIZE(BehaviorUtility::RayCast, 0x520);
+VALIDATE_SIZE(BehaviorUtility::RayInfo, 0x34);

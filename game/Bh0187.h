@@ -25,3 +25,5 @@ public:
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1734B70);
 };
+
+VALIDATE_SIZE(Bh0187, 0x8A0);

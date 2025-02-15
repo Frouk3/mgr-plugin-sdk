@@ -69,5 +69,5 @@ public:
     float field_F8;
     float field_FC;
 
-    virtual ContextInstance& getContext() {ContextInstance context; return context; };
+    virtual ContextInstance& getContext() {static ContextInstance context; return context; };
 };

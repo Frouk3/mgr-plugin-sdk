@@ -358,7 +358,7 @@ public:
 
     T& back()
     {
-        return m_pBegin + m_nSize - 1;
+        return m_nSize ? m_pBegin[m_nSize - 1] : *m_pBegin;
     }
 
     void pop_front()
@@ -393,10 +393,8 @@ public:
         {
             for (size_t j = 0; j < m_nSize - i - 1; ++j)
             {
-                if (callback(m_pBegin[j], m_pBegin[j + 1]))
-                {
+                if (callback(m_pBegin[j], m_pBegin[j + 1])
                     std::swap(m_pBegin[j], m_pBegin[j + 1]);
-                }
             }
         }
     }
@@ -444,9 +442,7 @@ public:
             for (int j = i + 1; j < m_nSize; j++)
             {
                 if (callback(m_pBegin[j], m_pBegin[minIndex]))
-                {
                     minIndex = j;
-                }
             }
             std::swap(m_pBegin[i], m_pBegin[minIndex]);
         }
