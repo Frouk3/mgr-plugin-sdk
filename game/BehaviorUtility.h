@@ -3,7 +3,7 @@
 #include <hkpAllCdPointCollector.h>
 #include <hkpAllRayHitCollector.h>
 #include <Entity.h>
-#include "Hw.h"
+#include <Hw.h>
 #include <shared.h>
 
 namespace BehaviorUtility
@@ -16,7 +16,7 @@ namespace BehaviorUtility
         int field_C;
         cVec4 m_vecOut;
         cVec4 m_vecOutDirection;
-        int field_30;
+        Entity *field_30;
         int field_34;
         int field_38;
         int field_3C;
@@ -45,11 +45,11 @@ namespace BehaviorUtility
     {
         cVec4 m_vecOrigin;
         cVec4 m_vecEndRayPoint;
-        int m_nCollisionFilter;
-        int m_nIgnoreOjbect;
-        float m_fRadius;
-        int m_bMultiHit;
-        int m_bLinearCast;
+        int m_CollisionFilter;
+        int m_IgnoreObjectFilter;
+        float m_Radius;
+        BOOL m_MultiHit;
+        BOOL m_LinearCast;
 
         void drawRayInfo(unsigned int color, int debugLayer, const char* text)
         {
@@ -62,3 +62,6 @@ namespace BehaviorUtility
         return ((int(__cdecl*)(RayCast*, RayInfo*))(shared::base + 0x686290))(rayCast, rayInfo);
     }
 }
+
+VALIDATE_SIZE(BehaviorUtility::RayCast, 0x520);
+VALIDATE_SIZE(BehaviorUtility::RayInfo, 0x34);

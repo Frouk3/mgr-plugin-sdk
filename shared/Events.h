@@ -1,6 +1,7 @@
 #pragma once
 
 #include "injector/injector.hpp"
+#include "injector/hooking.hpp"
 #include "shared.h"
 #include "stdint.h"
 #include <vector>
@@ -9,6 +10,91 @@
 class Events
 {
 public:
+   // Base class for events
+    /*template <typename ...Args>
+    class IEventBase
+    {
+    protected:
+        typedef std::function<void(Args...)> FuncCallback;
+        class Key
+        {
+        private:
+            std::vector<FuncCallback> hooks;
+        public:
+
+            std::vector<FuncCallback> &getHooks()
+            {
+                return hooks;
+            }
+
+            Key() {};
+
+            ~Key() 
+            {
+                hooks.clear();
+            };
+
+            void add(FuncCallback func)
+            {
+                hooks.emplace_back(func);
+            }
+
+            void remove(FuncCallback func)
+            {
+                auto it = std::find(hooks.begin(), hooks.end(), func);
+                if (it != hooks.end())
+                {
+                    hooks.erase(it);
+                }
+            }
+
+            void run()
+            {
+                for (FuncCallback& func : hooks)
+                    func();
+            }
+
+            Key& operator+=(FuncCallback func)
+            {
+                add(func);
+                return *this;
+            }
+
+            Key& operator-=(FuncCallback func)
+            {
+                remove(func);
+                return *this;
+            }
+        };
+
+        uintptr_t callback;
+        void(__cdecl *mainhook)();
+
+    public:
+        IEventBase()
+        {
+            callback = NULL;
+            mainhook = nullptr;
+        }
+
+        IEventBase(uintptr_t where)
+        {
+            Patch(where);
+        }
+
+        ~IEventBase()
+        {
+            
+        }
+
+    private:
+        void Patch(uintptr_t where)
+        {
+
+        }
+    public:
+    };*/
+public:
     template <int mPriority>
     class IEvent
     {
@@ -16,66 +102,43 @@ public:
         uintptr_t returnAddress;
         void(__cdecl *mainhookptr)() = nullptr;
 
-
         class Key
         {
         private:
-            std::vector<std::function<void()>>* vector;
+            std::vector<std::function<void()>> vector;
         public:
 
             Key()
             {
-                vector = nullptr;
+                
             }
-
-            Key(std::vector<std::function<void()>>* vector) : vector(vector) {};
 
             Key& operator +=(std::function<void()> function)
             {
-                vector->emplace_back(function);
+                vector.emplace_back(function);
                 return *this;
             }
 
-            std::vector<std::function<void()>>* getVector()
+            std::vector<std::function<void()>>& getVector()
             {
                 return vector;
             }
         };
     public:
-        Key before;
-        Key after;
+        Key before; // Use to add events before event occurs
+        Key after; // Use to add events after event occurs
 
         IEvent()
         {
-            this->returnAddress = 0;
-            this->mainhookptr = nullptr;
-
-            before = Key(new std::vector<std::function<void()>>);
-            after = Key(new std::vector<std::function<void()>>);
+            returnAddress = 0;
+            mainhookptr = nullptr;
         }
 
-        IEvent(std::vector<std::function<void()>>* before, std::vector<std::function<void()>>* after, void(__cdecl* func)())
+        IEvent(void *mainhook, unsigned int address)
         {
-            this->returnAddress = 0;
-            this->mainhookptr = func;
+            mainhookptr = (void(__cdecl*)())mainhook;
 
-            this->before = Key(before);
-            this->after = Key(after);
-        }
-
-        IEvent(std::vector<std::function<void()>>* before, std::vector<std::function<void()>>* after, void(__cdecl* mainhook)(), unsigned int address)
-        {
-            this->IEvent::IEvent(before, after, mainhook);
-            this->Patch(address);
-        }
-
-        IEvent(void(__cdecl* mainhook)(), unsigned int address)
-        {
-            this->mainhookptr = mainhook;
-            this->Patch(address);
-
-            before = Key(new std::vector<std::function<void()>>());
-            after = Key(new std::vector<std::function<void()>>());
+            Patch(address);
         }
 
         IEvent& operator+=(std::function<void()> funcptr)
@@ -84,7 +147,7 @@ public:
             return *this;
         }
 
-        void SetMainHook(void(__cdecl *funcptr)())
+        void setMainHook(void(__cdecl *funcptr)())
         {
             mainhookptr = funcptr;
         }
@@ -94,15 +157,20 @@ public:
             this->returnAddress = (uintptr_t)injector::MakeCALL(address, mainhookptr, true);
         }
 
-        void RunBefore()
+        uintptr_t getCallbackAddress()
         {
-            for (auto& f : *before.getVector())
+            return returnAddress;
+        }
+
+        void runBefore()
+        {
+            for (auto& f : before.getVector())
                 f();
         }
         
-        void RunAfter()
+        void runAfter()
         {
-            for (auto& f : *after.getVector())
+            for (auto& f : after.getVector())
                 f();
         }
     };
@@ -110,20 +178,20 @@ private:
 
     struct Caves
     {
-        static inline void OnUpdateMainHook();
-        static inline void OnGameStartupMainHook();
-        static inline void OnSceneStartupMainHook();
-        static inline void OnSceneCleanupMainHook();
-        static inline void OnTickEventMainHook();
-        static inline void OnPauseEventMainHook();
-        static inline void OnEndSceneMainHook();
-        static inline void OnApplicationStartup();
-        static inline void OnPresentHook();
-        static inline void OnHeapStartupHook();
-        static inline void OnHavokStartupHook();
-        static inline void OnGameCleanupHook();
-        static inline void OnMainCleanupEventHook();
-        static inline void OnDeviceResetHook();
+        static inline void *OnUpdateMainHook();
+        static inline void *OnGameStartupMainHook();
+        static inline void *OnSceneStartupMainHook();
+        static inline void *OnSceneCleanupMainHook();
+        static inline void *OnTickEventMainHook();
+        static inline void *OnPauseEventMainHook();
+        static inline void *OnEndSceneMainHook();
+        static inline void *OnApplicationStartup();
+        static inline void *OnPresentHook();
+        static inline void *OnHeapStartupHook();
+        static inline void *OnHavokStartupHook();
+        static inline void *OnGameCleanupHook();
+        static inline void *OnMainCleanupEventHook();
+        static inline void *OnDeviceResetHook();
     };
 public:
     static inline IEvent OnUpdateEvent = IEvent<0>(Caves::OnUpdateMainHook, shared::base + 0x6526A2); // Every non-game tick
@@ -147,20 +215,18 @@ public:
     };
 };
 
-#define DEFINE_CAVE(Cave, Event)                          \
-void __declspec(naked) Cave() \
-{                                                   \
-    __asm pushad                                    \
-    __asm lea ecx, Event                            \
-    __asm call Events::IEvent<0>::RunBefore                    \
-    __asm popad                                     \
-    __asm call Event.returnAddress                  \
-    __asm pushad                                    \
-    __asm lea ecx, Event                            \
-    __asm call Events::IEvent<0>::RunAfter                     \
-    __asm popad                                     \
-    __asm ret          \
-}
+#define DEFINE_CAVE(Cave, Event)                                        \
+void *Cave()                                                            \
+{                                                                       \
+    __asm { pushad }                                                        \
+    Event.runBefore();                                                  \
+    __asm { popad }                                                         \
+    void *value = ((void*(__cdecl *)())Event.getCallbackAddress())();   \
+    __asm { pushad }                                                        \
+    Event.runAfter();                                                   \
+    __asm { popad }                                                         \
+    return value;                                                       \
+}                                                                       
 
 DEFINE_CAVE(Events::Caves::OnUpdateMainHook, Events::OnUpdateEvent)
 DEFINE_CAVE(Events::Caves::OnGameStartupMainHook, Events::OnGameStartupEvent)

@@ -1,21 +1,31 @@
 #pragma once
 
-#include "BehaviorAppBase.h"
-#include "shared.h"
+#include <BehaviorAppBase.h>
+#include <shared.h>
 
-#include "NinjaRunEventManagerImplement.h"
+#include <NinjaRunEventManagerImplement.h>
 
-#include "Slot.h"
-#include "cQteArea.h"
+#include <Slot.h>
+#include <cQteArea.h>
+#include <cZandatsuTarget.h>
+
+class SlashStartSlotPl0010 : public Slot
+{
+public:
+    Pl0000* m_Owner;
+};
+
+class GetMoneySlotPl0010 : public Slot
+{
+public:
+    Pl0000 *m_Owner;
+};
 
 class cCameraGame;
 
 class Pl0000 : public BehaviorAppBase
 {
 public:
-    int field_9F4;
-    int field_9F8;
-    int field_9FC;
     cEspControler field_A00;
     int field_AB0;
     int field_AB4;
@@ -42,13 +52,7 @@ public:
     float field_BB4;
     float field_BB8;
     int field_BBC;
-    int field_BC0;
-    int field_BC4;
-    int field_BC8;
-    int field_BCC;
-    int field_BD0;
-    int field_BD4;
-    int field_BD8;
+    Hw::CriticalSection field_BC0;
     int field_BDC;
     cVec4 field_BE0;
     int field_BF0;
@@ -67,13 +71,13 @@ public:
     int field_C24;
     int field_C28;
     int field_C2C;
-    int field_C30;
+    EntityHandle field_C30;
     int field_C34;
     int field_C38;
     int field_C3C;
     cEspControler m_BloodLArmControler;
     int m_nCuttedLArm;
-    int field_CF4;
+    EntityHandle field_CF4;
     int field_CF8;
     int field_CFC;
     int field_D00;
@@ -156,11 +160,7 @@ public:
     int field_F58;
     int field_F5C;
     int field_F60;
-    int field_F64;
-    int field_F68;
-    int field_F6C;
-    int field_F70;
-    int field_F74;
+    Hw::cFixedVector<int> field_F64;
     int field_F78;
     int field_F7C;
     int field_F80;
@@ -187,45 +187,35 @@ public:
     int field_FD4;
     int field_FD8;
     int field_FDC;
-    int field_FE0;
-    int field_FE4;
+    EntityHandle field_FE0;
+    EntityHandle field_FE4;
     EntityHandle m_HairHandle;
     EntityHandle m_HelmetHandle;
     EntityHandle m_SwordHandle;
     EntityHandle m_SheathHandle;
-    EntityHandle field_FF8;
-    EntityHandle field_FFC;
+    EntityHandle m_CustomWeaponHandle;
+    EntityHandle m_SubWep2Handle;
     int field_1000;
-    int field_1004;
-    int field_1008;
+    EntityHandle field_1004;
+    EntityHandle field_1008;
     EntityHandle field_100C;
-    int field_1010;
+    EntityHandle field_1010;
     int field_1014;
     int field_1018;
     int field_101C;
     cVec4 field_1020;
     cVec4 field_1030;
-    int field_1040;
-    int field_1044;
-    int field_1048;
-    int field_104C;
-    int field_1050;
-    int field_1054;
-    int field_1058;
-    int field_105C;
-    int field_1060;
-    int field_1064;
-    int field_1068;
-    int field_106C;
+    Hw::cFixedVector<int> field_1040;
+    Hw::cFixedList<int> field_1054;
     float field_1070;
     int field_1074;
-    __int16 field_1078;
+    short field_1078;
     float field_107C;
     int field_1080;
-    __int16 field_1084;
+    short field_1084;
     int field_1088;
     int field_108C;
-    __int16 field_1090;
+    short field_1090;
     int field_1094;
     int field_1098;
     int field_109C;
@@ -246,12 +236,12 @@ public:
     float field_10D8;
     int field_10DC;
     int field_10E0;
-    void* field_10E4;
+    int *field_10E4;
     int field_10E8;
     int field_10EC;
     int field_10F0;
     int field_10F4;
-    void* field_10F8;
+    int *field_10F8;
     int field_10FC;
     int field_1100;
     int field_1104;
@@ -284,69 +274,18 @@ public:
     int field_117C;
     int field_1180;
     int field_1184;
-    Entity* field_1188;
-    Animation* m_pAnimation;
-    Entity* m_pBladeEntity;
-    Entity* m_pSheathEntity;
-    int field_1198;
-    int field_119C;
+    Entity *field_1188;
+    Animation *m_Animation;
+    Entity *m_BladeEntity;
+    Entity *m_SheathEntity;
+    EntityHandle field_1198;
+    EntityHandle field_119C;
     int field_11A0;
     int field_11A4;
-    int field_11A8;
+    EntityHandle field_11A8;
     EntityHandle field_11AC;
-    int field_11B0;
-    int field_11B4;
-    int field_11B8;
-    int field_11BC;
-    int field_11C0;
-    int field_11C4;
-    int field_11C8;
-    int field_11CC;
-    int field_11D0;
-    int field_11D4;
-    int field_11D8;
-    int field_11DC;
-    int field_11E0;
-    int field_11E4;
-    int field_11E8;
-    int field_11EC;
-    int field_11F0;
-    int field_11F4;
-    int field_11F8;
-    int field_11FC;
-    int field_1200;
-    int field_1204;
-    int field_1208;
-    int field_120C;
-    int field_1210;
-    int field_1214;
-    int field_1218;
-    int field_121C;
-    int field_1220;
-    int field_1224;
-    int field_1228;
-    int field_122C;
-    int field_1230;
-    int field_1234;
-    int field_1238;
-    int field_123C;
-    int field_1240;
-    int field_1244;
-    int field_1248;
-    int field_124C;
-    int field_1250;
-    int field_1254;
-    int field_1258;
-    int field_125C;
-    int field_1260;
-    int field_1264;
-    int field_1268;
-    int field_126C;
-    int field_1270;
-    int field_1274;
-    int field_1278;
-    int field_127C;
-    cVec4 field_1280;
+    cZandatsuTarget field_11B0;
+    cZandatsuTarget field_1220;
     float field_1290;
     float field_1294;
     float field_1298;
@@ -356,38 +295,11 @@ public:
     int field_12A8;
     float field_12AC;
     int field_12B0;
-    void* field_12B4;
+    void *field_12B4;
     float field_12B8;
     int field_12BC;
     cEspControler field_12C0;
-    int field_1370;
-    int field_1374;
-    int field_1378;
-    int field_137C;
-    int field_1380;
-    int field_1384;
-    int field_1388;
-    int field_138C;
-    int field_1390;
-    int field_1394;
-    int field_1398;
-    int field_139C;
-    int field_13A0;
-    int field_13A4;
-    int field_13A8;
-    int field_13AC;
-    int field_13B0;
-    int field_13B4;
-    int field_13B8;
-    int field_13BC;
-    int field_13C0;
-    int field_13C4;
-    int field_13C8;
-    int field_13CC;
-    int field_13D0;
-    int field_13D4;
-    int field_13D8;
-    int field_13DC;
+    cZandatsuTarget field_1370;
     int field_13E0;
     int field_13E4;
     float field_13E8;
@@ -396,7 +308,7 @@ public:
     int field_13F4;
     int field_13F8;
     int field_13FC;
-    int m_nSwordState;
+    int m_SwordState;
     int field_1404;
     int field_1408;
     int field_140C;
@@ -405,7 +317,7 @@ public:
     int field_1418;
     float field_141C;
     int field_1420;
-    int m_nIdleAnimationIndex;
+    int m_nCustomWeaponBone;
     float field_1428;
     int field_142C;
     int field_1430;
@@ -1063,7 +975,7 @@ public:
     cEspControler field_2110;
     cEspControler field_21C0;
     cEspControler field_2270;
-    cCameraGame* m_pcCameraGame;
+    cCameraGame *m_Camera;
     float field_2324;
     int field_2328;
     int field_232C;
@@ -1088,8 +1000,8 @@ public:
     int field_23A8;
     int field_23AC;
     Animation::FootIk2 field_23B0;
-    int field_255C;
-    int field_2560;
+    int field_23B4;
+    int field_23B8;
     int m_bDisableControl;
     int field_2568;
     int field_256C;
@@ -1162,7 +1074,7 @@ public:
     int field_2678;
     float field_267C;
     int field_2680;
-    int field_2684;
+    EntityHandle field_2684;
     int field_2688;
     int field_268C;
     int field_2690;
@@ -1170,7 +1082,7 @@ public:
     float field_2698;
     int field_269C;
     int field_26A0;
-    Entity* m_pVrWallCheckEntity;
+    Entity *m_pVrWallCheckEntity;
     int field_26A8;
     int field_26AC;
     float field_26B0;
@@ -1189,34 +1101,7 @@ public:
     int field_26E4;
     int field_26E8;
     int field_26EC;
-    int field_26F0;
-    int field_26F4;
-    int field_26F8;
-    int field_26FC;
-    int field_2700;
-    int field_2704;
-    int field_2708;
-    int field_270C;
-    int field_2710;
-    int field_2714;
-    int field_2718;
-    int field_271C;
-    int field_2720;
-    int field_2724;
-    int field_2728;
-    int field_272C;
-    int field_2730;
-    int field_2734;
-    int field_2738;
-    int field_273C;
-    int field_2740;
-    int field_2744;
-    int field_2748;
-    int field_274C;
-    int field_2750;
-    int field_2754;
-    int field_2758;
-    int field_275C;
+    cZandatsuTarget field_26F0;
     int field_2760;
     int field_2764;
     int field_2768;
@@ -1236,7 +1121,7 @@ public:
     float field_27A0;
     float field_27A4;
     int field_27A8;
-    int field_27AC;
+    EntityHandle field_27AC;
     int field_27B0;
     int field_27B4;
     float field_27B8;
@@ -1248,7 +1133,7 @@ public:
     int field_27D0;
     int field_27D4;
     int field_27D8;
-    int field_27DC;
+    EntityHandle field_27DC;
     int field_27E0;
     float field_27E4;
     int field_27E8;
@@ -1276,16 +1161,12 @@ public:
     int field_2840;
     int field_2844;
     int field_2848;
-    int field_284C;
-    int field_2850;
-    int field_2854;
-    int field_2858;
-    int field_285C;
+    Hw::cFixedVector<int> field_284C;
     float field_2860;
     float field_2864;
     int field_2868;
     int field_286C;
-    int field_2870;
+    EntityHandle field_2870;
     int field_2874;
     int field_2878;
     int field_287C;
@@ -1351,11 +1232,7 @@ public:
     int field_296C;
     int field_2970;
     int field_2974;
-    int field_2978;
-    int field_297C;
-    int field_2980;
-    int field_2984;
-    int field_2988;
+    Hw::cFixedVector<int> field_2978;
     int field_298C;
     cEspControler field_2990;
     cEspControler field_2A40;
@@ -1372,11 +1249,7 @@ public:
     float field_2BD0;
     float field_2BD4;
     float field_2BD8;
-    int field_2BDC;
-    int field_2BE0;
-    int field_2BE4;
-    int field_2BE8;
-    int field_2BEC;
+    Hw::cFixedVector<int> field_2BDC;
     float field_2BF0;
     float field_2BF4;
     float field_2BF8;
@@ -1388,22 +1261,18 @@ public:
     float field_2C10;
     float field_2C14;
     int field_2C18;
-    int field_2C1C;
+    EntityHandle field_2C1C;
     float field_2C20;
     float field_2C24;
     int field_2C28;
     float field_2C2C;
     char field_2C30;
-    int field_2C34;
+    EntityHandle field_2C34;
     int field_2C38;
     float field_2C3C;
     int field_2C40;
     int field_2C44;
-    int field_2C48;
-    int field_2C4C;
-    int field_2C50;
-    int field_2C54;
-    int field_2C58;
+    Hw::cFixedVector<int> field_2C48;
     float field_2C5C;
     float field_2C60;
     int field_2C64;
@@ -1745,12 +1614,12 @@ public:
     float field_31A4;
     float m_fHurtTime;
     float m_fHealTime;
-    __int16 field_31B0;
-    __int16 field_31B2;
+    short field_31B0;
+    short field_31B2;
     int field_31B4;
     int field_31B8;
     int field_31BC;
-    int field_31C0;
+    EntityHandle field_31C0;
     int field_31C4;
     int field_31C8;
     int field_31CC;
@@ -1781,7 +1650,7 @@ public:
     int field_328C;
     int field_3290;
     int field_3294;
-    int field_3298;
+    EntityHandle field_3298;
     int field_329C;
     cEspControler field_32A0;
     int field_3350;
@@ -1856,7 +1725,7 @@ public:
     int field_3464;
     int field_3468;
     int field_346C;
-    cEspControler field_3470;
+    cEspControler m_RipperEsp;
     cEspControler field_3520;
     cEspControler field_35D0;
     cEspControler field_3680;
@@ -1873,7 +1742,6 @@ public:
     EntityHandle field_3810;
     int field_3814;
     EntityHandle field_3818;
-    int field_381C;
     class FuelContainer
     {
     public:
@@ -1883,10 +1751,8 @@ public:
         float m_fFuelContainerCapacity;
         float field_10;
         int field_14;
-    }*m_pFuelContainers;
-    int m_nMaxFCUpgrades;
-    int m_nCurrentFCUpgrades;
-    int field_382C;
+    };
+    Hw::cFixedVector<FuelContainer> m_FuelContainers;
     float field_3830;
     float field_3834;
     float field_3838;
@@ -1962,7 +1828,7 @@ public:
     int field_3DF0;
     int field_3DF4;
     int field_3DF8;
-    int field_3DFC;
+    EntityHandle field_3DFC;
     int field_3E00;
     int field_3E04;
     int field_3E08;
@@ -2018,10 +1884,10 @@ public:
     int field_3EDC;
     int field_3EE0;
     int field_3EE4;
-    int field_3EE8;
-    int field_3EEC;
-    int field_3EF0;
-    int field_3EF4;
+    EntityHandle field_3EE8;
+    EntityHandle field_3EEC;
+    EntityHandle field_3EF0;
+    EntityHandle field_3EF4;
     int field_3EF8;
     float field_3EFC;
     int field_3F00;
@@ -2057,9 +1923,9 @@ public:
     int field_3F78;
     int field_3F7C;
     int field_3F80;
-    int field_3F84;
-    int field_3F88;
-    int field_3F8C;
+    EntityHandle field_3F84;
+    EntityHandle field_3F88;
+    EntityHandle field_3F8C;
     int field_3F90;
     int field_3F94;
     int field_3F98;
@@ -2127,7 +1993,7 @@ public:
     int field_416C;
     int field_4170;
     float field_4174;
-    int field_4178;
+    EntityHandle field_4178;
     int field_417C;
     float field_4180;
     int field_4184;
@@ -2137,23 +2003,12 @@ public:
     float field_4194;
     float field_4198;
     int field_419C;
-    class SlashStartSlotPl0010 : public Slot
-    {
-    public:
-        Pl0000* m_pOwner;
-    }*m_pSlashStartSlot;
-    class GetMoneySlotPl0010 : public Slot
-    {
-    public:
-        Pl0000* m_pOwner;
-    }*m_pGetMoneySlot;
+    SlashStartSlotPl0010 *m_SlashStartSlot;
+    GetMoneySlotPl0010 *m_GetMoneySlot;
     float field_41A8;
     int field_41AC;
     cVec4 field_41B0;
-    float field_41C0;
-    float field_41C4;
-    float field_41C8;
-    float field_41CC;
+    cVec4 field_41C0;
     float field_41D0;
     float field_41D4;
     float field_41D8;
@@ -3077,218 +2932,12 @@ public:
     int field_5084;
     int field_5088;
     int field_508C;
-    lib::StaticArray<FreeRunActivity::Info*, 64>* m_pFreeRunActivityInfoArray;
+    lib::StaticArray<FreeRunActivity::Info, 64>* m_FreeRunActivityInfoArray;
     int field_5094;
     int field_5098;
     int field_509C;
-    int field_50A0;
-    float field_50A4;
-    int field_50A8;
-    int field_50AC;
-    int field_50B0;
-    int field_50B4;
-    int field_50B8;
-    int field_50BC;
-    int field_50C0;
-    int field_50C4;
-    int field_50C8;
-    int field_50CC;
-    int field_50D0;
-    int field_50D4;
-    int field_50D8;
-    int field_50DC;
-    int field_50E0;
-    int field_50E4;
-    int field_50E8;
-    int field_50EC;
-    int field_50F0;
-    int field_50F4;
-    int field_50F8;
-    int field_50FC;
-    int field_5100;
-    int field_5104;
-    int field_5108;
-    int field_510C;
-    int field_5110;
-    int field_5114;
-    int field_5118;
-    int field_511C;
-    int field_5120;
-    int field_5124;
-    int field_5128;
-    int field_512C;
-    int field_5130;
-    int field_5134;
-    int field_5138;
-    int field_513C;
-    int field_5140;
-    int field_5144;
-    int field_5148;
-    int field_514C;
-    int field_5150;
-    int field_5154;
-    int field_5158;
-    int field_515C;
-    int field_5160;
-    int field_5164;
-    int field_5168;
-    int field_516C;
-    int field_5170;
-    int field_5174;
-    int field_5178;
-    int field_517C;
-    int field_5180;
-    int field_5184;
-    int field_5188;
-    int field_518C;
-    int field_5190;
-    int field_5194;
-    int field_5198;
-    int field_519C;
-    int field_51A0;
-    int field_51A4;
-    int field_51A8;
-    int field_51AC;
-    int field_51B0;
-    int field_51B4;
-    int field_51B8;
-    int field_51BC;
-    int field_51C0;
-    int field_51C4;
-    int field_51C8;
-    int field_51CC;
-    int field_51D0;
-    int field_51D4;
-    int field_51D8;
-    int field_51DC;
-    int field_51E0;
-    int field_51E4;
-    int field_51E8;
-    int field_51EC;
-    int field_51F0;
-    int field_51F4;
-    int field_51F8;
-    int field_51FC;
-    int field_5200;
-    int field_5204;
-    int field_5208;
-    int field_520C;
-    int field_5210;
-    int field_5214;
-    int field_5218;
-    int field_521C;
-    int field_5220;
-    int field_5224;
-    int field_5228;
-    int field_522C;
-    int field_5230;
-    int field_5234;
-    int field_5238;
-    int field_523C;
-    int field_5240;
-    float field_5244;
-    int field_5248;
-    int field_524C;
-    int field_5250;
-    int field_5254;
-    int field_5258;
-    int field_525C;
-    int field_5260;
-    int field_5264;
-    int field_5268;
-    int field_526C;
-    int field_5270;
-    int field_5274;
-    int field_5278;
-    int field_527C;
-    int field_5280;
-    int field_5284;
-    int field_5288;
-    int field_528C;
-    int field_5290;
-    int field_5294;
-    int field_5298;
-    int field_529C;
-    int field_52A0;
-    int field_52A4;
-    int field_52A8;
-    int field_52AC;
-    int field_52B0;
-    int field_52B4;
-    int field_52B8;
-    int field_52BC;
-    int field_52C0;
-    int field_52C4;
-    int field_52C8;
-    int field_52CC;
-    int field_52D0;
-    int field_52D4;
-    int field_52D8;
-    int field_52DC;
-    int field_52E0;
-    int field_52E4;
-    int field_52E8;
-    int field_52EC;
-    int field_52F0;
-    int field_52F4;
-    int field_52F8;
-    int field_52FC;
-    int field_5300;
-    int field_5304;
-    int field_5308;
-    int field_530C;
-    int field_5310;
-    int field_5314;
-    int field_5318;
-    int field_531C;
-    int field_5320;
-    int field_5324;
-    int field_5328;
-    int field_532C;
-    int field_5330;
-    int field_5334;
-    int field_5338;
-    int field_533C;
-    int field_5340;
-    int field_5344;
-    int field_5348;
-    int field_534C;
-    int field_5350;
-    int field_5354;
-    int field_5358;
-    int field_535C;
-    int field_5360;
-    int field_5364;
-    int field_5368;
-    int field_536C;
-    int field_5370;
-    int field_5374;
-    int field_5378;
-    int field_537C;
-    int field_5380;
-    int field_5384;
-    int field_5388;
-    int field_538C;
-    int field_5390;
-    int field_5394;
-    int field_5398;
-    int field_539C;
-    int field_53A0;
-    int field_53A4;
-    int field_53A8;
-    int field_53AC;
-    int field_53B0;
-    int field_53B4;
-    int field_53B8;
-    int field_53BC;
-    int field_53C0;
-    int field_53C4;
-    int field_53C8;
-    int field_53CC;
-    int field_53D0;
-    int field_53D4;
-    int field_53D8;
-    int field_53DC;
+    hkpAllCdPointCollector field_50A0;
+    hkpAllCdPointCollector field_5240;
     float m_fNinjaRunSpeedRate;
     float m_fWallRunSpeedRate;
     int field_53E8;
@@ -3305,42 +2954,52 @@ public:
 
     BOOL isBladeModeActive()
     {
-        return ReturnCallVMTFunc<bool, 203, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 203, Pl0000*>(this);
     }
 
     BOOL isRunning()
     {
-        return ReturnCallVMTFunc<bool, 204, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 204, Pl0000*>(this);
     }
 
     BOOL isIdle()
     {
-        return ReturnCallVMTFunc<bool, 206, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 206, Pl0000*>(this);
     }
 
     BOOL isInAir()
     {
-        return ReturnCallVMTFunc<bool, 208, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 208, Pl0000*>(this);
     }
 
     BOOL canActivateRipperMode()
     {
-        return ReturnCallVMTFunc<bool, 209, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 209, Pl0000*>(this);
     }
 
     BOOL isCodecTalk()
     {
-        return ReturnCallVMTFunc<bool, 211, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 211, Pl0000*>(this);
     }
 
     BOOL isParrying()
     {
-        ReturnCallVMTFunc<bool, 216, Pl0000*>(this);
+        ReturnCallVMTFunc<BOOL, 216, Pl0000*>(this);
     }
 
     BOOL isOnGround()
     {
-        return ReturnCallVMTFunc<bool, 220, Pl0000*>(this);
+        return ReturnCallVMTFunc<BOOL, 220, Pl0000*>(this);
+    }
+
+    void applyWeaponChanges()
+    {
+        CallVMTFunc<225, Pl0000*>(this);
+    }
+
+    void setIdle(int a2)
+    {
+        CallVMTFunc<226, Pl0000*, int>(this, a2);
     }
 
     void forceKill()
@@ -3363,7 +3022,7 @@ public:
         CallVMTFunc<242, Pl0000*>(this);
     }
 
-    void changeSubWeapon()
+    void rebuildCustomWeapon()
     {
         CallVMTFunc<246, Pl0000*>(this);
     }
@@ -3384,9 +3043,9 @@ public:
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x785190))(this);
     }
 
-    void setFuelCapacity(float FuelContainer)
+    void setFuelLevel(float fLevel)
     {
-        ((void(__thiscall*)(Pl0000*, float))(shared::base + 0x7C3100))(this, FuelContainer);
+        ((void(__thiscall*)(Pl0000*, float))(shared::base + 0x7C3100))(this, fLevel);
     }
 
     void disableRipperMode(bool bUseFade)
@@ -3418,6 +3077,8 @@ public:
     {
         return ((float(__thiscall*)(Pl0000*, bool))(shared::base + 0x7C2F00))(this, bIgnoreUnused);
     }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

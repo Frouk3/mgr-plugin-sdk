@@ -2,7 +2,7 @@
 
 class BattleRegionManager
 {
+private:
+    virtual void dummy() {};
 public:
-
-    virtual ~BattleRegionManager() {};
 };

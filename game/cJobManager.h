@@ -6,12 +6,12 @@ struct cJobManager
 {
 	struct JobTask
 	{
-		cJobManager* m_pOwner;
+		cJobManager* m_Owner;
 		int m_nThreadIndex;
 		HANDLE m_hSemaphore;
 		HANDLE m_hTask;
-		void(__cdecl *m_pFunc)(LPVOID reserved, void *arg);
-		void* m_pFuncParameter;
+		void(__cdecl *m_func)(LPVOID reserved, void *arg);
+		void* m_parameter;
 	};
 
 	JobTask* m_pJobs;

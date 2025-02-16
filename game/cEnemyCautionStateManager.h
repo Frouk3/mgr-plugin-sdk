@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Entity.h>
+
 class cEnemyCautionStateManager
 {
 public:
@@ -82,3 +84,5 @@ public:
 
 	virtual ~cEnemyCautionStateManager() {};
 };
+
+VALIDATE_SIZE(cEnemyCautionStateManager, 0x140);

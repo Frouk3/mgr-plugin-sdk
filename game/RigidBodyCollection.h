@@ -1,5 +1,6 @@
 #pragma once
-#include "HkPhysicsSystemContainer.h"
+
+#include <HkPhysicsSystemContainer.h>
 
 class RigidBodyCollection
 {
@@ -9,6 +10,6 @@ public:
     int field_14;
     int field_18;
 
-    virtual void *getContext() {};
+    virtual ContextInstance &getContext() {};
     virtual ~RigidBodyCollection() {};
 };

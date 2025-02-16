@@ -1,9 +1,21 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
+#include <hkpPhantomOverlapListener.h>
+#include <Slot.h>
 
 class BehaviorDebrisActor : public Behavior
 {
+public:
+    class DebrisPhantomListener : public hkpPhantomOverlapListener
+    {
+    public:
+    };
+
+    class ExplosionSlot : public Slot
+    {
+    public:
+    };
 public:
     int field_870;
     int field_874;
@@ -45,4 +57,13 @@ public:
     int field_904;
     int field_908;
     int field_90C;
+
+    BehaviorDebrisActor()
+    {
+        ((void(__thiscall *)(BehaviorDebrisActor *))(shared::base + 0x1DA670))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735304);
 };
+
+VALIDATE_SIZE(BehaviorDebrisActor, 0x910);

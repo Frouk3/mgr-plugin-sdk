@@ -1,4 +1,6 @@
-#include "cEspControler.h"
+#pragma once
+
+#include <cEspControler.h>
 
 class EspControllerHitStrip : public cEspControler
 {
@@ -17,3 +19,5 @@ public:
         ((void (__thiscall *)(EspControllerHitStrip*))(shared::base + 0xAAAAB0))(this);
     }
 };
+
+VALIDATE_SIZE(EspControllerHitStrip, 0xD0);

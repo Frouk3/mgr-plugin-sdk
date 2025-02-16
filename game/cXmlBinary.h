@@ -14,7 +14,10 @@ public:
     char *m_pStrings;
     int m_nFileFlags;
 
-    virtual ~cXmlBinary() override {};
+    cXmlBinary()
+    {
+        ((void(__thiscall *)(cXmlBinary*))(shared::base + 0xA05360))(this);
+    }
     
     int getFirstChild()
     {

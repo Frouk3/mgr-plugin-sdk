@@ -1,10 +1,10 @@
 #pragma once
 
-#include "hkpEntityListener.h"
-#include "hkReferencedObject.h"
-#include "hkpWorldPostSimulationListener.h"
+#include <hkpEntityListener.h>
+#include <hkReferencedObject.h>
+#include <hkpWorldPostSimulationListener.h>
 
-class hkpCharacterRigidBody : public hkReferencedObject, hkpEntityListener, hkpWorldPostSimulationListener
+class hkpCharacterRigidBody : public hkReferencedObject, public hkpEntityListener, public hkpWorldPostSimulationListener
 {
 public:
     int field_10;
@@ -31,6 +31,6 @@ public:
     int field_64;
     int field_68;
     int field_6C;
-
-    virtual ~hkpCharacterRigidBody() {};
 };
+
+VALIDATE_SIZE(hkpCharacterRigidBody, 0x70);

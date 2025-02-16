@@ -2,7 +2,7 @@
 
 class BattleParameter
 {
+private:
+    virtual void dummy() {};
 public:
-
-  virtual ~BattleParameter() {};
 };

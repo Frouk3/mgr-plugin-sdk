@@ -2,7 +2,7 @@
 
 class BattleCollisionFilter
 {
+private:
+    virtual void dummy() {};
 public:
-
-    virtual ~BattleCollisionFilter() {((void (__thiscall *)(BattleCollisionFilter *))(*(void***)this)[1])(this); };
 };

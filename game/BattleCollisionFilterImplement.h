@@ -1,8 +1,8 @@
 #pragma once
 
-#include "BattleCollisionFilter.h"
-#include "Hw.h"
-#include "lib.h"
+#include <BattleCollisionFilter.h>
+#include <Hw.h>
+#include <lib.h>
 
 class BattleCollisionFilterImplement : public BattleCollisionFilter
 {
@@ -12,8 +12,8 @@ public:
         int field_0;
         int field_4;
     };
-    Hw::cHeapVariable *m_pHeapVariable;
-    lib::StaticArray<LayerPair, 1024> *m_pLayerPairArray;
+    Hw::cHeapVariable *m_Allocator;
+    lib::StaticArray<LayerPair, 1024> *m_LayersArray;
 
-    static inline BattleCollisionFilterImplement *&pInstance = *(BattleCollisionFilterImplement **)(shared::base + 0x19C52E0);
+    static inline BattleCollisionFilterImplement*& ms_Instance = *(BattleCollisionFilterImplement **)(shared::base + 0x19C52E0);
 };

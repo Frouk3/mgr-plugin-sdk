@@ -1,7 +1,9 @@
 #pragma once
-#include "Hw.h"
-#include "shared.h"
+
+#include <Hw.h>
+#include <shared.h>
 #include <d3dx9math.h>
+#include <cMath.h>
 
 class cParts
 {
@@ -9,13 +11,13 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    D3DXMATRIX m_PartsMatrix;
+    D3DXMATRIX m_PositionMatrix;
     cVec4 m_vecTransPos;
-    cQuaternion m_rotationQuat;
+    cQuaternion m_quatRotation;
     cVec4 m_vecSize;
     cVec4 field_80;
     cVec4 m_vecRotation;
-    short m_nPartIndex;
+    short m_BoneIndex;
     struct PartsProperties
     {
         unsigned short b01 : 1;
@@ -35,9 +37,9 @@ public:
         unsigned short b14 : 1;
         unsigned short bFreezeRotation : 1; // same as bFreezeModelRotation
         unsigned short b16 : 1;
-    } m_nPartsFlag;
+    } m_PartsFlag;
     int field_A4;
-    cParts* m_pParentBone;
+    cParts* m_ParentBone;
     int field_AC;
 
     cParts()
@@ -48,6 +50,11 @@ public:
     void updateMatrix()
     {
         ((void(__thiscall*)(cParts*))(shared::base + 0x615310))(this);
+    }
+
+    void calculateLocalTransformation()
+    {
+        ((void(__thiscall*)(cParts*))(shared::base + 0x615190))(this);
     }
 
     virtual ~cParts() {};

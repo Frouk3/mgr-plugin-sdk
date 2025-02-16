@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cModelBase.h"
+#include <cModelBase.h>
 
 class cModel : public cModelBase
 {
@@ -56,25 +56,25 @@ public:
     int field_430;
     int field_434;
     int field_438;
-    int m_nHemishphereNo;
+    int m_HemishphereNo;
     int field_440;
-    int m_nEventLight;
+    int m_EventLight;
     int field_448;
-    __int16 field_44C;
+    short field_44C;
     char field_44E;
     char field_44F;
     int field_450;
     int field_454;
     int field_458;
-    float field_45C;
-    float m_fCamAlphaRate;
+    float m_CurrentCamAlphaRate;
+    float m_CamAlphaRate;
     int field_464;
     int field_468;
     int field_46C;
     char field_470;
     char field_471;
     char field_472;
-    char m_nShadowLOD;
+    char m_ShadowLOD;
     int field_474;
     int field_478;
     int field_47C;

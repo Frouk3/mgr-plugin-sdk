@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
 
 class BehaviorDatsu : public Behavior
 {
@@ -9,7 +9,7 @@ public:
     int field_874;
     float field_878;
     int field_87C;
-    int field_880;
+    float field_880;
     int field_884;
     int field_888;
     int field_88C;
@@ -39,9 +39,9 @@ public:
     float field_8EC;
     int field_8F0;
     int field_8F4;
-    int field_8F8;
+    EntityHandle field_8F8;
     int field_8FC;
-    int field_900;
+    float field_900;
     float field_904;
     int field_908;
     float field_90C;
@@ -67,7 +67,7 @@ public:
     int field_95C;
     int field_960;
     int field_964;
-    int field_968;
+    EntityHandle field_968;
     int field_96C;
     int field_970;
     int field_974;
@@ -124,7 +124,7 @@ public:
         ((void (__thiscall *)(BehaviorDatsu *))(shared::base + 0x6A6130))(this);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9CA8);
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9CA8);
 };
 
 VALIDATE_SIZE(BehaviorDatsu, 0xAE0);

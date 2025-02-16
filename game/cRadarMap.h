@@ -1,7 +1,7 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
-#include "cCustomObjCtrlManagerEx.h"
+#include <cCustomObjCtrlManager.h>
+#include <cCustomObjCtrlManagerEx.h>
 
 class cRadarMap : public cCustomObjCtrlManager
 {
