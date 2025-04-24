@@ -19,7 +19,8 @@ public:
 	int field_30;
 	int field_34;
 	cSlowRateUnit *m_LastUnit;
-	struct SlowRateUnit {
+	struct SlowRateUnit 
+	{
 		float m_fSlowRate;
 		float m_fRate;
 		float m_fDesiredRate;
@@ -33,6 +34,7 @@ public:
 	int field_90;
 
 	virtual ~cSlowRateManager() {};
+	
 	cSlowRateManager()
 	{
 		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08FB0))(this);

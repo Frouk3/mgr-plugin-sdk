@@ -5,6 +5,7 @@
 
 class cPointGetParts : public cCustomObjCtrlManager 
 {
+public:
     int field_1C;
     int field_20;
     int field_24;

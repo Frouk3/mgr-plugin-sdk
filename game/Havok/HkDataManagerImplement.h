@@ -17,7 +17,10 @@ struct DataArchiveEntry
 struct DataArchiveHolder
 {
     char* m_data;
-    char *m_bigEndianData; // why?
+    char *m_dds; // why?
+
+    DataArchiveHolder(char* data) : m_data(data), m_dds(nullptr) {};
+    DataArchiveHolder(char* data, char* dds) : m_data(data), m_dds(dds) {};
 
     DataArchiveHolder()
     {
@@ -133,6 +136,11 @@ struct DataArchiveHolder
     size_t getAnySize(const char *name, unsigned int matchLimit)
     {
         return ((size_t(__thiscall *)(DataArchiveHolder *, const char *, unsigned int))(shared::base + 0x9E46D0))(this, name, matchLimit);
+    }
+
+    operator bool()
+    {
+        return m_data != nullptr;
     }
 };
 

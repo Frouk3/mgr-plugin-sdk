@@ -1,8 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <algorithm>
-#include "Hw.h"
-#include "sys.h"
+#include <Hw.h>
+#include <sys.h>
 
 extern void FreeMemory(void* block, int a2);
 
@@ -178,69 +178,82 @@ public:
     typedef T* iterator;
     typedef const T* const_iterator;
 
-    T *m_pBegin;
-    size_t m_nSize;
-    size_t m_nCapacity;
+    T *m_array;
+    size_t m_size;
+    size_t m_capacity;
 
     Array()
     {
-        m_pBegin = nullptr;
-        m_nSize = 0;
-        m_nCapacity = 0;
+        m_array = nullptr;
+        m_size = 0u;
+        m_capacity = 0u;
     }
 
     Array(const Array<T>& other)
     {
-        m_nSize = other.m_nSize;
-        m_nCapacity = other.m_nCapacity;
+        m_size = other.m_size;
+        m_capacity = other.m_capacity;
+    }
+
+    Array(std::initializer_list<T> &&list)
+    {
+        for (const T& item : list)
+            this->push_back(item);
+    }
+
+    Array(Array<T> &&from) : m_array(from.m_array), m_size(from.m_size), m_capacity(from.m_capacity)
+    {
+        from.m_array = nullptr;
+        from.m_size = 0u;
+        from.m_capacity = 0u;
     }
 
     virtual ~Array() 
     {
-        if (m_pBegin)
-            m_nSize = 0;
-        m_pBegin = nullptr;
-        m_nCapacity = 0;
+        if (m_array)
+            m_size = 0u;
+        m_array = nullptr;
+        m_capacity = 0u;
     };
 
     virtual size_t getCapacity() 
     {
-        return m_nCapacity;
+        return m_capacity;
     };
 
     virtual bool push_back(const T &element) 
     {
-        if (!m_pBegin)
+        if (!m_array)
             return false;
 
-        if (m_nSize >= m_nCapacity)
+        if (m_size >= m_capacity)
             return false;
 
-        m_pBegin[m_nSize++] = element;
+        m_array[m_size++] = element;
         return true;
     };
 
     virtual void insert(T &position, const T &element)
     {
-        if (m_nSize >= m_nCapacity)
+        if (m_size >= m_capacity)
             return;
 
-        size_t insertIndex = &position - m_pBegin;
-        if (insertIndex > m_nSize)
+        size_t insertIndex = &position - m_array;
+        if (insertIndex > m_size)
             return;
 
-        for (size_t i = m_nSize; i > insertIndex; --i)
-            m_pBegin[i] = m_pBegin[i - 1];
+        for (size_t i = m_size; i > insertIndex; --i)
+            m_array[i] = m_array[i - 1];
 
-        m_pBegin[insertIndex] = element;
-        ++m_nSize;
+        m_array[insertIndex] = element;
+        ++m_size;
     };
 
     virtual void swap(lib::Array<T> &array) 
     {
-        std::swap(m_pBegin, array.m_pBegin);
-        std::swap(m_nCapacity, array.m_nCapacity);
-        std::swap(m_nSize, array.m_nSize);
+        std::swap(m_array, array.m_array);
+        std::swap(m_capacity, array.m_capacity);
+        std::swap(m_size, array.m_size);
     };
 
     virtual void reallocate(size_t newSize) 
@@ -250,79 +263,79 @@ public:
 
     bool push_front(const T& element)
     {
-        insert(m_pBegin[0], element);
+        insert(m_array[0], element);
         return true;
     }
 
     iterator begin()
     {
-        return m_pBegin;
+        return m_array;
     }
     iterator begin() const
     {
-        return m_pBegin;
+        return m_array;
     }
 
     iterator end()
     {
-        return m_pBegin + m_nSize;
+        return m_array + m_size;
     }
     iterator end() const
     {
-        return m_pBegin + m_nSize;
+        return m_array + m_size;
     }
     
     iterator rbegin()
     {
-        return m_pBegin + m_nSize - 1;
+        return m_array + m_size - 1;
     }
     iterator rbegin() const
     {
-        return m_pBegin + m_nSize - 1;
+        return m_array + m_size - 1;
     }
 
     iterator rend()
     {
-        return m_pBegin;
+        return m_array;
     }
     iterator rend() const
     {
-        return m_pBegin;
+        return m_array;
     }
 
     void remove(T& element)
     {
-        if (!m_pBegin)
+        if (!m_array)
             return;
 
-        if ((unsigned int)(&element - m_pBegin) >= m_nSize)
+        if ((unsigned int)(&element - m_array) >= m_size)
             return;
 
         for (T* elem = &element; elem != end() - 1; elem++)
             *elem = elem[1];
 
-        --m_nSize;
+        --m_size;
     }
 
     void move(T& where, T& element)
     {
-        size_t elementFrom = &element - m_pBegin;
-        size_t elementTo = &where - m_pBegin;
-        if (elementFrom >= m_nSize || elementTo >= m_nSize)
+        size_t elementFrom = &element - m_array;
+        size_t elementTo = &where - m_array;
+        if (elementFrom >= m_size || elementTo >= m_size)
             return;
 
         T temp = element;
         if (elementFrom < elementTo)
         {
             for (size_t i = elementFrom; i < elementTo; ++i)
-                m_pBegin[i] = m_pBegin[i + 1];
+                m_array[i] = m_array[i + 1];
         }
         else if (elementFrom > elementTo)
         {
             for (size_t i = elementFrom; i > elementTo; --i)
-                m_pBegin[i] = m_pBegin[i - 1];
+                m_array[i] = m_array[i - 1];
         }
-        m_pBegin[elementTo] = temp;
+        m_array[elementTo] = temp;
     }
 
     void swap(T& lhs, T& rhs)
@@ -332,7 +345,7 @@ public:
 
     T& get(size_t at)
     {
-        return m_pBegin[at];
+        return m_array[at];
     }
 
     T& operator [](size_t index)
@@ -347,18 +360,18 @@ public:
 
     void clear()
     {
-        if (m_pBegin)
-            m_nSize = 0;
+        if (m_array)
+            m_size = 0;
     }
 
     T& front()
     {
-        return m_pBegin[0];
+        return m_array[0];
     }
 
     T& back()
     {
-        return m_nSize ? m_pBegin[m_nSize - 1] : *m_pBegin;
+        return m_size ? m_array[m_size - 1] : *m_array;
     }
 
     void pop_front()
@@ -373,12 +386,12 @@ public:
 
     bool empty()
     {
-        return m_nSize == 0;
+        return m_size == 0;
     }
 
     size_t size()
     {
-        return m_nSize;
+        return m_size;
     }
 
     Array<T> copy()
@@ -389,12 +402,12 @@ public:
     // Bubble sort: Sorts the array using the bubble sort algorithm
     void bubbleSort(bool(*callback)(T& current, T& next)) // do not let the user modify the array
     {
-        for (size_t i = 0; i < m_nSize - 1; ++i)
+        for (size_t i = 0; i < m_size - 1; ++i)
         {
-            for (size_t j = 0; j < m_nSize - i - 1; ++j)
+            for (size_t j = 0; j < m_size - i - 1; ++j)
             {
-                if (callback(m_pBegin[j], m_pBegin[j + 1])
-                    std::swap(m_pBegin[j], m_pBegin[j + 1]);
+                if (callback(m_array[j], m_array[j + 1]))
+                    std::swap(m_array[j], m_array[j + 1]);
             }
         }
     }
@@ -402,24 +415,24 @@ public:
     // Quick sort: Sorts the array using the quick sort algorithm
     void quickSort(bool(*callback)(T& current, T& next))
     {
-        quickSortRecursive(0, m_nSize - 1, callback);
+        quickSortRecursive(0, m_size - 1, callback);
     }
 
     int partition(int low, int high, bool(*callback)(T& current, T& next))
     {
-        T &pivot = m_pBegin[high];
+        T &pivot = m_array[high];
         int i = low - 1;
 
         for (int j = low; j <= high - 1; j++)
         {
-            if (callback(m_pBegin[j], pivot))
+            if (callback(m_array[j], pivot))
             {
                 i++;
-                std::swap(m_pBegin[i], m_pBegin[j]);
+                std::swap(m_array[i], m_array[j]);
             }
         }
 
-        std::swap(m_pBegin[i + 1], m_pBegin[high]);
+        std::swap(m_array[i + 1], m_array[high]);
         return (i + 1);
     }
 
@@ -436,33 +449,33 @@ public:
     // Selection sort: Sorts the array using the selection sort algorithm
     void selectionSort(bool(*callback)(T& current, T& next))
     {
-        for (int i = 0; i < m_nSize - 1; i++)
+        for (int i = 0; i < m_size - 1; i++)
         {
             int minIndex = i;
-            for (int j = i + 1; j < m_nSize; j++)
+            for (int j = i + 1; j < m_size; j++)
             {
-                if (callback(m_pBegin[j], m_pBegin[minIndex]))
+                if (callback(m_array[j], m_array[minIndex]))
                     minIndex = j;
             }
-            std::swap(m_pBegin[i], m_pBegin[minIndex]);
+            std::swap(m_array[i], m_array[minIndex]);
         }
     }
 
     // Insertion sort: Sorts the array using the insertion sort algorithm
     void insertionSort(bool(*callback)(T& current, T& next))
     {
-        for (int i = 1; i < m_nSize; i++)
+        for (int i = 1; i < m_size; i++)
         {
-            T &key = m_pBegin[i];
+            T &key = m_array[i];
             int j = i - 1;
 
-            while (j >= 0 && callback(m_pBegin[j], key))
+            while (j >= 0 && callback(m_array[j], key))
             {
-                m_pBegin[j + 1] = m_pBegin[j];
+                m_array[j + 1] = m_array[j];
                 j--;
             }
 
-            m_pBegin[j + 1] = key;
+            m_array[j + 1] = key;
         }
     }
 };
@@ -471,21 +484,31 @@ template <typename T, unsigned int Size>
 class lib::StaticArray : public lib::Array<T>
 {
 public:
-    T m_Array[Size];
+    T m_storage[Size];
 
     StaticArray() : Array<T>()
     {
-        this->m_pBegin = this->m_Array;
-        this->m_nCapacity = Size;
+        this->m_array = this->m_storage;
+        this->m_capacity = Size;
     }
 
     StaticArray(const StaticArray<T, Size>& other) : Array<T>(other)
     {
-        this->m_pBegin = m_Array;
-        this->m_nCapacity = Size;
+        this->m_array = m_storage;
+        this->m_capacity = Size;
 
-        memcpy(m_Array, other.m_Array, sizeof(T) * Size);
+        memcpy(m_storage, other.m_storage, sizeof(T) * Size);
     }
+
+    StaticArray(std::initializer_list<T> &&list)
+    {
+        this->m_array = m_storage;
+
+        for (const T& it : list)
+            this->m_array[this->m_size++] = it;
+
+        this->m_capacity = Size;
+    };
 
     StaticArray<T, Size> copy()
     {
@@ -511,24 +534,24 @@ public:
 
     AllocatedArray(const AllocatedArray<T> &other) : Array<T>(other)
     {
-        if (create(other.m_nCapacity, other.m_Helper.m_Allocator->m_Allocator))
-            memcpy(this->m_pBegin, other.m_pBegin, sizeof(T) * other.m_nCapacity);
+        if (create(other.m_capacity, other.m_Helper.m_Allocator->m_Allocator))
+            memcpy(this->m_array, other.m_array, sizeof(T) * other.m_capacity);
     }
 
     template <typename Allocator>
     bool create(size_t capacity, Allocator *allocator)
     {
-        this->cleanup();
+        cleanup();
         helper::AllocatorHelper<Allocator> helpa(allocator);
         if (helpa.create(*allocator) && helpa.m_Allocator)
         {
-            if (auto mem = helpa.m_Allocator->allocate(sizeof(T) * capacity); mem)
+            if (T* mem = (T*)helpa.m_Allocator->allocate(sizeof(T) * capacity); mem)
             {
-                this->m_Helper = helpa;
-                if (this->m_pBegin)
-                    this->m_nSize = 0;
-                this->m_nCapacity = sizeof(T) * capacity / sizeof(T);
-                this->m_pBegin = (T*)mem;
+                m_Helper = helpa;
+                if (this->m_array)
+                    this->m_size = 0;
+                this->m_capacity = sizeof(T) * capacity / sizeof(T);
+                this->m_array = mem;
                 helpa.cleanup();
                 return 1;
             }
@@ -547,16 +570,16 @@ public:
 
     void cleanup()
     {
-        if (this->m_pBegin)
+        if (this->m_array)
         {
-            this->m_nSize = 0;
-            this->m_nCapacity = 0;
-            if (this->m_Helper.m_Allocator)
-                this->m_Helper.m_Allocator->free(this->m_pBegin);
-            this->m_pBegin = nullptr;
-            this->m_Helper.cleanup();
-            this->m_Helper.m_Allocator = nullptr;
-            this->m_Helper.m_Core = nullptr;
+            this->m_size = 0;
+            this->m_capacity = 0;
+            if (m_Helper.m_Allocator)
+                m_Helper.m_Allocator->free(this->m_array);
+            this->m_array = nullptr;
+            m_Helper.cleanup();
+            m_Helper.m_Allocator = nullptr;
+            m_Helper.m_Core = nullptr;
         }
     }
 
@@ -581,10 +604,10 @@ public:
 
     ~DynamicArray()
     {
-        if (this->m_pBegin)
+        if (this->m_array)
         {
-            operator delete(this->m_pBegin, (Hw::cHeap*)m_Allocator);
-            this->m_pBegin = nullptr;
+            operator delete(this->m_array, (Hw::cHeap*)m_Allocator);
+            this->m_array = nullptr;
         }
 
         this->Array<T>::~Array();
@@ -594,55 +617,55 @@ public:
 
     DynamicArray(const DynamicArray<T, allocator>& other) : Array<T>(other)
     {
-        this->m_Allocator = other.m_Allocator;
-        resize(other.m_nCapacity);
+        m_Allocator = other.m_Allocator;
+        resize(other.m_capacity);
 
-        memcpy(this->m_pBegin, other.m_pBegin, sizeof(T) * other.m_nCapacity);
+        memcpy(this->m_array, other.m_array, sizeof(T) * other.m_capacity);
     }
 
     bool push_back(const T& element)
     {
-        if (this->m_nSize > this->m_nCapacity)
+        if (this->m_size > this->m_capacity)
             return false;
 
-        if (this->m_nCapacity)
+        if (this->m_capacity)
         {
-            if (this->m_nSize == this->m_nCapacity)
-                this->reallocate(2 * this->m_nCapacity);
+            if (this->m_size == this->m_capacity)
+                reallocate(2 * this->m_capacity);
         }
         else
         {
-            this->reallocate(32u);
+            reallocate(32u);
         }
 
-        if (!this->m_pBegin)
+        if (!this->m_array)
             return false;
 
-        if (this->m_nSize >= this->m_nCapacity)
+        if (this->m_size >= this->m_capacity)
             return false;
 
-        this->m_pBegin[this->m_nSize++] = element;
+        this->m_array[this->m_size++] = element;
 
         return true;
     }
 
     void insert(T& position, const T& element)
     {
-        if (!this->m_pBegin)
+        if (!this->m_array)
             return; // Just to be safe
 
-        size_t memPos = &position - this->m_pBegin;
+        size_t memPos = &position - this->m_array;
 
-        if (memPos <= this->m_nSize)
+        if (memPos <= this->m_size)
         {
-            if (this->m_nSize == this->m_nCapacity)
+            if (this->m_size == this->m_capacity)
             {
-                if (this->m_nCapacity)
-                    this->reallocate(2 * this->m_nCapacity);
+                if (this->m_capacity)
+                    reallocate(2 * this->m_capacity);
                 else
-                    this->reallocate(32u);
+                    reallocate(32u);
 
-                this->lib::Array<T>::insert(this->m_pBegin[memPos], element);
+                this->lib::Array<T>::insert(this->m_array[memPos], element);
             }
             this->lib::Array<T>::insert(position, element);
         }
@@ -655,71 +678,72 @@ public:
 
     void reallocate(size_t newSize)
     {
-       if (this->m_nCapacity < newSize)
+       if (this->m_capacity < newSize)
        {
            if (newSize <= 0x20) // Minimum for 32? Why?
                newSize = 0x20;
 
-           auto newArray = (T*)this->m_Allocator->AllocateMemory(sizeof(T) * newSize, 32, 0, 0);
+           T* newArray = (T*)m_Allocator->AllocateMemory(sizeof(T) * newSize, 32, 0, 0);
 
            if (newArray)
            {
-               if (this->m_nSize && this->m_pBegin)
+               if (this->m_size && this->m_array)
                {
-                   memcpy(newArray, this->m_pBegin, sizeof(T) * this->m_nSize);
+                   memcpy(newArray, this->m_array, sizeof(T) * this->m_size);
                }
 
-               if (this->m_pBegin)
+               if (this->m_array)
                {
-                   operator delete(this->m_pBegin, m_Allocator);
-                   this->m_pBegin = 0;
-                   this->m_nCapacity = 0;
+                   operator delete(this->m_array, m_Allocator);
+                   this->m_array = 0;
+                   this->m_capacity = 0;
                }
 
                this->clear();
 
-               this->m_pBegin = newArray;
-               this->m_nCapacity = sizeof(T) * newSize / sizeof(T);
+               this->m_array = newArray;
+               this->m_capacity = sizeof(T) * newSize / sizeof(T);
            }
        }
     }
 
     virtual void _swap(lib::DynamicArray<T, allocator>& other) // duplicate?
     {
-        std::swap(this->m_pBegin, other.m_pBegin);
-        std::swap(this->m_nSize, other.m_nSize);
-        std::swap(this->m_nCapacity, other.m_nCapacity);
+        std::swap(this->m_array, other.m_array);
+        std::swap(this->m_size, other.m_size);
+        std::swap(this->m_capacity, other.m_capacity);
+        std::swap(m_Allocator, other.m_Allocator);
     }
 
     void resize(size_t size)
     {
-        if (size > this->m_nCapacity)
+        if (size > this->m_capacity)
         {
             reallocate(size);
         }
         else
         {
-            if (size <= this->m_nSize) // new size of array cannot hold old elements
+            if (size <= this->m_size) // new size of array cannot hold old elements
                 return;
 
-            auto newArray = (T*)this->m_Allocator->AllocateMemory(sizeof(T) * size, 32, 0, 0);
+            T* newArray = (T*)m_Allocator->AllocateMemory(sizeof(T) * size, 32, 0, 0);
             if (newArray)
             {
-                if (this->m_nSize && this->m_pBegin)
-                    memcpy(newArray, this->m_pBegin, sizeof(T) * this->m_nSize);
+                if (this->m_size && this->m_array)
+                    memcpy(newArray, this->m_array, sizeof(T) * this->m_size);
 
-                if (this->m_pBegin)
+                if (this->m_array)
                 {
-                    operator delete(this->m_pBegin, this->m_Allocator);
+                    operator delete(this->m_array, this->m_Allocator);
 
-                    this->m_pBegin = nullptr;
-                    this->m_nCapacity = 0;
+                    this->m_array = nullptr;
+                    this->m_capacity = 0;
                 }
 
                 this->clear();
 
-                this->m_pBegin = newArray;
-                this->m_nCapacity = sizeof(T) * size / sizeof(T);
+                this->m_array = newArray;
+                this->m_capacity = sizeof(T) * size / sizeof(T);
             }
         }
     }

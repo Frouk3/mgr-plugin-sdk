@@ -7,8 +7,8 @@
 class BehaviorAppBase : public Behavior
 {
 public:
-    int m_Health;
-    int m_MaxHealth;
+    int m_nHealth;
+    int m_nMaxHealth;
     int field_878;
     int field_87C;
     int field_880;
@@ -35,7 +35,7 @@ public:
     cVec4 field_8E0;
     cVec4 field_8F0;
     cVec4 field_900;
-    float m_EntityTickRate;
+    float m_fEntityTickRate;
     int field_914;
     Animation* field_918;
     EntityHandle m_QTETargetExecutor;

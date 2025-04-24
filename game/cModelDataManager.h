@@ -18,8 +18,8 @@ struct cModelData
 		int field_38;
 		int field_3C;
 		int field_40;
-		unsigned __int16 m_BoneAmount;
-		unsigned __int16 *m_BoneSet;
+		unsigned __int16 m_nBoneAmount;
+		unsigned __int16 *m_pBoneSet;
 		int field_4C;
 		int m_nMaterialAmount;
 		int field_54;
@@ -79,8 +79,6 @@ struct cModelData
 		unsigned int m_nVertexFormat;
 		unsigned int field_18;
 	};
-	struct MaterialInfo;
-	struct VertexGroupHolder;
 	struct ModelDataResource
 	{
 		int m_nReferences;
@@ -573,21 +571,6 @@ struct cModelData::cMaterial
 	int field_554;
 	int field_558;
 	int field_55C;
-};
-
-struct cModelData::MaterialInfo
-{
-	int field_0;
-	int field_4;
-	int field_8;
-	int field_C;
-	cMaterial m_materials[];
-};
-
-struct cModelData::VertexGroupHolder
-{
-	unsigned int m_nAmount;
-  	VertexGroup m_VertexGroup[];
 };
 
 class cModelDataManager

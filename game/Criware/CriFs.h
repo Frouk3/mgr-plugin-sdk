@@ -309,6 +309,16 @@ struct CriFsBinderWork // Platinum addon
     CriFsBindId m_BinderId;
     int m_BindStatus;
     int m_nPriority;
+
+    BOOL bindCpkFileSync(const char* path, int a3, int a4, int priority)
+    {
+        return ((BOOL(__thiscall*)(CriFsBinderWork*, const char*, int, int, int))(shared::base + 0x9EAFB0))(this, path, a3, a4, priority);
+    }
+
+    BOOL bindCpk(const char* path, int a3, int a4, int priority)
+    {
+        return ((BOOL(__thiscall*)(CriFsBinderWork*, const char*, int, int, int))(shared::base + 0x9EB530))(this, path, a3, a4, priority);
+    }
 };
 
 struct CriFsBinderHn
@@ -325,3 +335,18 @@ struct CriFsBinderHn
     int field_24;
     int field_28;
 };
+
+inline int CRIAPI criFsBinder_GetStatus(int binderId, int* bindStatus)
+{
+    return ((int(CRIAPI*)(int, int*))(shared::base + 0xE97D56))(binderId, bindStatus);
+}
+
+inline int CRIAPI criFsBinder_UnBind(int binderId)
+{
+    return ((int(CRIAPI*)(int))(shared::base + 0xE97543))(binderId);
+}
+
+inline int CRIAPI CriFsBinderHn_free(CriFsBinderHn* binderHn)
+{
+    return ((int(CRIAPI*)(CriFsBinderHn*))(shared::base + 0xE97C59))(binderHn);
+}

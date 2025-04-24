@@ -165,7 +165,7 @@ inline void * __cdecl eFree(void *block)
 
 inline void *__cdecl AllocateMemory(size_t size)
 {
-	void *mem = Hw::cHeapGlobal::get()->allocate(size, 32u, 0, 0);
+	void *mem = Hw::cHeapGlobal::GetInstance()->allocate(size, 32u, 0, 0);
 	if (mem)
 		memset(mem, 0, size);
 	return mem;

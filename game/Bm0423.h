@@ -13,4 +13,13 @@ public:
     int field_B54;
     int field_B58;
     int field_B5C;
+
+    Bm0423()
+    {
+        ((void(__thiscall *)(Bm0423*))(shared::base + 0x6B0820))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734BDC);
 };
+
+VALIDATE_SIZE(Bm0423, 0xB60);

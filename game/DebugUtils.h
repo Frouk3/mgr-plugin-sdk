@@ -31,7 +31,7 @@ namespace DebugUtils
 		return ((int(__cdecl*)())(shared::base + 0xB96420))();
 	}
 
-	inline void AddCircle(const cVec2 center, float size, unsigned int color)
+	inline void AddCircleFilled(const cVec2 center, float size, unsigned int color)
 	{
 		((void(__cdecl*)(const cVec2, float, unsigned int))(shared::base + 0xB95EB0))(center, size, color);
 	}
@@ -46,14 +46,39 @@ namespace DebugUtils
 		((void(__cdecl*)(const cVec4&, const cVec4&, unsigned int, int))(shared::base + 0xB95FA0))(min, max, color, a4);
 	}
 
+	inline void AddBox(const cVec4& min, const cVec4& max, unsigned int color, int a5, int a6)
+	{
+		((void(__cdecl *)(const cVec4&, const cVec4&, unsigned int, int, int))(shared::base + 0xB962E0))(min, max, color, a5, a6);
+	}
+
 	inline void AddLine3D(const cVec4& p1, const cVec4& p2, unsigned int color, int a4)
 	{
 		((void(__cdecl*)(const cVec4&, const cVec4&, unsigned int, int))(shared::base + 0xB95F40))(p1, p2, color, a4);
 	}
 
-	inline void AddSphere(const cVec4& center, float fRadius, unsigned int color, float a4, float a5)
+	inline void AddDot(const cVec4& center, float fRadius, unsigned int color, float a4, float a5)
 	{
 		((void(__cdecl*)(const cVec4&, float, unsigned int, float, float))(shared::base + 0xB96100))(center, fRadius, color, a4, a5);
+	}
+
+	inline void AddCylinder(const cVec4& start, const cVec4& end, float width, unsigned int color, int a5, int a6)
+	{
+		((void(__cdecl*)(const cVec4&, const cVec4&, float, unsigned int, int, int))(shared::base + 0xB961D0))(start, end, width, color, a5, a6);
+	}
+
+	inline void AddTrace(const cVec4& from, const cVec4& to, float width, unsigned int color, int a5, int a6)
+	{
+		((void(__cdecl *)(const cVec4&, const cVec4&, float, unsigned int, int, int))(shared::base + 0xB96230))(from, to, width, color, a5, a6);
+	}
+
+	inline void AddBox(const cVec3& min, const cVec3& max, float width, unsigned int color, int a5, int a6)
+	{
+		((void(__cdecl *)(const cVec3&, const cVec3&, float, unsigned int, int, int))(shared::base + 0xB96220))(min, max, width, color, a5, a6);
+	}
+
+	inline void AddSphere(const D3DXMATRIX& matrix, float width, unsigned int color, int a4, int a5)
+	{
+		((void(__cdecl *)(const D3DXMATRIX&, float, unsigned int, int, int))(shared::base + 0xB96110))(matrix, width, color, a4, a5);
 	}
 }
 

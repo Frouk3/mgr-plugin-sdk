@@ -5,22 +5,26 @@
 #include <shared.h>
 #include <Hw.h>
 
-enum RotateMatrixOrder : int
+namespace cMath
 {
-    ORDER_XYZ = 0x0,
-    ORDER_XZY = 0x1,
-    ORDER_YXZ = 0x2,
-    ORDER_YZX = 0x3,
-    ORDER_ZXY = 0x4,
-    ORDER_ZYX = 0x5
-};
+    enum RotateMatrixOrder : int
+    {
+        ORDER_XYZ = 0x0,
+        ORDER_XZY = 0x1,
+        ORDER_YXZ = 0x2,
+        ORDER_YZX = 0x3,
+        ORDER_ZXY = 0x4,
+        ORDER_ZYX = 0x5
+    };
 
-inline float __cdecl normalizeAngle(float angle)
-{
-    return ((float(__cdecl *)(float))(shared::base + 0x9DBA30))(angle);
-}
 
-inline void __cdecl rotateMatrix(D3DXMATRIX* matrix, const cVec4& rotation, RotateMatrixOrder order = ORDER_ZYX)
-{
-    ((void(__cdecl*)(D3DXMATRIX*, const cVec4&, RotateMatrixOrder))(shared::base + 0x9DC1D0))(matrix, rotation, order);
+    inline float __cdecl normalizeAngle(float angle)
+    {
+        return ((float(__cdecl *)(float))(shared::base + 0x9DBA30))(angle);
+    }
+
+    inline void __cdecl rotateMatrix(D3DXMATRIX* matrix, const cVec4& rotation, RotateMatrixOrder order = ORDER_ZYX)
+    {
+        ((void(__cdecl*)(D3DXMATRIX*, const cVec4&, RotateMatrixOrder))(shared::base + 0x9DC1D0))(matrix, rotation, order);
+    }
 }

@@ -20,10 +20,10 @@ public:
     D3DXMATRIX m_ViewModelMatrix;
     D3DXMATRIX field_F0;
     cModelBase::RenderMatrix m_RenderMatrix;
-    float m_DistRate0;
-    float m_DistRate1;
-    float m_DistRate2;
-    float m_LostDistRate;
+    float m_fDistRate0;
+    float m_fDistRate1;
+    float m_fDistRate2;
+    float m_fLostDistRate;
     float field_190;
     float field_194;
     float field_198;
@@ -126,25 +126,25 @@ public:
     float field_314;
     int field_318;
     int field_31C;
-    cMesh *m_Meshes;
-    short m_MeshAmount;
+    cMesh *m_pMeshes;
+    short m_nMeshAmount;
     cModelData::cMaterial *m_Materials;
-    short m_MaterialAmount;
+    short m_nMaterialAmount;
     cModelData::ModelData *m_ModelData;
-    cParts *m_RootBone;
+    cParts *m_pRootBone;
     int field_338;
     int field_33C;
-    int m_AnisotropicType;
+    int m_nAnisotropicType;
     void *m_WTB;
     void *m_TextureRawData;
-    Hw::cTexture *m_Texture;
+    Hw::cTexture *m_pTexture;
     cParts *m_pBones;
     cParts **m_ppBones;
-    short m_BoneAmount;
+    short m_nBoneAmount;
     void *m_BoneOffsetData;
-    cModelBase *m_Parent;
-    int m_ModelFlags;
-    int m_RootBoneIndex;
+    cModelBase *m_pParent;
+    int m_nModelFlags;
+    int m_nRootBoneIndex;
     void *m_MeshData;
 
     cModelBase()
@@ -154,9 +154,9 @@ public:
 
     inline void toggleAnyMesh(const char *meshName, bool bToggle)
     {
-        if (m_MeshAmount)
+        if (m_nMeshAmount)
         {
-            for (cMesh* mesh = m_Meshes; mesh != &m_Meshes[m_MeshAmount]; mesh++)
+            for (cMesh* mesh = m_pMeshes; mesh != &m_pMeshes[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && strstr(mesh->getName(), meshName))
                     mesh->m_MeshFlags = bToggle ? mesh->m_MeshFlags | 1u : mesh->m_MeshFlags & ~1u;
@@ -166,9 +166,9 @@ public:
 
     inline void toggleMesh(const char *meshName, bool bToggle)
     {
-        if (m_MeshAmount)
+        if (m_nMeshAmount)
         {
-            for (cMesh* mesh = m_Meshes; mesh != &m_Meshes[m_MeshAmount]; mesh++)
+            for (cMesh* mesh = m_pMeshes; mesh != &m_pMeshes[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && !strcmp(mesh->getName(), meshName))
                     mesh->m_MeshFlags = bToggle ? mesh->m_MeshFlags | 1u : mesh->m_MeshFlags & ~1u;

@@ -11,3 +11,5 @@ typedef signed __int64 CriSint64;
 typedef unsigned __int64 CriUint64;
 
 typedef CriSint32 CriBool;
+
+#define CRIAPI __cdecl

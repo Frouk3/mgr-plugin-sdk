@@ -146,7 +146,7 @@ public:
 
     float getEasyPowerScale(int id)
     {
-        return ReturnCallVMTFunc<int, 23, BattleParameterImplement *, int>(this, id);
+        return ReturnCallVMTFunc<float, 23, BattleParameterImplement *, int>(this, id);
     }
 
     float getEasyPowerScaleByNo(int no)
@@ -156,7 +156,7 @@ public:
 
     float getHardPowerScale(int id)
     {
-        return ReturnCallVMTFunc<int, 25, BattleParameterImplement *, int>(this, id);
+        return ReturnCallVMTFunc<float, 25, BattleParameterImplement *, int>(this, id);
     }
 
     float getHardPowerScaleByNo(int no)

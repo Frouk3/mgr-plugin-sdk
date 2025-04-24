@@ -22,23 +22,23 @@ namespace Camera
     class StateAnimation;
     class StateBattle;
     class StateBattleFixed;
+    class StateDiveKill;
+    class StateFps;
+    class StateGallery;
+    class StateLockOn;
     class StateNode;
     class StateNodeTrait;
-    class StatePerpetrator;
-    class StateGallery;
-    class StateDiveKill;
-    class StateSlashingTarget;
-    class StateSubWeaponAiming;
-    class StateFps;
-    class StateLockOn;
     class StateNormal;
     class StatePartsFollow;
+    class StatePerpetrator;
     class StatePlayerDead;
     class StateRadio; // maybe they've meant codec?
     class StateRail;
     class StateReady;
     class StateSlashingBehind;
     class StateSlashingNormal;
+    class StateSlashingTarget;
+    class StateSubWeaponAiming;
     class StateUniqueSituation;
 
     template <typename tC>
@@ -49,8 +49,15 @@ class Camera::StateNode
 {
 public:
 
-    virtual ContextInstance& getContext() { static ContextInstance context; return context; };
-    virtual ~StateNode() {};
+    StateNode()
+    {
+        ((void(__thiscall *)(StateNode *))(shared::base + 0x9A42D0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x19C558C);
+
+    virtual ContextInstance& getContext() { return ms_Context; }
+    virtual ~StateNode() {}
 };
 
 class Camera::StateNodeTrait
@@ -64,8 +71,20 @@ public:
 template <typename tC>
 class Camera::StateNodeTraitType : public Camera::StateNodeTrait
 {
-
+public:
     tC *allocate() { return nullptr; };
+};
+
+class Camera::StateAnimation : public Camera::StateNode
+{
+public:
+
+    StateAnimation()
+    {
+        ((void(__thiscall *)(StateAnimation*))(shared::base + 0x9A7DE0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63F8);
 };
 
 class Camera::StateBattle : public Camera::StateNode
@@ -87,6 +106,13 @@ public:
     int field_38;
     float field_3C;
     float field_40;
+
+    StateBattle()
+    {
+        ((void(__thiscall *)(StateBattle*))(shared::base + 0x9A43F0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63E4);
 };
 
 class Camera::StatePerpetrator : public Camera::StateNode
@@ -147,14 +173,21 @@ public:
     int field_5C;
     cVec4 field_60;
     cVec4 field_70;
-    int field_80;
-    int field_84;
+    EntityHandle field_80;
+    EntityHandle field_84;
     int field_88;
     int field_8C;
     int field_90;
     float field_94;
     int field_98;
     int field_9C;
+
+    StateBattleFixed()
+    {
+        ((void(__thiscall *)(StateBattleFixed *))(shared::base + 0x9A7B20))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63E8);
 };
 
 class Camera::StateGallery : public Camera::StateNode
@@ -224,6 +257,13 @@ public:
     int field_F4;
     int field_F8;
     int field_FC;
+
+    StateDiveKill()
+    {
+        ((void(__thiscall *)(StateDiveKill *))(shared::base + 0x9A7C40))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C641C);
 };
 
 class Camera::StateSlashingTarget : public Camera::StateNode
@@ -260,12 +300,6 @@ public:
     float field_24;
     float field_28;
     int field_2C;
-};
-
-class Camera::StateAnimation : public Camera::StateNode
-{
-public:
-    
 };
 
 class Camera::StateFps : public Camera::StateNode
@@ -306,6 +340,13 @@ public:
     int field_84;
     int field_88;
     int field_8C;
+
+    StateFps()
+    {
+        ((void(__thiscall *)(StateFps *))(shared::base + 0x9B7BE0))(this);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63FC);
 };
 
 class Camera::StateLockOn : public Camera::StateNode
@@ -1056,3 +1097,8 @@ class Camera::StateUniqueSituation : public Camera::StateNode
 public:
 };
 
+VALIDATE_SIZE(Camera::StateAnimation, 4);
+VALIDATE_SIZE(Camera::StateBattle, 0x44);
+VALIDATE_SIZE(Camera::StateBattleFixed, 0xA0);
+VALIDATE_SIZE(Camera::StateDiveKill, 0x100);
+VALIDATE_SIZE(Camera::StateFps, 0x90);

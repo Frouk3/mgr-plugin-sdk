@@ -1,5 +1,5 @@
 #pragma once
-#include <ARGB32.h>
+#include <RGBA32.h>
 #include <cModelDataManager.h>
 
 class cMeshBase
@@ -8,14 +8,14 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    ARGB32 m_Color;
-    ARGB32 m_ColorScale;
+    RGBA32 m_Color;
+    RGBA32 m_ColorScale;
     cModelData::cMaterial **m_Materials;
     int m_MaterialAmount;
     int m_MeshFlags;
     int field_3C;
-    ARGB32 field_40;
-    ARGB32 field_50;
+    RGBA32 field_40;
+    RGBA32 field_50;
     int m_MeshData;
     cParts *m_AttachBone;
     int field_68;

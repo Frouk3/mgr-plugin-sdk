@@ -169,7 +169,7 @@ public:
     int field_D4;
     int field_D8;
     int field_DC;
-    float m_AnimationSize;
+    float m_fAnimationSize;
     float field_E4;
     float field_E8;
     float field_EC;

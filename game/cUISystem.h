@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Hw.h>
-#include <ARGB32.h>
+#include <RGBA32.h>
 #include <HkDataManagerImplement.h>
 
 class cUIDrawBase;
@@ -83,10 +83,10 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    ARGB32 field_10;
-    ARGB32 field_20;
-    ARGB32 field_30;
-    ARGB32 field_40;
+    RGBA32 field_10;
+    RGBA32 field_20;
+    RGBA32 field_30;
+    RGBA32 field_40;
     int field_50;
     int field_54;
     int field_58;
