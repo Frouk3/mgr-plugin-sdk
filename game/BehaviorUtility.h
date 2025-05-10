@@ -45,11 +45,11 @@ namespace BehaviorUtility
     {
         cVec4 m_vecOrigin;
         cVec4 m_vecEndRayPoint;
-        int m_CollisionFilter;
-        int m_IgnoreObjectFilter;
-        float m_Radius;
-        BOOL m_MultiHit;
-        BOOL m_LinearCast;
+        int m_nCollisionFilter;
+        int m_nIgnoreObjectFilter;
+        float m_fRadius;
+        BOOL m_bMultiHit;
+        BOOL m_bLinearCast;
 
         void drawRayInfo(unsigned int color, int debugLayer, const char* text)
         {

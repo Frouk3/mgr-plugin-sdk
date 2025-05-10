@@ -1132,6 +1132,28 @@ public:
     CameraMatrix m_CameraMatrix;
     float field_14C;
 
+    void setViewMatrix(const D3DXMATRIX& matrix)
+    {
+        ((void(__thiscall *)(cCameraBase *, const D3DXMATRIX&))(shared::base + 0x9E5170))(this, matrix);
+    }
+
+    void move(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E4F20))(this, offset);
+    }
+
+    // Move camera according to the offset of camera
+    void moveWithOffset(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E4FA0))(this, offset);
+    }
+
+    // Move camera according to the Y offset
+    void moveWithY(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5090))(this, offset);
+    }
+
     void setPosition(const cVec4& position)
     {
         ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5F20))(this, position);
@@ -1147,14 +1169,67 @@ public:
         ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5FC0))(this, lookAt);
     }
 
+    void setCameraOffset(const cVec4& cameraOffset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6090))(this, cameraOffset);
+    }
+
+    void setDistance(float distance)
+    {
+        ((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E62D0))(this, distance);
+    }
+
+    // m_fDistance += clamp(distance, minDistance, maxDistance)
+    void adjustDistanceToLookAt(float distance, float maxDistance, float minDistance)
+    {
+        ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E62F0))(this, distance, maxDistance, minDistance);
+    }
+
+    void adjustDistanceToPosition(float distance, float maxDistance, float minDistance)
+    {
+        ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E6390))(this, distance, maxDistance, minDistance);
+    }
+
+    // m_vecLookAtPosition += with
+    void setLookAtAlong(const cVec4& with)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6000))(this, with);
+    }
+
     void place(const cVec4& position, const cVec4& lookAt, const cVec4& offset)
     {
         ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, const cVec4&))(shared::base + 0x9E5D10))(this, position, lookAt, offset);
     }
 
+    void place(const cVec4& position, const cVec4& cameraOffset, float distance)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, float))(shared::base + 0x9E5DA0))(this, position, cameraOffset, distance);
+    }
+
+    void lookAt(const cVec4& lookAt, const cVec4& cameraOffset, float distance)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, float))(shared::base + 0x9E5E60))(this, lookAt, cameraOffset, distance);
+    }
+
+    // m_vecPosition += with
+    void moveAlong(const cVec4& with)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&))(shared::base + 0x9E5F60))(this, with);
+    }
+
     void updatePosition()
     {
         ((void(__thiscall *)(cCameraBase*))(shared::base + 0x9E51B0))(this);
+    }
+
+    void updateLookAtPos() // z = -distance
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5260))(this);
+    }
+
+    void resetOffset()
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5310))(this);
     }
 
     void calculateCameraOffset()
@@ -1170,6 +1245,11 @@ public:
     void updateCameraViewMatrix()
     {
         ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E6410))(this);
+    }
+
+    void calculateInverseViewMatrix()
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5170))(this);
     }
 };
 
