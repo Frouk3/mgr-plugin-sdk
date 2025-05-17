@@ -128,9 +128,9 @@ public:
     int field_31C;
     cMesh *m_pMeshes;
     short m_nMeshAmount;
-    cModelData::cMaterial *m_Materials;
+    cModelData::cMaterial *m_pMaterials;
     short m_nMaterialAmount;
-    cModelData::ModelData *m_ModelData;
+    cModelData::ModelData *m_pModelData;
     cParts *m_pRootBone;
     int field_338;
     int field_33C;
@@ -141,11 +141,11 @@ public:
     cParts *m_pBones;
     cParts **m_ppBones;
     short m_nBoneAmount;
-    void *m_BoneOffsetData;
+    void *m_pBoneOffsetData;
     cModelBase *m_pParent;
     int m_nModelFlags;
     int m_nRootBoneIndex;
-    void *m_MeshData;
+    void *m_pMeshData;
 
     cModelBase()
     {
@@ -159,7 +159,7 @@ public:
             for (cMesh* mesh = m_pMeshes; mesh != &m_pMeshes[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && strstr(mesh->getName(), meshName))
-                    mesh->m_MeshFlags = bToggle ? mesh->m_MeshFlags | 1u : mesh->m_MeshFlags & ~1u;
+                    mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
             }
         }
     }
@@ -171,7 +171,7 @@ public:
             for (cMesh* mesh = m_pMeshes; mesh != &m_pMeshes[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && !strcmp(mesh->getName(), meshName))
-                    mesh->m_MeshFlags = bToggle ? mesh->m_MeshFlags | 1u : mesh->m_MeshFlags & ~1u;
+                    mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
             }
         }
     }

@@ -13,17 +13,17 @@ class Behavior;
 
 struct Entity
 {
-    cSlowRateUnit *m_SlowRateUnit;
+    cSlowRateUnit *m_pSlowRateUnit;
     char m_EntityName[32];
     eObjID m_EntityIndex;
     int m_EntityFlags;
     EntityHandle m_Handle;
     DataArchiveHolder m_EntityData;
-    SceneModelSystem *m_SceneManager;
-    Behavior *m_SceneModel;                 ///< There's no difference between m_SceneModel and m_Instance
-    Animation *m_Animation;
+    SceneModelSystem *m_pSceneManager;
+    Behavior *m_pSceneModel;                 ///< There's no difference between m_SceneModel and m_Instance
+    Animation *m_pAnimation;
     int field_44; // BehaviorInfo *
-    Behavior *m_Instance;
+    Behavior *m_pInstance;
     BOOL m_bStartupImmediately; 
     int field_50;
     int field_54;

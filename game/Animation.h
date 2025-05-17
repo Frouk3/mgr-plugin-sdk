@@ -344,8 +344,8 @@ public:
             int field_64;
             float field_68;
             float field_6C;
-            float field_70;
-            float field_74;
+            float m_fLocalPlaybackSpeed;
+            float m_fLocalPlaybackRate;
             float field_78;
             int field_7C;
             int field_80;

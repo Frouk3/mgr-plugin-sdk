@@ -10,21 +10,21 @@ public:
     int field_C;
     RGBA32 m_Color;
     RGBA32 m_ColorScale;
-    cModelData::cMaterial **m_Materials;
-    int m_MaterialAmount;
-    int m_MeshFlags;
+    cModelData::cMaterial **m_pMaterials;
+    int m_nMaterialAmount;
+    int m_nMeshFlags;
     int field_3C;
     RGBA32 field_40;
     RGBA32 field_50;
-    int m_MeshData;
-    cParts *m_AttachBone;
+    int m_pMeshData;
+    cParts *m_pAttachBone;
     int field_68;
     int field_6C;
 
     inline const char *getName()
     {
-        if (*(int*)m_MeshData)
-            return *(const char**)(m_MeshData + 0x40);
+        if (*(int*)m_pMeshData)
+            return *(const char**)(m_pMeshData + 0x40);
 
         return nullptr;
     }

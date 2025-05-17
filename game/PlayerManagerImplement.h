@@ -26,7 +26,7 @@ public:
     int field_C4;
     EntityHandle m_BalkanHandle;
     int m_nMaxHealth;
-    float m_nMaxFuelContainer;
+    float m_fMaxFuelContainer;
     int m_nHealthBonus;
     int m_nFuelContainerBonus;
     int m_nBattlePoints;
