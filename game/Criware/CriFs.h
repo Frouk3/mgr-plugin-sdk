@@ -307,7 +307,7 @@ struct CriFsBinderWork // Platinum addon
     int m_nStatus;
     CriFsBinderHn *m_CriBinderHn;
     CriFsBindId m_BinderId;
-    int m_BindStatus;
+    int m_nBindStatus;
     int m_nPriority;
 
     BOOL bindCpkFileSync(const char* path, int a3, int a4, int priority)

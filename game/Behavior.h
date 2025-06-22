@@ -925,7 +925,7 @@ public:
         int field_1C;
         AnimationMap::Unit* m_pAnimationMap;
         int field_24;
-        float m_Cycle; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
+        float m_fCycle; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
         int field_2C;
     };
 

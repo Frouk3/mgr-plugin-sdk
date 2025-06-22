@@ -85,11 +85,6 @@ public:
         ((void(__thiscall*)(cObj*))(shared::base + 0x5FD150))(this);
     }
 
-    void setShadowCast(BOOL disabled)
-    {
-        ((void(__thiscall*)(cObj*, BOOL))(shared::base + 0x60BA60))(this, disabled);
-    }
-
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x177B380);
 };
 

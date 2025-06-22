@@ -56,9 +56,9 @@ public:
     int field_430;
     int field_434;
     int field_438;
-    int m_HemishphereNo;
+    int m_nHemishphereNo;
     int field_440;
-    int m_EventLight;
+    int m_nEventLight;
     int field_448;
     short field_44C;
     char field_44E;
@@ -66,8 +66,8 @@ public:
     int field_450;
     int field_454;
     int field_458;
-    float m_CurrentCamAlphaRate;
-    float m_CamAlphaRate;
+    float m_fCurrentCamAlphaRate;
+    float m_fCamAlphaRate;
     int field_464;
     int field_468;
     int field_46C;

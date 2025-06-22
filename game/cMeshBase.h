@@ -26,7 +26,7 @@ public:
         if (*(int*)m_pMeshData)
             return *(const char**)(m_pMeshData + 0x40);
 
-        return nullptr;
+        return "\0";
     }
 
     virtual ~cMeshBase() {};

@@ -15,6 +15,39 @@ public:
         cVec4 m_vecBBMin;
         cVec4 m_vecBBMax;
         cVec4 field_40;
+
+        void updateBoundingBox(const D3DXMATRIX& matrix, BOOL calculateTransformExtent)
+        {
+            ((void(__thiscall *)(RenderMatrix*, const D3DXMATRIX&, BOOL))(shared::base + 0x610CF0))(this, matrix, calculateTransformExtent);
+        }
+
+        void initializeBoundsFromBone(cParts* rootBone, int boneIndex, cModelData::ModelData *modelData)
+        {
+            ((void(__thiscall *)(RenderMatrix*, cParts*, int, cModelData::ModelData*))(shared::base + 0x607AC0))(this, rootBone, boneIndex, modelData);
+        }
+    };
+
+    struct BoneSet
+    {
+        cParts *m_pBones;
+        cParts **m_ppBones;
+        short m_nBoneAmount;
+        void *m_pBoneData;
+
+        void clear()
+        {
+            ((void(__thiscall *)(BoneSet*))(shared::base + 0x607600))(this);
+        }
+
+        BOOL initialize(short boneAmount, void *boneData, Hw::cHeapVariable *allocator)
+        {
+            return ((BOOL(__thiscall *)(BoneSet*, short, void*, Hw::cHeapVariable*))(shared::base + 0x607660))(this, boneAmount, boneData, allocator);
+        }
+
+        void updateBoneMatrices(cParts *rootBone, const D3DXMATRIX& viewMatrix)
+        {
+            ((void(__thiscall *)(BoneSet*, cParts*, const D3DXMATRIX&))(shared::base + 0x616680))(this, rootBone, viewMatrix);
+        }
     };
 
     D3DXMATRIX m_ViewModelMatrix;
@@ -138,10 +171,7 @@ public:
     void *m_WTB;
     void *m_TextureRawData;
     Hw::cTexture *m_pTexture;
-    cParts *m_pBones;
-    cParts **m_ppBones;
-    short m_nBoneAmount;
-    void *m_pBoneOffsetData;
+    BoneSet m_BoneSet;
     cModelBase *m_pParent;
     int m_nModelFlags;
     int m_nRootBoneIndex;
@@ -187,9 +217,40 @@ public:
         return ((float(__thiscall*)(cModelBase*, const cVec4&))(shared::base + 0x68EC30))(this, target);
     }
 
-    void updateBones()
+    // update bone matrices
+    void updateHierarchicalTransformations()
     {
         ((void(__thiscall*)(cModelBase*))(shared::base + 0x617A40))(this);
+    }
+
+    BOOL initializeBones(cModelData::ModelData *modelData, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, Hw::cHeapVariable*))(shared::base + 0x60A680))(this, modelData, allocator);
+    }
+
+    BOOL meshStartup(cModelData::ModelData *modelData, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, Hw::cHeapVariable*))(shared::base + 0x611E20))(this, modelData, allocator);
+    }
+
+    BOOL materialStartup(cModelData::ModelData *modelData, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, Hw::cHeapVariable*))(shared::base + 0x611D20))(this, modelData, allocator);
+    }
+
+    BOOL initialize(cModelData::ModelData *modelData, void *textureInfo, void *textures, void *a5, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, void*, void*, void*, Hw::cHeapVariable*))(shared::base + 0x617860))(this, modelData, textureInfo, textures, a5, allocator);
+    }
+
+    void setShadowCast(BOOL disabled)
+    {
+        ((void(__thiscall*)(cModelBase*, BOOL))(shared::base + 0x60BA60))(this, disabled);
+    }
+
+    void enableShadowTransparency(BOOL enable)
+    {
+        ((void(__thiscall*)(cModelBase*, BOOL))(shared::base + 0x613340))(this, enable);
     }
 };
 

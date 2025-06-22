@@ -14,7 +14,7 @@ public:
     {
         int m_nLockType;
         EntityHandle m_TargetEntity;
-        Behavior *m_Target;
+        Behavior *m_pTarget;
         int m_nBone;
         cVec4 field_10;
         cVec4 m_vecPosition;

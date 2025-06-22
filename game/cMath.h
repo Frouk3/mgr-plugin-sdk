@@ -27,4 +27,14 @@ namespace cMath
     {
         ((void(__cdecl*)(D3DXMATRIX*, const cVec4&, RotateMatrixOrder))(shared::base + 0x9DC1D0))(matrix, rotation, order);
     }
+
+    inline void __cdecl matrixSetScale(D3DXMATRIX* matrix, const cVec4& scale)
+    {
+        ((void(__cdecl*)(D3DXMATRIX*, const cVec4&))(shared::base + 0x9DD140))(matrix, scale);
+    }
+
+    inline void __cdecl quatFromEulerAngles(cQuaternion& out, const cVec4& eulerAngles)
+    {
+        ((void(__cdecl*)(cQuaternion&, const cVec4&))(shared::base + 0x9DB590))(out, eulerAngles);
+    }
 }

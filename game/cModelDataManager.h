@@ -571,6 +571,16 @@ struct cModelData::cMaterial
 	int field_554;
 	int field_558;
 	int field_55C;
+
+	void clear()
+	{
+		((void(__thiscall *)(cMaterial *))(shared::base + 0x607FA0))(this);
+	}
+
+	void deallocate()
+	{
+		((void(__thiscall *)(cMaterial *))(shared::base + 0x6118E0))(this);
+	}
 };
 
 class cModelDataManager

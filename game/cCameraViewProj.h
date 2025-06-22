@@ -4,11 +4,13 @@
 class cCameraViewProj : public Hw::CameraProj, public Hw::cCameraBase
 {
 public:
-	D3DXMATRIX field_200;
-	D3DXMATRIX field_240;
+	D3DXMATRIX m_viewProjectionMatrix;
+	D3DXMATRIX m_inverseViewProjectionMatrix;
 	D3DXMATRIX field_280;
 
-	void screenToWorld(cVec4& out, const cVec4& ScreenPos, const D3DXMATRIX &viewMatrix, int __unused)
+	// Maybe those methods down below are actually from Hw::CameraProj?
+
+	void screenToWorld(cVec4& out, const cVec4& ScreenPos, const D3DXMATRIX &viewMatrix, int __unused) 
 	{
 		((void(__thiscall *)(cCameraViewProj*, cVec4&, const cVec4&, const D3DXMATRIX&, int))(shared::base + 0x9E4E40))(this, out, ScreenPos, viewMatrix, __unused);
 	}
