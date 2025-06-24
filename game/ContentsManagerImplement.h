@@ -5,17 +5,6 @@
 #include <lib.h>
 #include <common.h>
 
-class ContentsBase
-{
-public:
-    int field_4;
-    int field_8;
-    int field_C;
-    int field_10;
-
-    virtual ContextInstance &getContext() {static ContextInstance ContentsBase; return ContentsBase; };
-};
-
 class ContentsManagerImplement : public ContentsManager
 {
 public:

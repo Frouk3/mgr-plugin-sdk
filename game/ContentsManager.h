@@ -8,8 +8,11 @@ public:
     int field_4;
     int field_8;
     int field_C;
+    int field_10;
 
-    virtual ~ContentsBase() {};
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735D64);
+
+    virtual ContextInstance& getContext() { return ms_Context; };
 };
 
 class BrokenBridgeContents : public ContentsBase

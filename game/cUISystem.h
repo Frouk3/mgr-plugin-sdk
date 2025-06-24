@@ -3,6 +3,7 @@
 #include <Hw.h>
 #include <RGBA32.h>
 #include <HkDataManagerImplement.h>
+#include <cCkMsgDataManager.h>
 
 class cUIDrawBase;
 class cUIWorkBase;
@@ -2586,24 +2587,6 @@ public:
     int field_20;
 
     virtual ~cUITextureManager() {};
-};
-
-class cMsgCtrl
-{
-public:
-    int field_4;
-    int field_8;
-    Hw::cTexture m_cMsgTexture;
-    int field_28;
-    char field_2C;
-    __int16 field_2D;
-    int field_30;
-    int field_34;
-    int field_38;
-    int field_3C;
-    int field_40;
-
-    virtual ~cMsgCtrl() {};
 };
 
 class cUIDataManager

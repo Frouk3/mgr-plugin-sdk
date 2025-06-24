@@ -3,7 +3,7 @@
 #include <StateMachineFactoryPl0010.h>
 #include <cEspControler.h>
 
-class DeadStatePl1400 : public StateMachineNode
+class DeadStatePl1500 : public StateMachineNode
 {
 public:
     cEspControler field_30;

@@ -5,6 +5,7 @@ namespace Constraint
 {
     class WorkBase
     {
+    public:
         int field_4;
 
         virtual ~WorkBase() {};
