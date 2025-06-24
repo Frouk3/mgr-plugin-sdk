@@ -1,18 +1,21 @@
 #pragma once
 
-#include "cObj.h"
-#include "hkpRigidBody.h"
-#include "cLockonPartsList.h"
-#include "BattleParameterImplement.h"
-#include "EspCtrlCustomImpl.h"
-#include "CharacterControl.h"
-#include "lib.h"
-#include "StateMachineContextPl0010.h"
-#include "StateMachineFactoryPl0010.h"
+#include <cObj.h>
+#include <hkpRigidBody.h>
+#include <cLockonPartsList.h>
+#include <BattleParameterImplement.h>
+#include <EspCtrlCustomImpl.h>
+#include <CharacterControl.h>
+#include <lib.h>
+#include <StateMachineContextPl0010.h>
+#include <StateMachineFactoryPl0010.h>
 #include <D3dx9math.h>
 #include <AnimationMapManagerImplement.h>
-#include "Collision.h"
-#include "RigidBodyCollision.h"
+#include <Collision.h>
+#include <RigidBodyCollision.h>
+#include <RigidBodyList.h>
+#include <NodeManager.h>
+#include <CollisionAttackData.h>
 
 struct ClothSimulation
 {
@@ -90,8 +93,8 @@ struct ClothSimulation
         float m_fLimitSpringRate;
         float m_fSpdRate;
         float m_fStretchy;
-        unsigned __int16 m_nBundleNum;
-        unsigned __int16 m_nBundleNum2;
+        unsigned short m_nBundleNum;
+        unsigned short m_nBundleNum2;
         float m_fThick;
         cVec3 m_vecGravity;
         int m_nGravityPartsNo;
@@ -121,6 +124,11 @@ struct ClothSimulation
             cVec3 m_vecOffset;
             float m_fOriginalRate;
         };
+
+        void reset()
+        {
+            ((void(__thiscall *)(ClothSimulation::Physics *))(shared::base + 0x5FAC50))(this);
+        }
     };
 
     int field_0;
@@ -875,20 +883,30 @@ struct ClothSimulation
     int field_BD4;
     int field_BD8;
     int field_BDC;
+
+    ClothSimulation()
+    {
+        ((void(__thiscall *)(ClothSimulation*))(shared::base + 0x5FAD80))(this);
+    }
+
+    void reset(BOOL bUseStretch)
+    {
+        ((void(__thiscall *)(ClothSimulation *, BOOL))(shared::base + 0x5F79C0))(this, bUseStretch);
+    }
 };
 
 struct Constraints
 {
-    int m_nIndex;
-    EntityHandle m_nMainEntity;
-    EntityHandle m_nObjectEntityHandle;
-    unsigned int m_nBone;
-    int field_10;
+    int m_Index;
+    EntityHandle m_MainEntity;
+    EntityHandle m_ObjectEntityHandle;
+    unsigned int m_Bone;
+    unsigned int m_RotationBone;
     int field_14;
     int field_18;
     int field_1C;
-    Hw::cVec4 m_vecRotation;
-    Hw::cVec4 m_vecOffset;
+    cVec4 m_vecRotation;
+    cVec4 m_vecOffset;
     int field_40;
     int field_44;
     int field_48;
@@ -900,26 +918,26 @@ class Behavior : public cObj
 public:
     struct AnimationSlot
     {
-        int field_0;
+        int m_SlotId;
         int field_4;
         char m_AnimName[16];
-        Behavior* m_Parent;
+        Behavior* m_pAnimationTarget;
         int field_1C;
-        AnimationMap::Unit* m_AnimationMap;
+        AnimationMap::Unit* m_pAnimationMap;
         int field_24;
-        float m_fAnimTimer;
+        float m_fCycle; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
         int field_2C;
     };
 
     struct EffectIntegrationContainer
     {
-        int field_0;
-        int field_4;
+        int m_ContainerId;
+        eObjID m_EffObjId;
         int field_8;
-        int field_C;
-        int field_10;
-        int field_14;
-        int field_18;
+        int m_EffectId;
+        cEspControler *m_pControler;
+        float m_FadeTime;
+        float m_FadeEndAlpha;
     };
 
     struct InstructionContainer
@@ -994,16 +1012,16 @@ public:
     int m_pBehaviorInfo;
     int field_610;
     int field_614;
-    unsigned int m_nCurrentAction;
-    int m_nCurrentActionId;
+    unsigned int m_CurrentAction;
+    int m_CurrentActionId;
     int field_620;
     int field_624;
-    int m_nPreviousAction;
-    int m_nPreviousActionId;
+    int m_PreviousAction;
+    int m_PreviousActionId;
     int field_630;
     int field_634;
     Hw::CriticalSection* field_638;
-    lib::AllocatedArray<InstructionContainer>* m_pInstructionContainerArray;
+    lib::AllocatedArray<InstructionContainer>* m_pInstructions;
     int field_640;
     int field_644;
     int field_648;
@@ -1044,7 +1062,7 @@ public:
     int field_6E4;
     float field_6E8;
     int field_6EC;
-    cLockonPartsList m_cLockonPartsList;
+    cLockonPartsList m_LockonPartsList;
     int field_710;
     int field_714;
     int field_718;
@@ -1064,7 +1082,7 @@ public:
     int field_750;
     BattleParameterImplement* m_pBattleParameterImplement;
     int field_758;
-    lib::AllocatedArray<AnimationMap::Unit>** m_ppAnimationUnit;
+    lib::AllocatedArray<AnimationMap::Unit>** m_ppAnimationMap;
     int field_760;
     CharacterControl* m_pCharacterControl;
     int field_768;
@@ -1086,7 +1104,7 @@ public:
     lib::StaticArray<Collision *, 64> *m_pDefenseCollisions;
     int field_7AC;
     RigidBodyCollision* m_pRigidBodyCollision;
-    void* m_pRigidBodyList;
+    RigidBodyList* m_pRigidBodyList;
     lib::AllocatedArray<Collision *>* m_pAllocatedCollisionArray;
     int field_7BC;
     float field_7C0;
@@ -1095,7 +1113,7 @@ public:
     int field_7CC;
     StateMachineContextPl0010* m_pStateMachineContext;
     StateMachineFactoryPl0010* m_pStateMachineFactory;
-    int field_7D8;
+    NodeNavigation* m_pNodeNavigation;
     int field_7DC;
     int field_7E0;
     int field_7E4;
@@ -1114,7 +1132,7 @@ public:
     int field_818;
     int field_81C;
     int field_820;
-    __int16 field_824;
+    short field_824;
     int field_828;
     int field_82C;
     int field_830;
@@ -1172,54 +1190,59 @@ public:
         CallVMTFunc<21, Behavior*>(this);
     }
 
-    Hw::cVec4 &getTransPos()
+    void updateAnimation()
     {
-        return ReturnCallVMTFunc<Hw::cVec4 &, 26, Behavior *>(this);
+        CallVMTFunc<25, Behavior*>(this);
     }
 
-    void setTransPos(const Hw::cVec4& transPos)
+    const cVec4 &getTransPos()
     {
-        CallVMTFunc<27, Behavior *, const Hw::cVec4&>(this, transPos);
+        return ReturnCallVMTFunc<const cVec4 &, 26, Behavior *>(this);
     }
 
-    void offsetTransPos(const Hw::cVec4& offset)
+    void setTransPos(const cVec4& transPos)
     {
-        CallVMTFunc<28, Behavior *, const Hw::cVec4&>(this, offset);
+        CallVMTFunc<27, Behavior *, const cVec4&>(this, transPos);
     }
 
-    void changeHeight(const float height)
+    void offsetTransPos(const cVec4& offset)
+    {
+        CallVMTFunc<28, Behavior *, const cVec4&>(this, offset);
+    }
+
+    void changeHeight(float height)
     {
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
 
-    void place(const Hw::cVec4 &pos, const Hw::cVec4& rotation, const Hw::cVec4& size)
+    void place(const cVec4 &pos, const cVec4& rotation, const cVec4& size)
     {
-        CallVMTFunc<30, Behavior *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation, size);
+        CallVMTFunc<30, Behavior *, const cVec4&, const cVec4&, const cVec4&>(this, pos, rotation, size);
     }
 
-    void place(const Hw::cVec4 &pos, const Hw::cVec4 &rotation)
+    void place(const cVec4 &pos, const cVec4 &rotation)
     {
-        CallVMTFunc<31, Behavior *, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation);
+        CallVMTFunc<31, Behavior *, const cVec4&, const cVec4&>(this, pos, rotation);
     }
 
-    Hw::cVec4& getRotation()
+    const cVec4& getRotation()
     {
-        return ReturnCallVMTFunc<Hw::cVec4&, 33, Behavior *>(this);
+        return ReturnCallVMTFunc<const cVec4&, 33, Behavior *>(this);
     }
 
-    void setRotation(const Hw::cVec4& rotation)
+    void setRotation(const cVec4& rotation)
     {
-        CallVMTFunc<34, Behavior *, const Hw::cVec4&>(this, rotation);
+        CallVMTFunc<34, Behavior *, const cVec4&>(this, rotation);
     }
 
-    Hw::cVec4& getSize()
+    const cVec4& getSize()
     {
-        return ReturnCallVMTFunc<Hw::cVec4&, 35, Behavior *>(this);
+        return ReturnCallVMTFunc<const cVec4&, 35, Behavior *>(this);
     }
 
-    void setSize(const Hw::cVec4& size)
+    void setSize(const cVec4& size)
     {
-        CallVMTFunc<36, Behavior *, const Hw::cVec4&>(this, size);
+        CallVMTFunc<36, Behavior *, const cVec4&>(this, size);
     }
 
     int getSequence()
@@ -1227,14 +1250,14 @@ public:
         return ReturnCallVMTFunc<int, 37, Behavior *>(this);
     }
 
-    int getIndex()
+    eObjID getObjectId()
     {
-        return ReturnCallVMTFunc<int, 38, Behavior *>(this);
+        return ReturnCallVMTFunc<eObjID, 38, Behavior *>(this);
     }
 
-    int getSequenceFile(const char *a2)
+    void* getSequenceFile(const char *name)
     {
-        return ReturnCallVMTFunc<int, 39, Behavior *, const char*>(this, a2);
+        return ReturnCallVMTFunc<void*, 39, Behavior *, const char*>(this, name);
     }
 
     void transform(D3DXMATRIX *matrix)
@@ -1257,19 +1280,26 @@ public:
         CallVMTFunc<74, Behavior *>(this);
     }
 
+    CollisionAttackData *createAttackData()
+    {
+        return ReturnCallVMTFunc<CollisionAttackData*, 76, Behavior*>(this);
+    }
+
     void *setCutCreateInfo()
     {
         return ReturnCallVMTFunc<void *, 110, Behavior *>(this);
     }
 
-    bool isAlive()
+    BOOL isAlive()
     {
         return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
     }
 
-    Hw::cVec4 getOffsetPosition()
+    cVec4 getOffsetPosition()
     {
-        return ReturnCallVMTFunc<Hw::cVec4, 159, Behavior *>(this);
+        cVec4 result;
+        result = ReturnCallVMTFunc<cVec4&, 159, Behavior *, cVec4&>(this, result);
+        return result;
     }
 
     void forceDie()
@@ -1278,6 +1308,11 @@ public:
     }
 
 // vft end
+
+    void shutdownEffects()
+    {
+        ((void(__thiscall *)(Behavior *))(shared::base + 0x68C820))(this);
+    }
 
     void setState(int action, int actId, int a3, int a4)
     {
@@ -1314,9 +1349,9 @@ public:
         ((void (__thiscall *)(Behavior*, int))(shared::base + 0x69E060))(this, constraintId);
     }
 
-    void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int _bone)
+    void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int rotationBone)
     {
-        ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, _bone);
+        ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, rotationBone);
     }
 
     void shutdownBattleParameter()
@@ -1354,9 +1389,9 @@ public:
         ((void(__thiscall*)(Behavior*))(shared::base + 0x6944D0))(this);
     }
 
-    void setConstraintsBone(int id, unsigned int bone, unsigned int _bone)
+    void setConstraintsBone(int id, unsigned int bone, unsigned int rotationBone)
     {
-        ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, _bone);
+        ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, rotationBone);
     }
 
     int setDirectAnimation(void* mot, void* seq, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)
@@ -1381,13 +1416,95 @@ public:
         return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
     }
 
-    static inline ContextInstance &Context = *(ContextInstance*)(shared::base + 0x17E9C20);
+    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);
 };
 
 struct BehaviorData
 {
-
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    float field_1C;
+    int field_20;
+    float field_24;
+    float field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    float field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    float field_80;
+    float field_84;
+    float field_88;
+    int field_8C;
+    int field_90;
+    float field_94;
+    int field_98;
+    float field_9C;
+    int field_A0;
+    int field_A4;
+    int field_A8;
+    int field_AC;
+    int field_B0;
+    int field_B4;
+    int field_B8;
+    int field_BC;
+    float field_C0;
+    int field_C4;
+    int field_C8;
+    int field_CC;
+    int field_D0;
+    int field_D4;
+    int field_D8;
+    int field_DC;
+    int field_E0;
+    float field_E4;
+    int field_E8;
+    int field_EC;
+    float field_F0;
+    float field_F4;
+    float field_F8;
+    float field_FC;
+    float field_100;
+    float field_104;
+    float field_108;
+    float field_10C;
+    float field_110;
+    float field_114;
+    float field_118;
+    float field_11C;
+    float field_120;
+    float field_124;
+    float field_128;
+    float field_12C;
+    int field_130;
+    int field_134;
+    Hw::CriticalSection field_138;
+    int field_154;
+    int field_158;
+    int field_15C;
 };
 
 VALIDATE_SIZE(Behavior::AnimationSlot, 0x30);
 VALIDATE_SIZE(Behavior, 0x870);
+VALIDATE_SIZE(BehaviorData, 0x160);

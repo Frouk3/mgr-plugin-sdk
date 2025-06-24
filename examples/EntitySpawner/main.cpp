@@ -99,7 +99,7 @@ public:
 	{
 		Events::OnUpdateEvent.after += []()
 			{
-				if (m_EntQueue.m_nSize)
+				if (m_EntQueue.m_size)
 				{
 					for (auto& str : m_EntQueue)
 					{
@@ -112,7 +112,7 @@ public:
 						}
 					}
 
-					for (int i = 0; i < m_EntQueue.m_nSize; i++)
+					for (int i = 0; i < m_EntQueue.m_size; i++)
 					{
 						auto& elem = m_EntQueue[i];
 
@@ -120,20 +120,20 @@ public:
 							m_EntQueue.remove(elem);
 
 						if (!elem.bWorkFail && elem.bDone && !elem.m_Entity)
-							elem.m_Entity = EntitySystem::Instance.createEntity("SpawnedObject", elem.mObjId, nullptr);
+							elem.m_Entity = EntitySystem::ms_Instance.createEntity("SpawnedObject", elem.mObjId, nullptr);
 					}
 				}
 
-				if (auto entity = m_EntQueue.getLastEntity(); entity)
+				if (Entity* entity = m_EntQueue.getLastEntity(); entity)
 				{
-					auto instance = entity->getEntityInstance<Behavior>();
+					Behavior* instance = entity->getEntityInstance<Behavior>();
 
-					auto pos = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecTransPos : cVec4();
-					auto rot = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecRotation : cVec4();
+					cVec4 pos = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecTransPos : cVec4();
+					cVec4 rot = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecRotation : cVec4();
 
-					instance->place(&pos, &rot);
+					instance->place(pos, rot);
 
-					cObjReadManager::Instance.endWork(instance->m_nObjId, instance->m_nSetType);
+					cObjReadManager::Instance.endWork(instance->m_ObjId, instance->m_nSetType);
 				}
 
 				shared::ExPressKeyUpdate();
@@ -141,8 +141,11 @@ public:
 
 		Events::OnTickEvent += []()
 			{
-				if (shared::IsKeyPressedEx('H', false)) // spawn boss Sam for example
-					m_EntQueue.push_back({ .mObjId = (eObjID)0x20020, .iSetType = 0, .bWorkFail = !isObjExists(.mObjId) });
+				if (shared::IsKeyPressed('H', false)) // spawn boss Sam for example
+				{
+					eObjID objectId = eObjID(0x20020); 
+					m_EntQueue.push_back({ .mObjId = objectId, .iSetType = 0, .bWorkFail = !isObjExists(objectId) });
+				}
 			};
 	}
 } __spawner;

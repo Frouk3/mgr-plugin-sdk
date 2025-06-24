@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Hw.h"
+#include <Hw.h>
 
 class DatsuSetTableManager
 {
-private:
+public:
 
-	virtual void field_0() {};
+	virtual void dummyVM() {};
 };

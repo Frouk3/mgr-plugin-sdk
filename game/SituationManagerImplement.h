@@ -1,27 +1,34 @@
 #pragma once
-#include "SituationManager.h"
-#include "Entity.h"
-#include "Hw.h"
+
+#include <SituationManager.h>
+#include <Entity.h>
+#include <Hw.h>
+#include <lib.h>
 
 class SituationManagerImplement : public SituationManager
 {
 public:
-    Hw::cHeapVariable *m_pHeapVariable;
-    int field_8;
-    int field_C;
-    int field_10;
-    int field_14;
-    int field_18;
-    int field_1C;
-    int field_20;
+    struct Unit
+    {
+        int field_0;
+        EntityHandle m_Entity;
+        eObjID m_Object;
+        int field_C;
+        cVec4 m_vecEventPosition;
+    };
+
+    Hw::cHeapVariable *m_Allocator;
+    Hw::CriticalSection field_8;
     int field_24;
-    int field_28;
+    lib::AllocatedArray<Unit *> *m_UnitArray;
     int field_2C;
 
-    static inline SituationManagerImplement*& pInstance = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);
+    static inline SituationManagerImplement*& ms_Instance = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);
 
-    static inline SituationManagerImplement *Get()
+    static inline SituationManagerImplement *get()
     {
         return ((SituationManagerImplement *(__cdecl *)())(shared::base + 0x8206D0))();
     }
 };
+
+VALIDATE_SIZE(SituationManagerImplement, 0x30);

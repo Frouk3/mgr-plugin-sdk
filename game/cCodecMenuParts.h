@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
+#include <cCustomObjCtrlManager.h>
 
-class cCodecMenuParts : cCustomObjCtrlManager
+class cCodecMenuParts : public cCustomObjCtrlManager
 {
 public:
     int field_1C;
@@ -103,6 +103,4 @@ public:
     int field_254;
     int field_258;
     int field_25C;
-
-    virtual ~cCodecMenuParts() override {};
 };

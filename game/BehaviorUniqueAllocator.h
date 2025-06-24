@@ -3,5 +3,5 @@
 class BehaviorUniqueAllocator
 {
 public:
-    virtual ~BehaviorUniqueAllocator() {};
+    virtual ~BehaviorUniqueAllocator() {}
 };

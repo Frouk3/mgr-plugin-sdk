@@ -1,9 +1,9 @@
 #pragma once
 
-#include "cParts.h"
-#include "cMesh.h"
-#include "Hw.h"
-#include "cModelDataManager.h"
+#include <cParts.h>
+#include <cMesh.h>
+#include <Hw.h>
+#include <cModelDataManager.h>
 
 class cModelBase : public cParts
 {
@@ -15,11 +15,44 @@ public:
         cVec4 m_vecBBMin;
         cVec4 m_vecBBMax;
         cVec4 field_40;
+
+        void updateBoundingBox(const D3DXMATRIX& matrix, BOOL calculateTransformExtent)
+        {
+            ((void(__thiscall *)(RenderMatrix*, const D3DXMATRIX&, BOOL))(shared::base + 0x610CF0))(this, matrix, calculateTransformExtent);
+        }
+
+        void initializeBoundsFromBone(cParts* rootBone, int boneIndex, cModelData::ModelData *modelData)
+        {
+            ((void(__thiscall *)(RenderMatrix*, cParts*, int, cModelData::ModelData*))(shared::base + 0x607AC0))(this, rootBone, boneIndex, modelData);
+        }
     };
 
-    D3DXMATRIX field_B0;
+    struct BoneSet
+    {
+        cParts *m_pBones;
+        cParts **m_ppBones;
+        short m_nBoneAmount;
+        void *m_pBoneData;
+
+        void clear()
+        {
+            ((void(__thiscall *)(BoneSet*))(shared::base + 0x607600))(this);
+        }
+
+        BOOL initialize(short boneAmount, void *boneData, Hw::cHeapVariable *allocator)
+        {
+            return ((BOOL(__thiscall *)(BoneSet*, short, void*, Hw::cHeapVariable*))(shared::base + 0x607660))(this, boneAmount, boneData, allocator);
+        }
+
+        void updateBoneMatrices(cParts *rootBone, const D3DXMATRIX& viewMatrix)
+        {
+            ((void(__thiscall *)(BoneSet*, cParts*, const D3DXMATRIX&))(shared::base + 0x616680))(this, rootBone, viewMatrix);
+        }
+    };
+
+    D3DXMATRIX m_ViewModelMatrix;
     D3DXMATRIX field_F0;
-    RenderMatrix m_RenderMatrix;
+    cModelBase::RenderMatrix m_RenderMatrix;
     float m_fDistRate0;
     float m_fDistRate1;
     float m_fDistRate2;
@@ -66,10 +99,10 @@ public:
     int field_22C;
     int field_230;
     int field_234;
-    unsigned short field_238;
-    unsigned short field_23A;
-    unsigned short field_23C;
-    unsigned short field_23E;
+    short field_238;
+    short field_23A;
+    short field_23C;
+    short field_23E;
     int field_240;
     int field_244;
     int field_248;
@@ -126,26 +159,23 @@ public:
     float field_314;
     int field_318;
     int field_31C;
-    cMesh* m_pMesh;
-    unsigned short m_nTotalMeshes;
-    int field_328;
-    unsigned short field_32C;
-    cModelData::ModelData* m_pModelData;
-    cParts* m_pRootBone;
+    cMesh *m_pMeshes;
+    short m_nMeshAmount;
+    cModelData::cMaterial *m_pMaterials;
+    short m_nMaterialAmount;
+    cModelData::ModelData *m_pModelData;
+    cParts *m_pRootBone;
     int field_338;
     int field_33C;
     int m_nAnisotropicType;
-    int field_344;
-    int field_348;
-    Hw::cTexture* field_34C;
-    cParts* m_pBones;
-    cParts** m_ppBones;
-    unsigned short m_nAmountOfBones;
-    int field_35C;
-    cModelBase* m_pParent;
+    void *m_WTB;
+    void *m_TextureRawData;
+    Hw::cTexture *m_pTexture;
+    BoneSet m_BoneSet;
+    cModelBase *m_pParent;
     int m_nModelFlags;
-    int m_nRootBone;
-    int field_36C;
+    int m_nRootBoneIndex;
+    void *m_pMeshData;
 
     cModelBase()
     {
@@ -154,9 +184,9 @@ public:
 
     inline void toggleAnyMesh(const char *meshName, bool bToggle)
     {
-        if (m_nTotalMeshes)
+        if (m_nMeshAmount)
         {
-            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nTotalMeshes]; mesh++)
+            for (cMesh* mesh = m_pMeshes; mesh != &m_pMeshes[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && strstr(mesh->getName(), meshName))
                     mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
@@ -166,9 +196,9 @@ public:
 
     inline void toggleMesh(const char *meshName, bool bToggle)
     {
-        if (m_nTotalMeshes)
+        if (m_nMeshAmount)
         {
-            for (auto mesh = m_pMesh; mesh != &m_pMesh[m_nTotalMeshes]; mesh++)
+            for (cMesh* mesh = m_pMeshes; mesh != &m_pMeshes[m_nMeshAmount]; mesh++)
             {
                 if (mesh->getName() && !strcmp(mesh->getName(), meshName))
                     mesh->m_nMeshFlags = bToggle ? mesh->m_nMeshFlags | 1u : mesh->m_nMeshFlags & ~1u;
@@ -187,9 +217,40 @@ public:
         return ((float(__thiscall*)(cModelBase*, const cVec4&))(shared::base + 0x68EC30))(this, target);
     }
 
-    void updateBones()
+    // update bone matrices
+    void updateHierarchicalTransformations()
     {
         ((void(__thiscall*)(cModelBase*))(shared::base + 0x617A40))(this);
+    }
+
+    BOOL initializeBones(cModelData::ModelData *modelData, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, Hw::cHeapVariable*))(shared::base + 0x60A680))(this, modelData, allocator);
+    }
+
+    BOOL meshStartup(cModelData::ModelData *modelData, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, Hw::cHeapVariable*))(shared::base + 0x611E20))(this, modelData, allocator);
+    }
+
+    BOOL materialStartup(cModelData::ModelData *modelData, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, Hw::cHeapVariable*))(shared::base + 0x611D20))(this, modelData, allocator);
+    }
+
+    BOOL initialize(cModelData::ModelData *modelData, void *textureInfo, void *textures, void *a5, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall*)(cModelBase*, cModelData::ModelData*, void*, void*, void*, Hw::cHeapVariable*))(shared::base + 0x617860))(this, modelData, textureInfo, textures, a5, allocator);
+    }
+
+    void setShadowCast(BOOL disabled)
+    {
+        ((void(__thiscall*)(cModelBase*, BOOL))(shared::base + 0x60BA60))(this, disabled);
+    }
+
+    void enableShadowTransparency(BOOL enable)
+    {
+        ((void(__thiscall*)(cModelBase*, BOOL))(shared::base + 0x613340))(this, enable);
     }
 };
 

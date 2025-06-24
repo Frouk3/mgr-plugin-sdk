@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Behavior.h"
+#include <Behavior.h>
 
 // physical object
+
 class BehaviorAppBase : public Behavior
 {
 public:
@@ -37,7 +38,7 @@ public:
     float m_fEntityTickRate;
     int field_914;
     Animation* field_918;
-    EntityHandle field_91C;
+    EntityHandle m_QTETargetExecutor;
     float field_920;
     float field_924;
     float field_928;
@@ -88,35 +89,46 @@ public:
     float field_9E8;
     float field_9EC;
     float field_9F0;
+    int field_9F4;
+    int field_9F8;
+    int field_9FC;
 
-    // empty constructor
-    // vftable at 0x123F724
     BehaviorAppBase()
     {
-
+        ((void(__thiscall *)(BehaviorAppBase *))(shared::base + 0xEC370))(this);
     }
+
     void heal(int heal)
     {
         CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
     }
+
     void setupHealth(int health)
     {
         ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EDF0))(this, health);
     }
+
     void setHealth(int health)
     {
         ((void (__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE20))(this, health);
     }
+
     void damage(int damage, bool leave1Hp)
     {
         CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
     }
+
     int getHealth()
     {
         return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
     }
 
-    static inline ContextInstance& Context = *(ContextInstance*)(shared::base + 0x17E9C24);
+    void updateVelocity(float deltaTime)
+    {
+        CallVMTFunc<200, BehaviorAppBase *, float>(this, deltaTime);
+    }
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C24);
 };
 
-VALIDATE_SIZE(BehaviorAppBase, 0x9F4);
+VALIDATE_SIZE(BehaviorAppBase, 0xA00);

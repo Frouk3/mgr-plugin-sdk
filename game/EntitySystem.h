@@ -1,8 +1,11 @@
 #pragma once
-#include "Hw.h"
-#include "SceneModelSystem.h"
-#include "Entity.h"
-#include "Behavior.h"
+
+#include <Hw.h>
+#include <SceneModelSystem.h>
+#include <Entity.h>
+#include <Behavior.h>
+#include <EntityHandle.h>
+#include <common.h>
 
 struct EntitySystem
 {
@@ -12,36 +15,18 @@ struct EntitySystem
     int field_C;
     int field_10;
     int field_14;
-    int field_18;
-    int field_1C;
-    int field_20;
-    int field_24;
-    int field_28;
-    int field_2C;
-    int field_30;
+    Hw::CriticalSection m_EntityListSection;
     int field_34;
     Hw::cFixedList<Entity *> m_EntityList;
     int field_54;
     int field_58;
     int field_5C;
     Hw::cHeapFixed m_HeapFixed;
-    int field_C0;
-    int field_C4;
-    int field_C8;
-    int field_CC;
-    int field_D0;
-    int field_D4;
-    int field_D8;
+    Hw::CriticalSection m_EntitySpawnSection;
     int field_DC;
     lib::AllocatedArray<Entity *> field_E0;
     lib::AllocatedArray<Entity *> m_DatsuArray;
-    int field_110;
-    int field_114;
-    int field_118;
-    int field_11C;
-    int field_120;
-    int field_124;
-    int field_128;
+    Hw::CriticalSection field_110;
 
     struct SetInfo;
     struct EntityInfo;
@@ -155,8 +140,14 @@ struct EntitySystem
     EntitySystem(EntitySystem const &) = delete;
     EntitySystem(EntitySystem&&) = delete;
 
-    static inline EntitySystem& Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
+    static inline HandleManager<Entity> &ms_HandleManager = *(HandleManager<Entity>*)(shared::base + 0x17E9A60); // now it makes sense
+    static inline EntitySystem& ms_Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
 };
+
+inline EntityHandle::operator Entity *()
+{
+    return ((Entity*(__thiscall *)(EntityHandle *))(shared::base + 0x681330))(this);
+}
 
 struct EntitySystem::SetInfo
 {
@@ -233,18 +224,18 @@ struct EntitySystem::SetInfo
 
 struct EntitySystem::EntityInfo
 {
-    char* m_Name;
-    int m_nModelIndex;
-    int m_nAnimIndex;
-    EntitySystem::ObjectInfo* m_pObjectInfo;
+    const char *m_Name;
+    eObjID m_ModelIndex;
+    eObjID m_ObjectIndex;
+    EntitySystem::ObjectInfo *m_ObjectInfo;
     int field_10;
     int field_14;
-    Behavior* field_18;
+    Behavior *field_18;
     int field_1C;
-    void* m_pModelData;
-    int field_24;
-    int field_28;
-    void* m_pParam;
+    void *m_ModelData; // wmb
+    void *m_TexturesFile;
+    void *m_WtbFile;
+    void *m_Param;
 
     EntityInfo()
     {
@@ -274,9 +265,9 @@ struct EntitySystem::ObjectInfo
     float field_44;
     float field_48;
     float field_4C;
-    Hw::cVec3 m_vecTransformPosition;
-    Hw::cVec3 m_vecRotation;
-    Hw::cVec3 m_vecSize;
+    cVec3 m_vecTransformPosition;
+    cVec3 m_vecRotation;
+    cVec3 m_vecSize;
     int field_74;
     int field_78;
     int field_7C;
@@ -289,10 +280,10 @@ struct EntitySystem::ObjectInfo
 
 struct Entity::ConstructInfo
 {
-    EntitySystem* m_pEntitySystem;
-    SceneModelSystem* m_pSceneModelSystem;
+    EntitySystem* m_Creator;
+    SceneModelSystem* m_ModelSystem;
     int field_8;
-    EntitySystem::EntityInfo* m_pEntityInfo;
+    EntitySystem::EntityInfo* m_EntityInfo;
     int field_10;
 };
 

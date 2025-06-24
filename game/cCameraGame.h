@@ -1,7 +1,7 @@
 #pragma once
-#include "cCameraApp.h"
-#include "BehaviorEmBase.h"
-#include "BehaviorCamera.h"
+#include <cCameraApp.h>
+#include <BehaviorEmBase.h>
+#include <BehaviorCamera.h>
 
 class cCameraGame : public cCameraApp
 {
@@ -10,24 +10,36 @@ public:
     void* m_pStates;
     int field_6E8;
     int field_6EC;
-    int m_bUsesLockon;
-    EntityHandle field_6F4;
-    BehaviorEmBase* m_pEnemyLockOn;
-    int field_6FC;
-    int field_700;
-    int field_704;
-    int field_708;
-    int field_70C;
-    int field_710;
-    int field_714;
-    int field_718;
-    int field_71C;
-    D3DXMATRIX field_720;
+    struct LockonSystem
+    {
+        int m_nLockType;
+        EntityHandle m_TargetEntity;
+        Behavior *m_pTarget;
+        int m_nBone;
+        cVec4 field_10;
+        cVec4 m_vecPosition;
+    } m_LockonSystem;
+    int field_720;
+    int field_724;
+    int field_728;
+    int field_72C;
+    int field_730;
+    int field_734;
+    int field_738;
+    int field_73C;
+    int field_740;
+    int field_744;
+    int field_748;
+    int field_74C;
+    float field_750;
+    float field_754;
+    float field_758;
+    int field_75C;
     float field_760;
     int field_764;
     int field_768;
     float field_76C;
-    float field_770;
+    int field_770;
     float field_774;
     float field_778;
     float field_77C;
@@ -108,7 +120,7 @@ public:
     int field_8A8;
     float field_8AC;
     float field_8B0;
-    int field_8B4;
+    int m_nCameraType;
     int field_8B8;
     float field_8BC;
     float field_8C0;
@@ -164,8 +176,6 @@ public:
     float field_1704;
     int field_1708;
     int field_170C;
-
-    virtual ~cCameraGame() override {};
 
     static inline cCameraGame& Instance = *(cCameraGame*)(shared::base + 0x17EA1D0);
     

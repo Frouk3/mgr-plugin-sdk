@@ -2,7 +2,8 @@
 
 class BattleCollisionManager
 {
+private:
+    virtual void dummy() {};
 public:
-
-    virtual ~BattleCollisionManager() {((void (__thiscall *)(BattleCollisionManager *))(*(void***)this)[9])(this);};
+    
 };

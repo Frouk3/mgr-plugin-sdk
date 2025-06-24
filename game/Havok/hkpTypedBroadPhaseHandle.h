@@ -7,8 +7,6 @@
 class hkpTypedBroadPhaseHandle : public hkpBroadPhaseHandle
 {
 public:
-
-protected:
     enum { OFFSET_INVALID = 127 };
     friend class hkpBroadPhaseBorder;
 

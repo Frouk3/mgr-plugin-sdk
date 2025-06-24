@@ -1,5 +1,6 @@
 #pragma once
-#include "cItemPossessionBase.h"
+
+#include <cItemPossessionBase.h>
 
 class cItemPossessionWeaponHeatKnife : public cItemPossessionBase
 {

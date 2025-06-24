@@ -14,6 +14,4 @@ public:
     int field_34;
     int field_38;
     int field_3C;
-
-    virtual ~cWeaponSelectItemMessageParts() override {};
 };

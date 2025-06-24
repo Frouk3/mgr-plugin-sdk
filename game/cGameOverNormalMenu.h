@@ -1,6 +1,7 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
+#include <cCustomObjCtrlManager.h>
+#include <cMessWindowCtrl.h>
 
 class cGameOverNormalMenu : public cCustomObjCtrlManager
 {
@@ -15,11 +16,7 @@ public:
     int field_38;
     int field_3C;
     float field_40;
-    int field_44;
-    int field_48;
-    short field_4C;
-    short field_4E;
-    int field_50;
-
-    virtual ~cGameOverNormalMenu() override {};
+    cMessWindowCtrl field_44;
 };
+
+VALIDATE_SIZE(cGameOverNormalMenu, 0x54);

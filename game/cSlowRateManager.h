@@ -10,16 +10,17 @@ public:
 	int field_C;
 	int field_10;
 	int field_14;
-	int field_18;
+	cSlowRateUnit* m_FirstUnit;
 	int field_1C;
-	Hw::cHeapVariable* m_pHeapVariable;
+	int field_20;
 	int field_24;
 	int field_28;
 	int field_2C;
 	int field_30;
 	int field_34;
-	int field_38;
-	struct SlowRateUnit {
+	cSlowRateUnit *m_LastUnit;
+	struct SlowRateUnit 
+	{
 		float m_fSlowRate;
 		float m_fRate;
 		float m_fDesiredRate;
@@ -28,11 +29,12 @@ public:
 	float m_fTickRate;
 	float m_fTicks;
 	float field_84;
-	float field_88;
-	float field_8C;
-	float field_90;
+	float m_fTickDelay;
+	float m_fTickDifference;
+	int field_90;
 
 	virtual ~cSlowRateManager() {};
+	
 	cSlowRateManager()
 	{
 		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08FB0))(this);
@@ -43,12 +45,12 @@ public:
 		((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03A70))(this, SlowRateType, SlowRate);
 	}
 
-	float GetSlowRate(eSlowRateType SlowRateType)
+	float getSlowRate(eSlowRateType SlowRateType)
 	{
-		if (SlowRateType >= 4)
+		if (SlowRateType > SLOWRATE_ETC)
 			return 1.0f;
-		else
-			return this->m_SlowRateUnit[SlowRateType].m_fSlowRate;
+
+		return m_SlowRateUnit[static_cast<int>(SlowRateType)].m_fSlowRate;
 	}
 
 	void ResetSlowRate()

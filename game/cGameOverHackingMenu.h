@@ -1,8 +1,9 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
+#include <cCustomObjCtrlManager.h>
+#include <cMessWindowCtrl.h>
 
-class cGameOverHackingMenu : cCustomObjCtrlManager
+class cGameOverHackingMenu : public cCustomObjCtrlManager
 {
 public:
     int field_1C;
@@ -20,11 +21,7 @@ public:
     float field_4C;
     int field_50;
     int field_54;
-    int field_58;
-    int field_5C;
-    short field_60;
-    short field_62;
-    int field_64;
-
-    virtual ~cGameOverHackingMenu() override {};
+    cMessWindowCtrl field_58;
 };
+
+VALIDATE_SIZE(cGameOverHackingMenu, 0x68);

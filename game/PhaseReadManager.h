@@ -4,5 +4,5 @@ class PhaseReadManager
 {
 public:
 
-    virtual ~PhaseReadManager() {};
+    virtual void dummyVM() {};
 };

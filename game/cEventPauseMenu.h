@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cCustomObjCtrlManager.h"
+#include <cCustomObjCtrlManager.h>
 
 class cEventPauseMenu : public cCustomObjCtrlManager
 {
@@ -15,6 +15,6 @@ public:
     int field_38;
     int field_3C;
     int field_40;
-
-    virtual ~cEventPauseMenu() override {};
 };
+
+VALIDATE_SIZE(cEventPauseMenu, 0x44);

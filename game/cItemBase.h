@@ -1,6 +1,6 @@
 #pragma once
-#include "shared.h"
-#include "Entity.h"
+#include <shared.h>
+#include <Entity.h>
 
 class cItemBase
 {
@@ -24,6 +24,6 @@ public:
 
     void startup(void *a2)
     {
-      CallVMTFunc<2, cItemBase *, void *>(this, a2);
+        CallVMTFunc<2, cItemBase *, void *>(this, a2);
     }
 };

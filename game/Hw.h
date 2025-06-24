@@ -1,17 +1,31 @@
 #pragma once
+#define DIRECTINPUT_VERSION 0x800u
 #include <Windows.h>
 #include <d3dx9.h>
 #include <dinput.h>
-#include "shared.h"
+#include <shared.h>
+#include <Xinput.h>
 
-extern void(__cdecl* ePrintf)(const char* fmt, ...);
+extern void PrintfLog(const char* fmt, ...);
 
 namespace Hw
 {
+    struct cDvdFst;
+    struct DvdReadManager;
+
+    struct Thread;
+
+    template <typename tC>
+    class cSingleton;
+
     class cHeap;
     class cHeapVariableBase;
     class cHeapVariable;
     class cTexture;
+    class cTextureInstance;
+    class cLockableTexture;
+    class cTargetTexture;
+    class cShareTargetTexture;
     class CameraProj;
     class cCameraBase;
     class cHeapPhysical;
@@ -26,6 +40,41 @@ namespace Hw
     class cRenderTargetInfo;
     class cOtWork;
     class CriticalSection;
+    class cShader;
+    class cPixelShader;
+    class cVertexShader;
+    struct cVertexInfo;
+    struct cPixelInfo;
+    class cDepthSurface;
+
+    class cOtManagerBase;
+
+    class cPrimF;
+    class cPrimFT;
+    class cPrimFTyuv;
+    class cPrimFV;
+    class cPrimG;
+    class cPrimIF;
+    class cPrimIFT;
+
+    class cRenderPredicate;
+
+    class cShaderPreset;
+    class cShaderCharacter;
+    class cShaderPF;
+    class cShaderPFT;
+    class cShaderPFTyuv;
+    class cShaderPFTyuva;
+    class cShaderPFV;
+    class cShaderPG;
+    class cVertexFormat;
+    class cVertexFormatP;
+    class cVertexFormatPG;
+    class cVertexFormatPT;
+    class cVertexFormatPV;
+    class cZTexture;
+
+    struct RenderBufferHeapManager;
 
     template <typename T>
     struct cFixedVector;
@@ -44,9 +93,79 @@ namespace Hw
     inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
     {
         return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
+    }
+
+    namespace TextureManager
+    {
+        struct Texture
+        {
+            LPDIRECT3DTEXTURE9 m_pTexture;
+            LPDIRECT3DTEXTURE9 *m_ppTexture;
+            int field_8;
+            int m_nWidth;
+            int m_nHeight;
+            int field_14;
+            D3DFORMAT m_Format;
+            D3DPOOL m_Pool;
+            int field_20;
+            int field_24;
+        };
+
+        inline void removeTexture(Texture& texture)
+        {
+            ((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture);
+        }
+
+        inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
+        inline CriticalSection &TextureCriticalSection = *(CriticalSection*)(shared::base + 0x1B20740);
     } 
 
-    inline LPDIRECT3D9 &pDirect3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+    namespace Wwise
+    {
+        namespace Command
+        {
+            class Work
+            {
+            public:
+                
+                virtual ~Work() {};
+            };
+
+            class ListenerPositionWork : public Work{};
+
+            class ListenerSpatializationWork : public Work{};
+
+            class ObjectEnvironmentDryLevelWork : public Work{};
+
+            class ObjectEnvironmentValuesWork : public Work{};
+
+            class ObjectListenerMaskWork : public Work{};
+
+            class ObjectOutputMaskWork : public Work{};
+
+            class ObjectPositionWork : public Work{};
+
+            class ObjectRTPCValueWork : public Work{};
+
+            class ObjectRegisterWork : public Work{};
+
+            class ObjectReleaseWork : public Work{};
+
+            class ObjectSwitchWork : public Work{};
+
+            class PostEventWork : public Work{};
+
+            class ReleaseEventWork : public Work{};
+
+            class ScalingFactorWork : public Work{};
+
+            class StateWork : public Work{};
+
+            class StopEventWork : public Work{};
+        }
+    }
+
+    inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
     inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
     inline LPDIRECTINPUT8& InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
     inline LPDIRECTINPUTDEVICE8W& InputDeviceW = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
@@ -55,7 +174,64 @@ namespace Hw
 
     inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
     inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+
+    inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 }
+
+template <typename tC>
+class Hw::cSingleton
+{
+private:
+    static inline tC m_instance;
+    static inline BOOL m_wasInitialized = FALSE;
+
+    cSingleton() {};
+public:
+
+    // remove copy, move and assign copy operators
+
+    cSingleton(const cSingleton<tC> &) = delete;
+    cSingleton(cSingleton<tC> &&) = delete;
+    cSingleton<tC> &operator=(const cSingleton<tC> &) = delete;
+
+    static tC* GetInstance()
+    {
+        if (!m_wasInitialized)
+        {
+            m_wasInitialized = TRUE;
+            m_instance->tC::tC();
+        }
+        return &m_instance;
+    }
+
+    operator tC*()
+    {
+        return GetInstance();
+    }
+};
+
+class Hw::cDepthSurface
+{
+public:
+
+    virtual ~cDepthSurface() {};
+};
+
+class Hw::cOtManagerBase
+{
+public:
+
+    virtual ~cOtManagerBase() {};
+};
+
+struct Hw::Thread
+{
+    int m_ThreadId;
+    int field_4;
+    int m_ThreadIndex;
+    void (__cdecl *m_func)(void *);
+    void *m_arg;
+};
 
 struct Hw::cVec2
 {
@@ -280,6 +456,11 @@ struct Hw::cVec3
         return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
     }
 
+    float length2D()
+    {
+        return sqrtf(powf(x, 2) + powf(z, 2));
+    }
+
     cVec3 Normalize()
     {
         float length = this->length();
@@ -318,11 +499,6 @@ struct Hw::cVec4
     float z;
     float w;
 
-    static inline void Normalize(cVec4* v1, cVec4* v2)
-    {
-        ((void(__cdecl*)(cVec4*, cVec4*))(shared::base + 0x9DF460))(v1, v2);
-    }
-
     void operator=(const cVec4& right)
     {
         this->x = right.x;
@@ -346,6 +522,11 @@ struct Hw::cVec4
     float length()
     {
         return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
+    }
+
+    float length2D()
+    {
+        return sqrtf(powf(x, 2) + powf(z, 2));
     }
 
     cVec4 operator+(const cVec4& rhs) const
@@ -438,8 +619,8 @@ struct Hw::cVec4
     
     cVec4 Normalize()
     {
-        Normalize(this, this);
-        return *this;
+        float length = this->length();
+        return cVec4(x / length, y / length, z / length, w);
     }
 
     float dot(const cVec4& lhs) const 
@@ -467,14 +648,56 @@ struct Hw::cQuaternion
 
     cQuaternion(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
     cQuaternion() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
-};
 
-VALIDATE_SIZE(Hw::cVec4, 0x10);
+    static inline void Multiply(cQuaternion &out, const cVec4& rotation)
+    {
+        ((void(__cdecl*)(cQuaternion&, const cVec4&))(shared::base + 0x9DB590))(out, rotation);
+    }
+};
 
 typedef Hw::cVec2 cVec2;
 typedef Hw::cVec3 cVec3;
 typedef Hw::cVec4 cVec4;
 typedef Hw::cQuaternion cQuaternion;
+
+struct cInput
+{
+    struct ControllerState
+    {
+        XINPUT_STATE m_XInputState;
+        int m_bSuccessful;
+        float field_14;
+        float field_18;
+        float field_1C;
+        float field_20;
+        float m_fLeftMotorSpeed;
+        float m_fRightMotorSpeed;
+        int field_2C;
+        int field_30;
+        int field_34;
+    };
+
+    struct KeyInput
+    {
+        int m_KeysPressed[31];
+    };
+
+    struct MouseInput
+    {
+        int field_0;
+        int field_4;
+        int field_8;
+        int field_C;
+        cVec2 m_MousePosition;
+        int field_18;
+        int field_1C;
+        cVec2 m_LastMousePosition;
+    };
+
+    static inline MouseInput& ms_MouseInput = *(MouseInput*)(shared::base + 0x177B798);
+    static inline KeyInput& ms_KeyInput = *(KeyInput*)(shared::base + 0x177B7C0);
+    static inline ControllerState *ms_Controllers = (ControllerState*)(shared::base + 0x19D05F0); // Maximum 4 controllers
+};
 
 class Hw::CriticalSection
 {
@@ -550,7 +773,7 @@ public:
         return ReturnCallVMTFunc<size_t, 4, cHeap*>(this);
     }
 
-    size_t getAvailableMemory()
+    size_t getUsedMemory()
     {
         return ReturnCallVMTFunc<size_t, 5, cHeap*>(this);
     }
@@ -614,26 +837,26 @@ public:
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
-    HANDLE m_HeapHandle;
-    int field_44;
-    int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
-    int m_nUsedMemory;
-
-    cHeapVariableBase()
-    {
-        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
-    }
-
     struct HeapBlock
     {
         HeapBlock* m_pPrevious;
         HeapBlock* m_pNext;
         void* m_pMemoryBlock;
-        size_t m_nMemorySize;
+        size_t m_MemorySize;
         cHeapVariableBase* m_pAllocator;
     };
+
+    HANDLE m_HeapHandle;
+    HeapBlock* m_pFirstBlock;
+    HeapBlock* m_pLastBlock;
+    size_t m_MemoryLimit;
+    size_t m_FreeMemory;
+    size_t m_UsedMemory;
+
+    cHeapVariableBase()
+    {
+        ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
+    }
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
@@ -649,11 +872,22 @@ public:
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
-    HANDLE m_HeapHandle;
-    int filed_44;
-    int field_48;
-    int m_nMemoryLimit;
-    int m_nFreeMemory;
+    struct HeapBlock
+    {
+        HeapBlock* m_pPrevious;
+        HeapBlock* m_pNext;
+        size_t m_TotalSize;
+        size_t m_Size;
+        int field_10;
+        int field_14;
+        cHeapPhysicalBase* m_pAllocator;
+    };
+public:
+    HeapBlock* m_pMainBlock;
+    HeapBlock* m_pFirstBlock;
+    HeapBlock *m_pLastBlock;
+    size_t m_MemoryLimit;
+    size_t m_FreeMemory;
     int field_54;
     int field_58;
     int field_5C;
@@ -661,23 +895,12 @@ public:
     int field_64;
     int field_68;
     int field_6C;
-    void* m_pBlocks[256];
+    HeapBlock* m_pBlocks[256];
 
     cHeapPhysicalBase()
     {
         ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
     }
-
-    struct HeapBlock
-    {
-        HeapBlock* m_pPrevious;
-        HeapBlock* m_pNext;
-        size_t m_nTotalSize;
-        size_t m_nSize;
-        int field_10;
-        int field_14;
-        Hw::cHeapPhysicalBase* m_pAllocator;
-    };
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
@@ -700,18 +923,35 @@ public:
 class Hw::cHeapFixed : public Hw::cHeap
 {
 public:
+    struct HeapBlock 
+    {
+        HeapBlock *m_pPrevious;
+        HeapBlock *m_pNext;
+        cHeapFixed *m_pAllocator;
+    };
+public:
     HANDLE m_HeapHandle;
     int field_44;
-    int m_nFixedSize;
+    size_t m_FixedSize;
     int field_4C;
-    int m_nFixedReservedSize;
-    int m_nFixedAmount;
+    size_t m_FixedReservedSize;
+    size_t m_FixedAmount;
     int field_58;
     int field_5C;
+
+    cHeapFixed()
+    {
+        ((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this);
+    }
 
     void* AllocateMemory()
     {
         return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
+    }
+
+    BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name)
+    {
+        return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name);
     }
 };
 
@@ -726,12 +966,38 @@ class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
-    static inline cHeapGlobal* get()
+    cHeapGlobal()
+    {
+        ((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this);
+    }
+
+    static inline cHeapGlobal* GetInstance() // -> return Hw::cHeapGlobal::ms_Instance.GetInstance();
     {
         return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
     }
 
-    static inline Hw::cHeapGlobal& Instance = *(Hw::cHeapGlobal*)(shared::base + 0x1783AF0);
+    BOOL create(size_t size, const char *target) // Got optimised away
+    {
+        if (hasHandle())
+            return FALSE;
+
+        if (!this->m_CriticalSection.init())
+            return FALSE;
+
+        this->m_HeapHandle = HeapCreate(1u, 0u, 0u);
+
+        if (!this->m_HeapHandle)
+            return FALSE;
+
+        this->m_MemoryLimit = size;
+        this->m_FreeMemory = size;
+        this->m_TargetAlloc = target;
+        this->m_pFirstBlock = nullptr;
+        this->m_pLastBlock = nullptr;
+        return TRUE;
+    }
+
+    static inline cSingleton<cHeapGlobal> &ms_Instance = *(cSingleton<cHeapGlobal>*)(shared::base + 0x1783AF0); // Actually a singleton
 };
 
 class Hw::cShareHeapPhysical : Hw::cHeapPhysical
@@ -744,14 +1010,70 @@ public:
 class Hw::cTexture
 {
 public:
-    int field_4;
+    void *m_Texture;
+    cTextureInstance *m_pTextureInstance;
+    int m_TextureAmount;
+    int field_10;
+    int field_14;
+    void *m_TextureAttributes;
+
+    cTexture()
+    {
+        ((void(__thiscall *)(cTexture *))(shared::base + 0xB972C0))(this);
+    }
+
+    virtual ~cTexture() {};
+
+    BOOL create(void *wtb)
+    {
+        return ((BOOL(__thiscall *)(cTexture *, void *))(shared::base + 0xBA25D0))(this, wtb);
+    }
+
+    BOOL create(void *wta, void *wtp)
+    {
+        return ((BOOL(__thiscall *)(cTexture *, void *, void*))(shared::base + 0xBA4D00))(this, wta, wtp);
+    }
+
+    void reset()
+    {
+        ((void(__thiscall *)(cTexture *))(shared::base + 0xB972F0))(this);
+    }
+};
+
+class Hw::cTextureInstance
+{
+public:
+    IDirect3DTexture9 *m_Texture;
     int field_8;
     int field_C;
     int field_10;
     int field_14;
     int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
 
-    virtual ~cTexture() {};
+    virtual ~cTextureInstance() {};
+};
+
+class Hw::cLockableTexture : public Hw::cTexture
+{
+public:
+    Hw::cTextureInstance m_Texture;
+};
+
+class Hw::cTargetTexture : public Hw::cTexture
+{
+public:
+    Hw::cTextureInstance m_Texture;
+};
+
+class Hw::cShareTargetTexture : public Hw::cTargetTexture
+{
+public:
+    int field_4C;
 };
 
 class Hw::CameraProj
@@ -797,7 +1119,9 @@ public:
 
         cVec4 calculateViewOffset()
         {
-            ((cVec4(__thiscall*)(CameraMatrix*))(shared::base + 0x9B9090))(this);
+            cVec4 result;
+            result = *((cVec4*(__thiscall*)(CameraMatrix*, cVec4*))(shared::base + 0x9B9090))(this, &result);
+            return result;
         }
     };
 
@@ -807,6 +1131,28 @@ public:
     D3DXMATRIX field_C0;
     CameraMatrix m_CameraMatrix;
     float field_14C;
+
+    void setViewMatrix(const D3DXMATRIX& matrix)
+    {
+        ((void(__thiscall *)(cCameraBase *, const D3DXMATRIX&))(shared::base + 0x9E5170))(this, matrix);
+    }
+
+    void move(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E4F20))(this, offset);
+    }
+
+    // Move camera according to the offset of camera
+    void moveWithOffset(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E4FA0))(this, offset);
+    }
+
+    // Move camera according to the Y offset
+    void moveWithY(const cVec4& offset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5090))(this, offset);
+    }
 
     void setPosition(const cVec4& position)
     {
@@ -823,14 +1169,67 @@ public:
         ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5FC0))(this, lookAt);
     }
 
+    void setCameraOffset(const cVec4& cameraOffset)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6090))(this, cameraOffset);
+    }
+
+    void setDistance(float distance)
+    {
+        ((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E62D0))(this, distance);
+    }
+
+    // m_fDistance += clamp(distance, minDistance, maxDistance)
+    void adjustDistanceToLookAt(float distance, float maxDistance, float minDistance)
+    {
+        ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E62F0))(this, distance, maxDistance, minDistance);
+    }
+
+    void adjustDistanceToPosition(float distance, float maxDistance, float minDistance)
+    {
+        ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E6390))(this, distance, maxDistance, minDistance);
+    }
+
+    // m_vecLookAtPosition += with
+    void setLookAtAlong(const cVec4& with)
+    {
+        ((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6000))(this, with);
+    }
+
     void place(const cVec4& position, const cVec4& lookAt, const cVec4& offset)
     {
         ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, const cVec4&))(shared::base + 0x9E5D10))(this, position, lookAt, offset);
     }
 
+    void place(const cVec4& position, const cVec4& cameraOffset, float distance)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, float))(shared::base + 0x9E5DA0))(this, position, cameraOffset, distance);
+    }
+
+    void lookAt(const cVec4& lookAt, const cVec4& cameraOffset, float distance)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, float))(shared::base + 0x9E5E60))(this, lookAt, cameraOffset, distance);
+    }
+
+    // m_vecPosition += with
+    void moveAlong(const cVec4& with)
+    {
+        ((void(__thiscall *)(cCameraBase*, const cVec4&))(shared::base + 0x9E5F60))(this, with);
+    }
+
     void updatePosition()
     {
         ((void(__thiscall *)(cCameraBase*))(shared::base + 0x9E51B0))(this);
+    }
+
+    void updateLookAtPos() // z = -distance
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5260))(this);
+    }
+
+    void resetOffset()
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5310))(this);
     }
 
     void calculateCameraOffset()
@@ -846,6 +1245,11 @@ public:
     void updateCameraViewMatrix()
     {
         ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E6410))(this);
+    }
+
+    void calculateInverseViewMatrix()
+    {
+        ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5170))(this);
     }
 };
 
@@ -890,6 +1294,35 @@ public:
     virtual ~cIndexBufferHeap() {};
 };
 
+struct Hw::RenderBufferHeapManager
+{
+    cPrimHeap *field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    cPrimHeap field_20[2];
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    cIndexBufferHeap field_80[2];
+    int field_B8;
+};
+
 class Hw::cRenderTargetInfo
 {
 public:
@@ -920,6 +1353,161 @@ public:
     }
 };
 
+struct Hw::cVertexInfo
+{
+    LPDIRECT3DVERTEXSHADER9 m_VertexShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
+};
+
+struct Hw::cPixelInfo
+{
+    LPDIRECT3DPIXELSHADER9 m_PixelShader;
+    LPD3DXCONSTANTTABLE m_ConstantTable;
+    unsigned short field_C;
+};
+
+class Hw::cVertexShader
+{
+public:
+    cVertexInfo m_VertexData;
+
+    virtual ~cVertexShader() {};
+};
+
+class Hw::cPixelShader
+{
+public:
+
+    cPixelInfo m_PixelData;
+
+    virtual ~cPixelShader() {};
+};
+
+class Hw::cShader
+{
+public:
+    Hw::cVertexShader m_VertexShader;
+    Hw::cPixelShader m_PixelShader;
+    int field_24;
+
+    virtual ~cShader() {};
+};
+
+VALIDATE_SIZE(Hw::cShader, 0x28);
+
+class Hw::cVertexFormat
+{
+public:
+
+    IDirect3DVertexDeclaration9 *m_VertexDeclaration;
+    int m_UsageFlags;
+
+    virtual void dummyVM() {};
+};
+
+class Hw::cPrimF : public Hw::cOtWork
+{
+public:
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+};
+
+class Hw::cPrimFT : public Hw::cOtWork{};
+
+class Hw::cPrimFTyuv : public Hw::cOtWork{};
+
+class Hw::cPrimFV : public Hw::cOtWork{};
+
+class Hw::cPrimG : public Hw::cOtWork{};
+
+class Hw::cPrimIF : public Hw::cOtWork{};
+
+class Hw::cPrimIFT : public Hw::cOtWork{};
+
+class Hw::cRenderPredicate
+{
+public:
+
+    virtual ~cRenderPredicate() {};
+};
+
+class Hw::cShaderPreset : public Hw::cShader{};
+
+class Hw::cShaderCharacter : public Hw::cShaderPreset{};
+
+class Hw::cShaderPF : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFT : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFTyuv : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFTyuva : public Hw::cShaderPreset{};
+
+class Hw::cShaderPFV : public Hw::cShaderPreset{};
+
+class Hw::cShaderPG : public Hw::cShaderPreset{};
+
+class Hw::cVertexFormatP : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPG : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPT : public Hw::cVertexFormat{};
+
+class Hw::cVertexFormatPV : public Hw::cVertexFormat{};
+
+class Hw::cZTexture : public Hw::cTargetTexture{};
+
+class cFilterShaderCopyTex : public Hw::cShader
+{
+public:
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+};
+
+class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
+
 inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
 {
     return ((void*(__cdecl *)(size_t, Hw::cHeap *))(shared::base + 0x9D3500))(s, allocator);
@@ -946,31 +1534,31 @@ template <typename T>
 struct Hw::cFixedVector
 {
     int field_0;
-    T* m_pBegin;
-    size_t m_nCapacity;
-    size_t m_nSize;
+    T* m_vector;
+    size_t m_capacity;
+    size_t m_size;
     int field_10;
 
     cFixedVector()
     {
         field_0 = 0;
-        m_pBegin = nullptr;
-        m_nCapacity = 0;
-        m_nSize = 0;
+        m_vector = nullptr;
+        m_capacity = 0;
+        m_size = 0;
         field_10 = 0;
     }
 
     BOOL create(size_t capacity, Hw::cHeap* allocator)
     {
-        if (this->m_pBegin)
+        if (m_vector)
             return 0;
 
-        this->m_pBegin = allocator->AllocateMemory(sizeof(T) * capacity);
-        if (this->m_pBegin)
+        m_vector = allocator->AllocateMemory(sizeof(T) * capacity);
+        if (m_vector)
         {
-            this->m_nCapacity = capacity;
-            this->m_nSize = 0;
-            this->field_10 = 1; // is initialized?
+            m_capacity = capacity;
+            m_size = 0;
+            field_10 = 1; // is initialized?
             return 1;
         }
         else
@@ -983,93 +1571,93 @@ struct Hw::cFixedVector
 
     bool push_back(const T& element)
     {
-        if (!this->m_pBegin)
+        if (!m_vector)
             return false;
 
-        if (this->m_nSize >= this->m_nCapacity)
+        if (m_size >= m_capacity)
             return false;
 
-        this->m_pBegin[this->m_nSize++] = element;
+        m_vector[m_size++] = element;
         return true;
     }
 
     bool push_front(const T& element)
     {
-        this->insert(this->m_pBegin[0], element);
+        insert(m_vector[0], element);
         return true;
     }
 
     void insert(T& insIndex, const T& element)
     {
-        if (!this->m_pBegin)
+        if (!m_vector)
             return;
 
-        if (this->m_nSize >= this->m_nCapacity)
+        if (m_size >= m_capacity)
             return;
 
-        size_t insertIndex = &insIndex - this->m_pBegin;
-        if (insertIndex > this->m_nSize)
+        size_t insertIndex = &insIndex - m_vector;
+        if (insertIndex > m_size)
             return;
 
-        for (int i = this->m_nSize; i > insertIndex; --i)
-            this->m_pBegin[i] = this->m_pBegin[i - 1];
+        for (int i = m_size; i > insertIndex; --i)
+            m_vector[i] = m_vector[i - 1];
 
-        this->m_pBegin[insertIndex] = element;
-        ++this->m_nSize;
+        m_vector[insertIndex] = element;
+        ++m_size;
     }
 
     void remove(T& element)
     {
-        if (!this->m_pBegin)
+        if (!m_vector)
             return;
 
-        if (&element - this->m_pBegin >= this->m_nSize)
+        if (&element - m_vector >= m_size)
             return;
 
-        for (auto i = &element; i != this->m_pBegin[this->m_nSize - 1]; ++i)
+        for (T* i = &element; i != m_vector[m_size - 1]; ++i)
             *i = i[1];
 
-        --this->m_nSize;
+        --m_size;
     }
 
-    auto& get(size_t index)
+    T& get(size_t index)
     {
-        return this->m_pBegin[index];
+        return m_vector[index];
     }
 
-    auto& get(size_t index) const
+    T& get(size_t index) const
     {
-        return this->m_pBegin[index];
+        return m_vector[index];
     }
 
-    auto& operator[](size_t index)
+    T& operator[](size_t index)
     {
-        return this->get(index);
+        return get(index);
     }
 
-    auto& operator[](size_t index) const
+    T& operator[](size_t index) const
     {
-        return this->get(index);
+        return get(index);
     }
 
-    auto begin()
+    T* begin()
     {
-        return &this->m_pBegin[0];
+        return m_vector;
     }
 
-    auto begin() const
+    T* begin() const
     {
-        return &this->m_pBegin[0];
+        return m_vector;
     }
 
-    auto end()
+    T* end()
     {
-        return &this->m_pBegin[this->m_nSize];
+        return m_vector + m_size;
     }
 
-    auto end() const
+    T* end() const
     {
-        return &this->m_pBegin[this->m_nSize];
+        return m_vector + m_size;
     }
 };
 
@@ -1084,10 +1672,10 @@ struct Hw::cFixedList
     };
 
     Node* m_pHead;
-    Node* m_pBegin;
-    size_t m_nCapacity;
-    size_t m_nSize;
-    Node* m_pEnd;
+    Node* m_ListBegin;
+    size_t m_capacity;
+    size_t m_size;
+    Node* m_ListEnd;
     Node* m_pFirst;
     Node* m_pLast;
 
@@ -1100,28 +1688,28 @@ struct Hw::cFixedList
 
         iterator& operator++()
         {
-            if (this->m_current)
-                this->m_current = this->m_current->m_next;
+            if (m_current)
+                m_current = m_current->m_next;
 
             return *this;
         }
 
         iterator& operator--()
         {
-            if (this->m_current)
-                this->m_current = this->m_current->m_prev;
+            if (m_current)
+                m_current = m_current->m_prev;
 
             return *this;
         }
 
         T& operator*() const
         {
-            return this->m_current->m_value;
+            return m_current->m_value;
         }
 
         bool operator==(const iterator& other) const
         {
-            return this->m_current == other.m_current;
+            return m_current == other.m_current;
         }
 
         bool operator!=(const iterator& other) const
@@ -1130,52 +1718,52 @@ struct Hw::cFixedList
         }
     };
 
-    auto begin()
+    iterator begin()
     {
-        return iterator(this->m_pFirst);
+        return iterator(m_pFirst);
     }
 
-    auto begin() const
+    iterator begin() const
     {
-        return iterator(this->m_pFirst);
+        return iterator(m_pFirst);
     }
 
-    auto end() const
+    iterator end() const
     {
-        return iterator(this->m_pLast);
+        return iterator(m_pLast);
     }
 
-    auto end()
+    iterator end()
     {
-        return iterator(this->m_pLast);
+        return iterator(m_pLast);
     }
 
-    auto rbegin()
+    iterator rbegin()
     {
-        return iterator(this->m_pLast);
+        return iterator(m_pLast);
     }
 
-    auto rbegin() const
+    iterator rbegin() const
     {
-        return iterator(this->m_pLast);
+        return iterator(m_pLast);
     }
 
-    auto rend()
+    iterator rend()
     {
-        return iterator(this->m_pFirst);
+        return iterator(m_pFirst);
     }
 
-    auto rend() const
+    iterator rend() const
     {
-        return iterator(this->m_pFirst);
+        return iterator(m_pFirst);
     }
 
     void setupNodes()
     {
-        if (this->m_nCapacity > 0)
+        if (m_capacity > 0)
         {
-            Node* current = this->m_pBegin;
-            for (int i = 0; i < this->m_nCapacity; i++)
+            Node* current = m_ListBegin;
+            for (int i = 0; i < m_capacity; i++)
             {
                 current->m_prev = (current - 1);
                 current->m_next = (current + 1);
@@ -1183,32 +1771,32 @@ struct Hw::cFixedList
             }
         }
 
-        this->m_pBegin->m_prev = nullptr;
+        m_ListBegin->m_prev = nullptr;
 
-        this->m_pBegin[this->m_nCapacity - 1].m_next = 0;
+        m_ListBegin[m_capacity - 1].m_next = 0;
 
-        this->m_pLast->m_prev = nullptr;
-        this->m_pLast->m_next = nullptr;
+        m_pLast->m_prev = nullptr;
+        m_pLast->m_next = nullptr;
 
-        this->m_pFirst = this->m_pLast;
-        this->m_pEnd = this->m_pBegin;
+        m_pFirst = m_pLast;
+        m_ListEnd = m_ListBegin;
 
-        this->m_nSize = 0;
+        m_size = 0;
     }
 
-    BOOL create(size_t capacity, Hw::cHeap * allocator)
+    BOOL create(size_t capacity, Hw::cHeap *allocator)
     {
-        if (this->m_pBegin)
+        if (m_ListBegin)
             return 0;
 
-        this->m_pBegin = (Node*)allocator->AllocateMemory(sizeof(Node) * capacity + sizeof(Node), 32, 0, 0);
-        if (this->m_pBegin)
+        m_ListBegin = (Node*)allocator->AllocateMemory(sizeof(Node) * capacity + sizeof(Node), 32, 0, 0);
+        if (m_ListBegin)
         {
-            this->m_nCapacity = capacity;
-            this->m_nSize = 0;
-            this->m_pLast = &this->m_pBegin[capacity];
+            m_capacity = capacity;
+            m_size = 0;
+            m_pLast = m_ListBegin + capacity;
 
-            this->setupNodes();
+            setupNodes();
 
             return 1;
         }
@@ -1217,10 +1805,10 @@ struct Hw::cFixedList
 
     void insert(Node* &retNode, Node* const& where, const T & element)
     {
-        Node *m_pLast = this->m_pEnd;
-        if (m_pLast == this->m_pHead)
+        Node *m_pLast = m_ListEnd;
+        if (m_pLast == m_pHead)
         {
-            m_pLast = this->m_pHead;
+            m_pLast = m_pHead;
         }
         else
         {
@@ -1230,13 +1818,13 @@ struct Hw::cFixedList
                 m_prev->m_next = m_next;
             if (m_next)
                 m_next->m_prev = m_prev;
-            this->m_pEnd = m_next;
-            ++this->m_nSize;
+            m_ListEnd = m_next;
+            ++m_size;
         }
-        if (m_pLast == this->m_pHead)
+        if (m_pLast == m_pHead)
         {
-            ePrintf("cFixedList<tC>::insert  list max over!");
-            retNode = this->m_pHead;
+            PrintfLog("cFixedList<tC>::insert  list max over!");
+            retNode = m_pHead;
         }
         else
         {
@@ -1254,58 +1842,72 @@ struct Hw::cFixedList
                 v9->m_next = m_pLast;
             if (v8)
                 v8->m_prev = m_pLast;
-            if (this->m_pFirst == where)
-                this->m_pFirst = m_pLast;
+            if (m_pFirst == where)
+                m_pFirst = m_pLast;
             retNode = m_pLast;
         }
     }
 
+    void insert(Node *&where, const T& element)
+    {
+        Node *node;
+        insert(node, where, element);
+    }
+
     void push_back(const T& element)
     {
-        Node* node;
-        this->insert(node, this->m_pLast, element);
+        insert(m_pLast, element);
     }
 
     void push_front(const T& element)
     {
-        Node* node;
-        this->insert(node, this->m_pFirst, element);
+        insert(m_pFirst, element);
     }
 
-    void remove(const Node*& node)
+    void remove(Node*& node)
     {
         Node* m_prev = node->m_prev;
         Node* m_next = node->m_next;
+
         if (m_prev)
             m_prev->m_next = m_next;
         if (m_next)
             m_next->m_prev = m_prev;
-        if (this->m_pFirst == node)
-            this->m_pFirst = m_next;
-        --this->m_nSize;
+
+        if (m_pFirst == node)
+            m_pFirst = m_next;
+
+        --m_size;
+
         Node* m_pLast = this->m_pLast;
+
         Node* v10;
+
         if (m_pLast)
             v10 = m_pLast->m_prev;
         else
             v10 = nullptr;
+
         node->m_prev = v10;
         node->m_next = m_pLast;
+
         if (v10)
             v10->m_next = node;
+
         if (m_pLast)
             m_pLast->m_prev = node;
-        this->m_pLast = node;
+
+        m_pLast = node;
     }
 
-    void remove(const T& value)
+    void Remove(const T& value)
     {
-        Node *current = this->m_pFirst;
+        Node *current = m_pFirst;
         while (current)
         {
             if (current->m_value == value)
             {
-                this->remove(current);
+                remove(current);
                 return;
             }
 
@@ -1314,55 +1916,55 @@ struct Hw::cFixedList
     }
 };
 
-template <typename tC, typename tHeapBinder>
+template <typename tC, typename tHeapBinder = Hw::cHeap>
 struct Hw::cExpandableVector
 {
     int field_0;
-    tC *m_pBegin;
-    size_t m_nCapacity;
-    size_t m_nSize;
-    BOOL m_bArrayInitialized;
-    tHeapBinder* m_Allocator; // Why use the allocator member?? It cannot bind directly to the declared heap, so it's the solver
+    tC *m_vector;
+    size_t m_capacity;
+    size_t m_size;
+    BOOL m_ArrayInitialized;
+    tHeapBinder* m_Allocator;
 
     cExpandableVector()
     {
         field_0 = 0;
-        m_pBegin = nullptr;
-        m_nCapacity = 0;
-        m_nSize = 0;
-        m_bArrayInitialized = FALSE;
+        m_vector = nullptr;
+        m_capacity = 0;
+        m_size = 0;
+        m_ArrayInitialized = FALSE;
     };
 
     cExpandableVector(tHeapBinder* allocator) : m_Allocator(allocator) 
     {
         field_0 = 0;
-        m_pBegin = nullptr;
-        m_nCapacity = 0;
-        m_nSize = 0;
-        m_bArrayInitialized = FALSE;
+        m_vector = nullptr;
+        m_capacity = 0;
+        m_size = 0;
+        m_ArrayInitialized = FALSE;
     }
 
     ~cExpandableVector()
     {
-        operator delete(m_pBegin, m_Allocator);
-        m_pBegin = nullptr;
+        operator delete(m_vector, m_Allocator);
+        m_vector = nullptr;
 
-        m_nCapacity = 0;
-        m_nSize = 0;
-        m_bArrayInitialized = FALSE;
+        m_capacity = 0;
+        m_size = 0;
+        m_ArrayInitialized = FALSE;
     }
 
     BOOL create(size_t size)
     {
-        if (m_pBegin)
+        if (m_vector)
             return FALSE;
 
-        m_pBegin = (tC*)m_Allocator->AllocateMemory(sizeof(tC) * size, 32, 0, 0);
-        if (m_pBegin)
+        m_vector = (tC*)m_Allocator->AllocateMemory(sizeof(tC) * size, 32, 0, 0);
+        if (m_vector)
         {
-            m_nSize = 0;
-            m_nCapacity = size;
-            m_bArrayInitialized = TRUE;
+            m_size = 0;
+            m_capacity = size;
+            m_ArrayInitialized = TRUE;
 
             return TRUE;
         }
@@ -1373,175 +1975,173 @@ struct Hw::cExpandableVector
 
     void insert(tC& where, const tC& element)
     {
-        if (!m_pBegin)
+        if (!m_vector)
             return;
 
-        size_t index = m_pBegin - &where;
+        size_t index = &where - m_vector;
 
-        if (index > m_nSize)
+        if (index > m_size)
             return;
 
-        if (m_nSize >= m_nCapacity)
+        if (m_size >= m_capacity)
         {
-            if (!m_nCapacity)
+            if (!m_capacity)
                 create(32u);
             else
-                reallocate(m_nCapacity * 2);
+                reallocate(m_capacity * 2);
         }
 
-        for (size_t i = index; i < m_nSize; i++)
-            m_pBegin[i] = m_pBegin[i - 1];
+        for (size_t i = index; i < m_size; i++)
+            m_vector[i] = m_vector[i - 1];
 
-        m_pBegin[index] = element;
-        ++m_nSize;
+        m_vector[index] = element;
+        ++m_size;
     }
 
     void push_back(const tC& element)
     {
-        if (!m_pBegin)
+        if (!m_vector)
             return;
 
-        if (m_nSize >= m_nCapacity)
+        if (m_size >= m_capacity)
         {
-            if (!m_nCapacity)
+            if (!m_capacity)
                 create(32u);
             else
-                reallocate(m_nCapacity * 2);
+                reallocate(m_capacity * 2);
         }
 
-        m_pBegin[m_nSize++] = element;
+        m_vector[m_size++] = element;
     }
 
     void push_front(const tC& element)
     {
-        insert(m_pBegin[0], element);
+        insert(m_vector[0], element);
     }
 
     void remove(tC& element)
     {
-        if (!m_pBegin)
+        if (!m_vector)
             return;
 
-        if (&element - m_pBegin >= m_nSize)
+        if (&element - m_vector >= m_size)
             return;
 
-        size_t index = &element - m_pBegin;
+        size_t index = &element - m_vector;
 
-        for (auto elem = &m_pBegin[index]; elem != &m_pBegin[m_nSize - 1]; elem++)
+        if (index >= m_capacity) //< Invalid element for vector
+            return; 
+
+        for (tC* elem = m_vector + index; elem != m_vector + m_size - 1; elem++)
             *elem = elem[1];
 
-        --m_nSize;
+        --m_size;
     }
 
     void clear()
     {
-        if (m_pBegin)
-        {
-            for (size_t i = m_nSize - 1; i > 0; i--)
-                m_pBegin[i].~tC();
-
-            m_nSize = 0;
-        }
+        if (m_vector)
+            m_size = 0;
     }
 
-    auto &get(size_t index)
+    tC& get(size_t index)
     {
-        return m_pBegin[index];
+        return m_vector[index];
     }
 
-    auto &get(size_t index) const
+    tC& get(size_t index) const
     {
-        return m_pBegin[index];
+        return m_vector[index];
     }
 
-    auto &operator[](size_t index)
+    tC& operator[](size_t index)
     {
         return get(index);
     }
 
-    auto &operator[](size_t index) const
+    tC& operator[](size_t index) const
     {
         return get(index);
     }
 
-    auto begin()
+    tC* begin()
     {
-        return m_pBegin;
+        return m_vector;
     }
 
-    auto begin() const
+    tC* begin() const
     {
-        return m_pBegin;
+        return m_vector;
     }
 
-    auto end()
+    tC* end()
     {
-        return &m_pBegin[m_nSize];
+        return m_vector + m_size;
     }
 
-    auto end() const
+    tC* end() const
     {
-        return &m_pBegin[m_nSize];
+        return m_vector + m_size;
     }
 
-    auto rbegin()
+    tC* rbegin()
     {
-        return &m_pBegin[m_nSize];
+        return m_vector + m_size;
     }
 
-    auto rbegin() const
+    tC* rbegin() const
     {
-        return &m_pBegin[m_nSize];
+        return m_vector + m_size;
     }
 
-    auto rend()
+    tC* rend()
     {
-        return m_pBegin;
+        return m_vector;
     }
 
-    auto rend() const
+    tC* rend() const
     {
-        return m_pBegin;
+        return m_vector;
     }
 
     BOOL reallocate(size_t newSize)
     {
-        if (m_nCapacity == newSize)
+        if (m_capacity == newSize)
             return TRUE;
 
         tC* newArray = (tC*)m_Allocator->AllocateMemory(sizeof(tC) * newSize, 32, 0, 0);
 
         if (newArray)
         {
-            if (m_nSize >= newSize)
+            if (m_size >= newSize)
             {
-                if (m_nSize > 0)
+                if (m_size > 0)
                 {
-                    for (size_t elementIndex = 0; elementIndex < m_nSize; elementIndex++)
-                        newArray[elementIndex] = m_pBegin[elementIndex];
+                    for (size_t elementIndex = 0; elementIndex < m_size; elementIndex++)
+                        newArray[elementIndex] = m_vector[elementIndex];
                 }
-                m_nSize = newSize;
+                m_size = newSize;
             }
             else
             {
-                for (size_t elementIndex = 0; elementIndex < m_nSize; elementIndex++)
-                    newArray[elementIndex] = m_pBegin[elementIndex];
+                for (size_t elementIndex = 0; elementIndex < m_size; elementIndex++)
+                    newArray[elementIndex] = m_vector[elementIndex];
             }
-            if (m_bArrayInitialized)
+            if (m_ArrayInitialized)
             {
-                operator delete(m_pBegin, m_Allocator);
-                m_bArrayInitialized = FALSE;
+                operator delete(m_vector, m_Allocator);
+                m_ArrayInitialized = FALSE;
             }
 
-            m_pBegin = newArray;
-            m_nCapacity = newSize;
-            m_bArrayInitialized = TRUE;
+            m_vector = newArray;
+            m_capacity = newSize;
+            m_ArrayInitialized = TRUE;
 
             return TRUE;
         }
         else
         {
-            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+            PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
             return FALSE;
         }
 
@@ -1550,19 +2150,108 @@ struct Hw::cExpandableVector
 
     BOOL resize(size_t size)
     {
-        if (size <= m_nCapacity || reallocate(size))
+        if (size <= m_capacity || reallocate(size))
         {
-            if (size != m_nSize)
-                m_nSize = size;
+            if (size != m_size)
+                m_size = size;
             return TRUE;
         }
         else
         {
-            ePrintf("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+            PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
             return FALSE;
         }
         return FALSE;
     }
+};
+
+#include <CriFs.h>
+
+struct Hw::cDvdFst
+{
+    int field_0;
+    int field_4;
+    int field_8;
+    int field_C;
+    int field_10;
+    int field_14;
+    int field_18;
+    int field_1C;
+    int field_20;
+    int field_24;
+    int field_28;
+    int field_2C;
+    int field_30;
+    int field_34;
+    int field_38;
+    int field_3C;
+    int field_40;
+    int field_44;
+    int field_48;
+    int field_4C;
+    int field_50;
+    int field_54;
+    int field_58;
+    int field_5C;
+    int field_60;
+    int field_64;
+    int field_68;
+    int field_6C;
+    int field_70;
+    int field_74;
+    int field_78;
+    int field_7C;
+    int field_80;
+    int field_84;
+    int field_88;
+    int field_8C;
+    int field_90;
+    int field_94;
+    int field_98;
+    int field_9C;
+    int field_A0;
+    int field_A4;
+    int field_A8;
+    int field_AC;
+    int field_B0;
+    int field_B4;
+    int field_B8;
+
+    struct Work
+    {
+        int m_State;
+        CriFsBinderWork *m_CriBinderWork;
+        CriFsLoaderHn *m_CriLoader;
+        char m_Filepath[64];
+        int m_MaxTime;
+        int m_AttemptTime;
+        void *m_Filedata;
+        int m_Buffersize;
+        int m_Priority;
+        int field_60;
+        int field_64;
+        int field_68;
+        Work *m_pNext;
+        Work *m_pPrevious;
+    };
+
+    struct ReadWork : Work // Probably FileReadWork
+    {
+        char m_Filepath[64];
+        void *m_Filedata;
+        int m_Buffersize;
+        int field_BC;
+        int m_WaitAmount;
+        int m_ReaderFlags;
+        int m_Priority;
+    }; 
+};
+
+struct Hw::DvdReadManager
+{
+    int field_0;
+    int field_4;
+    Hw::cHeapFixed m_DvdReadFactory;
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);

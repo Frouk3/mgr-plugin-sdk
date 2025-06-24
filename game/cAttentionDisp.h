@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cUISystem.h>
+
 class cAttentionDisp
 {
 public:
@@ -11,3 +13,5 @@ public:
 
     virtual ~cAttentionDisp() {};
 };
+
+class cAttentionDispBase : public cCustomObjWorkBase{};

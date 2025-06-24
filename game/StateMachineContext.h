@@ -1,11 +1,11 @@
 #pragma once
 
-#include "StateMachineFactory.h"
+#include <StateMachineFactory.h>
 
 class StateMachineContext
 {
 public:
-  StateMachineFactory *m_pStateMachineFactory;
+  StateMachineFactory *m_Factory;
   float field_8;
 
   virtual ~StateMachineContext() {};
