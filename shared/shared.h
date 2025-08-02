@@ -14,12 +14,17 @@ class shared
 private:
 #ifdef SHARED_USE_EX_FUNCS
 	// used for extended usage of key pressing(requires updating)
+	/*
 	static inline bool key_state_ex[256] = {};
 	static inline bool prev_key_state[256] = {};
+	*/
+	static inline unsigned int aPressedKeys[8] = { 0 }; // Compressed int's will weight less
+	static inline unsigned int aPressedKeysHistory[8] = { 0 }; 
 
 #else
 	// used for simple key checking
-	static inline bool key_state[256] = {};
+	// static inline bool key_state[256] = {};
+	static inline unsigned int aPressedKeys[8] = { 0 }; 
 #endif
 public:
 	static inline DWORD base = (DWORD)GetModuleHandleA(NULL);
@@ -39,40 +44,46 @@ public:
 		return min + (max - min) * (rand() / float(RAND_MAX + 1));
 	}
 #ifdef SHARED_USE_EX_FUNCS
-	
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
-		if (bRepeat)
-			return key_state_ex[vKey];
+		unsigned int mask = 1 << (vKey & 0x1F);
 
-		return key_state_ex[vKey] && key_state_ex[vKey] != prev_key_state[vKey];
+		if (bRepeat)
+			return (aPressedKeys[vKey >> 5] & mask) != 0;
+
+		return (aPressedKeys[vKey >> 5] & mask) != 0 && !(aPressedKeysHistory[vKey >> 5] & mask);
 	}
 
 	// should be passed after the update of everything(OnUpdateEvent.after for example)
 	static inline void ExPressKeyUpdate()
 	{
-		memcpy(prev_key_state, key_state_ex, 256u);
+		memcpy(aPressedKeysHistory, aPressedKeys, sizeof(aPressedKeys));
 
 		for (int i = 0; i < 256; i++)
-			key_state_ex[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
+		{
+			if (SHORT state = GetAsyncKeyState(i); state)
+				aPressedKeys[i >> 5] |= 1 << (i & 0x1F);
+			else
+				aPressedKeys[i >> 5] &= ~(1 << (i & 0x1F));
+		}
 	}
 
 #else
-
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
-		auto state = (GetAsyncKeyState(vKey) & 0x8000) != 0;
+		bool isKeyDown = GetAsyncKeyState(vKey) & 0x8000;
+
+		bool condition = isKeyDown && !(aPressedKeys[vKey >> 5] & (1 << (vKey & 0x1F)));
+
+		if (isKeyDown)
+			aPressedKeys[vKey >> 5] |= 1 << (vKey & 0x1F);
+		else
+			aPressedKeys[vKey >> 5] &= ~(1 << (vKey & 0x1F));
 
 		if (bRepeat)
-			return state;
+			return isKeyDown;
 
-		if (state != key_state[vKey])
-		{
-			key_state[vKey] = state;
-			return state;
-		}
-
-		return false;
+		return condition;
 	}
 
 #endif
