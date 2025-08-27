@@ -656,7 +656,7 @@ inline memory_pointer_aslr  aslr_ptr(T p)
 
 
 
-
+#ifndef INJECTOR_GVM_DUMMY
 #ifndef INJECTOR_GVM_OWN_DETECT // Should we implement our detection method?
 
 // Detects game, region and version; returns false if could not detect it
@@ -750,6 +750,7 @@ inline bool game_version_manager::Detect()
     }
 }
 
+#endif
 #endif
 
 

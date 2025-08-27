@@ -152,6 +152,7 @@ class game_version_manager
  *      Address translator from 1.0 executables to other executables offsets
  *      Inherits from game_version_manager ;)
  */
+
 class address_manager : public game_version_manager
 {
     private:
@@ -177,6 +178,7 @@ class address_manager : public game_version_manager
         
         
     public:
+#ifndef INJECTOR_GVM_DUMMY
         // Address manager singleton
         static address_manager& singleton()
         {
@@ -195,6 +197,7 @@ class address_manager : public game_version_manager
         {
             singleton().PluginName = modname;
         }
+#endif
         
     public:
         // Functors for memory translation:
@@ -220,11 +223,16 @@ class address_manager : public game_version_manager
         struct fn_mem_translator
         {
             void* operator()(void* p) const
-            { return translate_address(p); }
+            { 
+#ifndef INJECTOR_GVM_HAS_TRANSLATOR
+                return ((address_manager*)NULL)->translate(p); // ECX is not used, don't worry about this part
+#else
+                return singleton().translate_address(p);
+#endif
+            } 
         };
 };
 
 #endif  // #if 1
-
 
 }
