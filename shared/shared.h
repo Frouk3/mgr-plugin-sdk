@@ -46,6 +46,9 @@ public:
 #ifdef SHARED_USE_EX_FUNCS
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
+		if (!vKey) // Might get true if controller is connected
+			return false;
+
 		unsigned int mask = 1 << (vKey & 0x1F);
 
 		if (bRepeat)
@@ -71,6 +74,9 @@ public:
 #else
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
+		if (!vKey)
+			return false;
+
 		bool isKeyDown = GetAsyncKeyState(vKey) & 0x8000;
 
 		bool condition = isKeyDown && !(aPressedKeys[vKey >> 5] & (1 << (vKey & 0x1F)));

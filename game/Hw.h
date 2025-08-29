@@ -660,43 +660,92 @@ typedef Hw::cVec3 cVec3;
 typedef Hw::cVec4 cVec4;
 typedef Hw::cQuaternion cQuaternion;
 
-struct cInput
+namespace cInput
 {
     struct ControllerState
     {
         XINPUT_STATE m_XInputState;
-        int m_bSuccessful;
-        float field_14;
-        float field_18;
-        float field_1C;
-        float field_20;
+        int m_bAvailable;
+        float m_fCurrentLeftVibration;
+        float m_fTargetLeftVibration;
+        float m_fCurrentRightVibration;
+        float m_fTargetRightVibration;
         float m_fLeftMotorSpeed;
         float m_fRightMotorSpeed;
-        int field_2C;
-        int field_30;
-        int field_34;
+        int m_nCurrentVibrationTime;
+        int m_nVibrationTotal;
+        int m_bVibrationEnabled;
     };
 
     struct KeyInput
     {
-        int m_KeysPressed[31];
+        int m_KeysPressed[6];
+        int field_18[6];
+        int field_30[6];
+        int field_48[6];
+        int m_KeyHistory[6];
+        int field_78;
+
+        bool isKeyDown(int vKey)
+        {
+            return ((bool(__thiscall*)(KeyInput*, int))(shared::base + 0x9D93A0))(this, vKey);
+        }
     };
 
     struct MouseInput
     {
-        int field_0;
-        int field_4;
-        int field_8;
-        int field_C;
+        int m_nMouseButtons;
+        int m_nButtonsTriggered;
+        int m_nButtonsReleased;
+        int m_nButtonsPressed;
         cVec2 m_MousePosition;
         int field_18;
-        int field_1C;
+        int m_nRepeatCount;
         cVec2 m_LastMousePosition;
     };
 
-    static inline MouseInput& ms_MouseInput = *(MouseInput*)(shared::base + 0x177B798);
-    static inline KeyInput& ms_KeyInput = *(KeyInput*)(shared::base + 0x177B7C0);
-    static inline ControllerState *ms_Controllers = (ControllerState*)(shared::base + 0x19D05F0); // Maximum 4 controllers
+    struct InputUnit
+    {
+        unsigned int m_nButtons;
+        unsigned int m_nTriggeredButtons;
+        unsigned int m_nReleasedButtons;
+        unsigned int m_nPressed;
+        cVec2 m_fLeftStick;
+        cVec2 m_fRightStick;
+        float m_fLeftTrigger;
+        float m_fRightTrigger;
+        int m_bValidInput;
+        int m_nRepeatCount;
+    };
+
+    struct GlobalInput
+    {
+        char field_0;
+        char field_1;
+        char field_2;
+        char field_3;
+        __int16 field_4;
+        __int16 field_6;
+        int field_8;
+        int field_C;
+        int field_10;
+        bool m_bIsPCInput;
+        int field_18;
+        int field_1C;
+        int field_20;
+        int field_24;
+        int field_28;
+    };
+
+    inline int isControllerAvailable(int index)
+    {
+        return ((int(__cdecl*)(int))(shared::base + 0x9DA340))(index);
+    }
+
+    inline MouseInput& ms_MouseInput = *(MouseInput*)(shared::base + 0x177B798);
+    inline KeyInput& ms_KeyInput = *(KeyInput*)(shared::base + 0x177B7C0);
+    inline ControllerState *ms_aControllers = (ControllerState*)(shared::base + 0x19D05F0); // Maximum 4 controllers
+    inline GlobalInput& ms_GlobalInput = *(GlobalInput*)(shared::base + 0x19C1404);
 };
 
 class Hw::CriticalSection
