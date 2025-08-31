@@ -897,11 +897,11 @@ struct ClothSimulation
 
 struct Constraints
 {
-    int m_Index;
+    int m_nIndex;
     EntityHandle m_MainEntity;
     EntityHandle m_ObjectEntityHandle;
-    unsigned int m_Bone;
-    unsigned int m_RotationBone;
+    unsigned int m_nBone;
+    unsigned int m_nRotationBone;
     int field_14;
     int field_18;
     int field_1C;
