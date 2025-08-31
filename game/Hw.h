@@ -655,22 +655,6 @@ typedef Hw::cQuaternion cQuaternion;
 
 namespace cInput
 {
-	struct ControllerState
-	{
-		XINPUT_STATE m_XInputState;
-		int m_bAvailable;
-		float m_fCurrentLeftVibration;
-		float m_fTargetLeftVibration;
-		float m_fCurrentRightVibration;
-		float m_fTargetRightVibration;
-		float m_fLeftMotorSpeed;
-		float m_fRightMotorSpeed;
-		int m_nCurrentVibrationTime;
-		int m_nVibrationTotal;
-		int m_bVibrationEnabled;
-	};
-
-	/* // I'll add it here later
 	enum eInputButton
 	{
 		DPAD_LEFT = 1,
@@ -686,11 +670,54 @@ namespace cInput
 		LEFT_SHOULDER = 0x400,
 		LEFT_TRIGGER = 0x800,
 		LEFT_STICK = 0x1000,
-		RIGHT_TRIGGER = 0x2000,
-		RIGHT_SHOULDER = 0x4000,
+		RIGHT_SHOULDER = 0x2000,
+		RIGHT_TRIGGER = 0x4000,
 		RIGHT_STICK = 0x8000
 	};
-	*/
+
+	enum eSaveKeybind
+	{
+		KEYBIND_FORWARD,
+		KEYBIND_BACK,
+		KEYBIND_LEFT,
+		KEYBIND_RIGHT,
+		KEYBIND_WALK,
+		KEYBIND_JUMP,
+		KEYBIND_LIGHT_ATTACK,
+		KEYBIND_HEAVY_ATTACK,
+		KEYBIND_BLADEMODE,
+		KEYBIND_NINJARUN,
+		KEYBIND_ACTION,
+		KEYBIND_RIPPERMODE,
+		KEYBIND_SWITCH_LOCK_ON,
+		KEYBIND_USE_SUBWEAPON,
+		KEYBIND_USE_ITEM,
+		KEYBIND_AR_MODE,
+		KEYBIND_WEAPON_SELECT_SCREEN,
+		KEYBIND_CODEC_SCREEN,
+		KEYBIND_PAUSE,
+		KEYBIND_CAMERA_RESET,
+		KEYBIND_EXECUTION,
+		KEYBIND_DEFFENSIVE_OFFENSIVE,
+		KEYBIND_FIRE_SUBWEAPON,
+
+		KEYBIND_TOTAL
+	};
+
+	struct ControllerState
+	{
+		XINPUT_STATE m_XInputState;
+		int m_bAvailable;
+		float m_fCurrentLeftVibration;
+		float m_fTargetLeftVibration;
+		float m_fCurrentRightVibration;
+		float m_fTargetRightVibration;
+		float m_fLeftMotorSpeed;
+		float m_fRightMotorSpeed;
+		int m_nCurrentVibrationTime;
+		int m_nVibrationTotal;
+		int m_bVibrationEnabled;
+	};
 
 	struct KeyInput
 	{
@@ -755,9 +782,9 @@ namespace cInput
 	struct MouseInput
 	{
 		int m_nMouseButtons;
-		int m_nButtonsTriggered;
-		int m_nButtonsReleased;
 		int m_nButtonsPressed;
+		int m_nButtonsReleased;
+		int m_nButtonsAlternated;
 		cVec2 m_MousePosition;
 		int field_18;
 		int m_nRepeatCount;
@@ -766,10 +793,10 @@ namespace cInput
 
 	struct InputUnit
 	{
-		unsigned int m_nButtons;
-		unsigned int m_nTriggeredButtons;
-		unsigned int m_nReleasedButtons;
-		unsigned int m_nPressed;
+		unsigned int m_nButtonsDown;
+		unsigned int m_nButtonsPressed;
+		unsigned int m_nButtonsReleased;
+		unsigned int m_nButtonsAlternated;
 		cVec2 m_fLeftStick;
 		cVec2 m_fRightStick;
 		float m_fLeftTrigger;
@@ -815,6 +842,21 @@ namespace cInput
 	inline void updateInputUnit(InputUnit *unit, int dwUserIndex)
 	{
 		((void(__cdecl*)(InputUnit*, int))(shared::base + 0x9DAFE0))(unit, dwUserIndex);
+	}
+
+	inline void setVibrationEnabled(BOOL bEnabled)
+	{
+		((void(__cdecl*)(BOOL))(shared::base + 0x9DA2F0))(bEnabled);
+	}
+
+	inline void setInputUnitButtons(InputUnit *unit, unsigned int buttons)
+	{
+		((void(__cdecl*)(InputUnit*, unsigned int))(shared::base + 0x9DA210))(unit, buttons);
+	}
+
+	inline BOOL isKeybindDown(eSaveKeybind keybind)
+	{
+		return ((BOOL(__cdecl*)(eSaveKeybind))(shared::base + 0x61D280))(keybind);
 	}
 
 	inline LPDIRECTINPUT8& ms_InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);

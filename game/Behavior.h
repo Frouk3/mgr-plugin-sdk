@@ -918,7 +918,7 @@ class Behavior : public cObj
 public:
     struct AnimationSlot
     {
-        int m_SlotId;
+        int m_nSlotId;
         int field_4;
         char m_AnimName[16];
         Behavior* m_pAnimationTarget;
@@ -931,13 +931,13 @@ public:
 
     struct EffectIntegrationContainer
     {
-        int m_ContainerId;
+        int m_nContainerId;
         eObjID m_EffObjId;
         int field_8;
-        int m_EffectId;
+        int m_nEffectId;
         cEspControler *m_pControler;
-        float m_FadeTime;
-        float m_FadeEndAlpha;
+        float m_fFadeTime;
+        float m_fFadeEndAlpha;
     };
 
     struct InstructionContainer
@@ -1012,12 +1012,12 @@ public:
     int m_pBehaviorInfo;
     int field_610;
     int field_614;
-    unsigned int m_CurrentAction;
-    int m_CurrentActionId;
+    unsigned int m_nCurrentAction;
+    int m_nCurrentActionId;
     int field_620;
     int field_624;
-    int m_PreviousAction;
-    int m_PreviousActionId;
+    int m_nPreviousAction;
+    int m_nPreviousActionId;
     int field_630;
     int field_634;
     Hw::CriticalSection* field_638;
@@ -1095,8 +1095,7 @@ public:
     float field_784;
     int field_788;
     int field_78C;
-    int field_790;
-    int field_794;
+    int m_aAnimFlag[2];
     EspCtrlCustomImpl* m_pEspCtrlCustomImpl;
     cEspControler* field_79C;
     lib::StaticArray<EffectIntegrationContainer, 32>* m_pEffectIntegrationContainer;
@@ -1414,6 +1413,11 @@ public:
     int getCollisionFilter()
     {
         return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
+    }
+
+    BOOL isFlagSet(int flagBit)
+    {
+        return ((BOOL(__thiscall*)(Behavior*, int))(shared::base + 0x68C760))(this, flagBit);
     }
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);

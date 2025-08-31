@@ -5,6 +5,38 @@
 #include <shared.h>
 #include <Hw.h>
 
+class Random
+{
+private:
+    unsigned int m_nSeed;
+public:
+
+    void reset()
+    {
+        ((void(__thiscall*)(Random*))(shared::base + 0x9DE290))(this);
+    }
+
+    void setSeed(unsigned int seed)
+    {
+        ((void(__thiscall*)(Random*, unsigned int))(shared::base + 0x9DBBD0))(this, seed);
+    }
+
+    short range(short min, short max)
+    {
+        return ((short(__thiscall*)(Random*, short, short))(shared::base + 0x9DE2D0))(this, min, max);
+    }
+
+    int range(int min, int max)
+    {
+        return ((int(__thiscall*)(Random*, int, int))(shared::base + 0x9DE2A0))(this, min, max);
+    }
+
+    float range(float min, float max)
+    {
+        return ((float(__thiscall*)(Random*, float, float))(shared::base + 0x9DE300))(this, min, max);
+    }
+};
+
 namespace cMath
 {
     enum RotateMatrixOrder : int
@@ -16,7 +48,6 @@ namespace cMath
         ORDER_ZXY = 0x4,
         ORDER_ZYX = 0x5
     };
-
 
     inline float __cdecl normalizeAngle(float angle)
     {

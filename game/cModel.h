@@ -74,7 +74,7 @@ public:
     char field_470;
     char field_471;
     char field_472;
-    char m_ShadowLOD;
+    char m_nShadowLOD;
     int field_474;
     int field_478;
     int field_47C;
