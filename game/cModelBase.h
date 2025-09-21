@@ -48,6 +48,11 @@ public:
         {
             ((void(__thiscall *)(BoneSet*, cParts*, const D3DXMATRIX&))(shared::base + 0x616680))(this, rootBone, viewMatrix);
         }
+
+        cParts *getBoneByIndex(int index)
+        {
+            return ((cParts* (__thiscall *)(BoneSet*, int))(shared::base + 0x3F7E0))(this, index);
+        }
     };
 
     D3DXMATRIX m_ViewModelMatrix;

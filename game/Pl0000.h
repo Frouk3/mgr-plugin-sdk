@@ -3067,6 +3067,11 @@ public:
         return ((float(__thiscall*)(Pl0000*, bool))(shared::base + 0x7C2F00))(this, bIgnoreUnused);
     }
 
+    void setPlayerSafe()
+    {
+        ((void(__thiscall*)(Pl0000*))(shared::base + 0x7E86F0))(this);
+    }
+
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);
 };
 

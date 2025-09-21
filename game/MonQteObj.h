@@ -5,7 +5,7 @@
 class MonQteObj : public BehaviorAppBase
 {
 public:
-    CollisionAttackData::AttackData m_ObjAttackData[8];
+    CollisionAttackData::HitData m_ObjAttackData[8];
     int field_1200;
     int field_1204;
     int field_1208;

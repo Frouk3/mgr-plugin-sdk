@@ -63,6 +63,11 @@ public:
         CallVMTFunc<3, cObj*>(this);
     }
 
+    void updateBoneTransform()
+    {
+        CallVMTFunc<6, cObj*>(this);
+    }
+
     void enableRender()
     {
         CallVMTFunc<7, cObj*>(this);

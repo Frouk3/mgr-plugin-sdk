@@ -148,12 +148,12 @@ inline void __declspec(naked) PrintfLog(const char* fmt, ...)
 	}
 }
 
-inline unsigned int stringhash32(const char* str, size_t length) // then later used for function that doesn't uses length
+inline unsigned int crc32lower(const char* str, size_t length) // then later used for function that doesn't uses length
 {
 	return ((unsigned int (__cdecl *)(const char *, size_t))(shared::base + 0xA03D20))(str, length);
 }
 
-inline unsigned int stringhash32(const char* str)
+inline unsigned int crc32lower(const char* str)
 {
 	return ((unsigned int (__cdecl *)(const char*))(shared::base + 0xA03EA0))(str);
 }

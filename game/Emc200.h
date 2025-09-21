@@ -580,7 +580,7 @@ public:
     int field_1E34;
     int field_1E38;
     int field_1E3C;
-    CollisionAttackData::AttackData field_1E40[2];
+    CollisionAttackData::HitData field_1E40[2];
     int field_2040;
     int field_2044;
     int field_2048;

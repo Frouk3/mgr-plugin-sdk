@@ -957,6 +957,25 @@ public:
         int field_30;
     };
 
+    struct AttackData // Logically it will be here, in this class
+    {
+        CollisionAttackData::HitData m_HitData;
+        cVec4 m_vecSeparation;
+        cVec4 field_110;
+        EntityHandle field_120;
+        EntityHandle field_124;
+        int field_128;
+        int field_12C;
+        float field_130;
+        float field_134;
+        float field_138;
+        float field_13C;
+        float field_140;
+        int field_144;
+        int field_148;
+        int field_14C;
+    };
+
     int field_530;
     int field_534;
     int field_538;
@@ -970,14 +989,14 @@ public:
     float field_564;
     float field_568;
     float field_56C;
-    float field_570;
+    BOOL m_bUpdateAnimationOnly; // Will only update animations when true
     float field_574;
     float field_578;
     float field_57C;
     float field_580;
     float field_584;
     float field_588;
-    int field_58C;
+    BOOL m_bPaused; // Sets to true when game is paused, if you unpause this entity in pause, it will update behind the pause
     char field_590;
     int field_594;
     int field_598;
@@ -1013,11 +1032,11 @@ public:
     int field_610;
     int field_614;
     unsigned int m_nCurrentAction;
-    int m_nCurrentActionId;
-    int field_620;
-    int field_624;
-    int m_nPreviousAction;
-    int m_nPreviousActionId;
+    unsigned int m_nCurrentActionId;
+    unsigned int field_620;
+    unsigned int field_624;
+    unsigned int m_nPreviousAction;
+    unsigned int m_nPreviousActionId;
     int field_630;
     int field_634;
     Hw::CriticalSection* field_638;
@@ -1036,7 +1055,7 @@ public:
     EntityHandle field_66C;
     int field_670;
     int field_674;
-    Hw::cFixedVector<int> field_678;
+    Hw::cFixedVector<AttackData> field_678;
     int field_68C;
     int field_690;
     float field_694;
@@ -1101,7 +1120,7 @@ public:
     lib::StaticArray<EffectIntegrationContainer, 32>* m_pEffectIntegrationContainer;
     lib::StaticArray<Collision *, 250> *m_pAttackCollision;
     lib::StaticArray<Collision *, 64> *m_pDefenseCollisions;
-    int field_7AC;
+    lib::StaticArray<Collision *, 64> *field_7AC;
     RigidBodyCollision* m_pRigidBodyCollision;
     RigidBodyList* m_pRigidBodyList;
     lib::AllocatedArray<Collision *>* m_pAllocatedCollisionArray;
@@ -1184,7 +1203,7 @@ public:
         CallVMTFunc<20, Behavior *>(this);
     }
     
-    void updateEntity()
+    void updateAttachments()
     {
         CallVMTFunc<21, Behavior*>(this);
     }
@@ -1259,14 +1278,34 @@ public:
         return ReturnCallVMTFunc<void*, 39, Behavior *, const char*>(this, name);
     }
 
-    void transform(D3DXMATRIX *matrix)
+    BOOL isLogicEnabled()
+    {
+        return ReturnCallVMTFunc<BOOL, 42, Behavior*>(this);
+    }
+
+    BOOL isTickEnabled()
+    {
+        return ReturnCallVMTFunc<BOOL, 43, Behavior*>(this);
+    }
+
+    BOOL isUpdateModelEnabled()
+    {
+        return ReturnCallVMTFunc<BOOL, 44, Behavior*>(this);
+    }
+
+    void getTransformMatrix(D3DXMATRIX *matrix)
     {
         CallVMTFunc<45, Behavior *, D3DXMATRIX *>(this, matrix);
     }
 
-    void inverse(D3DXMATRIX *matrix)
+    void multiplyLocalViewMatrix(D3DXMATRIX *matrix)
     {
         CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
+    }
+
+    void attachConstraints(BOOL bState)
+    {
+        CallVMTFunc<62, Behavior *, BOOL>(this, bState);
     }
 
     void setStealthCamoEnabled(bool bEnable)
@@ -1279,14 +1318,14 @@ public:
         CallVMTFunc<74, Behavior *>(this);
     }
 
-    CollisionAttackData *createAttackData()
+    CollisionAttackData *getAttackInfo(int a1)
     {
-        return ReturnCallVMTFunc<CollisionAttackData*, 76, Behavior*>(this);
+        return ReturnCallVMTFunc<CollisionAttackData*, 76, Behavior*, int>(this, a1);
     }
 
-    void *setCutCreateInfo()
+    void setCutCreateInfo(void *a1, int a2, int a3)
     {
-        return ReturnCallVMTFunc<void *, 110, Behavior *>(this);
+        CallVMTFunc<110, Behavior *, void *, int, int>(this, a1, a2, a3);
     }
 
     BOOL isAlive()
@@ -1306,7 +1345,42 @@ public:
         CallVMTFunc<190, Behavior*>(this);
     }
 
-// vft end
+    // vft end
+
+    BOOL initializeEffects(int *which) // array of 3, which[0] = esp, which[1] = effect containers, which[2] = esp custom ctrl
+    {
+        return ((BOOL (__thiscall *)(Behavior *, int *))(shared::base + 0x6A4980))(this, which);
+    }
+
+    void initCombatCollisions(int a2, int a3)
+    {
+        ((void (__thiscall *)(Behavior *, int, int))(shared::base + 0x6A9080))(this, a2, a3);
+    }
+
+    void getAttackCollisions(lib::Array<Collision*> *pOutArray)
+    {
+        ((void (__thiscall *)(Behavior *, lib::Array<Collision*> *))(shared::base + 0x69D9A0))(this, pOutArray);
+    }
+
+    void removeAttackCollisions()
+    {
+        ((void (__thiscall *)(Behavior *))(shared::base + 0x6933E0))(this);
+    }
+
+    void removeDefenseCollisions()
+    {
+        ((void (__thiscall *)(Behavior *))(shared::base + 0x6934C0))(this);
+    }
+
+    void initAttackCollisions(int a2)
+    {
+        ((void (__thiscall *)(Behavior *, int))(shared::base + 0x6A3920))(this, a2);
+    }
+
+    BOOL addDefenseCollision(Collision *pCollision)
+    {
+        return ((BOOL (__thiscall *)(Behavior *, Collision *))(shared::base + 0x693A00))(this, pCollision);
+    }
 
     void shutdownEffects()
     {
@@ -1328,9 +1402,9 @@ public:
         return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
     }
 
-    bool setupCloth(int a2)
+    BOOL setupCloth(DataArchiveHolder *clothStorage) // initializes first cloth bxm(0)
     {
-        return ((bool (__thiscall *)(Behavior *, int))(shared::base + 0x692380))(this, a2);
+        return ((BOOL (__thiscall *)(Behavior *, DataArchiveHolder *))(shared::base + 0x692380))(this, clothStorage);
     }
 
     int requestAnimationByMap(int animId, Entity* pEntityFrom, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)
@@ -1418,6 +1492,11 @@ public:
     BOOL isFlagSet(int flagBit)
     {
         return ((BOOL(__thiscall*)(Behavior*, int))(shared::base + 0x68C760))(this, flagBit);
+    }
+
+    void setNodePlaybackSpeed(int node, float fPlaybackSpeed)
+    {
+        ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, fPlaybackSpeed);
     }
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);

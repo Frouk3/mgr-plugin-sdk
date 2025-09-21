@@ -217,7 +217,7 @@ namespace Trigger
         unsigned int b43 : 1;                        // 0x00000800 (index = 11)
         unsigned int b44 : 1;                        // 0x00001000 (index = 12)
         unsigned int b45 : 1;                        // 0x00002000 (index = 13)
-        unsigned int b46 : 1;                        // 0x00004000 (index = 14)
+        unsigned int STA_EVENT_FRAME_MODE : 1;       // 0x00004000 (index = 14)
         unsigned int b47 : 1;                        // 0x00008000 (index = 15)
 
         unsigned int b48 : 1;                        // 0x00010000 (index = 16)

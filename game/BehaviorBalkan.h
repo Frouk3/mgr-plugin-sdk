@@ -27,7 +27,7 @@ public:
         int field_44;
         int field_48;
         int field_4C;
-        CollisionAttackData::AttackData field_50;
+        CollisionAttackData::HitData field_50;
         int field_150;
         int field_154;
         int field_158;

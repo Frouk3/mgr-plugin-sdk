@@ -9,7 +9,7 @@ public:
     int field_A04;
     int field_A08;
     int field_A0C;
-    CollisionAttackData::AttackData m_Attacks[8];
+    CollisionAttackData::HitData m_Attacks[8];
     int field_1210;
     int field_1214;
     int field_1218;

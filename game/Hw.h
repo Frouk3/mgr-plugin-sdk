@@ -180,7 +180,7 @@ template <typename tC>
 class Hw::cSingleton
 {
 private:
-	static inline tC m_instance; // it doesn't work like this, but we can't do it either way
+	// static inline tC m_instance; // it doesn't work like this, but we can't do it either way
 	// static inline BOOL m_wasInitialized = FALSE; // C++11 versions create a guard near the static variable, so this member here is pointless
 
 	cSingleton() {};
@@ -194,12 +194,13 @@ public:
 
 	static tC& GetInstance()
 	{
-		return m_instance;
+		static tC instance;
+		return instance;
 	}
 
 	operator tC*()
 	{
-		return &m_instance;
+		return &GetInstance();
 	}
 };
 
@@ -726,7 +727,7 @@ namespace cInput
 		unsigned int m_aKeysReleased[6];
 		unsigned int m_aKeysAlternated[6];
 		unsigned int m_aKeyHistory[6];
-		int m_nNotTouchedFor; // Amount of frames the keyboard input wasn't updated
+		int m_nPressDelay; // used for pressed last time timer
 
 		BOOL isKeyDown(int vKey)
 		{
@@ -859,6 +860,11 @@ namespace cInput
 		return ((BOOL(__cdecl*)(eSaveKeybind))(shared::base + 0x61D280))(keybind);
 	}
 
+	inline void updateControllerStateInput(ControllerState* state, int index)
+	{
+		((void(__cdecl*)(ControllerState*, int))(shared::base + 0x9DA900))(state, index);
+	}
+
 	inline LPDIRECTINPUT8& ms_InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
 	inline LPDIRECTINPUTDEVICE8W* ms_aControllerDevices = (LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D05A8); // 4 elements
 	inline LPDIRECTINPUTDEVICE8W& ms_MouseDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
@@ -882,9 +888,9 @@ namespace cInput
 	inline int* ms_aMouseButtons = (int*)(shared::base + 0x14B5D74); // 3 elements, buttons that are checked via binary operations(and, xor, or, etc.)
 	inline int& ms_nControllersAmount = *(int*)(shared::base + 0x19D0808); // how much were acquired
 
-	inline float* ms_fStickButtonThreshold = (float*)(shared::base + 0x19D05C0); // 4 elements, threshold in any direction that will convert as a button press, also used for left or right triggers
-	inline float* ms_fStickDeadzone = (float*)(shared::base + 0x19D05D0); // 4 elements
-	inline float* ms_fMaxStickThreshold = (float*)(shared::base + 0x19D05E0); // 4 elements, threshold until the stick is fully moved
+	inline float* ms_aStickButtonThreshold = (float*)(shared::base + 0x19D05C0); // 4 elements, threshold in any direction that will convert as a button press, also used for left or right triggers
+	inline float* ms_aStickDeadzone = (float*)(shared::base + 0x19D05D0); // 4 elements
+	inline float* ms_aMaxStickThreshold = (float*)(shared::base + 0x19D05E0); // 4 elements, threshold until the stick is fully moved
 };
 
 class Hw::CriticalSection
@@ -1120,10 +1126,10 @@ public:
 public:
 	HANDLE m_HeapHandle;
 	int field_44;
-	size_t m_FixedSize;
+	size_t m_nFixedSize;
 	int field_4C;
-	size_t m_FixedReservedSize;
-	size_t m_FixedAmount;
+	size_t m_nFixedReservedSize;
+	size_t m_nFixedAmount;
 	int field_58;
 	int field_5C;
 
@@ -1185,7 +1191,7 @@ public:
 		return TRUE;
 	}
 
-	static inline cSingleton<cHeapGlobal> &ms_Instance = *(cSingleton<cHeapGlobal>*)(shared::base + 0x1783AF0); // Actually a singleton
+	static inline cHeapGlobal &ms_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
 };
 
 class Hw::cShareHeapPhysical : Hw::cHeapPhysical
@@ -1200,7 +1206,7 @@ class Hw::cTexture
 public:
 	void *m_Texture;
 	cTextureInstance *m_pTextureInstance;
-	int m_TextureAmount;
+	int m_nTextureAmount;
 	int field_10;
 	int field_14;
 	void *m_TextureAttributes;
@@ -1725,7 +1731,7 @@ struct Hw::cFixedVector
 	T* m_vector;
 	size_t m_capacity;
 	size_t m_size;
-	int field_10;
+	BOOL m_bInitialized;
 
 	cFixedVector()
 	{
@@ -1733,7 +1739,7 @@ struct Hw::cFixedVector
 		m_vector = nullptr;
 		m_capacity = 0;
 		m_size = 0;
-		field_10 = 0;
+		m_bInitialized = 0;
 	}
 
 	BOOL create(size_t capacity, Hw::cHeap* allocator)
@@ -1746,7 +1752,7 @@ struct Hw::cFixedVector
 		{
 			m_capacity = capacity;
 			m_size = 0;
-			field_10 = 1; // is initialized?
+			m_bInitialized = 1; // is initialized?
 			return 1;
 		}
 		else

@@ -46,7 +46,7 @@ struct CharacterControl
     cVec4 field_A0;
     cVec4 field_B0;
     cVec4 field_C0;
-    cVec4* field_D0;
+    cVec4* m_pVelocity;
     int field_D4;
     int field_D8;
     int field_DC;
@@ -106,8 +106,18 @@ struct CharacterControl
         return ((bool(__thiscall*)(CharacterControl*))(shared::base + 0x4E2740))(this);
     }
 
-    void toggleCollisionInteraction(BOOL bEnabledCollision)
+    void switchCollisionDetection(BOOL bEnabled)
     {
-        ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E6C60))(this, bEnabledCollision);
+        ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E6C60))(this, bEnabled);
+    }
+
+    void setPosition(const cVec4& position, BOOL bResetVelocity)
+    {
+        ((void(__thiscall*)(CharacterControl*, const cVec4&, BOOL))(shared::base + 0x4E4580))(this, position, bResetVelocity);
+    }
+
+    void toggleFalling(BOOL bEnable)
+    {
+        ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E0AF0))(this, bEnable);
     }
 };

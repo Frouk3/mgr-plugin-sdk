@@ -49,7 +49,7 @@ public:
 
 	virtual ~cGameUIManager() {};
 
-	static inline cGameUIManager& Instance = *(cGameUIManager*)(shared::base + 0x19C1430);
+	static inline cGameUIManager& ms_Instance = *(cGameUIManager*)(shared::base + 0x19C1430);
 };
 
 VALIDATE_SIZE(cGameUIManager, 0xDC);

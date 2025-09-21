@@ -188,8 +188,8 @@ public:
     int field_1044;
     int field_1048;
     int field_104C;
-    CollisionAttackData::AttackData field_1050;
-    CollisionAttackData::AttackData field_1150;
+    CollisionAttackData::HitData field_1050;
+    CollisionAttackData::HitData field_1150;
     int field_1250;
     int field_1254;
     int field_1258;

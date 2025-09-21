@@ -22,7 +22,7 @@ public:
 class BaContainerParts : public BehaviorAppBase
 {
 public:
-    CollisionAttackData::AttackData field_A00[8];
+    CollisionAttackData::HitData field_A00[8];
     int field_1200;
     int field_1204;
     int field_1208;

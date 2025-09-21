@@ -2,6 +2,9 @@
 
 #include <lib.h>
 #include <hkpAllCdPointCollector.h>
+#include <CollisionUserData.h>
+
+class ShapeBase;
 
 class Collision
 {
@@ -107,33 +110,26 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    hkpAllCdPointCollector field_10;
-    hkpAllCdPointCollector field_1B0;
-    int field_350;
-    int field_354;
-    int field_358;
+    hkpAllCdPointCollector m_points;
+    hkpAllCdPointCollector m_points2;
+    int m_nReferenceCount;
+    int m_nUniqueID;
+    int m_nID;
     int field_35C;
     int field_360;
     int field_364;
-    int field_368;
-    int field_36C;
-    int field_370;
-    int field_374;
-    int field_378;
+    ShapeBase* m_pShape;
+    int m_nCollisionType;
+    int m_nCollisionFilter;
+    Entity* field_374;
+    CollisionUserData* m_pCollisionData;
     int field_37C;
     int field_380;
     int field_384;
     int field_388;
     int field_38C;
     int field_390;
-    int field_394;
-    int field_398;
-    int field_39C;
-    int field_3A0;
-    int field_3A4;
-    int field_3A8;
-    int field_3AC;
-    int field_3B0;
+    char m_ColName[32];
     int field_3B4;
     int field_3B8;
     int field_3BC;
@@ -149,8 +145,8 @@ public:
     float field_3E4;
     float field_3E8;
     float field_3EC;
-    int field_3F0;
-    int field_3F4;
+    Entity* m_pOwner;
+    Entity* m_pCollisionOwner;
     int field_3F8;
     int field_3FC;
     float field_400;
@@ -162,19 +158,86 @@ public:
     int field_418;
     int field_41C;
     float field_420;
-    int field_424;
-    int field_428;
-    int field_42C;
+    eObjID m_ObjectIndex;
+    eObjID m_ObjectReference;
+    int m_nObjectSetType;
     int field_430;
     lib::StaticArray<History, 5> *m_pCollisionHistory;
     lib::StaticArray<WithinOneFrame, 5> *m_pCollisionWithinOneFrame;
     int field_43C;
 
-    virtual ContextInstance& getContext() {ContextInstance context; return context;};
+    // vft start
+
+    virtual ContextInstance& getContext() { return *(ContextInstance*)(shared::base + 0x19C52F0); } // Dummy for virtual table
+
+    void processAndRecordRelevantCollisions(Collision *collider)
+    {
+        CallVMTFunc<3, Collision *, Collision *>(this, collider);
+    }
+
+    cVec4 getMaxShapeExpansion(const cVec4& scale)
+    {
+        cVec4 result;
+        ReturnCallVMTFunc<cVec4&, 6, Collision *, cVec4&, const cVec4&>(this, result, scale);
+        return result;
+    }
+
+    // vft end
+
+    Collision()
+    {
+        ((void(__thiscall *)(Collision*))(shared::base + 0x97C050))(this);
+    }
+
+    ~Collision()
+    {
+        ((void(__thiscall *)(Collision*))(shared::base + 0x97C2B0))(this);
+    }
+
+    void addRef()
+    {
+        ((void(__thiscall *)(Collision*))(shared::base + 0x977200))(this);
+    }
+
+    void setOwner(Entity *owner, int a2)
+    {
+        ((void(__thiscall *)(Collision*, Entity*, int))(shared::base + 0x977C50))(this, owner, a2);
+    }
+
+    void setName(const char *name)
+    {
+        ((void(__thiscall *)(Collision*, const char*))(shared::base + 0x1CD00))(this, name);
+    }
+
+    int release() // returns new ref count
+    {
+        return ((int(__thiscall *)(Collision*))(shared::base + 0x97B0F0))(this);
+    }
+
+    void registerCollision()
+    {
+        ((void(__thiscall *)(Collision*))(shared::base + 0x97B890))(this);
+    }
+
+    void unregisterCollision()
+    {
+        ((void(__thiscall *)(Collision*))(shared::base + 0x97ACC0))(this);
+    }
+
+    void addObjDatReference(eObjID obj, int setType)
+    {
+        ((void(__thiscall *)(Collision*, eObjID, int))(shared::base + 0x977E40))(this, obj, setType);
+    }
+
+    void releaseObjectReference()
+    {
+        ((void(__thiscall *)(Collision*))(shared::base + 0x977210))(this);
+    }
 };
 
 class CollisionBox : public Collision
 {
+public:
     int field_440;
     int field_444;
     int field_448;

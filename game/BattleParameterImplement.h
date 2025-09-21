@@ -8,22 +8,22 @@ class BattleParameterImplement : public BattleParameter
 public:
     struct Unit
     {
-        int m_id;
-        int m_AtkPower;
-        int m_AtkHavokMulScalar;
-        int m_AtkHavokPow;
-        int m_HitStopTime;
+        int m_nId;
+        int m_nAtkPower;
+        int m_nAtkHavokMulScalar;
+        int m_nAtkHavokPow;
+        int m_nHitStopTime;
         int m_Int0;
         int m_Int1;
         float m_Float0;
         float m_Float1;
         float m_Float2;
         float m_Float3;
-        int m_No;
-        float m_EasyPowerScale;
-        float m_HardPowerScale;
-        float m_VeryhardPowerScale;
-        float m_RevengeancePowerScale;
+        int m_nNo;
+        float m_fEasyPowerScale;
+        float m_fHardPowerScale;
+        float m_fVeryhardPowerScale;
+        float m_fRevengeancePowerScale;
         int m_Int3;
         int m_Int4;
         int m_Int5;
@@ -32,7 +32,7 @@ public:
     Hw::cHeapVariable *m_Allocator;
     lib::AllocatedArray<Unit> *m_Units;
 
-    virtual int getId(int id) {} // what
+    virtual int getId(int id) { return 0; } // what
 
     int getAttackPower(int id)
     {
@@ -220,9 +220,15 @@ public:
         return ReturnCallVMTFunc<int, 38, BattleParameterImplement *, int>(this, a2);
     }
     */
+
+    BattleParameterImplement(Hw::cHeapVariable *pAllocator, void *bin)
+    {
+        ((void(__thiscall *)(BattleParameterImplement*, Hw::cHeapVariable*, void *))(shared::base + 0x975270))(this, pAllocator, bin);
+    }
+
     ~BattleParameterImplement()
     {
-        CallVMTFunc<39, BattleParameterImplement *, char>(this, 0);
+        ((void(__thiscall *)(BattleParameterImplement*))(shared::base + 0x9752A0))(this);
     }
 };
 

@@ -3,7 +3,7 @@
 class BattleCollisionManager
 {
 private:
-    virtual void dummy() {};
+    virtual void tick() {};
 public:
     
 };

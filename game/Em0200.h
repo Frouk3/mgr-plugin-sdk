@@ -575,7 +575,7 @@ public:
     int field_1D54;
     int field_1D58;
     int field_1D5C;
-    CollisionAttackData::AttackData field_1D60[2];
+    CollisionAttackData::HitData field_1D60[2];
     int field_1F60;
     int field_1F64;
     int field_1F68;

@@ -20,13 +20,13 @@ struct Entity
     EntityHandle m_Handle;
     DataArchiveHolder m_EntityData;
     SceneModelSystem *m_pSceneManager;
-    Behavior *m_pSceneModel;                 ///< There's no difference between m_SceneModel and m_Instance
+    Behavior *m_pSceneModel;                 ///< There's no difference between m_pSceneModel and m_pInstance
     Animation *m_pAnimation;
     int field_44; // BehaviorInfo *
     Behavior *m_pInstance;
     BOOL m_bStartupImmediately; 
-    int field_50;
-    int field_54;
+    BOOL m_bDebris;
+    BOOL m_bDatsuEntity;
     int m_nSetType;
     int field_5C;
 
@@ -51,16 +51,6 @@ struct Entity
     void updateDelta()
     {
         ((void(__thiscall*)(Entity*))(shared::base + 0xA049A0))(this);
-    }
-
-    float getDeltaTime()
-    {
-        return ((float(__thiscall*)(Entity*))(shared::base + 0xA049B0))(this);
-    }
-
-    BOOL setEntitySlowRateType(int SlowRateType)
-    {
-        return ((BOOL(__thiscall*)(Entity*, int))(shared::base + 0xA08640))(this, SlowRateType);
     }
 
     void setTransPos(const cVec4& transPos)

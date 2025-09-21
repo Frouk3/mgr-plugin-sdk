@@ -163,7 +163,7 @@ public:
     int field_954;
     int field_958;
     int field_95C;
-    cCamera m_Cameras[4];
+    cCamera m_aCameras[4];
     Entity* m_pCameraObjectEnt;
     BehaviorCamera* m_pCameraObject;
     int field_16E8;

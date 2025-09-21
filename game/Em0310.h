@@ -653,7 +653,7 @@ public:
     EntityHandle field_874;
     int field_878;
     int field_87C;
-    CollisionAttackData::AttackData m_AttackData;
+    CollisionAttackData::HitData m_AttackData;
     int field_980;
     float field_984;
     int field_988;
@@ -679,7 +679,7 @@ class Em0310QteObstacle : public BehaviorBgBase
 {
 public:
     cEspControler field_A70;
-    CollisionAttackData::AttackData field_B20;
+    CollisionAttackData::HitData field_B20;
     int field_C20;
     int field_C24;
     int field_C28;
@@ -700,7 +700,7 @@ public:
 class Em0310QteCeiling : public BehaviorBgBase
 {
 public:
-    CollisionAttackData::AttackData field_A70;
+    CollisionAttackData::HitData field_A70;
     int field_B70;
     int field_B74;
     int field_B78;

@@ -5,7 +5,7 @@
 class Ba0015 : public BehaviorBa
 {
 public:
-    CollisionAttackData::AttackData field_B30[64];
+    CollisionAttackData::HitData field_B30[64];
 
     Ba0015()
     {

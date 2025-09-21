@@ -19,7 +19,7 @@ public:
     int field_A54;
     int field_A58;
     int field_A5C;
-    CollisionAttackData::AttackData field_A60;
+    CollisionAttackData::HitData field_A60;
     int field_B60;
     int field_B64;
     int field_B68;

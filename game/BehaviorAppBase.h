@@ -21,7 +21,7 @@ public:
     float field_8A8;
     int field_8AC;
     int field_8B0;
-    int field_8B4;
+    int m_nAnimationFrame;
     int field_8B8;
     int field_8BC;
     int field_8C0;
@@ -37,7 +37,7 @@ public:
     cVec4 field_900;
     float m_fEntityTickRate;
     int field_914;
-    Animation* field_918;
+    Animation* m_pAnimation;
     EntityHandle m_QTETargetExecutor;
     float field_920;
     float field_924;
@@ -88,7 +88,7 @@ public:
     float field_9E4;
     float field_9E8;
     float field_9EC;
-    float field_9F0;
+    float m_fYawDifference;
     int field_9F4;
     int field_9F8;
     int field_9FC;
@@ -98,10 +98,29 @@ public:
         ((void(__thiscall *)(BehaviorAppBase *))(shared::base + 0xEC370))(this);
     }
 
+    // vft start
+    
+    void adjustHeading(float adjustment, float yawThreshold, float maxYaw, float desiredYawOffset)
+    {
+        CallVMTFunc<194, BehaviorAppBase *, float, float, float, float>(this, adjustment, yawThreshold, maxYaw, desiredYawOffset);
+    }
+
+    void damage(int damage, bool leave1Hp)
+    {
+        CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
+    }
+
     void heal(int heal)
     {
         CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
     }
+
+    void updateVelocity(float deltaTime)
+    {
+        CallVMTFunc<200, BehaviorAppBase *, float>(this, deltaTime);
+    }
+
+    // vft end
 
     void setupHealth(int health)
     {
@@ -113,19 +132,9 @@ public:
         ((void (__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE20))(this, health);
     }
 
-    void damage(int damage, bool leave1Hp)
-    {
-        CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
-    }
-
     int getHealth()
     {
         return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
-    }
-
-    void updateVelocity(float deltaTime)
-    {
-        CallVMTFunc<200, BehaviorAppBase *, float>(this, deltaTime);
     }
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C24);

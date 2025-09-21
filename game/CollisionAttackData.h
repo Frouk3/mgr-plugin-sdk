@@ -6,7 +6,7 @@
 class CollisionAttackData : public CollisionUserData
 {
 public:
-    struct AttackData
+    struct HitData : public CollisionUserData::HitData
     {
         int field_0;
         int field_4;
@@ -73,18 +73,19 @@ public:
         int field_F8;
         int field_FC;
 
-        AttackData()
+        HitData()
         {
-            ((void(__thiscall *)(AttackData*))(shared::base + 0x105D0))(this);
+            ((void(__thiscall *)(HitData*))(shared::base + 0x105D0))(this);
         }
     };
 public:
-    AttackData* m_AttackData;
     int field_C;
-    AttackData m_CollisionDataContainer;
+    HitData m_CollisionDataContainer;
 
     CollisionAttackData()
     {
         ((void (__thiscall *)(CollisionAttackData *))(shared::base + 0x973030))(this);
     }
 };
+
+VALIDATE_SIZE(CollisionAttackData, 0x110);

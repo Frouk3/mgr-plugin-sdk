@@ -68,4 +68,6 @@ namespace cMath
     {
         ((void(__cdecl*)(cQuaternion&, const cVec4&))(shared::base + 0x9DB590))(out, eulerAngles);
     }
+
+    inline Random& m_Random = *(Random*)(shared::base + 0x19D0814);
 }
