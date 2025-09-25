@@ -264,9 +264,9 @@ public:
     int field_1180;
     int field_1184;
     Entity *field_1188;
-    Animation *m_Animation;
-    Entity *m_BladeEntity;
-    Entity *m_SheathEntity;
+    Animation *m_pAnimation; // if you want to access the one in BehaviorAppBase, use this->BehaviorAppBase::m_pAnimation
+    Entity *m_pBladeEntity;
+    Entity *m_pSheathEntity;
     EntityHandle field_1198;
     EntityHandle field_119C;
     int field_11A0;
@@ -1238,7 +1238,7 @@ public:
     float field_2BD0;
     float field_2BD4;
     float field_2BD8;
-    Hw::cFixedVector<int> field_2BDC;
+    Hw::cFixedVector<AttackData> field_2BDC;
     float field_2BF0;
     float field_2BF4;
     float field_2BF8;
@@ -1261,7 +1261,7 @@ public:
     float field_2C3C;
     int field_2C40;
     int field_2C44;
-    Hw::cFixedVector<int> field_2C48;
+    Hw::cFixedVector<AttackData> field_2C48;
     float field_2C5C;
     float field_2C60;
     int field_2C64;

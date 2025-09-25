@@ -1318,7 +1318,7 @@ public:
         CallVMTFunc<74, Behavior *>(this);
     }
 
-    CollisionAttackData *getAttackInfo(int a1)
+    [[nodiscard]] CollisionAttackData *getAttackInfo(int a1)
     {
         return ReturnCallVMTFunc<CollisionAttackData*, 76, Behavior*, int>(this, a1);
     }
@@ -1472,6 +1472,11 @@ public:
        return ((int(__thiscall*)(Behavior*, void*, void*, int, float, float, unsigned int, float, float))(shared::base + 0x69EFB0))(this, mot, seq, a4, fInterpolation, a6, nFlags, fStartFrame, a9);
     }
 
+    void setAnimationByData(DataArchiveHolder *data, unsigned int index, int a4, float interpolation, float a6, int flags, float startFrame, float a9)
+    {
+        ((void(__thiscall*)(Behavior*, DataArchiveHolder*, unsigned int, int, float, float, int, float, float))(shared::base + 0x69F3C0))(this, data, index, a4, interpolation, a6, flags, startFrame, a9);
+    }
+
     // Takes all values from the animation map and plays the animation
     int requestAnimationByMap(int id)
     {
@@ -1489,12 +1494,12 @@ public:
         return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
     }
 
-    BOOL isFlagSet(int flagBit)
+    BOOL isFlagSet(_In_range_(0, 63) int flagBit)
     {
         return ((BOOL(__thiscall*)(Behavior*, int))(shared::base + 0x68C760))(this, flagBit);
     }
 
-    void setNodePlaybackSpeed(int node, float fPlaybackSpeed)
+    void setNodePlaybackSpeed(_In_range_(0, 15) int node, float fPlaybackSpeed)
     {
         ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, fPlaybackSpeed);
     }
