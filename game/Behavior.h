@@ -16,6 +16,9 @@
 #include <RigidBodyList.h>
 #include <NodeManager.h>
 #include <CollisionAttackData.h>
+#include <BehaviorUniqueAllocatorImplement.h>
+#include <BehaviorDatabaseImplement.h>
+#include <SceneBehaviorSystem.h>
 
 struct ClothSimulation
 {
@@ -913,11 +916,14 @@ struct Constraints
     int field_4C;
 };
 
+class BehaviorData;
+
 class Behavior : public cObj
 {
 public:
-    struct AnimationSlot
+    class AnimationSlot
     {
+    public:
         int m_nSlotId;
         int field_4;
         char m_AnimName[16];
@@ -955,6 +961,9 @@ public:
         int field_28;
         int field_2C;
         int field_30;
+        int field_34;
+        int field_38;
+        int field_3C;
     };
 
     struct AttackData // Logically it will be here, in this class
@@ -994,8 +1003,8 @@ public:
     float field_578;
     float field_57C;
     float field_580;
-    float field_584;
-    float field_588;
+    BehaviorUniqueAllocatorImplement::Data::BehaviorData *m_pUniqueAllocatorData;
+    BehaviorData *m_pBehaviorData;
     BOOL m_bPaused; // Sets to true when game is paused, if you unpause this entity in pause, it will update behind the pause
     char field_590;
     int field_594;
@@ -1005,14 +1014,7 @@ public:
     int field_5A4;
     int field_5A8;
     int field_5AC;
-    int field_5B0;
-    int field_5B4;
-    int field_5B8;
-    int field_5BC;
-    int field_5C0;
-    int field_5C4;
-    int field_5C8;
-    int field_5CC;
+    cVec4 m_avecGroundSupport[2];
     int field_5D0;
     int field_5D4;
     int field_5D8;
@@ -1021,14 +1023,13 @@ public:
     int field_5E4;
     int field_5E8;
     int field_5EC;
-    hkpRigidBody* field_5F0;
-    hkpRigidBody* field_5F4;
+    hkpRigidBody* m_apGroundSupportRigids[2];
     int field_5F8;
     int field_5FC;
     float field_600;
     int field_604;
     int field_608;
-    int m_pBehaviorInfo;
+    BehaviorList::_BEHAVIOR_INFO* m_pBehaviorInfo;
     int field_610;
     int field_614;
     unsigned int m_nCurrentAction;
@@ -1101,7 +1102,7 @@ public:
     int field_750;
     BattleParameterImplement* m_pBattleParameterImplement;
     int field_758;
-    lib::AllocatedArray<AnimationMap::Unit>** m_ppAnimationMap;
+    AnimationMap *m_pAnimationMap;
     int field_760;
     CharacterControl* m_pCharacterControl;
     int field_768;
@@ -1114,7 +1115,7 @@ public:
     float field_784;
     int field_788;
     int field_78C;
-    int m_aAnimFlag[2];
+    unsigned int m_aAnimFlag[2];
     EspCtrlCustomImpl* m_pEspCtrlCustomImpl;
     cEspControler* field_79C;
     lib::StaticArray<EffectIntegrationContainer, 32>* m_pEffectIntegrationContainer;
@@ -1303,6 +1304,11 @@ public:
         CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
     }
 
+    void toggleCollision(BOOL bState)
+    {
+        CallVMTFunc<50, Behavior *, BOOL>(this, bState);
+    }
+
     void attachConstraints(BOOL bState)
     {
         CallVMTFunc<62, Behavior *, BOOL>(this, bState);
@@ -1330,7 +1336,7 @@ public:
 
     BOOL isAlive()
     {
-        return ReturnCallVMTFunc<bool, 128, Behavior *>(this);
+        return ReturnCallVMTFunc<BOOL, 128, Behavior *>(this);
     }
 
     cVec4 getOffsetPosition()
@@ -1340,7 +1346,7 @@ public:
         return result;
     }
 
-    void forceDie()
+    void forceDeath()
     {
         CallVMTFunc<190, Behavior*>(this);
     }
@@ -1407,14 +1413,27 @@ public:
         return ((BOOL (__thiscall *)(Behavior *, DataArchiveHolder *))(shared::base + 0x692380))(this, clothStorage);
     }
 
-    int requestAnimationByMap(int animId, Entity* pEntityFrom, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)
+    // return value is animation slot id
+    int setAnimationFrom(Behavior *from, const char *animName, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, pEntityFrom, a4, fInterpolation, a6, nFlags, fStartFrame, a9);
+        return ((BOOL (__thiscall *)(Behavior *, Behavior *, const char *, int, float, float, unsigned int, float, float))(shared::base + 0x69E440))(this, from, animName, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
-    int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float a9, unsigned int nFlags)
+    // return value is animation slot id
+    int requestAnimationByMap(int animId, Entity* from, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, a9, nFlags);
+        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, from, node, interpolation, weight, flags, startFrame, playbackSpeed);
+    }
+
+    // return value is animation slot id
+    int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float interpolation, unsigned int flags)
+    {
+        return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, interpolation, flags);
+    }
+
+    AnimationSlot *getAnimationSlotById(int slotId)
+    {
+        return ((AnimationSlot * (__thiscall *)(Behavior *, int))(shared::base + 0x6945C0))(this, slotId);
     }
 
     void removeConstraint(int constraintId)
@@ -1447,9 +1466,14 @@ public:
         return ((float(__thiscall*)(Behavior*))(shared::base + 0x693060))(this);
     }
 
-    Constraints* getConstraints(int id)
+    Constraints* getConstraintById(int id)
     {
         return ((Constraints * (__thiscall*)(Behavior*, int))(shared::base + 0x6943E0))(this, id);
+    }
+
+    Constraints *getConstraint(int index)
+    {
+        return ((Constraints * (__thiscall*)(Behavior*, int))(shared::base + 0x694380))(this, index);
     }
 
     Entity* getConstraintsEntity(int id)
@@ -1467,14 +1491,14 @@ public:
         ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, rotationBone);
     }
 
-    int setDirectAnimation(void* mot, void* seq, int a4, float fInterpolation, float a6, unsigned int nFlags, float fStartFrame, float a9)
+    int setDirectAnimation(void* mot, void* seq, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-       return ((int(__thiscall*)(Behavior*, void*, void*, int, float, float, unsigned int, float, float))(shared::base + 0x69EFB0))(this, mot, seq, a4, fInterpolation, a6, nFlags, fStartFrame, a9);
+       return ((int(__thiscall*)(Behavior*, void*, void*, int, float, float, unsigned int, float, float))(shared::base + 0x69EFB0))(this, mot, seq, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
-    void setAnimationByData(DataArchiveHolder *data, unsigned int index, int a4, float interpolation, float a6, int flags, float startFrame, float a9)
+    int setAnimationByData(DataArchiveHolder *data, unsigned int index, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        ((void(__thiscall*)(Behavior*, DataArchiveHolder*, unsigned int, int, float, float, int, float, float))(shared::base + 0x69F3C0))(this, data, index, a4, interpolation, a6, flags, startFrame, a9);
+        return ((int(__thiscall*)(Behavior*, DataArchiveHolder*, unsigned int, int, float, float, unsigned int, float, float))(shared::base + 0x69F3C0))(this, data, index, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     // Takes all values from the animation map and plays the animation
@@ -1484,9 +1508,9 @@ public:
     }
     
     // Unlike others, motion file is taken from the data file of this object
-    int requestAnimationByName(const char* anim, int a3, float fInterpolation, int a5, unsigned int nFlags, float fStartFrame, float a8)
+    int requestAnimationByName(const char* anim, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int(__thiscall*)(Behavior*, const char*, int, float, int, unsigned int, float, float))(shared::base + 0x69E290))(this, anim, a3, fInterpolation, a5, nFlags, fStartFrame, a8);
+        return ((int(__thiscall*)(Behavior*, const char*, int, float, float, unsigned int, float, float))(shared::base + 0x69E290))(this, anim, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     int getCollisionFilter()
@@ -1499,16 +1523,23 @@ public:
         return ((BOOL(__thiscall*)(Behavior*, int))(shared::base + 0x68C760))(this, flagBit);
     }
 
-    void setNodePlaybackSpeed(_In_range_(0, 15) int node, float fPlaybackSpeed)
+    // node can be passed as handle or index
+    void setNodePlaybackSpeed(int node, float playbackSpeed)
     {
-        ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, fPlaybackSpeed);
+        ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, playbackSpeed);
+    }
+
+    static inline Behavior* __cdecl allocate(Hw::cHeapVariable *allocator)
+    {
+        return ((Behavior* (__cdecl *)(Hw::cHeapVariable *))(shared::base + 0x6A5F10))(allocator);
     }
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);
 };
 
-struct BehaviorData
+class BehaviorData
 {
+public:
     int field_0;
     int field_4;
     int field_8;
@@ -1596,3 +1627,5 @@ struct BehaviorData
 VALIDATE_SIZE(Behavior::AnimationSlot, 0x30);
 VALIDATE_SIZE(Behavior, 0x870);
 VALIDATE_SIZE(BehaviorData, 0x160);
+VALIDATE_SIZE(Behavior::InstructionContainer, 0x40);
+VALIDATE_SIZE(Behavior::AnimationSlot, 0x30);

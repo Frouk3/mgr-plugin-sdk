@@ -1,6 +1,6 @@
 #pragma once
-#include "cSlowRateUnit.h"
-#include "Hw.h"
+#include <cSlowRateUnit.h>
+#include <Hw.h>
 
 class cSlowRateManager
 {
@@ -11,8 +11,8 @@ public:
 	int field_10;
 	int field_14;
 	cSlowRateUnit* m_FirstUnit;
-	int field_1C;
-	int field_20;
+	size_t m_nSlowUnitsCapacity;
+	Hw::cHeapVariable* m_pAllocator;
 	int field_24;
 	int field_28;
 	int field_2C;
@@ -23,9 +23,9 @@ public:
 	{
 		float m_fSlowRate;
 		float m_fRate;
-		float m_fDesiredRate;
-		float m_fCalculatedSlowRate;
-	} m_SlowRateUnit[4];
+		float m_fSlowRateBefore;
+		float m_fDelta;
+	} m_aSlowRateUnit[4];
 	float m_fTickRate;
 	float m_fTicks;
 	float field_84;
@@ -40,54 +40,66 @@ public:
 		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08FB0))(this);
 	}
 
-	void SetSlowRate(eSlowRateType SlowRateType, float SlowRate)
+	void setTickDelay(float framerate)
+	{
+		((void(__thiscall*)(cSlowRateManager*, float))(shared::base + 0xA03A50))(this, framerate);
+	}
+
+	void setSlowRate(eSlowRateType SlowRateType, float SlowRate)
 	{
 		((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03A70))(this, SlowRateType, SlowRate);
 	}
 
-	float getSlowRate(eSlowRateType SlowRateType)
-	{
-		if (SlowRateType > SLOWRATE_ETC)
-			return 1.0f;
-
-		return m_SlowRateUnit[static_cast<int>(SlowRateType)].m_fSlowRate;
-	}
-
-	void ResetSlowRate()
-	{
-		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA03B10))(this);
-	}
-
-	void Cleanup()
-	{
-		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08740))(this);
-	}
-
-	float GetCalculatedRate(eSlowRateType type)
+	float getDeltaRate(eSlowRateType type)
 	{
 		return ((float(__thiscall*)(cSlowRateManager*, int))(shared::base + 0xA03A90))(this, type);
 	}
 
-	cSlowRateUnit* AllocUnit()
+	void setRate(eSlowRateType slowRateType, float rate)
+	{
+		((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03AB0))(this, slowRateType, rate);
+	}
+
+	float getRate(eSlowRateType type)
+	{
+		return ((float(__thiscall*)(cSlowRateManager*, int))(shared::base + 0xA03AD0))(this, type);
+	}
+
+	float getSlowRateBefore(eSlowRateType type)
+	{
+		return ((float(__thiscall*)(cSlowRateManager*, int))(shared::base + 0xA03AF0))(this, type);
+	}
+
+	void resetSlowRate()
+	{
+		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA03B10))(this);
+	}
+
+	cSlowRateUnit* allocUnit()
 	{
 		return ((cSlowRateUnit * (__thiscall*)(cSlowRateManager*))(shared::base + 0xA06230))(this);
 	}
 
-	static inline void SetSlowRaten(eSlowRateType SlowRateType, float SlowRate)
+	BOOL allocateUnits(size_t units, Hw::cHeapVariable *allocator)
 	{
-		((void(__cdecl*)(int, float))(shared::base + 0x532020))(SlowRateType, SlowRate);
+		return ((BOOL(__thiscall*)(cSlowRateManager*, size_t, Hw::cHeapVariable*))(shared::base + 0xA198A0))(this, units, allocator);
 	}
 
-	static inline float GetTickRate(eSlowRateType type)
+	BOOL startup(Hw::cHeapVariable *allocator, float frameRate)
 	{
-		return ((float(__cdecl*)(int))(shared::base + 0x532000))(type);
+		return ((BOOL(__thiscall*)(cSlowRateManager*, Hw::cHeapVariable*, float))(shared::base + 0xA086A0))(this, allocator, frameRate);
 	}
 
-	static inline cSlowRateManager* Get()
+	void cleanup()
+	{
+		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08740))(this);
+	}
+
+	static inline cSlowRateManager* get()
 	{
 		return ((cSlowRateManager * (__cdecl*)())(shared::base + 0xA03960))();
 	}
 
-	static inline cSlowRateManager& Instance = *(cSlowRateManager*)(shared::base + 0x17E93B0);
-	static inline cSlowRateManager*& pInstance = *(cSlowRateManager**)(shared::base + 0x19D9160);
+	static inline cSlowRateManager& ms_Instance = *(cSlowRateManager*)(shared::base + 0x17E93B0);
+	static inline cSlowRateManager*& ms_pInstance = *(cSlowRateManager**)(shared::base + 0x19D9160);
 };

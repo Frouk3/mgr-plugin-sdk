@@ -1,4 +1,5 @@
 #include <cGameUIManager.h>
+#include <Hw.h> // for cInput
 #include <Events.h>
 
 class ChangeHeightExample
@@ -8,17 +9,17 @@ public:
     {
         Events::OnTickEvent += []()
         {
-            Pl0000 *player = cGameUIManager::Instance.m_pPlayer;
+            Pl0000 *player = cGameUIManager::ms_Instance.m_pPlayer;
 
             if (!player)
                 return;
 
-            if (shared::IsKeyPressed(VK_ADD, false))
+            if (cInput::ms_KeyInput.isKeyPressed('K'))
                 player->m_vecTransPos.y += 5.0f;
-            else if (shared::IsKeyPressed(VK_SUBTRACT, false))
+            else if (cInput::ms_KeyInput.isKeyPressed('L'))
                 player->m_vecTransPos.y -= 5.0f;
             
-            if (shared::IsKeyPressed(VK_ADD) || shared::IsKeyPressed(VK_SUBTRACT))
+            if (cInput::ms_KeyInput.isKeyDown('K') || cInput::ms_KeyInput.isKeyDown('L'))
                 player->m_vecVelocity.y = 0.0f;
         };
     }

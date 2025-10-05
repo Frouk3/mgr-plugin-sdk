@@ -964,7 +964,7 @@ public:
     cEspControler field_2110;
     cEspControler field_21C0;
     cEspControler field_2270;
-    cCameraGame *m_Camera;
+    cCameraGame *m_pCamera;
     float field_2324;
     int field_2328;
     int field_232C;
@@ -3070,6 +3070,11 @@ public:
     void setPlayerSafe()
     {
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x7E86F0))(this);
+    }
+
+    static inline Pl0000 *__cdecl allocate(Hw::cHeapVariable *allocator)
+    {
+        return ((Pl0000 * (__cdecl*)(Hw::cHeapVariable*))(shared::base + 0x6C3340))(allocator);
     }
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);

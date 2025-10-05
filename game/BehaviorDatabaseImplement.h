@@ -4,6 +4,8 @@
 #include <Behavior.h>
 #include <lib.h>
 
+class BehaviorData;
+
 class BehaviorDatabaseImplement : public BehaviorDatabase
 {
 public:

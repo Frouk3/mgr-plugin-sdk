@@ -2,6 +2,7 @@
 
 #include <lib.h>
 #include <eObjID.h>
+#include <HkDataManagerImplement.h>
 
 struct AnimationMap
 {
@@ -23,22 +24,80 @@ struct AnimationMap
         int m_nMirror;
         int m_nOther;
     };
+
+    lib::AllocatedArray<Unit> *m_pUnits;
+
+    AnimationMap(Hw::cHeapVariable *allocator, void *mapData)
+    {
+        ((void(__thiscall *)(AnimationMap*, Hw::cHeapVariable*, void*))(shared::base + 0x4DA630))(this, allocator, mapData);
+    }
+
+    Unit &getUnitByAnim(int animId)
+    {
+        return ((Unit &(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7D10))(this, animId);
+    }
+
+    Unit &getUnit(int index)
+    {
+        return ((Unit &(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7D50))(this, index);
+    }
+
+    const char *getNameByAnim(int animId)
+    {
+        return ((const char *(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7D70))(this, animId);
+    }
+
+    int getLoopByAnim(int animId)
+    {
+        return ((int(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7DB0))(this, animId);
+    }
+
+    float getInterpolationByAnim(int animId)
+    {
+        return ((float(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7DF0))(this, animId);
+    }
+
+    float getStartFrameByAnim(int animId)
+    {
+        return ((float(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7E50))(this, animId);
+    }
+
+    int getYTranslateEaseOffByAnim(int animId)
+    {
+        return ((int(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D7FD0))(this, animId);
+    }
+
+    int getZTranslateEaseOffByAnim(int animId)
+    {
+        return ((int(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D8010))(this, animId);
+    }
+
+    int getMirrorByAnim(int animId)
+    {
+        return ((int(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D8050))(this, animId);
+    }
+
+    int getOtherByAnim(int animId)
+    {
+        return ((int(__thiscall *)(AnimationMap*, int))(shared::base + 0x4D8090))(this, animId);
+    }
 };
 
-struct AnimationMapResource
+class AnimationMapResource
 {
+public:
     int m_nReferences;
     int m_bWantsToBeRemoved;
     eObjID m_nObject;
-    lib::AllocatedArray<AnimationMap::Unit>** m_ppAnimationUnit;
+    AnimationMap* m_pAnimationMap;
 };
 
 class AnimationMapManager
 {
 public:
 
-    virtual void tick() {};
-    virtual lib::AllocatedArray<AnimationMap::Unit> **addReference(eObjID object, void *a3) {};
-    virtual void removeReference(eObjID object) {};
-    virtual ~AnimationMapManager() {};
+    virtual void tick() {}
+    virtual AnimationMap *addReference(eObjID object, DataArchiveHolder *data) { return nullptr; /* nullptr for no raised exception */ } // they don't check if there's already an animation map resource for the object
+    virtual void release(eObjID object) {}
+    virtual ~AnimationMapManager() {}
 };

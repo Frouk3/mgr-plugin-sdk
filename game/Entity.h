@@ -7,12 +7,14 @@
 #include <eObjID.h>
 #include <EntityHandle.h>
 #include <HkDataManagerImplement.h>
+#include <SceneBehaviorSystem.h>
 
 struct EntitySystem;
 class Behavior;
 
-struct Entity
+class Entity
 {
+public:
     cSlowRateUnit *m_pSlowRateUnit;
     char m_EntityName[32];
     eObjID m_EntityIndex;
@@ -22,7 +24,7 @@ struct Entity
     SceneModelSystem *m_pSceneManager;
     Behavior *m_pSceneModel;                 ///< There's no difference between m_pSceneModel and m_pInstance
     Animation *m_pAnimation;
-    int field_44; // BehaviorInfo *
+    BehaviorList *m_pBehaviorList;
     Behavior *m_pInstance;
     BOOL m_bStartupImmediately; 
     BOOL m_bDebris;
@@ -46,11 +48,6 @@ struct Entity
     T *getEntityInstance()
     {
         return ((T *(__thiscall*)(Entity*))(shared::base + 0x67C8A0))(this);
-    }
-
-    void updateDelta()
-    {
-        ((void(__thiscall*)(Entity*))(shared::base + 0xA049A0))(this);
     }
 
     void setTransPos(const cVec4& transPos)

@@ -2,6 +2,7 @@
 #include <EntitySystem.h>
 #include <Events.h>
 #include <BehaviorEmBase.h>
+#include <Hw.h> // for cInput
 
 class Plugin
 {
@@ -10,9 +11,9 @@ public:
 	{
 		Events::OnTickEvent += []()
 			{
-				if (shared::IsKeyPressed('O', false))
+				if (cInput::ms_KeyInput.isKeyPressed('O'))
 				{
-					for (auto& entity : EntitySystem::ms_Instance.m_EntityList)
+					for (Entity* entity : EntitySystem::ms_Instance.m_EntityList)
 					{
 						if (!entity)
 							continue;
@@ -23,7 +24,7 @@ public:
 						if ((entity->m_EntityIndex & 0xF0000) != 0x20000) // NOT EM
 							continue;
 
-						auto enemy = entity->getEntityInstance<BehaviorEmBase>();
+						BehaviorEmBase* enemy = entity->getEntityInstance<BehaviorEmBase>();
 
 						if (enemy->getContext().hasInheritance(BehaviorEmBase::ms_Context))
 						{

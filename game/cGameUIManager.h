@@ -21,30 +21,22 @@ public:
 	int field_14;
 	cStageConnect *m_pStageConnect;
 	Hw::cFixedVector<cZandatsuTarget> m_ZandatsuTargets;
-	int field_30; // Hw::cFixedVector but typename is not defined -> m_Enemies(?)
-	int field_34;
-	int field_38;
-	int field_3C;
-	int field_40;
-	int field_44; // Hw::cFixedVector but typename is not defined
-	int field_48;
-	int field_4C;
-	int field_50;
-	int field_54;
+	Hw::cFixedVector<void*> field_30;
+	Hw::cFixedVector<void*> field_44;
 	Entity *m_pPlayerEntity;
-	EntityHandle m_nEntityHandle;
+	EntityHandle m_PlayerHandle;
 	Pl1500 *m_pPlCharacter;
 	cParts *m_pPlayerParts[13];
 	Pl1500 *m_pPlayer;
 	int m_nPlayerEntityHandle;
 	cVec4 m_vecPlayerPosition;
 	cVec4 field_B0;
-	cActionMessageParts *m_pcActionMessageParts;
+	cActionMessageParts *m_pActionMessageParts;
 	int field_C4;
 	cDryCellGauge2 *m_pcDryCellGauge2;
 	int field_CC;
 	cRadarMap *m_pRadarMap;
-	cWeaponInfoDispParts *m_pcWeaponInfoDispParts;
+	cWeaponInfoDispParts *m_pWeaponInfoDispParts;
 	int field_D8;
 
 	virtual ~cGameUIManager() {};

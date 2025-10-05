@@ -165,6 +165,27 @@ namespace Hw
 		}
 	}
 
+	namespace ThreadManager
+	{
+
+
+		inline BOOL startupThread(Hw::Thread* pThread, unsigned int stackSize, int a3, const char *threadName, int priority)
+		{
+			return ((BOOL(__cdecl *)(Hw::Thread*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority);
+		}
+
+		inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority)
+		{
+			return ((BOOL(__cdecl *)(void (__cdecl *)(void *), void *, unsigned int, int, const char *, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority);
+		}
+		
+		// Should be always called at the end of the thread function
+		inline void exitCurrentThread()
+		{
+			((void(__cdecl *)())(shared::base + 0x9D7C70))();
+		}
+	}
+
 	inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
 	inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
 	inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C);
@@ -220,11 +241,11 @@ public:
 
 struct Hw::Thread
 {
-	int m_ThreadId;
+	int m_nThreadId;
 	int field_4;
-	int m_ThreadIndex;
-	void (__cdecl *m_func)(void *);
-	void *m_arg;
+	int m_nThreadIndex;
+	void (__cdecl *m_pfnThreadFunction)(void *);
+	void *m_pThreadParameter;
 };
 
 struct Hw::cVec2
@@ -1702,7 +1723,7 @@ public:
 
 class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
 
-inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
+inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator) 
 {
 	return ((void*(__cdecl *)(size_t, Hw::cHeap *))(shared::base + 0x9D3500))(s, allocator);
 }
@@ -1710,6 +1731,16 @@ inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator)
 inline void __cdecl operator delete(void* block, Hw::cHeap* allocator) // to separate the delete operator
 {
 	return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
+}
+
+inline void *__cdecl operator new[](size_t s, Hw::cHeap* allocator)
+{
+	return ((void*(__cdecl*)(size_t, Hw::cHeap*))(shared::base + 0x9D3580))(s, allocator);
+}
+
+inline void __cdecl operator delete[](void *block, Hw::cHeap* allocator) // to separate the delete[] operator
+{
+	return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block);
 }
 
 // Usage after heap startup
@@ -1740,6 +1771,16 @@ struct Hw::cFixedVector
 		m_capacity = 0;
 		m_size = 0;
 		m_bInitialized = 0;
+	}
+
+	~cFixedVector()
+	{
+		if (m_vector)
+		{
+			m_size = 0;
+			if (m_bInitialized)
+				operator delete(m_vector, (Hw::cHeap*)nullptr);
+		}
 	}
 
 	BOOL create(size_t capacity, Hw::cHeap* allocator)

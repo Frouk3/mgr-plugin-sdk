@@ -4,30 +4,8 @@
 #include <cGameUIManager.h>
 #include <EntitySystem.h>
 #include <shared.h>
-
-struct cObjReadManager
-{
-	eObjID m_nObjId;
-	int m_nSetType;
-	int m_nTimeout;
-
-	BOOL loadRequestedObject(eObjID objId, int setType)
-	{
-		return ((BOOL(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x600CA0))(this, objId, setType);
-	}
-
-	BOOL requestWork(eObjID objId, int setType)
-	{
-		return ((BOOL(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x600A60))(this, objId, setType);
-	}
-
-	BOOL endWork(eObjID objId, int setType)
-	{
-		return ((BOOL(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x600BD0))(this, objId, setType);
-	}
-
-	static inline cObjReadManager& Instance = *(cObjReadManager*)(shared::base + 0x0177B364);
-};
+#include <cObjReadManager.h>
+#include <Hw.h> // for cInput
 
 bool isObjExists(eObjID objId)
 {
@@ -74,7 +52,7 @@ Entity* EntSpawnQueue::getLastEntity()
 {
 	EntSpawn* queue = nullptr;
 
-	for (auto& str : *this)
+	for (EntSpawn& str : *this)
 	{
 		if (str.bDone && !str.bWorkFail && str.m_Entity)
 			queue = &str;
@@ -101,20 +79,20 @@ public:
 			{
 				if (m_EntQueue.m_size)
 				{
-					for (auto& str : m_EntQueue)
+					for (EntSpawn& str : m_EntQueue)
 					{
 						if (!str.bDone)
 						{
 							if (!str.bWorkFail)
-								str.bWorkFail = cObjReadManager::Instance.requestWork(str.mObjId, str.iSetType) == 0;
+								str.bWorkFail = g_ObjReadManager.requestWork(str.mObjId, str.iSetType) == 0;
 
-							str.bDone = cObjReadManager::Instance.loadRequestedObject(str.mObjId, str.iSetType);
+							str.bDone = g_ObjReadManager.isObjectLoaded(str.mObjId, str.iSetType);
 						}
 					}
 
 					for (int i = 0; i < m_EntQueue.m_size; i++)
 					{
-						auto& elem = m_EntQueue[i];
+						EntSpawn& elem = m_EntQueue[i];
 
 						if (elem.bWorkFail)
 							m_EntQueue.remove(elem);
@@ -128,12 +106,12 @@ public:
 				{
 					Behavior* instance = entity->getEntityInstance<Behavior>();
 
-					cVec4 pos = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecTransPos : cVec4();
-					cVec4 rot = cGameUIManager::Instance.m_pPlayer ? cGameUIManager::Instance.m_pPlayer->m_vecRotation : cVec4();
+					cVec4 pos = cGameUIManager::ms_Instance.m_pPlayer ? cGameUIManager::ms_Instance.m_pPlayer->m_vecTransPos : cVec4();
+					cVec4 rot = cGameUIManager::ms_Instance.m_pPlayer ? cGameUIManager::ms_Instance.m_pPlayer->m_vecRotation : cVec4();
 
 					instance->place(pos, rot);
 
-					cObjReadManager::Instance.endWork(instance->m_ObjId, instance->m_nSetType);
+					g_ObjReadManager.endWork(instance->m_ObjId, instance->m_nSetType); // Removes reference
 				}
 
 				shared::ExPressKeyUpdate();
@@ -141,7 +119,7 @@ public:
 
 		Events::OnTickEvent += []()
 			{
-				if (shared::IsKeyPressed('H', false)) // spawn boss Sam for example
+				if (cInput::ms_KeyInput.isKeyPressed('H')) // spawn boss Sam for example
 				{
 					eObjID objectId = eObjID(0x20020); 
 					m_EntQueue.push_back({ .mObjId = objectId, .iSetType = 0, .bWorkFail = !isObjExists(objectId) });

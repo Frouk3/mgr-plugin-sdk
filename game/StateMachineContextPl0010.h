@@ -8,7 +8,7 @@ class Pl0000;
 class StateMachineContextPl0010 : public StateMachineContext
 {
 public:
-    Pl0000 *m_Owner;
+    Pl0000 *m_pOwner;
     float field_10;
     int field_14;
     int field_18;
@@ -295,4 +295,6 @@ public:
     int field_5D4;
     float field_5D8;
     int field_5DC;
+
+    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9EF4);
 };

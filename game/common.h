@@ -27,7 +27,7 @@ public:
 
 	sHandle &operator=(const sHandle &handle)
 	{
-		m_Handle = handle.m_Handle;
+		*this = handle.m_Handle;
 		return *this;
 	}
 
@@ -37,6 +37,53 @@ public:
 	}
 
 	operator tC*(); // Make sure we assure the user to add the operator for the handle they're constructing 
+};
+
+struct cString // incomplete class, needs further research
+{
+	Hw::cHeapVariable *m_pAllocator;
+	char *m_pData;
+	char *m_pEnd;
+	char *m_pCapacityEnd;
+	Hw::cHeapVariable *m_pDeleter;
+	int field_14;
+	int field_18;
+	int field_1C;
+
+	cString(const char *str, Hw::cHeapVariable *allocator)
+	{
+		((void(__thiscall *)(cString*, const char*, Hw::cHeapVariable*))(shared::base + 0xA09060))(this, str, allocator);
+	}
+
+	char *scanForChar(const char *str)
+	{
+		return ((char* (__thiscall *)(cString*, const char*))(shared::base + 0xA04370))(this, str);
+	}
+
+	char *findFistOfExcluding(const char *toFind, const char *toExclude)
+	{
+		return ((char* (__thiscall *)(cString*, const char*, const char*))(shared::base + 0xA043C0))(this, toFind, toExclude);
+	}
+
+	void trimLeadingWhitespaces()
+	{
+		((void(__thiscall *)(cString*))(shared::base + 0xA04440))(this);
+	}
+
+	bool startsWithN(const char *str, size_t length)
+	{
+		return ((bool(__thiscall *)(cString*, const char*, size_t))(shared::base + 0xA056F0))(this, str, length);
+	}
+
+	size_t length()
+	{
+		return ((size_t(__thiscall *)(cString*))(shared::base + 0xA13C00))(this);
+	}
+
+	~cString()
+	{
+		((void(__thiscall *)(cString*))(shared::base + 0xA18EA0))(this);
+	}
 };
 
 template <typename tC>
@@ -53,6 +100,33 @@ struct HandleManager
 	} *m_HandleArrayValue;
 	int field_14;
 	Hw::CriticalSection m_ArraySection;
+
+
+	BOOL startup(size_t capacity, Hw::cHeapVariable *allocator)
+	{
+		if (m_HandleArrayValue)
+			return FALSE;
+
+		if (capacity >= 0x10000)
+			return FALSE;
+
+		m_HandleArrayValue = new(allocator) HandleHolder[capacity];
+		if (!m_HandleArrayValue)
+			return FALSE;
+
+		for (size_t i = 0; i < capacity; i++)
+		{
+			m_HandleArrayValue[i].m_Handle.m_Handle = -1;
+			m_HandleArrayValue[i].m_value = nullptr;
+		}
+
+		m_capacity = capacity;
+		m_size = 0u;
+		m_lastPreshiftIndex = 0;
+		m_lastPreshift = 0;
+		m_ArraySection.init();
+		return TRUE;
+	}
 
 	unsigned int add(tC *value)
 	{
@@ -98,6 +172,22 @@ struct HandleManager
 		m_ArraySection.leave();
 
 		return j;
+	}
+
+	tC* get(unsigned int handle)
+	{
+		size_t index = (unsigned short)(handle >> 8);
+
+		if (index >= m_capacity)
+		{
+			PrintfLog("[HandleManage] Handle error: Invalid handle");
+			return nullptr;
+		}
+
+		if (((handle ^ m_HandleArrayValue[index].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
+			return nullptr;
+
+		return m_HandleArrayValue[index].m_value;
 	}
 };
 

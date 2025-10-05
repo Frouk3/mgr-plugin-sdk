@@ -6,13 +6,22 @@
 #include <Behavior.h>
 #include <EntityHandle.h>
 #include <common.h>
+#include <SceneBehaviorSystem.h>
 
 struct EntitySystem
 {
+    struct EntityCreationData
+    {
+        eObjID m_ObjectID;
+        void *(__cdecl *m_pfnConstructor)(Hw::cHeapVariable *);
+        int field_8;
+        const char *m_className;
+    };
+
     size_t m_nEntityCapacity; // how much entities can we hold?
     Hw::cHeapVariable* m_pHeapVariable;
     SceneModelSystem* m_pSceneModelSystem;
-    int field_C;
+    BehaviorList *m_pBehaviorList;
     int field_10;
     int field_14;
     Hw::CriticalSection m_EntityListSection;
@@ -142,12 +151,13 @@ struct EntitySystem
 
     static inline HandleManager<Entity> &ms_HandleManager = *(HandleManager<Entity>*)(shared::base + 0x17E9A60); // now it makes sense
     static inline EntitySystem& ms_Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
-};
 
-inline EntityHandle::operator Entity *()
-{
-    return ((Entity*(__thiscall *)(EntityHandle *))(shared::base + 0x681330))(this);
-}
+    /*
+    from what I can say from the field down below, it seems that PlatinumGames had their own way of adding entities without troubles, as if creating array of data with different functions and data would be pain in ass
+    */
+
+    static inline EntitySystem::EntityCreationData* ms_aEntities = (EntitySystem::EntityCreationData*)(shared::base + 0x14A1D70); // max 791
+};
 
 struct EntitySystem::SetInfo
 {
@@ -280,10 +290,10 @@ struct EntitySystem::ObjectInfo
 
 struct Entity::ConstructInfo
 {
-    EntitySystem* m_Creator;
-    SceneModelSystem* m_ModelSystem;
-    int field_8;
-    EntitySystem::EntityInfo* m_EntityInfo;
+    EntitySystem* m_pCreator;
+    SceneModelSystem* m_pSceneModelManager;
+    BehaviorList *m_pBehaviorList;
+    EntitySystem::EntityInfo* m_pEntityInfo;
     int field_10;
 };
 

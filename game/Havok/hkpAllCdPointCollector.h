@@ -12,19 +12,14 @@ public:
     int field_C;
     hkInplaceArray<hkpRootCdPoint, 8> m_points;
 
-    void sortHits()
-    {
-        ((void(__thiscall*)(hkpAllCdPointCollector*))(shared::base + 0xD2BCF0))(this);
-    }
-
     hkpAllCdPointCollector()
     {
         ((void(__thiscall *)(hkpAllCdPointCollector*))(shared::base + 0x38860))(this);
     }
 
-    ~hkpAllCdPointCollector()
+    void sortHits()
     {
-        ((void(__thiscall *)(hkpAllCdPointCollector*))(shared::base + 0x388C0))(this);
+        ((void(__thiscall*)(hkpAllCdPointCollector*))(shared::base + 0xD2BCF0))(this);
     }
 };
 

@@ -8,7 +8,7 @@ public:
     {
         Events::OnTickEvent += []()
         {
-            auto player = cGameUIManager::Instance.m_pPlayer;
+            Pl0000* player = cGameUIManager::ms_Instance.m_pPlayer;
 
             if (player)
             {

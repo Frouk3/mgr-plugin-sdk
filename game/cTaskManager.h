@@ -19,14 +19,14 @@ struct cTaskManager
 		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D6DF0))(this);
 	}
 
-	cTask* reorderTask(unsigned int priority)
+	cTask* setNewTaskByPriority(unsigned int priority)
 	{
 		return ((cTask * (__thiscall*)(cTaskManager*, int))(shared::base + 0x9D7420))(this, priority);
 	}
 	
-	int startTask(void(__cdecl *callback)(LPVOID parameter), LPVOID parameter, unsigned int priority, const char* taskName)
+	void startTask(void(__cdecl *callback)(LPVOID parameter), LPVOID parameter, unsigned int priority, const char* taskName)
 	{
-		return ((int(__thiscall*)(cTaskManager*, void(__cdecl *)(LPVOID), LPVOID, unsigned int, const char*))(shared::base + 0x9D7870))(this, callback, parameter, priority, taskName);
+		((void(__thiscall*)(cTaskManager*, void(__cdecl *)(LPVOID), LPVOID, unsigned int, const char*))(shared::base + 0x9D7870))(this, callback, parameter, priority, taskName);
 	}
 
 	void cleanup()
@@ -34,14 +34,14 @@ struct cTaskManager
 		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8450))(this);
 	}
 
-	DWORD run(int task)
+	void executeCurrentTask(int a1)
 	{
-		return ((int(__thiscall*)(cTaskManager*, int))(shared::base + 0x9D8570))(this, task);
+		((void(__thiscall*)(cTaskManager*, int))(shared::base + 0x9D8570))(this, a1);
 	}
 
-	BOOL startup(unsigned int taskCapacity, unsigned int taskStackSize, Hw::cHeap* allocator)
+	BOOL startup(unsigned int taskCapacity, unsigned int taskStackSize, Hw::cHeapVariable* allocator)
 	{
-		return ((BOOL(__thiscall*)(cTaskManager*, unsigned int, unsigned int, Hw::cHeap*))(shared::base + 0x9D8A10))(this, taskCapacity, taskStackSize, allocator);
+		return ((BOOL(__thiscall*)(cTaskManager*, unsigned int, unsigned int, Hw::cHeapVariable*))(shared::base + 0x9D8A10))(this, taskCapacity, taskStackSize, allocator);
 	}
 
 	void runTasks()
@@ -58,27 +58,32 @@ struct cTaskManager
 struct cTaskManager::cTask
 {
 	cTaskManager* m_pCreator;
-	void(__cdecl* m_callback)(LPVOID);
-	LPVOID m_callbackparameter;
+	void(__cdecl* m_pfnCallback)(LPVOID);
+	LPVOID m_pCallbackParameter;
 	int m_nTaskNum;
 	int m_nTaskPriority;
 	const char* m_TaskName;
 	int m_nTaskStatus;
 	int m_nTaskId;
 	unsigned int m_nTaskStackSize;
-	HANDLE m_hSemaphore;
-	HANDLE m_hTask;
+	HANDLE m_hStartSemaphore;
+	HANDLE m_hCompletionSemaphore;
 	cTask* m_pNext;
 	cTask* m_pPrev;
-	int field_34;
+	void(__cdecl *m_pfnOnTaskDone)(unsigned long);
 
 	void cleanup()
 	{
 		((void(__thiscall*)(cTask*))(shared::base + 0x9D8000))(this);
 	}
 
-	DWORD run(int task)
+	void run(int a1)
 	{
-		return ((DWORD(__thiscall*)(cTask*, int))(shared::base + 0x9D80E0))(this, task);
+		((void(__thiscall*)(cTask*, int))(shared::base + 0x9D80E0))(this, a1);
+	}
+
+	void setTaskFunction(void(__cdecl* callback)(LPVOID), LPVOID parameter)
+	{
+		((void(__thiscall*)(cTask*, void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8090))(this, callback, parameter);
 	}
 };

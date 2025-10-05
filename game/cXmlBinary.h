@@ -8,7 +8,7 @@ class cXmlBinary : public cXml
 public:
     Hw::cHeapVariable *m_pAllocator;
     int *m_pNodes;
-    void *m_Bxm;
+    void *m_pBxm;
     cXml::Node *m_pNodesInfo;
     cXml::Data *m_pData;
     char *m_pStrings;
@@ -18,6 +18,13 @@ public:
     {
         ((void(__thiscall *)(cXmlBinary*))(shared::base + 0xA05360))(this);
     }
+
+    BOOL open(void *bxm, Hw::cHeapVariable *allocator)
+    {
+        return ((BOOL(__thiscall *)(cXmlBinary*, void*, Hw::cHeapVariable*))(shared::base + 0xA062B0))(this, bxm, allocator);
+    }
+
+    // vft start
     
     int getFirstChild()
     {
@@ -83,4 +90,8 @@ public:
     {
         return ReturnCallVMTFunc<float*, 15, cXmlBinary*, unsigned int, float*>(this, node, value);
     }
+
+    // vft end
+
+
 };

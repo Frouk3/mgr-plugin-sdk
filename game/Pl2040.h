@@ -90,7 +90,7 @@ public:
     int field_F24;
     int field_F28;
     int field_F2C;
-    cCameraGame *m_Camera;
+    cCameraGame *m_pCamera;
     int field_F34;
     int field_F38;
     int field_F3C;
@@ -228,6 +228,11 @@ public:
     Pl2040()
     {
         ((void(__thiscall *)(Pl2040 *))(shared::base + 0x6AB650))(this);
+    }
+
+    static inline Pl2040 *__cdecl allocate(Hw::cHeapVariable *allocator)
+    {
+        return ((Pl2040 * (__cdecl *)(Hw::cHeapVariable *))(shared::base + 0x6BCC10))(allocator);
     }
 
     static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x1735420);

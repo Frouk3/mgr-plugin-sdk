@@ -20,6 +20,11 @@ public:
         ((void(__thiscall *)(Pl0012 *))(shared::base + 0x6A6040))(this);
     }
 
+    static inline Pl0012 *__cdecl allocate(Hw::cHeapVariable *allocator)
+    {
+        return ((Pl0012* (__cdecl *)(Hw::cHeapVariable *))(shared::base + 0x6A9F60))(allocator);
+    }
+
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9F20);
 };
 

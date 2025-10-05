@@ -29,7 +29,8 @@ public:
             rect.right = res.x;
             rect.top = 20;
             rect.bottom = rect.top + 200;
-            font->DrawTextA(NULL, "TEST RENDER TEXT\0", -1, &rect, 0, 0xFFFFFF00);
+            // rect.bottom and rect.right are useless if DT_NOCLIP is used
+            font->DrawTextA(NULL, "TEST RENDER TEXT\0", -1, &rect, DT_NOCLIP, 0xFFFFFF00);
         };
 
         Events::OnDeviceReset.before += []()

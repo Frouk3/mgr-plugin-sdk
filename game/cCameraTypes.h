@@ -10,8 +10,8 @@ struct cCameraTypes
 	float m_fHorizontalAngle; // yaw
 	float m_fZAngle;
 	float m_fWAngle;
-	EntityHandle m_nPlayerHandle;
-	Pl0000* m_pPlayer[2];
+	EntityHandle m_PlayerHandle;
+	Pl0000* m_apPlayer[2];
 	float m_fSmoothness;
 	float field_20;
 	int field_24;

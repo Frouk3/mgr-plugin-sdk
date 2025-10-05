@@ -10,7 +10,7 @@ public:
     struct Unit
     {
         int m_ID;
-        float m_TimeWeNeedThisObject;
+        float m_fTimeWeNeedThisObject;
     };
     lib::AllocatedArray<Unit>* m_Units;
     int field_8;

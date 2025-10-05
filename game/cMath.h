@@ -26,7 +26,7 @@ public:
         return ((short(__thiscall*)(Random*, short, short))(shared::base + 0x9DE2D0))(this, min, max);
     }
 
-    int range(int min, int max)
+    unsigned short range(unsigned short min, unsigned short max)
     {
         return ((int(__thiscall*)(Random*, int, int))(shared::base + 0x9DE2A0))(this, min, max);
     }
@@ -69,5 +69,5 @@ namespace cMath
         ((void(__cdecl*)(cQuaternion&, const cVec4&))(shared::base + 0x9DB590))(out, eulerAngles);
     }
 
-    inline Random& m_Random = *(Random*)(shared::base + 0x19D0814);
+    inline Random& ms_Random = *(Random*)(shared::base + 0x19D0814);
 }

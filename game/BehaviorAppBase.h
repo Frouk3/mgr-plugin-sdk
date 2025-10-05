@@ -115,9 +115,14 @@ public:
         CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
     }
 
-    void updateVelocity(float deltaTime)
+    void updateVelocity()
     {
-        CallVMTFunc<200, BehaviorAppBase *, float>(this, deltaTime);
+        CallVMTFunc<199, BehaviorAppBase *>(this);
+    }
+
+    BOOL updateGroundVelocity(float deltaTime)
+    {
+        return ReturnCallVMTFunc<BOOL, 200, BehaviorAppBase *, float>(this, deltaTime);
     }
 
     // vft end

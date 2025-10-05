@@ -5,7 +5,7 @@
 class Behavior;
 
 class cParts;
-struct Entity;
+class Entity;
 
 class EspCtrlCustomImpl;
 
@@ -124,7 +124,7 @@ public:
         class Node
         {
         public:
-            int field_4;
+            int field_4; // those fields up to field_10 are nodes of tree structure
             int field_8;
             int field_C;
             int field_10;
@@ -145,21 +145,27 @@ public:
             NodeListener* field_88;
             NodeListener* field_8C;
 
+            static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19D9438);
+
+            virtual ContextInstance& getContext() {return *(ContextInstance*)(shared::base + 0x19D9438); }
+
+            Node()
+            {
+                ((void(__thiscall *)(Node *))(shared::base + 0xA2E330))(this);
+            }
+
             virtual ~Node() {};
 
-            BOOL setup(int a2, const char *name, int a4, int a5)
+            // vft start
+
+            void setCurrentTime(float time, _In_opt_ Node *from)
             {
-                return ((BOOL(__thiscall *)(Node *, int, const char *, int, int))(shared::base + 0xA339B0))(this, a2, name, a4, a5);
+                CallVMTFunc<11, Node *, float, Node *>(this, time, from);
             }
 
-            void setCurrentTime(float time, float *data)
+            void setCurrentTimeSlide(float timeSlide, _In_opt_ Node *from)
             {
-                CallVMTFunc<11, Node *, float, float *>(this, time, data);
-            }
-
-            void setCurrentTimeSlide(float timeSlide, float *data)
-            {
-                CallVMTFunc<12, Node *, float, float *>(this, timeSlide, data);
+                CallVMTFunc<12, Node *, float, Node *>(this, timeSlide, from);
             }
 
             float getCurrentTime()
@@ -177,9 +183,41 @@ public:
                 return ReturnCallVMTFunc<float, 15, Node*>(this);
             }
 
-            void setLocalWeight(float *a2, float* a3)
+            void applyPlaybackSpeed()
             {
-                CallVMTFunc<16, Node*, float *, float*>(this, a2, a3);
+                CallVMTFunc<24, Node*>(this);
+            }
+
+            void applyLocalWeight()
+            {
+                CallVMTFunc<25, Node*>(this);
+            }
+
+            // vft end
+
+            BOOL setup(int nodeId, const char *name, int flags, int a5)
+            {
+                return ((BOOL(__thiscall *)(Node *, int, const char *, int, int))(shared::base + 0xA339B0))(this, nodeId, name, flags, a5);
+            }
+
+            BOOL setLocalPlaybackSpeed(float speed)
+            {
+                return ((BOOL(__thiscall *)(Node *, float))(shared::base + 0xA26480))(this, speed);
+            }
+
+            BOOL setLocalPlaybackRate(float rate)
+            {
+                return ((BOOL(__thiscall *)(Node *, float))(shared::base + 0xA264C0))(this, rate);
+            }
+
+            BOOL setLocalWeight(float weight)
+            {
+                return ((BOOL(__thiscall *)(Node *, float))(shared::base + 0xA26500))(this, weight);
+            }
+
+            BOOL applyAttributes() // applies local playback speed/rate/weight
+            {
+                return ((BOOL(__thiscall *)(Node *))(shared::base + 0xA26430))(this);
             }
         };
 
@@ -208,9 +246,23 @@ public:
             int field_AC;
         };
 
-        class NodeGrindBlend : public NodeBlend
+        class NodeGridBlend : public NodeBlend
         {
+        public:
 
+            NodeGridBlend()
+            {
+                ((void(__thiscall *)(NodeGridBlend *))(shared::base + 0xA44640))(this);
+            }
+        };
+
+        class NodeRingBlend : public NodeBlend
+        {
+        public:
+            NodeRingBlend()
+            {
+                ((void(__thiscall *)(NodeRingBlend *))(shared::base + 0xA44680))(this);
+            }
         };
 
         class NodeListener
@@ -266,6 +318,19 @@ public:
                     ((void(__thiscall *)(NodeHandler *))(shared::base + 0xA41B70))(this);
                 }
             };
+
+            NodeHandler m_aMotionNodes[16];
+
+            // index can also be served as a handle of the node
+            Animation::Motion::Node *getNode(int index)
+            {
+                return ((Animation::Motion::Node *(__thiscall *)(Animation::Motion::NodeSlot *, int))(shared::base + 0xA33DF0))(this, index);
+            }
+
+            BOOL setNode(int index, Animation::Motion::Node *pNode)
+            {
+                return ((BOOL(__thiscall *)(Animation::Motion::NodeSlot *, int, Animation::Motion::Node *))(shared::base + 0xA33DB0))(this, index, pNode);
+            }
         };
 
         class NodePlay : public NodeSequence
@@ -321,15 +386,25 @@ public:
         public:
             class NodeHandler : public NodeListener {};
         public:
-            int field_0;
+            Animation::Motion::Node* m_pCurrentNode;
             Animation::Motion::Unit::NodeHandler m_MotionUnit;
-            Animation::Motion::Unit::NodeHandler m_aMotionNodes[16];
+            Animation::Motion::NodeSlot m_NodeSlot;
             int field_114;
             int field_118;
             int field_11C;
             int field_120;
             int field_124;
             int field_128;
+
+            void setCurrentTime(int index, float time)
+            {
+                ((void(__thiscall *)(Animation::Motion::Unit *, int, float))(shared::base + 0xA368B0))(this, index, time);
+            }
+
+            void setCurrentTimeSlide(int index, float timeSlide)
+            {
+                ((void(__thiscall *)(Animation::Motion::Unit *, int, float))(shared::base + 0xA36910))(this, index, timeSlide);
+            }
         };
     };
 
@@ -338,7 +413,7 @@ public:
     int field_8;
     int field_C;
     int field_10;
-    char m_AnimationName[16];
+    char m_ObjectName[16];
     int field_24;
     int field_28;
     int field_2C;
@@ -450,6 +525,11 @@ public:
     Animation()
     {
         ((void (__thiscall *)(Animation *))(shared::base + 0xA35080))(this);
+    }
+
+    ~Animation()
+    {
+        ((void (__thiscall *)(Animation *))(shared::base + 0xA35190))(this);
     }
 };
 

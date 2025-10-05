@@ -4,8 +4,6 @@
 #include <Hw.h>
 #include <sys.h>
 
-extern void FreeMemory(void* block, int a2);
-
 namespace lib
 {
     template <typename T> class Array;
@@ -29,6 +27,7 @@ namespace lib
         public:
             int field_4;
             int field_8;
+            // ^^ these two represent reference count, but for what exactly?
 
             SharedCoreImplBase()
             {
@@ -60,13 +59,13 @@ namespace lib
 
             virtual void destroyAllocator()
             {
-                FreeMemory(this->m_AllocatorProxy, 0);
+                operator delete(m_AllocatorProxy, (Hw::cHeap*)m_Allocator);
+                m_AllocatorProxy = nullptr;
             }
 
             virtual void shutdown()
             {
-                this->~SharedCoreImpl();
-                FreeMemory(this, 0);
+                operator delete(this, (Hw::cHeap*)m_Allocator); // calls destructor and free's memory
             }
         };
 
@@ -91,7 +90,7 @@ namespace lib
                 virtual void free(void* block) = 0;
             };
 
-            template <typename allocator>
+            template <typename allocator = Hw::cHeap*>
             class CoreT : public Core
             {
             public:
@@ -109,12 +108,12 @@ namespace lib
 
                 virtual void free(void* block)
                 {
-                    FreeMemory(block, 0);
+                    operator delete(block, (Hw::cHeap*)m_Allocator);
                 }
             };
         };
 
-        template <typename deallocator>
+        template <typename deallocator = Hw::cHeap*>
         struct DeleterByAllocator
         {
             deallocator m_Deallocator;
@@ -130,7 +129,7 @@ namespace lib
 			}
         };
 
-        template <typename allocator>
+        template <typename allocator = Hw::cHeap*>
         struct AllocatorHelper
         {
             lib::helper::AllocatorProxy::CoreT<allocator>* m_Allocator;
@@ -210,8 +209,7 @@ public:
 
     virtual ~Array() 
     {
-        if (m_array)
-            m_size = 0u;
+        clear();
         m_array = nullptr;
         m_capacity = 0u;
     };
@@ -303,7 +301,7 @@ public:
         return m_array;
     }
 
-    void remove(T& element)
+    void remove(T& element) // pass the existing element from array
     {
         if (!m_array)
             return;
@@ -343,19 +341,19 @@ public:
         std::swap(lhs, rhs);
     }
 
-    T& get(size_t at)
+    T& at(size_t at)
     {
         return m_array[at];
     }
 
     T& operator [](size_t index)
     {
-        return get(index);
+        return at(index);
     }
 
     T& operator [](size_t index) const
     {
-        return get(index);
+        return at(index);
     }
 
     void clear()

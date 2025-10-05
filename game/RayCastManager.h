@@ -27,6 +27,13 @@ public:
     int field_134;
     int field_138[5];
     void *field_14C[5]; // huh?
+
+    BOOL setLinearCast(hkpAllCdPointCollector* cd, cVec4* out, const cVec4& origin, float radius, const cVec4& rayDir, int collisionFilter, const char* debugPurpose = "")
+    {
+        return ((BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, cVec4*, const cVec4&, float, const cVec4&, int, const char*))(shared::base + 0x50EEA0))(this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
+    }
+
+    static inline RayCastManager& ms_Instance = *(RayCastManager*)(shared::base + 0x1735DF8);
 };
 
 class RayCastWork

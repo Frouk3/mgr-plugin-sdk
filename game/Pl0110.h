@@ -5,9 +5,9 @@
 class Pl0110 : public Behavior
 {
 public:
-    Entity *m_Visor;
-    Entity *m_Sheath;
-    Entity *m_Head;
+    Entity *m_pVisor;
+    Entity *m_pSheath;
+    Entity *m_pHead;
     float field_87C;
 
     Pl0110()
