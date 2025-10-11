@@ -13,7 +13,7 @@ public:
             if (player)
             {
                 if (player->isBladeModeActive()) // Raiden only
-                    if (!player->m_nRipperModeEnabled)
+                    if (!player->m_bRipperModeEnabled)
                         player->enableRipperMode();
             }
         };

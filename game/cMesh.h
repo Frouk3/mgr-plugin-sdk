@@ -5,5 +5,8 @@ class cMesh : public cMeshBase
 {
 public:
 
-    virtual ~cMesh() override {};
+    cMesh()
+    {
+        ((void(__thiscall*)(cMesh*))(shared::base + 0x611B50))(this);
+    }
 };

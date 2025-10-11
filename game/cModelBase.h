@@ -56,7 +56,7 @@ public:
     };
 
     D3DXMATRIX m_ViewModelMatrix;
-    D3DXMATRIX field_F0;
+    D3DXMATRIX m_ModelRotationMatrix;
     cModelBase::RenderMatrix m_RenderMatrix;
     float m_fDistRate0;
     float m_fDistRate1;
@@ -173,8 +173,8 @@ public:
     int field_338;
     int field_33C;
     int m_nAnisotropicType;
-    void *m_WTB;
-    void *m_TextureRawData;
+    void *m_pWTB;
+    void *m_pTextureRawData;
     Hw::cTexture *m_pTexture;
     BoneSet m_BoneSet;
     cModelBase *m_pParent;

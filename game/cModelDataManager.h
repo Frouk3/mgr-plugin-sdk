@@ -64,6 +64,11 @@ struct cModelData
 		int field_F0;
 		int field_F4;
 		ModelDataResource *m_Resource;
+
+		int getBonePartNum(unsigned short boneIndex)
+		{
+			return ((int(__thiscall *)(ModelData*, unsigned short))(shared::base + 0x606DE0))(this, boneIndex);
+		}
 	};
 
 	struct cMaterial;

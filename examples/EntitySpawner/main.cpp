@@ -84,7 +84,7 @@ public:
 						if (!str.bDone)
 						{
 							if (!str.bWorkFail)
-								str.bWorkFail = g_ObjReadManager.requestWork(str.mObjId, str.iSetType) == 0;
+								str.bWorkFail = g_ObjReadManager.requestObject(str.mObjId, str.iSetType) == 0;
 
 							str.bDone = g_ObjReadManager.isObjectLoaded(str.mObjId, str.iSetType);
 						}

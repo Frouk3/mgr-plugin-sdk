@@ -168,6 +168,51 @@ namespace lib
             }
         };
     }
+
+    class Archive
+    {
+    public:
+        int field_4;
+
+        Archive()
+        {
+            *(void***)this = (void**)(shared::base + 0x12A785C);
+            field_4 = 0;
+        }
+
+        Archive(int a2)
+        {
+            ((void(__thiscall *)(Archive *, int))(shared::base + 0x8677F0))(this, a2);
+        }
+
+        ~Archive()
+        {
+            ((void(__thiscall *)(Archive *))(shared::base + 0x867920))(this);
+        }
+
+        virtual bool dummy() {return false;}
+    };
+
+    class InputArchive : public Archive
+    {
+    public:
+
+        InputArchive()
+        {
+            *(void***)this = (void**)(shared::base + 0x12A78DC);
+            field_4 = 0;
+        }    
+
+        InputArchive(int a2)
+        {
+            ((void(__thiscall *)(InputArchive*, int))(shared::base + 0x867950))(this, a2);
+        }
+
+        ~InputArchive()
+        {
+            ((void(__thiscall *)(InputArchive *))(shared::base + 0x867980))(this);
+        }
+    };
 };
 
 template <typename T>

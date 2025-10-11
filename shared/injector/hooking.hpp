@@ -352,8 +352,9 @@ namespace injector
                 // Make sure we only hook this address for the manager once
                 if(!this->has_hooked)
                 {
+                    HMODULE base = GetModuleHandleA(nullptr);
                     // (the following cast is needed for __thiscall functions)
-                    this->original = (func_type_raw) (void*) scoped_call::make_call(hooker.addr, ptr).get();
+                    this->original = (func_type_raw) (void*) scoped_call::make_call((uintptr_t)base + hooker.addr, ptr).get();
                     this->has_hooked = true;
                 }
             }

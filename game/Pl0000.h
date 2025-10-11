@@ -26,6 +26,118 @@ class cCameraGame;
 class Pl0000 : public BehaviorAppBase
 {
 public:
+    struct ConstantStruct
+    {
+        struct Freerun
+        {
+            float m_fThresholdBase;
+            float m_fThicknessOfGround;
+            float m_fThicknessOfWall;
+            float m_fThresholdHeightOfSpecialLanding;
+            float m_fFrontMaxLength;
+            float m_fUpMaxLength;
+            float field_18;
+            float m_fThresholdAtCenterOfThickness;
+            float m_fTurnMaxAngleForSliding;
+            float m_fTurnRateForSliding;
+            float m_fDistanceOfSliding;
+            float m_fTurnMaxAngleForDiveRoll;
+            float m_fTurnRateForDiveRoll;
+            float m_fDistanceOfDiveRoll;
+            float m_fDistanceOfHorizontalBar;
+            float m_fWidthOfHorizontalBar;
+            float m_fHeightOfHorizontalBar;
+            float m_fBaseDistanceOfCliff;
+            float m_fBaseDistancceOfShortCliff;
+            float m_fBaseDistanceOfMiddleCliff;
+            float m_fBaseDistanceOfLongCliff;
+            float m_fMinDistanceOfCliff;
+            float m_fMaxDistanceOfCliff;
+            float m_fThresholdDistanceOfCliff;
+            float m_fThresholdHeightOfCliff;
+            float m_fBaseHeightOfCliff;
+            float m_fMinHeightOfCliff;
+            float m_fMaxHeightOfCliff;
+            float m_fMaxDistanceCliffAheadShortCliff;
+            float m_fMaxDistanceOfBetweenToFootAhead;
+            float m_fMaxDistanceOfShortCliff;
+            float m_fMaxHeightOfShortCliff;
+            float m_fSwitchDistanceOfShortCliff;
+            float m_fSwitchHeightOfShortCliff;
+            float m_fSwitchDistanceOfLongCliff;
+            float m_fMaxThicknessOfShortCliff;
+            float m_fBaseDistanceOfUnevenCliff;
+            float m_fMinDistanceOfUnevenCliff;
+            float m_fMaxDistanceOfUnevenCliff;
+            float m_fBaseHeightOfUnevenCliff;
+            float m_fMinHeightOfUnevenCliff;
+            float m_fMaxHeightOfUnevenCliff;
+            float m_fHopThicknessOfUnevenCliff;
+            float m_fMinDistanceOfDownwardCliff;
+            float m_fBaseDistanceOfLowObstacle;
+            float m_fMinDistanceOfLowObstacle;
+            float m_fMaxDistanceOfLowObstacle;
+            float m_fBaseHeightOfLowObstacle;
+            float m_fMinHeightOfLowObstacle;
+            float m_fMaxHeightOfLowObstacle;
+            float m_fBaseDistanceOfMiddleObstacle;
+            float m_fMinDistanceOfMiddleObstacle;
+            float m_fMaxDistanceOfMiddleObstacle;
+            float m_fBaseHeightOfMiddleObstacle;
+            float m_fMinHeightOfMiddleObstacle;
+            float m_fMaxHeightOfMiddleObstacle;
+            float m_fHopThicknessOfMiddleObstacle;
+            float m_fBaseDistanceOfHighObstacle;
+            float m_fMinDistanceOfHighObstacle;
+            float m_fMaxDistanceOfHighObstacle;
+            float m_fMinHeightOfHighObstacle;
+            float m_fMaxHeightOfHighObstacle;
+            float m_fSpeedRateOfHighObstacle;
+            float m_fBaseDistanceOfMostHighObstacle;
+            float m_fMinDistanceOfMostHighObstacle;
+            float m_fMaxDistanceOfMostHighObstacle;
+            float field_108;
+            float m_fMinHeightOfMostHighObstacle;
+            float m_fMaxHeightOfMostHighObstacle;
+            float m_fMaxDistanceOfCatLeap;
+            float m_fMinHeightOfCatLeap;
+            float m_fThicknessOfWallHop;
+            float m_fThicknessOfWallOver;
+            float m_fAbsorbDistanceOfWallEdgeGrabFromOver;
+            float m_fAbsorbHeightOfWallEdgeGrabFromOver;
+            float m_fDistanceOfWallEdgeGrabFromOver;
+            float m_fMinHeightOfWallEdgeGrabFromOver;
+            float m_fMaxHeightOfWallEdgeGrabFromOver;
+            float m_fAbsorbDistancceOfWallEdgeGrabFromBelow;
+            float m_fAbsorbHeightOfWallEdgeGrabFromBelow;
+            float m_fDistanceOfWallEdgeGrabFromBelow;
+            float m_fMinHeightOfWallEdgeGrabFromBelow;
+            float m_fMaxHeightOfWallEdgeGrabFromBelow;
+
+            Freerun()
+            {
+                ((void(__thiscall *)(Freerun*))(shared::base + 0x982FF0))(this);
+            }
+        };
+        Freerun m_freerun;
+        float m_fLowerLimitOfWalk;
+        float m_fLimitOfRotation;
+        float m_fThresholdAngleOfRotation;
+        float m_fEaseInAngleOfRotation;
+        float m_fMaxVelocityOfJump;
+        float m_fNeedHeightFreeFall;
+        float m_fDeclineRateForFreeFall;
+        float m_fNinjaRunInterpolateTurnRate;
+        float m_fNinjaRunInterpolateTurnMaxAngle;
+        float m_fParkourInterpolateTurnRate;
+        float m_fParkourInterpolateTurnMaxAngle;
+
+        ConstantStruct(void *file)
+        {
+            ((void(__thiscall *)(ConstantStruct*, void*))(shared::base + 0x7F88F0))(this, file);
+        }
+    };
+
     cEspControler field_A00;
     int field_AB0;
     int field_AB4;
@@ -1592,7 +1704,7 @@ public:
     int field_3178;
     int field_317C;
     int field_3180;
-    int m_nRipperModeEnabled;
+    BOOL m_bRipperModeEnabled;
     float field_3188;
     float field_318C;
     float field_3190;
@@ -1953,7 +2065,7 @@ public:
     int m_nBladeModeType;
     int field_40CC;
     float field_40D0;
-    DWORD* field_40D4;
+    ConstantStruct* m_pConstant;
     int field_40D8;
     int field_40DC;
     cVec4 field_40E0;
@@ -1992,8 +2104,8 @@ public:
     float field_4194;
     float field_4198;
     int field_419C;
-    SlashStartSlotPl0010 *m_SlashStartSlot;
-    GetMoneySlotPl0010 *m_GetMoneySlot;
+    SlashStartSlotPl0010 *m_pSlashStartSlot;
+    GetMoneySlotPl0010 *m_pGetMoneySlot;
     float field_41A8;
     int field_41AC;
     cVec4 field_41B0;
@@ -2921,7 +3033,7 @@ public:
     int field_5084;
     int field_5088;
     int field_508C;
-    lib::StaticArray<FreeRunActivity::Info, 64>* m_FreeRunActivityInfoArray;
+    lib::StaticArray<FreeRunActivity::Info, 64>* m_pFreeRunActivityInfoArray;
     int field_5094;
     int field_5098;
     int field_509C;
@@ -2940,6 +3052,8 @@ public:
     {
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x6C0310))(this);
     }
+
+    // vft start
 
     BOOL isBladeModeActive()
     {
@@ -3022,6 +3136,8 @@ public:
         CallVMTFunc<248, Pl0000*, int, cEspControler*>(this, id, effController);
     }
 
+    // vft end
+
     void setSlowMo(float Duration, float SlowRate)
     {
         ((void(__thiscall*)(Pl0000*, float, float))(shared::base + 0x77AB80))(this, Duration, SlowRate);
@@ -3070,6 +3186,21 @@ public:
     void setPlayerSafe()
     {
         ((void(__thiscall*)(Pl0000*))(shared::base + 0x7E86F0))(this);
+    }
+
+    float getRemaninigAnimationTime(int node)
+    {
+        return ((float(__thiscall *)(Pl0000 *, int))(shared::base + 0x695BD0))(this, node);
+    }
+
+    float getRemainingAnimationFrames(int node)
+    {
+        return ((float(__thiscall *)(Pl0000 *, int))(shared::base + 0x695C80))(this, node);
+    }
+
+    void setDefaultInput()
+    {
+        ((void(__thiscall *)(Pl0000 *))(shared::base + 0x779E20))(this);
     }
 
     static inline Pl0000 *__cdecl allocate(Hw::cHeapVariable *allocator)

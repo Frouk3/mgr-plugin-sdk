@@ -20,7 +20,7 @@ struct cObjReadManager
         return ((BOOL(__thiscall*)(cObjReadManager*, DataArchiveHolder*, eObjID, int))(shared::base + 0x601170))(this, data, object, setType);
     }
 
-    BOOL requestWork(eObjID object, int setType)
+    BOOL requestObject(eObjID object, int setType)
     {
         return ((BOOL(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x600A60))(this, object, setType);
     }
@@ -30,7 +30,7 @@ struct cObjReadManager
         return ((BOOL(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x600CA0))(this, object, setType);
     }
 
-    void endWork(eObjID object, int setType)
+    void removeRequest(eObjID object, int setType)
     {
         ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x600BD0))(this, object, setType);
     }
@@ -38,6 +38,16 @@ struct cObjReadManager
     void removeReference(eObjID object, int setType)
     {
         ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x5FE7D0))(this, object, setType);
+    }
+
+    void removeUseRef(eObjID object, int setType)
+    {
+        ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x5FE7D0))(this, object, setType);
+    }
+
+    void addUseRef(eObjID object, int setType)
+    {
+        ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x5FE710))(this, object, setType);
     }
 };
 

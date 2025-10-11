@@ -21,6 +21,11 @@ public:
     int field_68;
     int field_6C;
 
+    cMeshBase()
+    {
+        ((void(__thiscall*)(cMeshBase*))(shared::base + 0x611AA0))(this);
+    }
+
     inline const char *getName()
     {
         if (*(int*)m_pMeshData)

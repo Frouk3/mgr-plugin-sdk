@@ -20,7 +20,6 @@ struct DataArchiveHolder
     char *m_dds; // why?
 
     DataArchiveHolder(char* data) : m_data(data), m_dds(nullptr) {};
-    DataArchiveHolder(char* data, char* dds) : m_data(data), m_dds(dds) {};
 
     DataArchiveHolder()
     {
@@ -30,6 +29,26 @@ struct DataArchiveHolder
     DataArchiveEntry* asEntry()
     {
         return (DataArchiveEntry*)m_data;
+    }
+
+    void *getDtt()
+    {
+        return ((void*(__thiscall *)(DataArchiveHolder*))(shared::base + 0x9E3550))(this);
+    }
+
+    void *getData()
+    {
+        return ((void*(__thiscall *)(DataArchiveHolder*))(shared::base + 0x9E3560))(this);
+    }
+
+    void setHolderData(void *data, int index)
+    {
+        ((void(__thiscall *)(DataArchiveHolder*, void*, int))(shared::base + 0x9E3570))(this, data, index);
+    }
+
+    void *getDataAt(int index)
+    {
+        return ((void*(__thiscall *)(DataArchiveHolder*, int))(shared::base + 0x9E3580))(this, index);
     }
 
     size_t getFileAmount()
@@ -141,6 +160,11 @@ struct DataArchiveHolder
     operator bool()
     {
         return m_data != nullptr;
+    }
+
+    void setData(char *data, char *dds = nullptr)
+    {
+        ((void(__thiscall *)(DataArchiveHolder*, char*, char*))(shared::base + 0x9E3540))(this, data, dds);
     }
 };
 
