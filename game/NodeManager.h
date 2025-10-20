@@ -15,7 +15,7 @@ struct NodeManager
         struct NodeLink;
         struct Node;
 
-        Hw::CriticalSection m_CritSect;
+        Hw::cCriticalSection m_CritSect;
         int field_1C;
         int field_20;
         int field_24;
@@ -41,7 +41,7 @@ struct NodeManager
         int field_84;
         int field_88;
         int field_8C;
-        Hw::CriticalSection *field_90;
+        Hw::cCriticalSection *field_90;
         int field_94;
         int field_98;
         int field_9C;
@@ -145,7 +145,7 @@ struct NodeManager
         int field_84;
         int field_88;
         int field_8C;
-        Hw::CriticalSection field_90;
+        Hw::cCriticalSection field_90;
         int field_AC;
         int field_B0;
         int field_B4;
@@ -9258,7 +9258,7 @@ struct NodeManager
     int field_878;
     int field_87C;
     NodeInfo m_Info[10];
-    Hw::CriticalSection field_58A80;
+    Hw::cCriticalSection field_58A80;
     int field_58A9C;
     int field_58AA0;
     int field_58AA4;

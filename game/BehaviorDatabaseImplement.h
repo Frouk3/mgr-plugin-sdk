@@ -18,7 +18,7 @@ public:
     lib::AllocatedArray<BehaviorDatabaseImplement::UsedContainer> *m_UsedContainers;
     lib::StaticArray<BehaviorData *, 2048> *m_BehaviorData;
     int field_C;
-    Hw::CriticalSection field_10;
+    Hw::cCriticalSection field_10;
     int field_2C;
 
     BehaviorDatabaseImplement()

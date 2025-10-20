@@ -20,7 +20,7 @@ public:
     Hw::cHeapFixed m_FixedHeap;
     lib::AllocatedArray<Work*> *m_RigidBodyWorks;
     int field_6C;
-    Hw::CriticalSection field_70;
+    Hw::cCriticalSection field_70;
     int field_94;
 
     static inline RigidBodyManagerImplement *& ms_Instance = *(RigidBodyManagerImplement**)(shared::base + 0x1735F9C);

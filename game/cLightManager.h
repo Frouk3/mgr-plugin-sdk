@@ -90977,7 +90977,7 @@ public:
     int field_5BF9C;
     int field_5BFA0;
     int field_5BFA4;
-    Hw::CriticalSection field_5BFA8;
+    Hw::cCriticalSection field_5BFA8;
 
     static inline cLightManager& ms_Instance = *(cLightManager*)(shared::base + 0x1783D20);
 };

@@ -13,7 +13,7 @@ public:
         {
             int m_Index;
             int field_4;
-            Hw::CriticalSection m_Section;
+            Hw::cCriticalSection m_Section;
             int field_24;
         };
     };

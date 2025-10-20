@@ -6,7 +6,7 @@
 class BehaviorEmBase : public BehaviorAppBase
 {
 public:
-    Hw::CriticalSection field_A00;
+    Hw::cCriticalSection field_A00;
     int field_A1C;
     int field_A20;
     float field_A24;

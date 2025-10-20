@@ -5,11 +5,26 @@
 #include <dinput.h>
 #include <shared.h>
 #include <Xinput.h>
+#include <CriFs.h>
+#include <DirectXMath.h>
 
 extern void PrintfLog(const char* fmt, ...);
 
-namespace Hw
+class Hw
 {
+public:
+	class KeyboardManagerBase;
+	class KeyboardManager;
+
+	class cMtx;
+
+	class cUcol;
+	class cFcol;
+
+	class cCriticalSection;
+	class cSemaphore;
+	class cRand;
+
 	struct cDvdFst;
 	struct DvdReadManager;
 
@@ -18,16 +33,97 @@ namespace Hw
 	template <typename tC>
 	class cSingleton;
 
+	enum ANISOTROPY_LEVEL
+	{
+		ANISOTROPY_LEVEL1=1,
+		ANISOTROPY_LEVEL2=2,
+		ANISOTROPY_LEVEL4=4,
+		ANISOTROPY_LEVEL8=8,
+		ANISOTROPY_LEVEL16=16
+	};
+
+	enum BLENDOP_MODE
+	{
+		BLENDOP_ADD=0,
+		BLENDOP_SUB=1,
+		BLENDOP_REVSUB=4,
+		BLENDOP_MIN=2,
+		BLENDOP_MAX=3,
+		BLENDOP_DEFAULT=0,
+		BLENDALPHAOP_DEFAULT=0
+	};
+
+	enum BLEND_ELEM
+	{
+		BLEND_ZERO=0,
+		BLEND_ONE=1,
+		BLEND_SRCCOLOR=4,
+		BLEND_INVSRCCOLOR=5,
+		BLEND_SRCALPHA=6,
+		BLEND_INVSRCALPHA=7,
+		BLEND_DESTALPHA=10,
+		BLEND_INVDESTALPHA=11,
+		BLEND_DESTCOLOR=8,
+		BLEND_INVDESTCOLOR=9,
+		BLEND_SRCALPHASAT=16,
+		BLEND_BOTHINVSRCALPHA=0,
+		BLEND_BLENDFACTOR=12,
+		BLEND_INVBLENDFACTOR=13,
+		BLEND_SRC_DEFAULT=1,
+		BLEND_DST_DEFAULT=0,
+		BLEND_ALPHASRC_DEFAULT=1,
+		BLEND_ALPHADST_DEFAULT=0
+	};
+
+	enum COMP_MODE
+	{
+		COMP_NEVER=0,
+		COMP_LESS=1,
+		COMP_EQUAL=2,
+		COMP_LESSEQUAL=3,
+		COMP_GREATER=4,
+		COMP_NOTEQUAL=5,
+		COMP_GREATEREQUAL=6,
+		COMP_ALWAYS=7,
+		COMP_Z_DEFAULT=3,
+		COMP_ALPHATEST_DEFAULT=7
+	};
+
+	enum HW_ALLOC_MODE
+	{
+		HW_ALLOC_VIRTUAL = 0x0,
+		HW_ALLOC_PHYSICAL = 0x1,
+		HW_ALLOC_PHYSICAL_BACK = 0x2,
+		HW_ALLOC_COMBINE = 0x3
+	};
+
+	enum eTaskId : int
+	{
+		TASK_ID_INVALID = 0
+	};
+
+	enum CULL_MODE : int
+	{
+		CULL_NONE = 0x0,
+		CULL_CW = 0x2,
+		CULL_CCW = 0x6,
+		CULL_DEFAULT = 0x6,
+		CULL_DEFAULT_REV = 0x2
+	};
+
+	enum INPUT_PAD_ANALOG
+	{
+		INPUT_PAD_ANALOG_STICK_LEFT = 0x0,
+		INPUT_PAD_ANALOG_STICK_RIGHT = 0x1,
+		INPUT_PAD_ANALOG_TRIGGER_LEFT = 0x2,
+		INPUT_PAD_ANALOG_TRIGGER_RIGHT = 0x3,
+		INPUT_PAD_ANALOG_NUM = 0x4,
+		INPUT_PAD_ANALOG_ALL = 0x5
+	};
+
 	class cHeap;
 	class cHeapVariableBase;
 	class cHeapVariable;
-	class cTexture;
-	class cTextureInstance;
-	class cLockableTexture;
-	class cTargetTexture;
-	class cShareTargetTexture;
-	class CameraProj;
-	class cCameraBase;
 	class cHeapPhysical;
 	class cHeapHook;
 	class cHeapFixed;
@@ -35,11 +131,21 @@ namespace Hw
 	class cHeapPhysicalBase;
 	class cHeapGlobal;
 	class cShareHeapPhysical;
-	class cPrimHeap;
+
+	class CameraProj;
+	class cCameraBase;
+	
 	class cIndexBufferHeap;
 	class cRenderTargetInfo;
+
+	class cTexture;
+	class cTextureInstance;
+	class cLockableTexture;
+	class cTargetTexture;
+	class cShareTargetTexture;
+	class cZTexture;
+
 	class cOtWork;
-	class CriticalSection;
 	class cShader;
 	class cPixelShader;
 	class cVertexShader;
@@ -49,6 +155,7 @@ namespace Hw
 
 	class cOtManagerBase;
 
+	class cPrimHeap;
 	class cPrimF;
 	class cPrimFT;
 	class cPrimFTyuv;
@@ -72,7 +179,9 @@ namespace Hw
 	class cVertexFormatPG;
 	class cVertexFormatPT;
 	class cVertexFormatPV;
-	class cZTexture;
+
+	class cTaskManager;
+	class cJobManager;
 
 	struct RenderBufferHeapManager;
 
@@ -88,15 +197,16 @@ namespace Hw
 	struct cVec2;
 	struct cVec3;
 	struct cVec4;
-	struct cQuaternion;
+	struct cQuat;
 
-	inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
+	static inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
 	{
 		return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
 	}
 
-	namespace TextureManager
+	class TextureManager
 	{
+	public:
 		struct Texture
 		{
 			LPDIRECT3DTEXTURE9 m_pTexture;
@@ -116,13 +226,14 @@ namespace Hw
 			((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture);
 		}
 
-		inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
-		inline CriticalSection &TextureCriticalSection = *(CriticalSection*)(shared::base + 0x1B20740);
-	} 
+		static inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
+		static inline cCriticalSection &TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
+	};
 
-	namespace Wwise
+	class Wwise
 	{
-		namespace Command
+	public:
+		class Command
 		{
 			class Work
 			{
@@ -162,40 +273,410 @@ namespace Hw
 			class StateWork : public Work{};
 
 			class StopEventWork : public Work{};
-		}
-	}
+		};
+	};
 
-	namespace ThreadManager
+	class ThreadSystem
 	{
-
-
-		inline BOOL startupThread(Hw::Thread* pThread, unsigned int stackSize, int a3, const char *threadName, int priority)
+	public:
+		static inline BOOL startupThread(Hw::Thread* pThread, unsigned int stackSize, int a3, const char *threadName, int priority)
 		{
 			return ((BOOL(__cdecl *)(Hw::Thread*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority);
 		}
 
-		inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority)
+		static inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority)
 		{
 			return ((BOOL(__cdecl *)(void (__cdecl *)(void *), void *, unsigned int, int, const char *, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority);
 		}
 		
 		// Should be always called at the end of the thread function
-		inline void exitCurrentThread()
+		static inline void Exit()
 		{
 			((void(__cdecl *)())(shared::base + 0x9D7C70))();
 		}
+	};
+
+	static inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+	static inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
+	static inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C);
+	static inline HWND &SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
+
+	static inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
+	static inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+
+	static inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
+
+	static inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
+};
+
+class Hw::cUcol
+{
+public:
+	unsigned int r, g, b, a;
+
+	cUcol(unsigned int color = 0) 
+	{
+		r = (color >> 16) & 0xFF;
+		g = (color >> 8) & 0xFF;
+		b = color & 0xFF;
+		a = (color >> 24) & 0xFF;
 	}
 
-	inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
-	inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
-	inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C);
-	inline HWND &SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
+	cUcol(const cFcol& fcol);
+	cUcol(unsigned int r, unsigned int g, unsigned int b, unsigned int a) : r(r), g(g), b(b), a(a) {}
 
-	inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
-	inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a) 
+	{
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->a = a;
+	}
 
-	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
+	void setRGBAF(float r, float g, float b, float a)
+	{
+		this->r = r * 255;
+	}
+
+	operator unsigned int() const 
+	{
+		return (a << 24) | (r << 16) | (g << 8) | b;
+	}
+
+	cUcol& operator=(unsigned int color) 
+	{
+		r = (color >> 16) & 0xFF;
+		g = (color >> 8) & 0xFF;
+		b = color & 0xFF;
+		a = (color >> 24) & 0xFF;
+
+		return *this;
+	}
+
+	cUcol& operator=(const cFcol& fcol);
+
+	cUcol operator+(const cFcol& fcol) const;
+	cUcol operator-(const cFcol& fcol) const;
+	cUcol operator*(const cFcol& fcol) const;
+	cUcol operator/(const cFcol& fcol) const;
+
+	bool operator==(const cFcol& fcol) const;
+	bool operator!=(const cFcol& fcol) const;
+};
+
+class Hw::cFcol 
+{
+public:
+	float r, g, b, a;
+
+	cFcol(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 1.0f) : r(r), g(g), b(b), a(a) {}
+
+	cFcol(const cUcol& ucol);
+	cFcol(unsigned int color) 
+	{
+		r = ((color >> 16) & 0xFF) / 255.0f;
+		g = ((color >> 8) & 0xFF) / 255.0f;
+		b = (color & 0xFF) / 255.0f;
+		a = ((color >> 24) & 0xFF) / 255.0f;
+	}
+
+	void setRGBAF(float r, float g, float b, float a) 
+	{
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->a = a;
+	}
+
+	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a)
+	{
+		this->r = (float)r / 255.f;
+		this->g = (float)g / 255.f;
+		this->b = (float)b / 255.f;
+		this->a = (float)a / 255.f;
+	}
+
+	operator unsigned int() const 
+	{
+		return ((unsigned int)(a * 255) << 24) | ((unsigned int)(r * 255) << 16)
+			| ((unsigned int)(g * 255) << 8) | (unsigned int)(b * 255);
+	}
+
+	cFcol& operator=(unsigned int color) 
+	{
+		r = ((color >> 16) & 0xFF) / 255.0f;
+		g = ((color >> 8) & 0xFF) / 255.0f;
+		b = (color & 0xFF) / 255.0f;
+		a = ((color >> 24) & 0xFF) / 255.0f;
+
+		return *this;
+	}
+
+	cFcol& operator=(const cUcol& ucol);
+
+	cFcol operator+(const cUcol& ucol) const;
+	cFcol operator-(const cUcol& ucol) const;
+	cFcol operator*(const cUcol& ucol) const;
+	cFcol operator/(const cUcol& ucol) const;
+
+	bool operator==(const cUcol& ucol) const;
+	bool operator!=(const cUcol& ucol) const;
+};
+
+Hw::cUcol::cUcol(const cFcol& fcol) 
+{
+	r = (unsigned int)(int)(fcol.r * 255.0f);
+	g = (unsigned int)(int)(fcol.g * 255.0f);
+	b = (unsigned int)(int)(fcol.b * 255.0f);
+	a = (unsigned int)(int)(fcol.a * 255.0f);
 }
+
+Hw::cFcol::cFcol(const cUcol& ucol) 
+{
+	r = ucol.r / 255.0f;
+	g = ucol.g / 255.0f;
+	b = ucol.b / 255.0f;
+	a = ucol.a / 255.0f;
+}
+
+Hw::cFcol &Hw::cFcol::operator=(const cUcol& ucol)
+{
+	setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a);
+
+	return *this;
+}
+
+Hw::cUcol &Hw::cUcol::operator=(const cFcol &fcol)
+{
+	setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a);
+
+	return *this;
+}
+
+Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const 
+{
+	return cUcol(
+		min(255, r + (unsigned int)(fcol.r * 255)),
+		min(255, g + (unsigned int)(fcol.g * 255)),
+		min(255, b + (unsigned int)(fcol.b * 255)),
+		min(255, a + (unsigned int)(fcol.a * 255))
+	);
+}
+
+Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const 
+{
+	return cUcol(
+		max(0, r - (unsigned int)(fcol.r * 255)),
+		max(0, g - (unsigned int)(fcol.g * 255)),
+		max(0, b - (unsigned int)(fcol.b * 255)),
+		max(0, a - (unsigned int)(fcol.a * 255))
+	);
+}
+
+Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const 
+{
+	return cUcol(
+		min(255, (int)(r * fcol.r)),
+		min(255, (int)(g * fcol.g)),
+		min(255, (int)(b * fcol.b)),
+		min(255, (int)(a * fcol.a))
+	);
+}
+
+Hw::cUcol Hw::cUcol::operator/(const cFcol& fcol) const 
+{
+	return cUcol(
+		min(255, r / max(fcol.r, 1e-6f)),
+		min(255, g / max(fcol.g, 1e-6f)),
+		min(255, b / max(fcol.b, 1e-6f)),
+		min(255, a / max(fcol.a, 1e-6f))
+	);
+}
+
+bool Hw::cUcol::operator==(const cFcol& fcol) const 
+{
+	return r == (unsigned int)(fcol.r * 255) &&
+		g == (unsigned int)(fcol.g * 255) &&
+		b == (unsigned int)(fcol.b * 255) &&
+		a == (unsigned int)(fcol.a * 255);
+}
+
+bool Hw::cUcol::operator!=(const cFcol& fcol) const 
+{
+	return !(*this == fcol);
+}
+
+Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const 
+{
+	return cFcol(
+		r + ucol.r / 255.0f,
+		g + ucol.g / 255.0f,
+		b + ucol.b / 255.0f,
+		a + ucol.a / 255.0f
+	);
+}
+
+Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const 
+{
+	return cFcol(
+		r - ucol.r / 255.0f,
+		g - ucol.g / 255.0f,
+		b - ucol.b / 255.0f,
+		a - ucol.a / 255.0f
+	);
+}
+
+Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const 
+{
+	return cFcol(
+		r * ucol.r / 255.0f,
+		g * ucol.g / 255.0f,
+		b * ucol.b / 255.0f,
+		a * ucol.a / 255.0f
+	);
+}
+
+Hw::cFcol Hw::cFcol::operator/(const cUcol& ucol) const 
+{
+	return cFcol(
+		r / max(ucol.r, 1u) / 255.0f,
+		g / max(ucol.g, 1u) / 255.0f,
+		b / max(ucol.b, 1u) / 255.0f,
+		a / max(ucol.a, 1u) / 255.0f
+	);
+}
+
+bool Hw::cFcol::operator==(const cUcol& ucol) const
+{
+	return fabs(r - ucol.r / 255.0f) < 1e-6f &&
+		fabs(g - ucol.g / 255.0f) < 1e-6f &&
+		fabs(b - ucol.b / 255.0f) < 1e-6f &&
+		fabs(a - ucol.a / 255.0f) < 1e-6f;
+};
+
+bool Hw::cFcol::operator!=(const cUcol& ucol) const 
+{
+	return !(*this == ucol);
+}
+
+class Hw::cRand
+{
+private:
+	unsigned int m_nSeed;
+public:
+	cRand()
+	{
+		((void(__thiscall *)(cRand *))(shared::base + 0x9DBBB0))(this);
+	}
+
+	~cRand()
+	{
+		((void(__thiscall *)(cRand *))(shared::base + 0x9DBBC0))(this);
+	}
+
+	void setSeed(unsigned int seed)
+	{
+		((void(__thiscall*)(cRand*, unsigned int))(shared::base + 0x9DBBD0))(this, seed);
+	}
+
+	unsigned int getSeed()
+	{
+		return ((unsigned int(__thiscall *)(cRand *))(shared::base + 0x9DBBE0))(this);
+	}
+
+	unsigned short rollU16()
+	{
+		return ((unsigned short(__thiscall *)(cRand*))(shared::base + 0x9DBBF0))(this);
+	}
+
+	unsigned int rollU32()
+	{
+		return ((unsigned int(__thiscall *)(cRand*))(shared::base + 0x9DBC10))(this);
+	}
+
+	void initSeed()
+	{
+		((void(__thiscall *)(cRand*))(shared::base + 0x9DE290))(this);
+	}
+
+	unsigned short getU16(unsigned short min, unsigned short max)
+	{
+		return ((unsigned short(__thiscall*)(cRand*, unsigned short, unsigned short))(shared::base + 0x9DE2A0))(this, min, max);
+	}
+
+	short getS16(short min, short max)
+	{
+		return ((int(__thiscall*)(cRand*, int, int))(shared::base + 0x9DE2D0))(this, min, max);
+	}
+
+	float getF32(float min, float max)
+	{
+		return ((float(__thiscall*)(cRand*, float, float))(shared::base + 0x9DE300))(this, min, max);
+	}
+};
+
+class Hw::cSemaphore
+{
+public:
+	HANDLE m_hSemaphore;
+
+	cSemaphore()
+	{
+		((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D7360))(this);
+	}
+		
+	BOOL startup(long init_count, long max_count)
+	{
+		return ((BOOL(__thiscall *)(cSemaphore *, long, long))(shared::base + 0x9D7370))(this, init_count, max_count);
+	}
+
+	void cleanup()
+	{
+		((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D73B0))(this);
+	}
+	
+	void hold()
+	{
+		((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73D0))(this);
+	}
+
+	void release()
+	{
+		((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73E0))(this);
+	}
+};
+
+class Hw::cCriticalSection
+{
+public:
+	RTL_CRITICAL_SECTION m_critsection;
+	BOOL m_bInit;
+
+	cCriticalSection()
+	{
+		this->m_bInit = FALSE;
+	}
+
+	BOOL startup()
+	{
+		return ((BOOL(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7240))(this);
+	}
+
+	void enter()
+	{
+		((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6C0))(this);
+	}
+
+	void leave()
+	{
+		((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6D0))(this);
+	}
+
+	void cleanup()
+	{
+		((void(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7270))(this);
+	}
+};
 
 template <typename tC>
 class Hw::cSingleton
@@ -248,10 +729,10 @@ struct Hw::Thread
 	void *m_pThreadParameter;
 };
 
-struct Hw::cVec2
+class Hw::cVec2
 {
-	float x;
-	float y;
+public:
+	float x, y;
 
 	cVec2()
 	{
@@ -366,11 +847,10 @@ struct Hw::cVec2
 	}
 };
 
-struct Hw::cVec3
+class Hw::cVec3
 {
-	float x;
-	float y;
-	float z;
+public:
+	float x, y, z;
 
 	cVec3()
 	{
@@ -507,12 +987,10 @@ struct Hw::cVec3
 	}
 };
 
-struct Hw::cVec4
+class Hw::cVec4
 {
-	float x;
-	float y;
-	float z;
-	float w;
+public:
+	float x, y, z, w;
 
 	void operator=(const cVec4& right)
 	{
@@ -654,26 +1132,362 @@ struct Hw::cVec4
 	}
 };
 
-struct Hw::cQuaternion
+struct Hw::cQuat
 {
 	float x;
 	float y;
 	float z;
 	float w;
 
-	cQuaternion(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
-	cQuaternion() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
+	cQuat(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
+	cQuat() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
 
-	static inline void Multiply(cQuaternion &out, const cVec4& rotation)
+	static inline void Multiply(cQuat &out, const cVec4& rotation)
 	{
-		((void(__cdecl*)(cQuaternion&, const cVec4&))(shared::base + 0x9DB590))(out, rotation);
+		((void(__cdecl*)(cQuat&, const cVec4&))(shared::base + 0x9DB590))(out, rotation);
 	}
 };
 
 typedef Hw::cVec2 cVec2;
 typedef Hw::cVec3 cVec3;
 typedef Hw::cVec4 cVec4;
-typedef Hw::cQuaternion cQuaternion;
+typedef Hw::cQuat cQuat;
+
+class Hw::cMtx
+{
+public:
+	union
+	{
+		float _11, _12, _13, _14,
+			  _21, _22, _23, _24,
+			  _31, _32, _33, _34,
+			  _41, _42, _43, _44;
+
+		float m[4][4];
+		Hw::cVec4 r[4];
+	};
+
+	cMtx()
+	{
+		r[0] = Hw::cVec4(1.0f, 0.0f, 0.0f, 0.0f);
+		r[1] = Hw::cVec4(0.0f, 1.0f, 0.0f, 0.0f);
+		r[2] = Hw::cVec4(0.0f, 0.0f, 1.0f, 0.0f);
+		r[3] = Hw::cVec4(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+};
+
+VALIDATE_SIZE(Hw::cMtx, 0x40);
+
+class Hw::cJobManager
+{
+public:
+	class cWork
+	{
+	public:
+		cJobManager* m_Owner;
+		int m_nThreadIndex;
+		HANDLE m_hSemaphore;
+		HANDLE m_hTask;
+		void(__cdecl *m_func)(LPVOID reserved, void *arg);
+		void* m_parameter;
+	};
+
+	cWork* m_pJobs;
+	int m_nJobCapacity;
+	int field_8;
+	int field_C;
+	int field_10;
+	int field_14;
+	int field_18;
+	int field_1C;
+	int field_20;
+	int field_24;
+	int field_28;
+	int field_2C;
+	int field_30;
+	int field_34;
+	int field_38;
+	int field_3C;
+	int field_40;
+	int field_44;
+	int field_48;
+	int field_4C;
+	int field_50;
+	int field_54;
+	int field_58;
+	int field_5C;
+	int field_60;
+	int field_64;
+	int field_68;
+	int field_6C;
+	int field_70;
+	int field_74;
+	int field_78;
+	int field_7C;
+	int field_80;
+	int field_84;
+	int field_88;
+	int field_8C;
+	int field_90;
+	int field_94;
+	int field_98;
+	int field_9C;
+	int field_A0;
+	int field_A4;
+	int field_A8;
+	int field_AC;
+	int field_B0;
+
+	cJobManager()
+	{
+		((void(__thiscall*)(cJobManager*))(shared::base + 0x9D6F30))(this);
+	}
+
+	~cJobManager()
+	{
+		((void(__thiscall*)(cJobManager*))(shared::base + 0x9D8B60))(this);
+	}
+
+	int shutdown()
+	{
+		return ((int(__thiscall*)(cJobManager*))(shared::base + 0x9D8860))(this);
+	}
+
+	unsigned int getCurrentThreadId()
+	{
+		return ((unsigned int(__thiscall*)(cJobManager*))(shared::base + 0x9D7AD0))(this);
+	}
+
+	void scheduleJob(void(__cdecl* function)(LPVOID reserved, LPVOID parameter), LPVOID parameter, unsigned int jobIndex)
+	{
+		((void(__thiscall*)(cJobManager*, void(__cdecl*)(LPVOID, LPVOID), LPVOID, unsigned int))(shared::base + 0x9D75D0))(this, function, parameter, jobIndex);
+	}
+
+	BOOL startup(size_t jobAmount, int* threadIndices, Hw::cHeap* allocator, void* a5, void* a6, const char** threadNames, int a8)
+	{
+		return ((BOOL(__thiscall*)(cJobManager*, size_t, int*, Hw::cHeap*, void*, void*, const char**, int))(shared::base + 0x9D8B70))(this, jobAmount, threadIndices, allocator, a5, a6, threadNames, a8);
+	}
+
+	void setJobConcurrency(unsigned int jobs)
+	{
+		((void(__thiscall*)(cJobManager*, unsigned int))(shared::base + 0x9D79A0))(this, jobs);
+	}
+};
+
+class Hw::cTaskManager
+{
+public:
+	class cWork;
+
+	int m_nWorkNum;
+	cWork *m_pWorkBuff;
+	cWork *m_pActiveWorkList;
+	cWork *m_pUnusingWorkList;
+	cWork *m_pCurrentWork;
+	int m_nRotateTaskId;
+	cTaskManager *m_pPrevTaskManager;
+
+	cTaskManager()
+	{
+		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D6DF0))(this);
+	}
+
+	cWork *newWork(int task_prio)
+	{
+		return ((cWork*(__thiscall *)(cTaskManager*, int))(shared::base + 0x9D7420))(this, task_prio);
+	}
+
+	void deleteWork(cWork *pWork)
+	{
+		((void(__thiscall *)(cTaskManager*, cWork *))(shared::base + 0x9D74A0))(this, pWork);
+	}
+
+	eTaskId getCurrentId()
+	{
+		return ((eTaskId(__thiscall *)(cTaskManager*))(shared::base + 0x9D7500))(this);
+	}
+	
+	void execute(void(__cdecl *rFunc)(LPVOID parameter), LPVOID pParam, int task_prio, const char* task_name)
+	{
+		((void(__thiscall*)(cTaskManager*, void(__cdecl *)(LPVOID), LPVOID, int, const char*))(shared::base + 0x9D7870))(this, rFunc, pParam, task_prio, task_name);
+	}
+
+	void killWork(cWork *pWork)
+	{
+		((void(__thiscall *)(cTaskManager *, cWork*))(shared::base + 0x9D7F40))(this, pWork);
+	}
+
+	void cleanup()
+	{
+		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8450))(this);
+	}
+
+	void sleep(int count)
+	{
+		((void(__thiscall*)(cTaskManager*, int))(shared::base + 0x9D8570))(this, count);
+	}
+
+	~cTaskManager()
+	{
+		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8A00))(this);
+	}
+
+	BOOL startup(unsigned int taskCapacity, unsigned int taskStackSize, Hw::cHeapVariable* allocator)
+	{
+		return ((BOOL(__thiscall*)(cTaskManager*, unsigned int, unsigned int, Hw::cHeapVariable*))(shared::base + 0x9D8A10))(this, taskCapacity, taskStackSize, allocator);
+	}
+
+	void update()
+	{
+		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8DA0))(this);
+	}
+
+	static inline void chain(void(__cdecl *rFunc)(LPVOID), LPVOID pParam)
+	{
+		((void(__cdecl *)(void(__cdecl* )(LPVOID), LPVOID))(shared::base + 0x9D8950))(rFunc, pParam);
+	}
+
+	static inline cTaskManager *getCurrentManager()
+	{
+		return ((cTaskManager*(__cdecl *)())(shared::base + 0x9D6E10))();
+	}
+
+	static inline void setCurrentManager(cTaskManager *pManager)
+	{
+		((void(__cdecl *)(cTaskManager *))(shared::base + 0x9D6E20))(pManager);
+	}
+
+	static inline cTaskManager *&m_pCurrentTaskManager = *(cTaskManager**)(shared::base + 0x19D0564); // private: static class
+};
+
+class Hw::cTaskManager::cWork
+{
+public:
+	enum eStatus
+	{
+		STATUS_EXIT = 0x0,
+		STATUS_EXEC = 0x1,
+		STATUS_CHAIN = 0x2,
+		STATUS_SLEEP = 0x3,
+		STATUS_RUN = 0x4,
+		STATUS_KILL = 0x5
+	};
+
+	Hw::cTaskManager *m_pManager;
+	void (__cdecl *m_pFunc)(void *);
+	void *m_pParam;
+	eTaskId m_TaskId;
+	int m_nTaskPrio;
+	const char *m_TaskName;
+	eStatus m_Status;
+	int m_nSleepCount;
+	int m_nTaskStackSize;
+	cSemaphore m_SyncTaskStart;
+	cSemaphore m_SyncTaskStop;
+	cWork *m_pPrev;
+	cWork *m_pNext;
+	void (__cdecl *m_pTaskReport)(eStatus);
+
+	void execute(void(__cdecl *rFunc)(LPVOID), LPVOID pParam, const char* task_name, eTaskId task_id)
+	{
+		((void(__thiscall *)(cWork*, void(__cdecl *)(LPVOID), LPVOID, const char*, eTaskId))(shared::base + 0x9D6E30))(this, rFunc, pParam, task_name, task_id);
+	}
+
+	void setTaskReport(void(__cdecl *rFunc)(eStatus))
+	{
+		((void(__thiscall *)(cWork *, void(__cdecl*)(eStatus)))(shared::base + 0x9D6E70))(this, rFunc);
+	}
+
+	BOOL isExit()
+	{
+		return ((BOOL(__thiscall *)(cWork*))(shared::base + 0x9D6E80))(this);
+	}
+
+	eTaskId getTaskId()
+	{
+		return ((eTaskId(__thiscall *)(cWork*))(shared::base + 0x9D6E90))(this);
+	}
+
+	const char *getTaskName()
+	{
+		return ((const char*(__thiscall *)(cWork*))(shared::base + 0x9D6EA0))(this);
+	}
+
+	int getTaskPrio()
+	{
+		return ((int(__thiscall *)(cWork*))(shared::base + 0x9D6EB0))(this);
+	}
+
+	void setTaskPrio(int task_prio)
+	{
+		((void(__thiscall *)(cWork*, int))(shared::base + 0x9D6EC0))(this, task_prio);
+	}
+
+	void chainWork(cWork *pPrev, cWork *pNext)
+	{
+		((void(__thiscall *)(cWork*, cWork*, cWork*))(shared::base + 0x9D6ED0))(this, pPrev, pNext);
+	}
+
+	void unchainWork()
+	{
+		((void(__thiscall *)(cWork*))(shared::base + 0x9D6EF0))(this);
+	}
+
+	cWork *getNextWork()
+	{
+		return ((cWork*(__thiscall *)(cWork*))(shared::base + 0x9D6F20))(this);
+	}
+
+	BOOL startup(unsigned int stack_size, /* unused */ int __formal, cTaskManager* pManager)
+	{
+		return ((BOOL(__thiscall *)(cWork *, unsigned int, int, cTaskManager*))(shared::base + 0x9D7540))(this, stack_size, __formal, pManager);
+	}
+
+	void waitTaskStart()
+	{
+		((void(__thiscall *)(cWork *))(shared::base + 0x9D7590))(this);
+	}
+
+	void sendTaskStart()
+	{
+		((void(__thiscall *)(cWork *))(shared::base + 0x9D75A0))(this);
+	}
+
+	void waitTaskStop()
+	{
+		((void(__thiscall *)(cWork*))(shared::base + 0x9D75B0))(this);
+	}
+
+	void sendTaskStop()
+	{
+		((void(__thiscall *)(cWork*))(shared::base + 0x9D75C0))(this);
+	}
+
+	void updateSleep()
+	{
+		((void(__thiscall *)(cWork*))(shared::base + 0x9D7910))(this);
+	}
+
+	void kill()
+	{
+		((void(__thiscall *)(cWork *))(shared::base + 0x9D7950))(this);
+	}
+
+	void cleanup()
+	{
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D8000))(this);
+	}
+
+	void chain(void(__cdecl *rFunc)(LPVOID), LPVOID pParam)
+	{
+		((void(__thiscall *)(cWork*, void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8090))(this, rFunc, pParam);
+	}
+
+	void sleep(int count)
+	{
+		((void(__thiscall*)(cWork*, int))(shared::base + 0x9D80E0))(this, count);
+	}
+};
 
 namespace cInput
 {
@@ -914,47 +1728,13 @@ namespace cInput
 	inline float* ms_aMaxStickThreshold = (float*)(shared::base + 0x19D05E0); // 4 elements, threshold until the stick is fully moved
 };
 
-class Hw::CriticalSection
-{
-public:
-	RTL_CRITICAL_SECTION m_critsection;
-	BOOL m_bInit;
-
-	CriticalSection()
-	{
-		this->m_bInit = FALSE;
-	}
-
-	BOOL init()
-	{
-		return ((BOOL(__thiscall*)(CriticalSection*))(shared::base + 0x9D7240))(this);
-	}
-
-	void enter()
-	{
-		if (this->m_bInit)
-			EnterCriticalSection(&this->m_critsection);
-	}
-
-	void leave()
-	{
-		if (this->m_bInit)
-			LeaveCriticalSection(&this->m_critsection);
-	}
-
-	void shutdown()
-	{
-		((void(__thiscall*)(CriticalSection*))(shared::base + 0x9D7270))(this);
-	}
-};
-
 class Hw::cHeap
 {
 public:
 	int field_4;
-	Hw::CriticalSection m_CriticalSection;
+	Hw::cCriticalSection m_CriticalSection;
 	int field_24;
-	Hw::cHeap* m_pReservedHeap;
+	Hw::cHeap* m_pSubHeap;
 	Hw::cHeap* m_pHeapOwner;
 	Hw::cHeap* m_pNext;
 	Hw::cHeap* m_pPrev;
@@ -1028,14 +1808,14 @@ public:
 		return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
 	}
 
-	void removeChildHeap(HANDLE* pHandle, size_t Size)
+	void destroyChildHeap(HANDLE* pHandle, size_t Size)
 	{
 		CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
 	}
 
-	void* allocate(size_t size, size_t preserved, int a3, int a4)
+	void* allocImpl(size_t size, size_t preserved, HW_ALLOC_MODE allocMode, int a4)
 	{
-		return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, int, int>(this, size, preserved, a3, a4);
+		return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, preserved, allocMode, a4);
 	}
 
 	void free(void* block, size_t size)
@@ -1043,27 +1823,70 @@ public:
 		CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size);
 	}
 
-	void *AllocateMemory(size_t size, size_t preserved, int alignment, int a3)
+	void *AllocateMemory(size_t size, size_t preserved, HW_ALLOC_MODE allocMode, int a3)
 	{
-		return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, int, int))(shared::base + 0x9D29B0))(this, size, preserved, alignment, a3);
+		return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, preserved, allocMode, a3);
+	}
+
+	void setSubHeap(Hw::cHeap &rHeap)
+	{
+		((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap);
+	}
+
+	void unsetSubHeap()
+	{
+		((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this);
 	}
 };
+
+inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) 
+{
+	return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap);
+}
+
+inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) // to separate the delete operator
+{
+	return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
+}
+
+inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap)
+{
+	return ((void*(__cdecl*)(size_t, Hw::cHeap&))(shared::base + 0x9D3580))(s, rHeap);
+}
+
+inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) // to separate the delete[] operator
+{
+	return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block);
+}
+
+// Usage after heap startup
+inline void* __cdecl memAlloc(size_t s)
+{
+	return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s);
+}
+
+// Usage after heap startup
+inline void __cdecl memDealloc(void* block)
+{
+	((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block);
+}
 
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
 public:
-	struct HeapBlock
+	class cList
 	{
-		HeapBlock* m_pPrevious;
-		HeapBlock* m_pNext;
+	public:
+		cList* m_pPrevious;
+		cList* m_pNext;
 		void* m_pMemoryBlock;
 		size_t m_MemorySize;
 		cHeapVariableBase* m_pAllocator;
 	};
 
 	HANDLE m_HeapHandle;
-	HeapBlock* m_pFirstBlock;
-	HeapBlock* m_pLastBlock;
+	cList* m_pFirstBlock;
+	cList* m_pLastBlock;
 	size_t m_MemoryLimit;
 	size_t m_FreeMemory;
 	size_t m_UsedMemory;
@@ -1087,10 +1910,11 @@ public:
 class Hw::cHeapPhysicalBase : public Hw::cHeap
 {
 public:
-	struct HeapBlock
+	class cList
 	{
-		HeapBlock* m_pPrevious;
-		HeapBlock* m_pNext;
+	public:
+		cList* m_pPrevious;
+		cList* m_pNext;
 		size_t m_TotalSize;
 		size_t m_Size;
 		int field_10;
@@ -1098,9 +1922,9 @@ public:
 		cHeapPhysicalBase* m_pAllocator;
 	};
 public:
-	HeapBlock* m_pMainBlock;
-	HeapBlock* m_pFirstBlock;
-	HeapBlock *m_pLastBlock;
+	cList* m_pMainBlock;
+	cList* m_pFirstBlock;
+	cList *m_pLastBlock;
 	size_t m_MemoryLimit;
 	size_t m_FreeMemory;
 	int field_54;
@@ -1110,7 +1934,7 @@ public:
 	int field_64;
 	int field_68;
 	int field_6C;
-	HeapBlock* m_pBlocks[256];
+	cList* m_pBlocks[256];
 
 	cHeapPhysicalBase()
 	{
@@ -1138,10 +1962,10 @@ public:
 class Hw::cHeapFixed : public Hw::cHeap
 {
 public:
-	struct HeapBlock 
+	struct cList 
 	{
-		HeapBlock *m_pPrevious;
-		HeapBlock *m_pNext;
+		cList *m_pPrevious;
+		cList *m_pNext;
 		cHeapFixed *m_pAllocator;
 	};
 public:
@@ -1196,7 +2020,7 @@ public:
 		if (hasHandle())
 			return FALSE;
 
-		if (!this->m_CriticalSection.init())
+		if (!this->m_CriticalSection.startup())
 			return FALSE;
 
 		this->m_HeapHandle = HeapCreate(1u, 0u, 0u);
@@ -1316,35 +2140,36 @@ VALIDATE_SIZE(Hw::CameraProj, 0xB0);
 class Hw::cCameraBase
 {
 public:
-	struct CameraMatrix
+	class cCameraMatrix
 	{
-		cVec4 m_vecPosition;
-		cVec4 m_vecLookAtPosition;
-		cVec4 m_vecOffset;
-		cVec4 m_vecCameraOffset;
+	public:
+		Hw::cVec4 m_Trans;
+		Hw::cVec4 m_Target;
+		Hw::cVec4 m_Up;
+		Hw::cVec4 m_Rot;
 		float m_fRoll;
-		float m_fDistance;
+		float m_Dist;
 		float m_fFOV;
 
-		CameraMatrix &operator=(const CameraMatrix &lvalue)
+		cCameraMatrix &operator=(const cCameraMatrix &lvalue)
 		{
-			((void(__thiscall *)(CameraMatrix *, const CameraMatrix &))(shared::base + 0x9A01F0))(this, lvalue);
+			((void(__thiscall *)(cCameraMatrix *, const cCameraMatrix &))(shared::base + 0x9A01F0))(this, lvalue);
 			return *this;
 		}
 
 		cVec4 calculateViewOffset()
 		{
 			cVec4 result;
-			result = *((cVec4*(__thiscall*)(CameraMatrix*, cVec4*))(shared::base + 0x9B9090))(this, &result);
+			result = *((cVec4*(__thiscall*)(cCameraMatrix*, cVec4*))(shared::base + 0x9B9090))(this, &result);
 			return result;
 		}
 	};
 
-	D3DXMATRIX m_viewMatrix;
-	D3DXMATRIX field_40;
-	D3DXMATRIX m_invertedViewMatrix;
-	D3DXMATRIX field_C0;
-	CameraMatrix m_CameraMatrix;
+	Hw::cMtx m_ViewMatrix;
+	Hw::cMtx m_TransposeViewMatrix;
+	Hw::cMtx m_InverseViewMatrix;
+	Hw::cMtx m_ViewMatrixOld;
+	cCameraMatrix m_CameraMatrix;
 	float field_14C;
 
 	void setViewMatrix(const D3DXMATRIX& matrix)
@@ -1723,38 +2548,6 @@ public:
 
 class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
 
-inline void *__cdecl operator new(size_t s, Hw::cHeap *allocator) 
-{
-	return ((void*(__cdecl *)(size_t, Hw::cHeap *))(shared::base + 0x9D3500))(s, allocator);
-}
-
-inline void __cdecl operator delete(void* block, Hw::cHeap* allocator) // to separate the delete operator
-{
-	return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
-}
-
-inline void *__cdecl operator new[](size_t s, Hw::cHeap* allocator)
-{
-	return ((void*(__cdecl*)(size_t, Hw::cHeap*))(shared::base + 0x9D3580))(s, allocator);
-}
-
-inline void __cdecl operator delete[](void *block, Hw::cHeap* allocator) // to separate the delete[] operator
-{
-	return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block);
-}
-
-// Usage after heap startup
-inline void* __cdecl memAlloc(size_t s)
-{
-	return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s);
-}
-
-// Usage after heap startup
-inline void __cdecl memDealloc(void* block)
-{
-	((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block);
-}
-
 template <typename T>
 struct Hw::cFixedVector
 {
@@ -1897,107 +2690,350 @@ struct Hw::cFixedVector
 };
 
 template <typename T>
-struct Hw::cFixedList
+class Hw::cFixedList
 {
-	struct Node
+public:
+	class cTag
 	{
+	public:
 		T m_value;
-		Node* m_prev;
-		Node* m_next;
+		cTag* m_prev;
+		cTag* m_next;
+
+		cTag()
+		{
+			m_prev = m_next = nullptr;
+		}
+
+		~cTag()
+		{
+			m_prev = m_next = nullptr;
+		}
 	};
 
-	Node* m_pHead;
-	Node* m_ListBegin;
-	size_t m_capacity;
-	size_t m_size;
-	Node* m_ListEnd;
-	Node* m_pFirst;
-	Node* m_pLast;
-
-	class iterator
+	class const_iterator
 	{
-	private:
-		Node* m_current;
 	public:
-		explicit iterator(Node* node) : m_current(node) {};
+		cTag *m_pTag;
 
-		iterator& operator++()
+		const_iterator(cTag *pTag)
 		{
-			if (m_current)
-				m_current = m_current->m_next;
+			m_pTag = pTag;
+		}
+
+		const_iterator(const const_iterator &it)
+		{
+			m_pTag = it.m_pTag;
+		}
+
+		const_iterator()
+		{
+			m_pTag = nullptr;
+		}
+
+		const_iterator& operator++()
+		{
+			if (m_pTag)
+				m_pTag = m_pTag->m_next;
 
 			return *this;
 		}
 
-		iterator& operator--()
+		const_iterator& operator--()
 		{
-			if (m_current)
-				m_current = m_current->m_prev;
+			if (m_pTag)
+				m_pTag = m_pTag->m_prev;
 
 			return *this;
 		}
 
-		T& operator*() const
+		const_iterator& operator=(const const_iterator& it) const
 		{
-			return m_current->m_value;
+			m_pTag = it.m_pTag;
+
+			return *this;
 		}
 
-		bool operator==(const iterator& other) const
+		bool operator==(const const_iterator &other)
 		{
-			return m_current == other.m_current;
+			return m_pTag == other.m_pTag;
 		}
 
-		bool operator!=(const iterator& other) const
+		bool operator!=(const const_iterator& other)
 		{
 			return !(*this == other);
 		}
+
+		tC &operator*() const
+		{
+			return m_pTag->m_value;
+		}
+
+		tC* operator->() const
+		{
+			return &m_pTag->m_value;
+		}
+
+		const_iterator getPrev() const
+		{
+			return m_pTag->m_prev;
+		}
+
+		const_iterator getNext() const
+		{
+			return m_pTag->m_next;
+		}
 	};
+
+	class iterator : public const_iterator
+	{
+	public:
+		iterator(const iterator& it)
+		{
+			m_pTag = it.m_pTag;
+		}
+
+		iterator(cTag *pTag)
+		{
+			m_pTag = pTag;
+		}
+
+		iterator(const const_iterator &it)
+		{
+			m_pTag = it.m_pTag;
+		}
+
+		iterator()
+		{
+			m_pTag = nullptr;
+		}
+
+		iterator &operator=(const iterator& it)
+		{
+			m_pTag = it.m_pTag;
+
+			return *this;
+		}
+
+		tC& operator*()
+		{
+			return m_pTag->m_value;
+		}
+
+		tC *operator->()
+		{
+			return &m_pTag->m_value;
+		}
+
+		iterator getPrev()
+		{
+			return m_pTag->m_prev;
+		}
+
+		iterator getNext()
+		{
+			return m_pTag->m_next;
+		}
+	};
+
+	const iterator m_npos;
+	cTag* m_pAllocated;
+	size_t m_capacity;
+	size_t m_size;
+	iterator m_freeBegin;
+	iterator m_first;
+	iterator m_last;
+
+	cFixedList() : m_npos(nullptr)
+	{
+		m_pAllocated = nullptr;
+		m_freeBegin = m_npos;
+		m_first = m_npos;
+		m_last = m_npos;
+	};
+
+	~cFixedList()
+	{
+		destroy();
+	}
+
+	BOOL create(size_t capacity, Hw::cHeap &allocator)
+	{
+		if (m_pAllocated)
+			return FALSE;
+
+		m_pAllocated = (cTag*)allocator.AllocateMemory(sizeof(cTag) * capacity + sizeof(cTag), 32, 0, 0);
+		if (m_pAllocated)
+		{
+			m_capacity = capacity;
+			m_size = 0;
+			m_last = m_pAllocated + capacity;
+
+			resetChain();
+
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	void destroy()
+	{
+		if (m_pAllocated)
+		{
+			if (m_pAllocated) // if this was generated by a macro, it makes sense
+			{
+				operator delete(m_pAllocated, (Hw::cHeap*)nullptr);
+				m_pAllocated = nullptr;
+			}
+
+			m_capacity = 0;
+			m_size = 0;
+			m_first = m_npos;
+			m_last = m_npos;
+			m_freeBegin = m_npos;
+		}
+	}
+
+	iterator insert(const_iterator &where, const T& element)
+	{
+		cTag* free = m_freeBegin;
+		if (m_freeBegin == m_npos)
+		{
+			PrintfLog("cFixedList<tC>::insert  list max over!");
+			return m_npos;
+		}
+
+		free = createIterator();
+
+		if (free)
+			free->m_value = element;
+
+		free->m_prev = where.getPrev();
+		free->m_next = where->m_pTag;
+
+		if (where.getPrev())
+			where.getPrev()->m_next = free;
+
+		if (where->m_pTag)
+			where->m_pTag->m_prev = free;
+
+		if (m_first == where)
+			m_first = free;
+
+		return free;
+	}
+
+	iterator pushBack(const T& element)
+	{
+		return insert(m_last, element);
+	}
+
+	iterator pushFront(const T& element)
+	{
+		return insert(m_first, element);
+	}
+
+	iterator erase(iterator &it)
+	{
+		cTag* prev = it.m_pTag->m_prev;
+		cTag* next = it.m_pTag->m_next;
+
+		if (prev)
+			prev->m_next = next;
+		if (next)
+			next->m_prev = prev;
+
+		if (m_first == it)
+			m_first = next;
+
+		--m_size;
+
+		it->m_pTag->m_prev = m_freeBegin.getPrev();
+		it->m_pTag->m_next = m_freeBegin.m_pTag;
+
+		if (m_freeBegin.getPrev())
+			m_freeBegin.getPrev()->m_next = it->m_pTag;
+		if (m_freeBegin.m_pTag)
+			m_freeBegin.m_pTag->m_prev = it->m_pTag;
+
+		m_freeBegin = it->m_pTag;
+
+		return next;
+	}
+
+	void clear()
+	{
+		resetChain();
+	}
 
 	iterator begin()
 	{
-		return iterator(m_pFirst);
+		return m_first;
 	}
 
-	iterator begin() const
+	const_iterator begin() const
 	{
-		return iterator(m_pFirst);
+		return m_first;
 	}
 
-	iterator end() const
+	const_iterator end() const
 	{
-		return iterator(m_pLast);
+		return m_last;
 	}
 
 	iterator end()
 	{
-		return iterator(m_pLast);
+		return m_last;
 	}
 
-	iterator rbegin()
+	size_t getSize() const
 	{
-		return iterator(m_pLast);
+		return m_size;
 	}
 
-	iterator rbegin() const
+	size_t getCapacity() const
 	{
-		return iterator(m_pLast);
+		return m_capacity;
 	}
 
-	iterator rend()
+	BOOL canAdd() const
 	{
-		return iterator(m_pFirst);
+		return m_size < m_capacity && m_freeBegin != m_npos;
 	}
 
-	iterator rend() const
+	void chain(iterator &it)
 	{
-		return iterator(m_pFirst);
+		cTag* prev = it->m_prev;
+		cTag* next = it->m_next;
+
+		if (prev)
+			prev->m_next = next;
+		if (next)
+			next->m_prev = prev;
 	}
 
-	void setupNodes()
+	iterator unchain(iterator &it)
+	{
+		cTag* prev = it.m_pTag->m_prev;
+		cTag* next = it.m_pTag->m_next;
+
+		if (prev)
+			prev->m_next = next;
+		if (next)
+			next->m_prev = prev;
+
+		if (m_first == it)
+			m_first = next;
+
+		if (m_last == it)
+			m_last = prev;
+	}
+
+	void resetChain()
 	{
 		if (m_capacity > 0)
 		{
-			Node* current = m_ListBegin;
+			cTag* current = m_pAllocated;
 			for (int i = 0; i < m_capacity; i++)
 			{
 				current->m_prev = (current - 1);
@@ -2006,148 +3042,50 @@ struct Hw::cFixedList
 			}
 		}
 
-		m_ListBegin->m_prev = nullptr;
+		m_pAllocated->m_prev = nullptr;
 
-		m_ListBegin[m_capacity - 1].m_next = 0;
+		m_pAllocated[m_capacity - 1].m_next = 0;
 
-		m_pLast->m_prev = nullptr;
-		m_pLast->m_next = nullptr;
+		m_last->m_prev = nullptr;
+		m_last->m_next = nullptr;
 
-		m_pFirst = m_pLast;
-		m_ListEnd = m_ListBegin;
+		m_first = m_last;
+		m_freeBegin = m_pAllocated;
 
 		m_size = 0;
 	}
 
-	BOOL create(size_t capacity, Hw::cHeap *allocator)
+	iterator createIterator()
 	{
-		if (m_ListBegin)
-			return 0;
+		iterator &free = m_freeBegin;
+		if (free == m_npos)
+			return m_npos;
 
-		m_ListBegin = (Node*)allocator->AllocateMemory(sizeof(Node) * capacity + sizeof(Node), 32, 0, 0);
-		if (m_ListBegin)
-		{
-			m_capacity = capacity;
-			m_size = 0;
-			m_pLast = m_ListBegin + capacity;
+		chain(free);
 
-			setupNodes();
+		m_freeBegin = free->getNext();
+		++m_size;
 
-			return 1;
-		}
-		return 0;
+		return free;
 	}
 
-	void insert(Node* &retNode, Node* const& where, const T & element)
+	void releaseIterator(iterator &it)
 	{
-		Node *m_pLast = m_ListEnd;
-		if (m_pLast == m_pHead)
-		{
-			m_pLast = m_pHead;
-		}
-		else
-		{
-			Node *m_prev = m_pLast->m_prev;
-			Node *m_next = m_pLast->m_next;
-			if (m_prev)
-				m_prev->m_next = m_next;
-			if (m_next)
-				m_next->m_prev = m_prev;
-			m_ListEnd = m_next;
-			++m_size;
-		}
-		if (m_pLast == m_pHead)
-		{
-			PrintfLog("cFixedList<tC>::insert  list max over!");
-			retNode = m_pHead;
-		}
-		else
-		{
-			if (m_pLast)
-				m_pLast->m_value = element;
-			Node *v8 = where;
-			Node* v9;
-			if (where)
-				v9 = v8->m_prev;
-			else
-				v9 = 0;
-			m_pLast->m_prev = v9;
-			m_pLast->m_next = v8;
-			if (v9)
-				v9->m_next = m_pLast;
-			if (v8)
-				v8->m_prev = m_pLast;
-			if (m_pFirst == where)
-				m_pFirst = m_pLast;
-			retNode = m_pLast;
-		}
-	}
+		if (it == m_npos)
+			return;
 
-	void insert(Node *&where, const T& element)
-	{
-		Node *node;
-		insert(node, where, element);
-	}
+		cTag* tag = it.m_pTag;
 
-	void push_back(const T& element)
-	{
-		insert(m_pLast, element);
-	}
+		unchain(it);
 
-	void push_front(const T& element)
-	{
-		insert(m_pFirst, element);
-	}
+		tag->m_next = m_freeBegin.m_pTag; 
+		tag->m_prev = nullptr;         
+		if (m_freeBegin != m_npos)
+			m_freeBegin.m_pTag->m_prev = tag;
 
-	void remove(Node*& node)
-	{
-		Node* m_prev = node->m_prev;
-		Node* m_next = node->m_next;
-
-		if (m_prev)
-			m_prev->m_next = m_next;
-		if (m_next)
-			m_next->m_prev = m_prev;
-
-		if (m_pFirst == node)
-			m_pFirst = m_next;
+		m_freeBegin = it;
 
 		--m_size;
-
-		Node* m_pLast = this->m_pLast;
-
-		Node* v10;
-
-		if (m_pLast)
-			v10 = m_pLast->m_prev;
-		else
-			v10 = nullptr;
-
-		node->m_prev = v10;
-		node->m_next = m_pLast;
-
-		if (v10)
-			v10->m_next = node;
-
-		if (m_pLast)
-			m_pLast->m_prev = node;
-
-		m_pLast = node;
-	}
-
-	void Remove(const T& value)
-	{
-		Node *current = m_pFirst;
-		while (current)
-		{
-			if (current->m_value == value)
-			{
-				remove(current);
-				return;
-			}
-
-			current = current->m_next;
-		}
 	}
 };
 
@@ -2400,8 +3338,6 @@ struct Hw::cExpandableVector
 	}
 };
 
-#include <CriFs.h>
-
 struct Hw::cDvdFst
 {
 	int field_0;
@@ -2490,3 +3426,5 @@ struct Hw::DvdReadManager
 };
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);
+
+inline Hw::cTaskManager& g_MainTaskManager = *(Hw::cTaskManager*)(shared::base + 0x17E9164);

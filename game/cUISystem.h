@@ -42,7 +42,7 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    Hw::CriticalSection m_WorkSection;
+    Hw::cCriticalSection m_WorkSection;
     int field_2C;
     Hw::cFixedList<cUIWorkBase*> m_UIWorkBaseList;
     cUIWorkExecList m_UIWorkExecList;

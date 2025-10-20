@@ -17,7 +17,7 @@ public:
     Hw::cHeapVariable *m_Allocator;
     lib::AllocatedArray<Entity*> *m_DebrisEntities;
     Hw::cFixedVector<DebrisHandle> m_DebrisHandles;
-    Hw::CriticalSection field_20;
+    Hw::cCriticalSection field_20;
     int field_3C;
 
     static inline DebrisManagerImplement * &ms_Instance = *(DebrisManagerImplement**)(shared::base + 0x17EA18C);

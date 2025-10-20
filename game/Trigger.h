@@ -181,8 +181,8 @@ namespace Trigger
         unsigned int STA_CAMERA_IGNORE_COLLIDE : 1;  // 0x00000800 (index = 11)
         unsigned int STA_PAUSE : 1;                  // 0x00001000 (index = 12)
         unsigned int b14 : 1;                        // 0x00002000 (index = 13)
-        unsigned int b15 : 1;                        // 0x00004000 (index = 14)
-        unsigned int b16 : 1;                        // 0x00008000 (index = 15)
+        unsigned int STA_REQUEST_HOOK_LOADING : 1;                        // 0x00004000 (index = 14)
+        unsigned int STA_DRAW_END : 1;                        // 0x00008000 (index = 15)
 
         unsigned int b17 : 1;                        // 0x00010000 (index = 16)
         unsigned int STA_BULLET_WITHOUT_COLLIDE : 1; // 0x00020000 (index = 17)

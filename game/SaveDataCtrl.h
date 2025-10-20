@@ -34,7 +34,7 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    Hw::CriticalSection m_CriticalSection;
+    Hw::cCriticalSection m_CriticalSection;
     int field_2C;
 
     virtual ~ProgressFlagBase() {};
@@ -48,7 +48,7 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    Hw::CriticalSection m_CriticalSection;
+    Hw::cCriticalSection m_CriticalSection;
     int field_2C;
 
     virtual ~ProgressFlagBase_Dlc() {};

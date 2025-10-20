@@ -21,7 +21,7 @@ namespace FileRead
         int field_2C;
         void *m_Filedata;
         int m_nFilesize;
-        Hw::cHeapPhysical *m_Allocator;
+        Hw::cHeap *m_pHeap;
         int m_FileFlags;
         int m_nRequests;
         int m_nUsageCount;

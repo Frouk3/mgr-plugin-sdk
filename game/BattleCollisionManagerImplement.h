@@ -14,7 +14,7 @@ public:
     lib::StaticArray<Collision *, 128> *field_C;
     lib::StaticArray<Collision *, 1024> *m_pDefenseCollisions;
     lib::StaticArray<Collision *, 1024> *field_14;
-    Hw::CriticalSection m_CriticalSection;
+    Hw::cCriticalSection m_CriticalSection;
     int field_34;
     class MainUpdateForPauseSlot : public Slot
     {
