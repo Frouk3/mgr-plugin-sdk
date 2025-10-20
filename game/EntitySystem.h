@@ -24,18 +24,18 @@ struct EntitySystem
     BehaviorList *m_pBehaviorList;
     int field_10;
     int field_14;
-    Hw::CriticalSection m_EntityListSection;
+    Hw::cCriticalSection m_EntityListSection;
     int field_34;
     Hw::cFixedList<Entity *> m_EntityList;
     int field_54;
     int field_58;
     int field_5C;
     Hw::cHeapFixed m_HeapFixed;
-    Hw::CriticalSection m_EntitySpawnSection;
+    Hw::cCriticalSection m_EntitySpawnSection;
     int field_DC;
     lib::AllocatedArray<Entity *> field_E0;
     lib::AllocatedArray<Entity *> m_DatsuArray;
-    Hw::CriticalSection field_110;
+    Hw::cCriticalSection field_110;
 
     struct SetInfo;
     struct EntityInfo;

@@ -18,7 +18,7 @@ public:
     };
 
     Hw::cHeapVariable *m_Allocator;
-    Hw::CriticalSection field_8;
+    Hw::cCriticalSection field_8;
     int field_24;
     lib::AllocatedArray<Unit *> *m_UnitArray;
     int field_2C;

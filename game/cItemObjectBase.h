@@ -33,7 +33,7 @@ public:
     float field_8D4;
     int field_8D8;
     int field_8DC;
-    Hw::CriticalSection field_8E0;
+    Hw::cCriticalSection field_8E0;
     int field_8FC;
     int field_900;
     int field_904;

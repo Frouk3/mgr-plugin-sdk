@@ -75,7 +75,7 @@ public:
 
         struct NodeFactory
         {
-            Hw::CriticalSection m_CriticalSection;
+            Hw::cCriticalSection m_CriticalSection;
             int field_1C;
             Hw::cHeapVariable *m_pAllocator;
             size_t m_nCapacity;

@@ -17,9 +17,9 @@ public:
     Hw::cFixedVector<int> field_7C[5];
     int field_E0;
     int field_E4;
-    Hw::CriticalSection field_E8;
+    Hw::cCriticalSection field_E8;
     int field_104;
-    Hw::CriticalSection field_108;
+    Hw::cCriticalSection field_108;
     int field_124;
     int field_128;
     int field_12C;

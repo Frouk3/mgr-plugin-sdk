@@ -164,7 +164,7 @@ public:
     float field_BB4;
     float field_BB8;
     int field_BBC;
-    Hw::CriticalSection field_BC0;
+    Hw::cCriticalSection field_BC0;
     int field_BDC;
     cVec4 field_BE0;
     int field_BF0;

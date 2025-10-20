@@ -15,7 +15,7 @@ public:
     int field_5C;
     int field_60;
     int field_64;
-    Hw::CriticalSection field_68;
+    Hw::cCriticalSection field_68;
     int field_84;
     int field_88;
     int field_8C;

@@ -1040,7 +1040,7 @@ public:
     unsigned int m_nPreviousActionId;
     int field_630;
     int field_634;
-    Hw::CriticalSection* field_638;
+    Hw::cCriticalSection* field_638;
     lib::AllocatedArray<InstructionContainer>* m_pInstructions;
     int field_640;
     int field_644;
@@ -1618,7 +1618,7 @@ public:
     float field_12C;
     int field_130;
     int field_134;
-    Hw::CriticalSection field_138;
+    Hw::cCriticalSection field_138;
     int field_154;
     int field_158;
     int field_15C;

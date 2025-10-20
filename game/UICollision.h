@@ -76,7 +76,7 @@ namespace UICollision
         int field_4;
         Hw::cHeapVariable *m_Allocator;
         int field_C;
-        Hw::CriticalSection field_10;
+        Hw::cCriticalSection field_10;
         int field_2C;
         Hw::cFixedVector<sHitData> m_HitData;
         int field_44;
@@ -97,7 +97,7 @@ namespace UICollision
         int field_4;
         Hw::cHeapVariable *m_Allocator;
         int field_C;
-        Hw::CriticalSection m_CriticalSection;
+        Hw::cCriticalSection m_CriticalSection;
         int field_2C;
         Hw::cFixedVector<sDictionary> m_Dictionary;
         int field_44;
@@ -112,7 +112,7 @@ namespace UICollision
         int field_4;
         Hw::cHeapVariable *m_Allocator;
         int field_C;
-        Hw::CriticalSection m_CriticalSection;
+        Hw::cCriticalSection m_CriticalSection;
         int field_2C;
         UICollision::cUIHitDataManager *m_UIDataManager;
         Hw::cFixedVector<void*> field_34; // unknown struct

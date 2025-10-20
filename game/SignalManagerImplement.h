@@ -9,7 +9,7 @@ struct Signal
 {
     int m_nID;
     int field_4;
-    Hw::CriticalSection field_8;
+    Hw::cCriticalSection field_8;
     int field_24;
     lib::AllocatedArray<Slot *> *m_Slots;
     int field_2C;

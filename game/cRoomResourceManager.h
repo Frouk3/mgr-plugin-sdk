@@ -359,7 +359,7 @@ struct cRoomResourceManager
     float field_578;
     float field_57C;
     RGBA32 field_580;
-    Hw::CriticalSection field_590;
+    Hw::cCriticalSection field_590;
     int field_5AC;
     int field_5B0;
     int field_5B4;

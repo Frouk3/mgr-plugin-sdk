@@ -99,7 +99,7 @@ struct HandleManager
 		tC *m_value;
 	} *m_HandleArrayValue;
 	int field_14;
-	Hw::CriticalSection m_ArraySection;
+	Hw::cCriticalSection m_ArraySection;
 
 
 	BOOL startup(size_t capacity, Hw::cHeapVariable *allocator)
@@ -124,7 +124,7 @@ struct HandleManager
 		m_size = 0u;
 		m_lastPreshiftIndex = 0;
 		m_lastPreshift = 0;
-		m_ArraySection.init();
+		m_ArraySection.startup();
 		return TRUE;
 	}
 
@@ -255,7 +255,7 @@ inline void * __cdecl eFree(void *block)
 
 inline void *__cdecl AllocateMemory(size_t size)
 {
-	void *mem = Hw::cHeapGlobal::GetInstance()->allocate(size, 32u, 0, 0);
+	void *mem = Hw::cHeapGlobal::GetInstance()->allocImpl(size, 32u, 0, 0);
 	if (mem)
 		memset(mem, 0, size);
 	return mem;

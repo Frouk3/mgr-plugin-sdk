@@ -11,13 +11,13 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    D3DXMATRIX m_PositionMatrix;
-    cVec4 m_vecTransPos;
-    cQuaternion m_quatRotation;
-    cVec4 m_vecSize;
-    cVec4 field_80;
-    cVec4 m_vecRotation;
-    short m_nBoneIndex;
+    Hw::cMtx m_LocalMatrix;
+    Hw::cVec4 m_TransPos;
+    Hw::cQuat m_QuatRot;
+    Hw::cVec4 m_Scale;
+    Hw::cVec4 m_WorldScale;
+    Hw::cVec4 m_Rot;
+    short m_PartsNo;
     struct PartsProperties
     {
         unsigned short bProcessEulerRotation : 1;   // 0x1
@@ -38,8 +38,8 @@ public:
         unsigned short bSkipRotationCalculation : 1;// 0x4000
         unsigned short b16 : 1;                     // 0x8000
     } m_PartsFlag;
-    int field_A4;
-    cParts* m_pParentBone;
+    Hw::cMtx* m_pMulMtx;
+    cParts* m_pPartsParent;
     int field_AC;
 
     cParts()
@@ -81,9 +81,9 @@ public:
     }
     */
 
-	cVec4& getPosition()
+	Hw::cVec4& getPosition()
 	{
-		return *(cVec4*)m_PositionMatrix.m[3];
+		return *(Hw::cVec4*)m_LocalMatrix.m[3];
 	}
 };
 

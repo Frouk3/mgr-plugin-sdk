@@ -20,7 +20,7 @@ public:
         int m_nListCapacity;
         Hw::cHeapVariable *m_pAllocator;
         int field_24;
-        Hw::CriticalSection m_ListCriticalSection;
+        Hw::cCriticalSection m_ListCriticalSection;
         int field_44;
         int field_48[18][2];
         int field_D8;
@@ -54,9 +54,9 @@ public:
     BehaviorList m_BehaviorList;
     int field_4F8;
     int field_4FC;
-    Hw::CriticalSection field_500;
+    Hw::cCriticalSection field_500;
     int field_51C;
-    Hw::CriticalSection field_520;
+    Hw::cCriticalSection field_520;
     int field_53C;
     int field_540;
 

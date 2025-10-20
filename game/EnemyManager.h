@@ -7,7 +7,7 @@ struct EnemyManager
 {
     int field_0;
     int field_4;
-    Hw::CriticalSection m_ManagerSection;
+    Hw::cCriticalSection m_ManagerSection;
     int field_24;
     Hw::cFixedList<EntityHandle> m_EnemyList;
     float field_44;

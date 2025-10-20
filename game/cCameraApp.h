@@ -7,11 +7,11 @@ class cCameraApp : public cCamera, public cCameraTypes
 {
 public:
 	D3DXMATRIX field_3D0;
-	CameraMatrix field_410;
+	cCameraMatrix field_410;
 	int field_45C;
-	CameraMatrix m_CurrentViewMatrix;
+	cCameraMatrix m_CurrentViewMatrix;
 	int field_4AC;
-	CameraMatrix m_TranslationMatrix;
+	cCameraMatrix m_TranslationMatrix;
 	int field_4FC;
 	int field_500;
 	float field_504;

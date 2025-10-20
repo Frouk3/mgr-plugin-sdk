@@ -7,7 +7,7 @@ class AnimationMapManagerImplement : public AnimationMapManager
 {
 public:
     Hw::cHeapVariable *m_pAllocator;
-    Hw::CriticalSection m_criticalSection;
+    Hw::cCriticalSection m_criticalSection;
     int field_24;
     lib::AllocatedArray<AnimationMapResource *> *m_pAnimationMapResourceArray;
     int field_2C;

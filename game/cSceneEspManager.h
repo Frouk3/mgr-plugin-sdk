@@ -70,7 +70,7 @@ struct EspReadWriteLock
 {
     int field_0;
     int field_4;
-    Hw::CriticalSection m_LockSection;
+    Hw::cCriticalSection m_LockSection;
 };
 
 struct EffectCallParam
@@ -485,7 +485,7 @@ public:
 class EspListThread : public cEspList
 {
 public:
-    Hw::CriticalSection m_CriticalSection;
+    Hw::cCriticalSection m_CriticalSection;
     int field_3C;
     int field_40;
     int field_44;
@@ -3900,7 +3900,7 @@ struct cSceneEspManager
     int field_1EF4;
     int field_1EF8;
     int field_1EFC;
-    Hw::CriticalSection m_CriticalSection;
+    Hw::cCriticalSection m_CriticalSection;
     int field_1F1C;
     int field_1F20;
     int field_1F24;

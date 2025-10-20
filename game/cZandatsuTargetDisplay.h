@@ -11,7 +11,7 @@ struct cZandatsuTargetDisplay
     int field_C;
     EntityHandle field_10;
     int field_14;
-    Hw::CriticalSection field_18;
+    Hw::cCriticalSection field_18;
     int field_34;
     Hw::cFixedVector<cZandatsuTarget *> field_38;
     Hw::cFixedVector<EntityHandle> field_4C;
