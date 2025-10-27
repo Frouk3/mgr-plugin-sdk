@@ -102,7 +102,7 @@ struct HandleManager
 	Hw::cCriticalSection m_ArraySection;
 
 
-	BOOL startup(size_t capacity, Hw::cHeapVariable *allocator)
+	BOOL startup(size_t capacity, Hw::cHeap &allocator)
 	{
 		if (m_HandleArrayValue)
 			return FALSE;
@@ -255,7 +255,7 @@ inline void * __cdecl eFree(void *block)
 
 inline void *__cdecl AllocateMemory(size_t size)
 {
-	void *mem = Hw::cHeapGlobal::GetInstance()->allocImpl(size, 32u, 0, 0);
+	void *mem = Hw::cHeapGlobal::GetInstance()->allocImpl(size, 32u, Hw::HW_ALLOC_VIRTUAL, 0);
 	if (mem)
 		memset(mem, 0, size);
 	return mem;

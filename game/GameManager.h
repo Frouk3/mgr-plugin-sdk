@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cTaskManager.h>
 #include <FileRead.h>
 
 struct GameManager
@@ -30,7 +29,7 @@ struct GameManager
     int field_58;
     int field_5C;
     int field_60;
-    cTaskManager m_TaskManager;
+    Hw::cTaskManager m_TaskManager;
     int field_80;
     int field_84;
     int field_88;

@@ -40,11 +40,6 @@ struct cObjReadManager
         ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x5FE7D0))(this, object, setType);
     }
 
-    void removeUseRef(eObjID object, int setType)
-    {
-        ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x5FE7D0))(this, object, setType);
-    }
-
     void addUseRef(eObjID object, int setType)
     {
         ((void(__thiscall*)(cObjReadManager*, eObjID, int))(shared::base + 0x5FE710))(this, object, setType);

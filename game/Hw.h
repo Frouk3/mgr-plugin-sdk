@@ -10,9 +10,8 @@
 
 extern void PrintfLog(const char* fmt, ...);
 
-class Hw
+namespace Hw
 {
-public:
 	class KeyboardManagerBase;
 	class KeyboardManager;
 
@@ -27,8 +26,6 @@ public:
 
 	struct cDvdFst;
 	struct DvdReadManager;
-
-	struct Thread;
 
 	template <typename tC>
 	class cSingleton;
@@ -119,6 +116,11 @@ public:
 		INPUT_PAD_ANALOG_TRIGGER_RIGHT = 0x3,
 		INPUT_PAD_ANALOG_NUM = 0x4,
 		INPUT_PAD_ANALOG_ALL = 0x5
+	};
+
+	enum eThreadId
+	{
+		THREAD_ID_INVALID=0
 	};
 
 	class cHeap;
@@ -279,9 +281,19 @@ public:
 	class ThreadSystem
 	{
 	public:
-		static inline BOOL startupThread(Hw::Thread* pThread, unsigned int stackSize, int a3, const char *threadName, int priority)
+		class cWork
 		{
-			return ((BOOL(__cdecl *)(Hw::Thread*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority);
+		public:
+			eThreadId m_ThreadId;
+			int field_4;
+			int m_nThreadIndex;
+			void (__cdecl *m_pfnThreadFunction)(void *);
+			void *m_pThreadParameter;
+		};
+
+		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char *threadName, int priority)
+		{
+			return ((BOOL(__cdecl *)(cWork*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority);
 		}
 
 		static inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority)
@@ -296,17 +308,28 @@ public:
 		}
 	};
 
-	static inline LPDIRECT3D9 &Direct3D9 = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
-	static inline LPDIRECT3DDEVICE9 &GraphicDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
-	static inline HWND &OSWindow = *(HWND*)(shared::base + 0x19D504C);
-	static inline HWND &SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
+	class GraphicDevice
+	{
+	public:
 
-	static inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
-	static inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+		static inline LPDIRECT3D9 &m_pD3D = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+		static inline LPDIRECT3DDEVICE9 &m_pDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
+	};
 
-	static inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
+	class OsWindow
+	{
+	public:
 
-	static inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
+		static inline HWND &m_MainWindow = *(HWND*)(shared::base + 0x19D504C);
+		static inline HWND &m_SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
+	};
+
+	inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
+	inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
+
+	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
+
+	inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
 };
 
 class Hw::cUcol
@@ -718,15 +741,6 @@ class Hw::cOtManagerBase
 public:
 
 	virtual ~cOtManagerBase() {};
-};
-
-struct Hw::Thread
-{
-	int m_nThreadId;
-	int field_4;
-	int m_nThreadIndex;
-	void (__cdecl *m_pfnThreadFunction)(void *);
-	void *m_pThreadParameter;
 };
 
 class Hw::cVec2
@@ -1173,6 +1187,26 @@ public:
 		r[1] = Hw::cVec4(0.0f, 1.0f, 0.0f, 0.0f);
 		r[2] = Hw::cVec4(0.0f, 0.0f, 1.0f, 0.0f);
 		r[3] = Hw::cVec4(0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	D3DXMATRIX& toDxMtx()
+	{
+		return *(D3DXMATRIX*)this;
+	}
+
+	D3DXMATRIX& toDxMtx() const
+	{
+		return *(D3DXMATRIX*)this;
+	}
+
+	cMtx& operator=(const cMtx& other)
+	{
+		r[0] = other.r[0];
+		r[1] = other.r[1];
+		r[2] = other.r[2];
+		r[3] = other.r[3];
+
+		return *this;
 	}
 };
 
@@ -2689,14 +2723,14 @@ struct Hw::cFixedVector
 	}
 };
 
-template <typename T>
+template <typename tC>
 class Hw::cFixedList
 {
 public:
 	class cTag
 	{
 	public:
-		T m_value;
+		tC m_value;
 		cTag* m_prev;
 		cTag* m_next;
 
@@ -2894,7 +2928,7 @@ public:
 		}
 	}
 
-	iterator insert(const_iterator &where, const T& element)
+	iterator insert(const_iterator &where, const tC& element)
 	{
 		cTag* free = m_freeBegin;
 		if (m_freeBegin == m_npos)
@@ -2923,12 +2957,12 @@ public:
 		return free;
 	}
 
-	iterator pushBack(const T& element)
+	iterator pushBack(const tC& element)
 	{
 		return insert(m_last, element);
 	}
 
-	iterator pushFront(const T& element)
+	iterator pushFront(const tC& element)
 	{
 		return insert(m_first, element);
 	}
