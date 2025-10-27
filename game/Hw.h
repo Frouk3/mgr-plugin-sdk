@@ -324,9 +324,6 @@ namespace Hw
 		static inline HWND &m_SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
 	};
 
-	inline LPDIRECT3DSWAPCHAIN9& MainSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B206FC); // Seems to be unused
-	inline LPDIRECT3DSWAPCHAIN9& SecondWindowSwapChain = *(LPDIRECT3DSWAPCHAIN9*)(shared::base + 0x1B20700); // This one unused too
-
 	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 
 	inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
