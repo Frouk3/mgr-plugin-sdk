@@ -15,6 +15,11 @@ namespace Hw
 	class KeyboardManagerBase;
 	class KeyboardManager;
 
+	class cKeyboardState;
+	enum KEYBOARD_MAP;
+	class cFmerge;
+	struct FmergeHeader;
+
 	class cMtx;
 
 	class cUcol;
@@ -134,6 +139,15 @@ namespace Hw
 	class cHeapGlobal;
 	class cShareHeapPhysical;
 
+	template <typename tC, unsigned const align, typename tHeapBinder>
+	class cFactory;
+	
+	template <typename tC, unsigned const align>
+	class cFactoryVariable;
+
+	template <typename tC, unsigned const align>
+	class cFactoryFixed;
+
 	class CameraProj;
 	class cCameraBase;
 	
@@ -201,7 +215,7 @@ namespace Hw
 	struct cVec4;
 	struct cQuat;
 
-	static inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
+	inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
 	{
 		return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
 	}
@@ -327,6 +341,928 @@ namespace Hw
 	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 
 	inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
+};
+
+class Hw::cHeap
+{
+public:
+	int field_4;
+	Hw::cCriticalSection m_CriticalSection;
+	int field_24;
+	Hw::cHeap* m_pSubHeap;
+	Hw::cHeap* m_pParentHeap;
+	Hw::cHeap* m_pNext;
+	Hw::cHeap* m_pPrev;
+	const char* m_pHeapName;
+	unsigned int m_OutOfMemoryFlag;
+
+	cHeap()
+	{
+		((void(__thiscall*)(cHeap*))(shared::base + 0x9D3650))(this);
+	}
+
+	virtual ~cHeap() {};
+
+	void cleanup()
+	{
+		CallVMTFunc<1, cHeap*>(this);
+	}
+
+	void destroy()
+	{
+		CallVMTFunc<2, cHeap*>(this);
+	}
+
+	BOOL isValid()
+	{
+		return ReturnCallVMTFunc<BOOL, 3, cHeap*>(this);
+	}
+
+	size_t getSize()
+	{
+		return ReturnCallVMTFunc<size_t, 4, cHeap*>(this);
+	}
+
+	size_t getUsedSize()
+	{
+		return ReturnCallVMTFunc<size_t, 5, cHeap*>(this);
+	}
+
+	size_t getAllocatableSize()
+	{
+		return ReturnCallVMTFunc<size_t, 6, cHeap*>(this);
+	}
+
+	void* getNextAlloc(void *block)
+	{
+		return ReturnCallVMTFunc<void*, 7, cHeap*, void *>(this, block);
+	}
+
+	size_t getAllocSize(void* block)
+	{
+		return ReturnCallVMTFunc<size_t, 8, cHeap*, void*>(this, block);
+	}
+
+	size_t getRestSizeLimit()
+	{
+		return ReturnCallVMTFunc<size_t, 9, cHeap*>(this);
+	}
+
+	size_t getChildHeapSize()
+	{
+		return ReturnCallVMTFunc<size_t, 10, cHeap*>(this);
+	}
+
+	void setDefragmentableFlag(void *a1)
+	{
+		CallVMTFunc<11, cHeap*, void*>(this, a1);
+	}
+
+	void* createChildHeap(HANDLE* pHandle, size_t Size)
+	{
+		return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
+	}
+
+	void destroyChildHeap(HANDLE* pHandle, size_t Size)
+	{
+		CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
+	}
+
+	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4)
+	{
+		return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, align, allocMode, a4);
+	}
+
+	void dealloc(void* block, size_t size)
+	{
+		CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size);
+	}
+
+	void *alloc(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a3)
+	{
+		return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, align, allocMode, a3);
+	}
+
+	void setSubHeap(Hw::cHeap &rHeap)
+	{
+		((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap);
+	}
+
+	void unsetSubHeap()
+	{
+		((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this);
+	}
+};
+
+inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) 
+{
+	return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap);
+}
+
+inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) // to separate the delete operator
+{
+	return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
+}
+
+inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap)
+{
+	return ((void*(__cdecl*)(size_t, Hw::cHeap&))(shared::base + 0x9D3580))(s, rHeap);
+}
+
+inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) // to separate the delete[] operator
+{
+	return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block);
+}
+
+// Usage after heap startup
+inline void* __cdecl memAlloc(size_t s)
+{
+	return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s);
+}
+
+// Usage after heap startup
+inline void __cdecl memDealloc(void* block)
+{
+	((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block);
+}
+
+class Hw::cHeapVariableBase : public Hw::cHeap
+{
+public:
+	class cList
+	{
+	public:
+		cList* m_pPrev;
+		cList* m_pNext;
+		void* m_pMemoryBlock;
+		size_t m_MemorySize;
+		cHeapVariableBase* m_pAllocator;
+	};
+
+	HANDLE m_hHeap;
+	Hw::cHeapVariableBase::cList *m_pFirstList;
+	Hw::cHeapVariableBase::cList *m_pLastList;
+	size_t m_HeapSize;
+	size_t m_RestSize;
+	size_t m_ChildHeapSize;
+
+	cHeapVariableBase()
+	{
+		((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
+	}
+};
+
+class Hw::cHeapVariable : public Hw::cHeapVariableBase
+{
+public:
+
+	cHeapVariable()
+	{
+		((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this);
+	}
+
+	int create(size_t size, Hw::cHeap& rHeap, const char *pName)
+	{
+		return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName);
+	}
+
+	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName)
+	{
+		return ReturnCallVMTFunc<int, 17, Hw::cHeapVariable*, size_t, size_t, Hw::cHeap&, const char*>(this, size, align, rHeap, pName);
+	}
+};
+
+class Hw::cHeapPhysicalBase : public Hw::cHeap
+{
+public:
+	class cList
+	{
+	public:
+		cList* m_pPrevious;
+		cList* m_pNext;
+		size_t m_TotalSize;
+		size_t m_Size;
+		int field_10;
+		int field_14;
+		cHeapPhysicalBase* m_pAllocator;
+	};
+public:
+	cList* m_pMainBlock;
+	cList* m_pFirstBlock;
+	cList *m_pLastBlock;
+	size_t m_MemoryLimit;
+	size_t m_FreeMemory;
+	int field_54;
+	int field_58;
+	int field_5C;
+	int field_60;
+	int field_64;
+	int field_68;
+	int field_6C;
+	cList* m_pBlocks[256];
+
+	cHeapPhysicalBase()
+	{
+		((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
+	}
+};
+
+class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
+{
+public:
+
+	cHeapPhysical()
+	{
+		((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this);
+	}
+
+	int create(size_t size, Hw::cHeap &rHeap, const char *name)
+	{
+		return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name);
+	}
+};
+
+class Hw::cHeapHook
+{
+public:
+
+	cHeapHook()
+	{
+		((void(__thiscall *)(cHeapHook *))(shared::base + 0x9D32E0))(this);
+	}
+
+	virtual ~cHeapHook() {};
+};
+
+class Hw::cHeapFixed : public Hw::cHeap
+{
+public:
+	struct cList 
+	{
+		cList *m_pPrevious;
+		cList *m_pNext;
+		cHeapFixed *m_pHeap;
+	};
+public:
+	void* m_pAlloc;
+	size_t m_HeapSize;
+	size_t m_BlockSize;
+	size_t m_BlockNum;
+	size_t m_BlockAlign;
+	size_t m_RestNum;
+	Hw::cHeapFixed::cList *m_pFreeList;
+	Hw::cHeapFixed::cList *m_pFirstList;
+
+	cHeapFixed()
+	{
+		((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this);
+	}
+
+	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name)
+	{
+		return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name);
+	}
+
+	void* alloc()
+	{
+		return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
+	}
+
+	int canAlloc(size_t size, size_t num)
+	{
+		return ((int (__thiscall*)(Hw::cHeapFixed*, size_t, size_t))(shared::base + 0x9D2BA0))(this, size, num);
+	}
+
+	unsigned int getBlockMaxNum()
+	{
+		return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C80))(this);
+	}
+
+	unsigned int getBlockUsedNum()
+	{
+		return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C90))(this);
+	}
+};
+
+class Hw::cHeapOneTime : public Hw::cHeap
+{
+public:
+	struct cList
+	{
+		cList *m_pNext;
+		cList *m_pPrev;
+		void *m_pMemory;
+		cHeapOneTime *m_pHeap;
+	};
+
+	void *m_pAlloc;
+	int m_BlockSize;
+	size_t m_HeapSize;
+	int m_BlockRest;
+	Hw::cHeapOneTime::cList *m_pFirstList;
+	Hw::cHeapOneTime::cList *m_pLastList;
+	int m_RestSize;
+
+	cHeapOneTime()
+	{
+		((void(__thiscall *)(Hw::cHeapOneTime *))(shared::base + 0x9D3800))(this);
+	}
+};
+
+class Hw::cHeapGlobal : public Hw::cHeapVariableBase
+{
+public:
+
+	cHeapGlobal()
+	{
+		((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this);
+	}
+
+	static inline cHeapGlobal* GetInstance() // -> return Hw::cHeapGlobal::ms_Instance.GetInstance();
+	{
+		return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
+	}
+
+	BOOL create(size_t size, const char *target) // Got optimised away
+	{
+		if (isValid()) // already created
+			return FALSE;
+
+		if (!this->m_CriticalSection.startup())
+			return FALSE;
+
+		this->m_hHeap = HeapCreate(1u, 0u, 0u);
+
+		if (!this->m_hHeap)
+			return FALSE;
+
+		this->m_HeapSize = size;
+		this->m_RestSize = size;
+		this->m_pHeapName = target;
+		this->m_pFirstList = nullptr;
+		this->m_pLastList = nullptr;
+		return TRUE;
+	}
+
+	// non virtual ~cHeapGlobal() -> at 0x9D3F60
+
+	static inline cHeapGlobal &ms_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
+};
+
+class Hw::cShareHeapPhysical : public Hw::cHeapPhysical
+{
+public:
+	cHeapPhysical *m_pShareHeap;
+
+	cShareHeapPhysical()
+	{
+		((void(__thiscall *)(cShareHeapPhysical *))(shared::base + 0x9D4BD0))(this);
+	}
+
+	int create(Hw::cHeapPhysical &shareHeap, const char *name)
+	{
+		return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name);
+	}
+
+	int startupShareHeap()
+	{
+		return ReturnCallVMTFunc<int, 19, cShareHeapPhysical*>(this);
+	}
+};
+
+template <typename tC, unsigned const align, typename tHeapBinder = Hw::cHeap>
+class Hw::cFactory
+{
+public:
+	class const_iterator
+	{
+	protected:
+		tC *m_Ptr;
+
+		cHeap *getHeapPtr()
+		{
+			return &m_Heap;
+		}
+
+		tC* getNextPtr()
+		{
+			return m_Heap.getNextAlloc(m_Ptr);
+		}
+
+	public:
+		const_iterator(void *pPtr) : m_Ptr((tC*)pPtr) {}
+		const_iterator(const const_iterator &other) : m_Ptr(other.m_Ptr) {}
+		const_iterator() : m_Ptr(nullptr) {}
+
+		const_iterator& operator++(int offset)
+		{
+			while (offset--)
+				m_Ptr = getNextPtr();
+
+			return *this;
+		}
+
+		const_iterator& operator++()
+		{
+			m_Ptr = getNextPtr();
+
+			return *this;
+		}
+
+		bool operator==(const const_iterator &other) const
+		{
+			return m_Ptr == other.m_Ptr;
+		}
+
+		bool operator!=(const const_iterator &other) const
+		{
+			return m_Ptr != other.m_Ptr;
+		}
+
+		void operator=(const const_iterator &other)
+		{
+			m_Ptr = other.m_Ptr;
+		}
+
+		tC& operator*() const
+		{
+			return *m_Ptr;
+		}
+
+		tC* operator->() const
+		{
+			return m_Ptr;
+		}
+	};
+
+	class iterator : public const_iterator
+	{
+	public:
+		iterator(void *pPtr) : const_iterator(pPtr) {}
+		iterator(const iterator &other) : const_iterator(other) {}
+		iterator() : const_iterator() {}
+
+		void operator=(const iterator &other)
+		{
+			this->m_Ptr = other.m_Ptr;
+		}
+
+		tC& operator*()
+		{
+			return *(this->m_Ptr);
+		}
+
+		tC* operator->()
+		{
+			return this->m_Ptr;
+		}
+	};
+
+	const const_iterator npos;
+private:
+	void *_pad01;
+protected:
+	tHeapBinder m_Heap;
+public:
+
+	cFactory() : npos(nullptr) {}
+	~cFactory() { destroy(); }
+
+	iterator begin()
+	{
+		return iterator(m_Heap.getNextAlloc(nullptr));
+	}
+
+	const_iterator begin() const
+	{
+		return const_iterator(m_Heap.getNextAlloc(nullptr));
+	}
+
+	iterator end()
+	{
+		return iterator(nullptr);
+	}
+
+	const_iterator end() const
+	{
+		return const_iterator(nullptr);
+	}
+
+	void destroy()
+	{
+		if (!m_Heap.isValid())
+			return;
+
+		for (iterator it = begin(); it != end(); it++)
+			operator delete(&(*it), &m_Heap);
+	}
+
+	iterator erase(iterator pos)
+	{
+		iterator next = pos;
+		++next;
+		operator delete(&(*pos), &m_Heap);
+		return next;
+	}
+
+	unsigned int getSize()
+	{
+		return m_Heap.getSize();
+	}
+
+	unsigned int getUsedSize()
+	{
+		return m_Heap.getUsedSize();
+	}
+
+	unsigned int getAllocatableSize()
+	{
+		return m_Heap.getAllocatableSize();
+	}
+
+	tHeapBinder& getHeap()
+	{
+		return m_Heap;
+	}
+};
+
+template <typename tC, unsigned const align>
+class Hw::cFactoryVariable : public Hw::cFactory<tC, align, Hw::cHeapVariable>
+{
+public:
+	cFactoryVariable() : Hw::cFactory<tC, align, Hw::cHeapVariable>() {}
+
+	int create(size_t heapSize, Hw::cHeap &rHeap, const char *name = "FactoryVariable")
+	{
+		return this->m_Heap.create(heapSize, align, rHeap, name);
+	}
+};
+
+template <typename tC, unsigned const align>
+class Hw::cFactoryFixed : public Hw::cFactory<tC, align, Hw::cHeapFixed>
+{
+public:
+	cFactoryFixed() : Hw::cFactory<tC, align, Hw::cHeapFixed>() {}
+
+	int create(unsigned int count, Hw::cHeap &rHeap, const char *name = "FactoryFixed")
+	{
+		return this->m_Heap.create(sizeof(tC), count, align, rHeap, name);
+	}
+
+	int canAlloc(int num)
+	{
+		return this->m_Heap.canAlloc(sizeof(tC), num);
+	}
+
+	tC* newWork()
+	{
+		return (tC*)this->m_Heap.alloc();
+	}
+
+	cFactory::iterator newWorkIt()
+	{
+		return cFactory::iterator(this->m_Heap.alloc());
+	}
+
+	size_t getUsedNum()
+	{
+		return this->m_Heap.getBlockUsedNum();
+	}
+
+	size_t getMaxNum()
+	{
+		return this->m_Heap.getBlockMaxNum();
+	}
+};
+
+struct Hw::FmergeHeader
+{
+    char magic[4];
+    size_t m_nAmountOfFiles;
+    size_t m_nPositionOffset;
+    size_t m_nExtensionOffset;
+    size_t m_nNamesOffset;
+    size_t m_nSizesOffset;
+    size_t m_nHashMapOffset;
+};
+
+class Hw::cFmerge
+{
+public:
+	FmergeHeader* m_data;
+	char *m_dds;
+
+	cFmerge(char* data) : m_data((FmergeHeader*)data), m_dds(nullptr) {};
+
+	cFmerge()
+	{
+		((void(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3530))(this);
+	}
+
+	void *getDtt()
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3550))(this);
+	}
+
+	void *getData()
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3560))(this);
+	}
+
+	void setData(void *data, int index)
+	{
+		((void(__thiscall *)(Hw::cFmerge*, void*, int))(shared::base + 0x9E3570))(this, data, index);
+	}
+
+	void *getDataAt(int index)
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge*, int))(shared::base + 0x9E3580))(this, index);
+	}
+
+	size_t getFileAmount()
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3590))(this);
+	}
+
+	size_t getFileIndexSize(size_t fileIndex)
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex);
+	}
+
+	const char *getFileIndexFileName(size_t fileIndex)
+	{
+		return ((const char*(__thiscall *)(Hw::cFmerge *, size_t))(shared::base + 0x9E38D0))(this, fileIndex);
+	}
+
+	BOOL getFileIndexExtension(char *pExt, size_t fileIndex)
+	{
+		return ((BOOL(__thiscall *)(Hw::cFmerge*, char *, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex);
+	}
+
+	void *getIndexFileData(size_t fileIndex)
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex);
+	}
+
+	size_t getFileIndexSize(size_t fileIndex)
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex);
+	}
+
+	size_t getExtensionFileIndex(const char* ext, unsigned int no)
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E3F20))(this, ext, no);
+	}
+
+	size_t getFileNameIndexI(const char *name)
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge *, const char*))(shared::base + 0x9E3FD0))(this, name);
+	}
+
+	size_t getSubStrFileIndex(const char *name, unsigned int matchLimit)
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit);
+	}
+
+	void* getExtensionFileData(const char *name, unsigned int matchLimit)
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge*, const char *, unsigned int))(shared::base + 0x9E44B0))(this, name, matchLimit);
+	}
+	
+	void* getFileNameData(const char *name)
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge *, const char *))(shared::base + 0x9E4500))(this, name);
+	}
+
+	void *getFileNameData(const char *name, unsigned int no)
+	{
+		return ((void*(__thiscall *)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4550))(this, name, no);
+	}
+
+	size_t getFileNameSize(const char *name, unsigned int no)
+	{
+		return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E46D0))(this, name, no);
+	}
+
+	operator bool()
+	{
+		return m_data != nullptr;
+	}
+
+	void setData(char *data, char *dds = nullptr)
+	{
+		((void(__thiscall *)(Hw::cFmerge*, char*, char*))(shared::base + 0x9E3540))(this, data, dds);
+	}
+};
+
+enum Hw::KEYBOARD_MAP
+{
+    KB_SPACE=32,
+    KB_A=65,
+    KB_B=66,
+    KB_C=67,
+    KB_D=68,
+    KB_E=69,
+    KB_F=70,
+    KB_G=71,
+    KB_H=72,
+    KB_I=73,
+    KB_J=74,
+    KB_K=75,
+    KB_L=76,
+    KB_M=77,
+    KB_N=78,
+    KB_O=79,
+    KB_P=80,
+    KB_Q=81,
+    KB_R=82,
+    KB_S=83,
+    KB_T=84,
+    KB_U=85,
+    KB_V=86,
+    KB_W=87,
+    KB_X=88,
+    KB_Y=89,
+    KB_Z=90,
+    KB_0=48,
+    KB_1=49,
+    KB_2=50,
+    KB_3=51,
+    KB_4=52,
+    KB_5=53,
+    KB_6=54,
+    KB_7=55,
+    KB_8=56,
+    KB_9=57,
+    KB_MINUS=45,
+    KB_EQ=61,
+    KB_BRAC_L=91,
+    KB_BRAC_R=93,
+    KB_PERIOD=46,
+    KB_APOS=39,
+    KB_SLASH=47,
+    KB_COMMA=44,
+    KB_SEMICOLON=59,
+    KB_GRAVE=96,
+    KB_COLON=58,
+    KB_AT=64,
+    KB_YEN=92,
+    KB_CIRCUMFLEX=94,
+    KB_RET=10,
+    KB_TAB=9,
+    KB_BS=8,
+    KB_F1=128,
+    KB_F2=129,
+    KB_F3=130,
+    KB_F4=131,
+    KB_F5=132,
+    KB_F6=133,
+    KB_F7=134,
+    KB_F8=135,
+    KB_F9=136,
+    KB_F10=137,
+    KB_F11=138,
+    KB_F12=139,
+    KB_DN=140,
+    KB_LT=141,
+    KB_RT=142,
+    KB_UP=143,
+    KB_CAP=144,
+    KB_ESC=145,
+    KB_INS=146,
+    KB_DEL=147,
+    KB_HOME=148,
+    KB_END=149,
+    KB_PAGE_UP=150,
+    KB_PAGE_DN=151,
+    KB_SYSRQ=152,
+    KB_SCRLOCK=153,
+    KB_PAUSE=154,
+    KB_CTRL_L=155,
+    KB_CTRL_R=156,
+    KB_ALT_L=157,
+    KB_ALT_R=158,
+    KB_SHIFT_L=159,
+    KB_SHIFT_R=160,
+    KB_WIN_L=161,
+    KB_WIN_R=162,
+    KB_APPS=163,
+    KB_BACKSLASH=164,
+    KB_NUMLOCK=165,
+    KB_NUM0=166,
+    KB_NUM1=167,
+    KB_NUM2=168,
+    KB_NUM3=169,
+    KB_NUM4=170,
+    KB_NUM5=171,
+    KB_NUM6=172,
+    KB_NUM7=173,
+    KB_NUM8=174,
+    KB_NUM9=175,
+    KB_NUM_ADD=176,
+    KB_NUM_SUB=177,
+    KB_NUM_DEC=178,
+    KB_NUM_DIV=179,
+    KB_NUM_MUL=180,
+    KB_NUM_ENT=181,
+    KB_MAP_MAX=182,
+    KB_MAP_INVALID=183
+};
+
+class Hw::cKeyboardState
+{
+public:
+	enum { KB_MAP_FLAG_SIZE=6 };
+public:
+	unsigned int m_pOn[KB_MAP_FLAG_SIZE];
+	unsigned int m_pTrig[KB_MAP_FLAG_SIZE];
+	unsigned int m_pRel[KB_MAP_FLAG_SIZE];
+	unsigned int m_pRep[KB_MAP_FLAG_SIZE];
+	unsigned int m_pOld[KB_MAP_FLAG_SIZE];
+	int m_RepCount;
+
+	BOOL on(KEYBOARD_MAP vKey)
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D93A0))(this, vKey);
+	}
+
+	BOOL on(char vKey) // unused
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D93D0))(this, vKey);
+	}
+
+	BOOL trig(KEYBOARD_MAP vKey)
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9400))(this, vKey);
+	}
+
+	BOOL trig(char vKey) // unused
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9430))(this, vKey);
+	}
+
+	BOOL rel(KEYBOARD_MAP vKey)
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9460))(this, vKey);
+	}
+
+	BOOL rel(char vKey) // unused
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9490))(this, vKey);
+	}
+
+	BOOL rep(KEYBOARD_MAP vKey)
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D94C0))(this, vKey);
+	}
+
+	BOOL rep(char vKey) // unused
+	{
+		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D94F0))(this, vKey);
+	}
+
+	void setOn(KEYBOARD_MAP vKey, BOOL bDown)
+	{
+		((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP, BOOL))(shared::base + 0x9D9620))(this, vKey, bDown);
+	}
+
+	void setTrig(KEYBOARD_MAP vKey)
+	{
+		((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9650))(this, vKey);
+	}
+};
+
+class Hw::KeyboardManagerBase
+{
+public:
+	static inline int m_RepeatWait = *(int*)(shared::base + 0x14CD830);
+	static inline int m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
+
+	static inline void InitState(cKeyboardState& rState)
+	{
+		((void(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4A0))(rState);
+	}
+
+	static inline int UpdateStateOnToOld(cKeyboardState& rState)
+	{
+		return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4C0))(rState);
+	}
+};
+
+class Hw::KeyboardManager : public Hw::KeyboardManagerBase
+{
+public:
+	enum{ MAX_KEY_MAP_FLAG=256 };
+
+	static inline int UpdateKeyState(cKeyboardState& rState)
+	{
+		return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA500))(rState);
+	}
+
+	static inline int UpdateState(cKeyboardState& rState)
+	{
+		return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA710))(rState);
+	}
 };
 
 class Hw::cUcol
@@ -718,11 +1654,6 @@ public:
 	{
 		static tC instance;
 		return instance;
-	}
-
-	operator tC*()
-	{
-		return &GetInstance();
 	}
 };
 
@@ -1159,11 +2090,6 @@ struct Hw::cQuat
 	}
 };
 
-typedef Hw::cVec2 cVec2;
-typedef Hw::cVec3 cVec3;
-typedef Hw::cVec4 cVec4;
-typedef Hw::cQuat cQuat;
-
 class Hw::cMtx
 {
 public:
@@ -1289,7 +2215,7 @@ public:
 		return ((unsigned int(__thiscall*)(cJobManager*))(shared::base + 0x9D7AD0))(this);
 	}
 
-	void scheduleJob(void(__cdecl* function)(LPVOID reserved, LPVOID parameter), LPVOID parameter, unsigned int jobIndex)
+	void setJobFunction(void(__cdecl* function)(LPVOID reserved, LPVOID parameter), LPVOID parameter, unsigned int jobIndex)
 	{
 		((void(__thiscall*)(cJobManager*, void(__cdecl*)(LPVOID, LPVOID), LPVOID, unsigned int))(shared::base + 0x9D75D0))(this, function, parameter, jobIndex);
 	}
@@ -1299,7 +2225,7 @@ public:
 		return ((BOOL(__thiscall*)(cJobManager*, size_t, int*, Hw::cHeap*, void*, void*, const char**, int))(shared::base + 0x9D8B70))(this, jobAmount, threadIndices, allocator, a5, a6, threadNames, a8);
 	}
 
-	void setJobConcurrency(unsigned int jobs)
+	void activate(unsigned int jobs)
 	{
 		((void(__thiscall*)(cJobManager*, unsigned int))(shared::base + 0x9D79A0))(this, jobs);
 	}
@@ -1586,7 +2512,7 @@ namespace cInput
 		int m_bVibrationEnabled;
 	};
 
-	struct KeyInput
+	struct cKeyboardState
 	{
 		unsigned int m_aKeysDown[6];
 		unsigned int m_aKeysPressed[6]; // bit is set when the key is pressed once
@@ -1595,55 +2521,7 @@ namespace cInput
 		unsigned int m_aKeyHistory[6];
 		int m_nPressDelay; // used for pressed last time timer
 
-		BOOL isKeyDown(int vKey)
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, int))(shared::base + 0x9D93A0))(this, vKey);
-		}
-
-		BOOL isKeyDown(char vKey) // unused
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, char))(shared::base + 0x9D93D0))(this, vKey);
-		}
-
-		BOOL isKeyPressed(int vKey)
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, int))(shared::base + 0x9D9400))(this, vKey);
-		}
-
-		BOOL isKeyPressed(char vKey) // unused
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, char))(shared::base + 0x9D9430))(this, vKey);
-		}
-
-		BOOL isKeyReleased(int vKey)
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, int))(shared::base + 0x9D9460))(this, vKey);
-		}
-
-		BOOL isKeyReleased(char vKey) // unused
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, char))(shared::base + 0x9D9490))(this, vKey);
-		}
-
-		BOOL isKeyAlternated(int vKey)
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, int))(shared::base + 0x9D94C0))(this, vKey);
-		}
-
-		BOOL isKeyAlternated(char vKey) // unused
-		{
-			return ((BOOL(__thiscall*)(KeyInput*, char))(shared::base + 0x9D94F0))(this, vKey);
-		}
-
-		void setKeyDown(int vKey, BOOL bDown)
-		{
-			((void(__thiscall*)(KeyInput*, int, BOOL))(shared::base + 0x9D9620))(this, vKey, bDown);
-		}
-
-		void setKeyPressed(int vKey)
-		{
-			((void(__thiscall*)(KeyInput*, int))(shared::base + 0x9D9650))(this, vKey);
-		}
+		
 	};
 
 	struct MouseInput
@@ -1652,10 +2530,10 @@ namespace cInput
 		int m_nButtonsPressed;
 		int m_nButtonsReleased;
 		int m_nButtonsAlternated;
-		cVec2 m_MousePosition;
+		Hw::cVec2 m_MousePosition;
 		int field_18;
 		int m_nRepeatCount;
-		cVec2 m_LastMousePosition;
+		Hw::cVec2 m_LastMousePosition;
 	};
 
 	struct InputUnit
@@ -1664,8 +2542,8 @@ namespace cInput
 		unsigned int m_nButtonsPressed;
 		unsigned int m_nButtonsReleased;
 		unsigned int m_nButtonsAlternated;
-		cVec2 m_fLeftStick;
-		cVec2 m_fRightStick;
+		Hw::cVec2 m_fLeftStick;
+		Hw::cVec2 m_fRightStick;
 		float m_fLeftTrigger;
 		float m_fRightTrigger;
 		int m_bValidInput;
@@ -1737,7 +2615,7 @@ namespace cInput
 	inline LPDIRECTINPUTDEVICE8W& ms_PCInputDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
 
 	inline MouseInput& ms_MouseInput = *(MouseInput*)(shared::base + 0x177B798);
-	inline KeyInput& ms_KeyInput = *(KeyInput*)(shared::base + 0x177B7C0);
+	inline cKeyboardState& ms_cKeyboardState = *(cKeyboardState*)(shared::base + 0x177B7C0);
 	inline ControllerState *ms_aControllers = (ControllerState*)(shared::base + 0x19D05F0); // Maximum 4 controllers
 	inline GlobalInput& ms_GlobalInput = *(GlobalInput*)(shared::base + 0x19C1404);
 
@@ -1758,325 +2636,6 @@ namespace cInput
 	inline float* ms_aStickDeadzone = (float*)(shared::base + 0x19D05D0); // 4 elements
 	inline float* ms_aMaxStickThreshold = (float*)(shared::base + 0x19D05E0); // 4 elements, threshold until the stick is fully moved
 };
-
-class Hw::cHeap
-{
-public:
-	int field_4;
-	Hw::cCriticalSection m_CriticalSection;
-	int field_24;
-	Hw::cHeap* m_pSubHeap;
-	Hw::cHeap* m_pHeapOwner;
-	Hw::cHeap* m_pNext;
-	Hw::cHeap* m_pPrev;
-	const char* m_TargetAlloc;
-	int field_3C;
-
-	cHeap()
-	{
-		((void(__thiscall*)(cHeap*))(shared::base + 0x9D3650))(this);
-	}
-
-	virtual ~cHeap() {};
-
-	void startup()
-	{
-		CallVMTFunc<1, cHeap*>(this);
-	}
-
-	void shutdown()
-	{
-		CallVMTFunc<2, cHeap*>(this);
-	}
-
-	BOOL hasHandle()
-	{
-		return ReturnCallVMTFunc<BOOL, 3, cHeap*>(this);
-	}
-
-	size_t getMemoryLimit()
-	{
-		return ReturnCallVMTFunc<size_t, 4, cHeap*>(this);
-	}
-
-	size_t getUsedMemory()
-	{
-		return ReturnCallVMTFunc<size_t, 5, cHeap*>(this);
-	}
-
-	size_t getFreeMemory()
-	{
-		return ReturnCallVMTFunc<size_t, 6, cHeap*>(this);
-	}
-
-	void* getBlock(void *block)
-	{
-		return ReturnCallVMTFunc<void*, 7, cHeap*, void *>(this, block);
-	}
-
-	size_t getMemorySizeByBlock(void* block)
-	{
-		return ReturnCallVMTFunc<size_t, 8, cHeap*, void*>(this, block);
-	}
-
-	size_t getCriticalLimit()
-	{
-		return ReturnCallVMTFunc<size_t, 9, cHeap*>(this);
-	}
-	// memory that is used by child heaps
-	size_t getChildHeapMemory()
-	{
-		return ReturnCallVMTFunc<size_t, 10, cHeap*>(this);
-	}
-
-	void unused(void *unk1)
-	{
-		CallVMTFunc<11, cHeap*, void*>(this, unk1);
-	}
-
-	void* createChildHeap(HANDLE* pHandle, size_t Size)
-	{
-		return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
-	}
-
-	void destroyChildHeap(HANDLE* pHandle, size_t Size)
-	{
-		CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
-	}
-
-	void* allocImpl(size_t size, size_t preserved, HW_ALLOC_MODE allocMode, int a4)
-	{
-		return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, preserved, allocMode, a4);
-	}
-
-	void free(void* block, size_t size)
-	{
-		CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size);
-	}
-
-	void *AllocateMemory(size_t size, size_t preserved, HW_ALLOC_MODE allocMode, int a3)
-	{
-		return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, preserved, allocMode, a3);
-	}
-
-	void setSubHeap(Hw::cHeap &rHeap)
-	{
-		((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap);
-	}
-
-	void unsetSubHeap()
-	{
-		((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this);
-	}
-};
-
-inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) 
-{
-	return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap);
-}
-
-inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) // to separate the delete operator
-{
-	return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
-}
-
-inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap)
-{
-	return ((void*(__cdecl*)(size_t, Hw::cHeap&))(shared::base + 0x9D3580))(s, rHeap);
-}
-
-inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) // to separate the delete[] operator
-{
-	return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block);
-}
-
-// Usage after heap startup
-inline void* __cdecl memAlloc(size_t s)
-{
-	return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s);
-}
-
-// Usage after heap startup
-inline void __cdecl memDealloc(void* block)
-{
-	((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block);
-}
-
-class Hw::cHeapVariableBase : public Hw::cHeap
-{
-public:
-	class cList
-	{
-	public:
-		cList* m_pPrevious;
-		cList* m_pNext;
-		void* m_pMemoryBlock;
-		size_t m_MemorySize;
-		cHeapVariableBase* m_pAllocator;
-	};
-
-	HANDLE m_HeapHandle;
-	cList* m_pFirstBlock;
-	cList* m_pLastBlock;
-	size_t m_MemoryLimit;
-	size_t m_FreeMemory;
-	size_t m_UsedMemory;
-
-	cHeapVariableBase()
-	{
-		((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
-	}
-};
-
-class Hw::cHeapVariable : public Hw::cHeapVariableBase
-{
-public:
-
-	cHeapVariable()
-	{
-		((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this);
-	}
-};
-
-class Hw::cHeapPhysicalBase : public Hw::cHeap
-{
-public:
-	class cList
-	{
-	public:
-		cList* m_pPrevious;
-		cList* m_pNext;
-		size_t m_TotalSize;
-		size_t m_Size;
-		int field_10;
-		int field_14;
-		cHeapPhysicalBase* m_pAllocator;
-	};
-public:
-	cList* m_pMainBlock;
-	cList* m_pFirstBlock;
-	cList *m_pLastBlock;
-	size_t m_MemoryLimit;
-	size_t m_FreeMemory;
-	int field_54;
-	int field_58;
-	int field_5C;
-	int field_60;
-	int field_64;
-	int field_68;
-	int field_6C;
-	cList* m_pBlocks[256];
-
-	cHeapPhysicalBase()
-	{
-		((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
-	}
-};
-
-class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
-{
-public:
-
-	cHeapPhysical()
-	{
-		((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this);
-	}
-};
-
-class Hw::cHeapHook
-{
-public:
-
-	virtual ~cHeapHook() {};
-};
-
-class Hw::cHeapFixed : public Hw::cHeap
-{
-public:
-	struct cList 
-	{
-		cList *m_pPrevious;
-		cList *m_pNext;
-		cHeapFixed *m_pAllocator;
-	};
-public:
-	HANDLE m_HeapHandle;
-	int field_44;
-	size_t m_nFixedSize;
-	int field_4C;
-	size_t m_nFixedReservedSize;
-	size_t m_nFixedAmount;
-	int field_58;
-	int field_5C;
-
-	cHeapFixed()
-	{
-		((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this);
-	}
-
-	void* AllocateMemory()
-	{
-		return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
-	}
-
-	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name)
-	{
-		return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name);
-	}
-};
-
-class Hw::cHeapOneTime : public Hw::cHeap
-{
-public:
-
-
-};
-
-class Hw::cHeapGlobal : public Hw::cHeapVariableBase
-{
-public:
-
-	cHeapGlobal()
-	{
-		((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this);
-	}
-
-	static inline cHeapGlobal* GetInstance() // -> return Hw::cHeapGlobal::ms_Instance.GetInstance();
-	{
-		return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
-	}
-
-	BOOL create(size_t size, const char *target) // Got optimised away
-	{
-		if (hasHandle())
-			return FALSE;
-
-		if (!this->m_CriticalSection.startup())
-			return FALSE;
-
-		this->m_HeapHandle = HeapCreate(1u, 0u, 0u);
-
-		if (!this->m_HeapHandle)
-			return FALSE;
-
-		this->m_MemoryLimit = size;
-		this->m_FreeMemory = size;
-		this->m_TargetAlloc = target;
-		this->m_pFirstBlock = nullptr;
-		this->m_pLastBlock = nullptr;
-		return TRUE;
-	}
-
-	static inline cHeapGlobal &ms_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
-};
-
-class Hw::cShareHeapPhysical : Hw::cHeapPhysical
-{
-public:
-
-
-};
-
 class Hw::cTexture
 {
 public:
@@ -2449,7 +3008,6 @@ public:
 class Hw::cPixelShader
 {
 public:
-
 	cPixelInfo m_PixelData;
 
 	virtual ~cPixelShader() {};
@@ -2470,7 +3028,6 @@ VALIDATE_SIZE(Hw::cShader, 0x28);
 class Hw::cVertexFormat
 {
 public:
-
 	IDirect3DVertexDeclaration9 *m_VertexDeclaration;
 	int m_UsageFlags;
 
@@ -2744,8 +3301,9 @@ public:
 
 	class const_iterator
 	{
-	public:
+	protected:
 		cTag *m_pTag;
+	public:
 
 		const_iterator(cTag *pTag)
 		{
@@ -3459,3 +4017,4 @@ struct Hw::DvdReadManager
 VALIDATE_SIZE(Hw::cHeap, 0x40);
 
 inline Hw::cTaskManager& g_MainTaskManager = *(Hw::cTaskManager*)(shared::base + 0x17E9164);
+inline Hw::cKeyboardState& g_Keyboard = *(Hw::cKeyboardState*)(shared::base + 0x177B7C0);

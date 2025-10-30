@@ -8,7 +8,7 @@ public:
     {
         Events::OnTickEvent += []()
         {
-            Pl0000* player = cGameUIManager::ms_Instance.m_pPlayer;
+            Pl0000* player = g_GameUIManager.m_pPlayer;
 
             if (player)
             {

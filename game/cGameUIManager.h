@@ -29,8 +29,8 @@ public:
 	cParts *m_pPlayerParts[13];
 	Pl1500 *m_pPlayer;
 	int m_nPlayerEntityHandle;
-	cVec4 m_vecPlayerPosition;
-	cVec4 field_B0;
+	Hw::cVec4 m_vecPlayerPosition;
+	Hw::cVec4 field_B0;
 	cActionMessageParts *m_pActionMessageParts;
 	int field_C4;
 	cDryCellGauge2 *m_pcDryCellGauge2;
@@ -40,8 +40,8 @@ public:
 	int field_D8;
 
 	virtual ~cGameUIManager() {};
-
-	static inline cGameUIManager& ms_Instance = *(cGameUIManager*)(shared::base + 0x19C1430);
 };
+
+inline cGameUIManager& g_GameUIManager = *(cGameUIManager*)(shared::base + 0x19C1430);
 
 VALIDATE_SIZE(cGameUIManager, 0xDC);

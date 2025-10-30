@@ -3,10 +3,11 @@
 #include <cFade.h>
 #include <PlayerManagerImplement.h>
 
-struct cGameRuntime
+class cScene
 {
+public:
     int field_0;
-    int m_nGameState;
+    int m_Rno0;
     int field_8;
     cFade::Unit *m_pFade;
     int field_10;
@@ -64,4 +65,4 @@ struct cGameRuntime
     int field_E0;
 };
 
-inline cGameRuntime& g_GameRuntime = *(cGameRuntime*)(shared::base + 0x17E8E40);
+inline cScene& g_Scene = *(cScene*)(shared::base + 0x17E8E40);

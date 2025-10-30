@@ -5,7 +5,7 @@
 #include "injector/hooking.hpp"
 
 struct GameManager;
-struct cGameRuntime;
+struct cScene;
 
 class Events
 {
@@ -135,7 +135,7 @@ public:
 public:
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x6526A2, CallingConvention::Cdecl> OnUpdateEvent; // Every non-game tick
 	static inline IEvent<FunctionAddPriority::AddAfter, 0x652CDF, CallingConvention::Thiscall, GameManager *> OnGameStartupEvent; // Executed after logo sequence
-	static inline IEvent<FunctionAddPriority::AddBefore, 0x650719, CallingConvention::Thiscall, cGameRuntime *> OnSceneStartupEvent; // Executes functions if scene should be prepared
+	static inline IEvent<FunctionAddPriority::AddBefore, 0x650719, CallingConvention::Thiscall, cScene *> OnSceneStartupEvent; // Executes functions if scene should be prepared
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x654237, CallingConvention::Thiscall, void *> OnSceneCleanupEvent; // Executes functions if scene wants to be cleaned
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x64D411, CallingConvention::Cdecl> OnTickEvent; // Every in-game tick
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x64D40A, CallingConvention::Cdecl> OnPauseEvent; // Every tick that is in pause

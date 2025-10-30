@@ -10,7 +10,7 @@ class PlayerAdrenaline
         Events::OnTickEvent += []()
         {
             cSlowRateManager* SlowRateManager = cSlowRateManager::ms_pInstance;
-            Pl0000 *player = cGameUIManager::ms_Instance.m_pPlayer;
+            Pl0000 *player = g_GameUIManager.m_pPlayer;
             static bool once = false;
 
             if (player->m_nHealth / player->getMaxHealth() <= 0.4f)

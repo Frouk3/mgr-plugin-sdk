@@ -2,7 +2,7 @@
 #include <EntitySystem.h>
 #include <Events.h>
 #include <BehaviorEmBase.h>
-#include <Hw.h> // for cInput
+#include <Hw.h> // for input
 
 class Plugin
 {
@@ -11,7 +11,7 @@ public:
 	{
 		Events::OnTickEvent += []()
 			{
-				if (cInput::ms_KeyInput.isKeyPressed('O'))
+				if (g_Keyboard.trig(Hw::KB_O))
 				{
 					for (Entity* entity : EntitySystem::ms_Instance.m_EntityList)
 					{
@@ -28,8 +28,8 @@ public:
 
 						if (enemy->getContext().hasInheritance(BehaviorEmBase::ms_Context))
 						{
-							enemy->m_vecTransPos.y = -1000.0f;
-							enemy->place(enemy->m_vecTransPos, enemy->m_vecRotation);
+							enemy->m_TransPos.y = -1000.0f;
+							enemy->place(enemy->m_TransPos, enemy->m_Rot);
 						}
 					}
 				}

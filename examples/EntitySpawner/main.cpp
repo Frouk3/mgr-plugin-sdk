@@ -106,12 +106,12 @@ public:
 				{
 					Behavior* instance = entity->getEntityInstance<Behavior>();
 
-					cVec4 pos = cGameUIManager::ms_Instance.m_pPlayer ? cGameUIManager::ms_Instance.m_pPlayer->m_vecTransPos : cVec4();
-					cVec4 rot = cGameUIManager::ms_Instance.m_pPlayer ? cGameUIManager::ms_Instance.m_pPlayer->m_vecRotation : cVec4();
+					Hw::cVec4 pos = g_GameUIManager.m_pPlayer ? g_GameUIManager.m_pPlayer->m_TransPos : Hw::cVec4();
+					Hw::cVec4 rot = g_GameUIManager.m_pPlayer ? g_GameUIManager.m_pPlayer->m_Rot : Hw::cVec4();
 
 					instance->place(pos, rot);
 
-					g_ObjReadManager.endWork(instance->m_ObjId, instance->m_nSetType); // Removes reference
+					g_ObjReadManager.removeRequest(instance->m_ObjId, instance->m_nSetType); // Removes reference
 				}
 
 				shared::ExPressKeyUpdate();
@@ -119,7 +119,7 @@ public:
 
 		Events::OnTickEvent += []()
 			{
-				if (cInput::ms_KeyInput.isKeyPressed('H')) // spawn boss Sam for example
+				if (g_Keyboard.trig(Hw::KB_H)) // spawn boss Sam for example
 				{
 					eObjID objectId = eObjID(0x20020); 
 					m_EntQueue.push_back({ .mObjId = objectId, .iSetType = 0, .bWorkFail = !isObjExists(objectId) });
