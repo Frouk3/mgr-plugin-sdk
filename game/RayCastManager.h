@@ -28,13 +28,13 @@ public:
     int field_138[5];
     void *field_14C[5]; // huh?
 
-    BOOL setLinearCast(hkpAllCdPointCollector* cd, cVec4* out, const cVec4& origin, float radius, const cVec4& rayDir, int collisionFilter, const char* debugPurpose = "")
+    BOOL setLinearCast(hkpAllCdPointCollector* cd, Hw::cVec4* out, const Hw::cVec4& origin, float radius, const Hw::cVec4& rayDir, int collisionFilter, const char* debugPurpose = "")
     {
-        return ((BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, cVec4*, const cVec4&, float, const cVec4&, int, const char*))(shared::base + 0x50EEA0))(this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
+        return ((BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, Hw::cVec4*, const Hw::cVec4&, float, const Hw::cVec4&, int, const char*))(shared::base + 0x50EEA0))(this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
     }
-
-    static inline RayCastManager& ms_Instance = *(RayCastManager*)(shared::base + 0x1735DF8);
 };
+
+RayCastManager &g_RayCastManager = *(RayCastManager*)(shared::base + 0x1735DF8);
 
 class RayCastWork
 {
@@ -65,8 +65,8 @@ public:
 class RayCastSingleHitWork : public RayCastWork
 {
 public:
-    cVec4 field_20;
-    cVec4 field_30;
+    Hw::cVec4 field_20;
+    Hw::cVec4 field_30;
     int field_40;
     int field_44;
     int field_48;
@@ -75,7 +75,7 @@ public:
     int field_54;
     int field_58;
     int field_5C;
-    cVec4 field_60;
+    Hw::cVec4 field_60;
     float field_70;
     int field_74;
     int field_78;
@@ -96,15 +96,15 @@ public:
     int field_B4;
     int field_B8;
     int field_BC;
-    cVec4 field_C0;
-    cVec4 field_D0;
+    Hw::cVec4 field_C0;
+    Hw::cVec4 field_D0;
 };
 
 class RayCastMultiHitWork : public RayCastWork
 {
 public:
-    cVec4 field_20;
-    cVec4 field_30;
+    Hw::cVec4 field_20;
+    Hw::cVec4 field_30;
     int field_40;
     int field_44;
     int field_48;
@@ -114,8 +114,8 @@ public:
     int field_58;
     int field_5C;
     hkpAllRayHitCollector m_RayHitCollector;
-    cVec4 field_380;
-    cVec4 field_390;
+    Hw::cVec4 field_380;
+    Hw::cVec4 field_390;
 };
 
 class RayCastPenetrationWork : public RayCastWork
@@ -145,12 +145,12 @@ class RayCastLinearWork : public RayCastWork
     int field_24;
     int field_28;
     int field_2C;
-    cVec4 field_30;
+    Hw::cVec4 field_30;
     int field_40;
     int field_44;
     int field_48;
     int field_4C;
-    cVec4 field_50;
+    Hw::cVec4 field_50;
     hkpAllCdPointCollector m_CdCollector;
     int field_200;
     int field_204;

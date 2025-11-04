@@ -4,7 +4,7 @@
 
 class cViewFrustum
 {
-    cVec4 m_planes[6];
+    Hw::cVec4 m_planes[6];
     float m_Aspect;
     float m_CosX;
     float m_SinX;
@@ -13,24 +13,21 @@ class cViewFrustum
     float m_NearZ;
     float m_FarZ;
 
-    void set(float fov, float nearClip, float farClip, int width, int height)
+    void initialize(float fovy, float nearZ, float farZ, unsigned int width, unsigned int height)
     {
-        ((void(__thiscall *)(cViewFrustum*, float, float, float, int, int))(shared::base + 0x9E5560))(this, fov, nearClip, farClip, width, height);
+        ((void(__thiscall *)(cViewFrustum*, float, float, float, unsigned int, unsigned int))(shared::base + 0x9E5560))(this, fovy, nearZ, farZ, width, height);
     }
 
-    void setFOV(float fov)
+    void setFovy(float fovy)
     {
-        ((void(__thiscall *)(cViewFrustum*, float))(shared::base + 0x9E59F0))(this, fov);
+        ((void(__thiscall *)(cViewFrustum*, float))(shared::base + 0x9E59F0))(this, fovy);
     }
 };
 
 class cCameraFrustum
 {
 public:
-    int field_4;
-    int field_8;
-    int field_C;
-    cViewFrustum m_Vfrustum;
+    __declspec(align(16)) cViewFrustum m_Vfrustum;
     int field_8C;
     int m_bUpdateFrustum;
     int field_94;

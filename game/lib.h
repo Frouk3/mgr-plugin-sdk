@@ -588,7 +588,7 @@ public:
         helper::AllocatorHelper<Allocator> helpa(allocator);
         if (helpa.create(*allocator) && helpa.m_Allocator)
         {
-            if (T* mem = (T*)helpa.m_Allocator->allocate(sizeof(T) * capacity); mem)
+            if (T* mem = new(helpa.m_Allocator) T[capacity]; mem)
             {
                 m_Helper = helpa;
                 if (this->m_array)
@@ -596,19 +596,21 @@ public:
                 this->m_capacity = sizeof(T) * capacity / sizeof(T);
                 this->m_array = mem;
                 helpa.cleanup();
-                return 1;
+                return true;
             }
             else
             {
                 helpa.cleanup();
-                return 0;
+                return false;
             }
         }
         else
         {
             helpa.cleanup();
-            return 0;
+            return false;
         }
+
+        return false; // if we ever get to this point, unless it'll be optimized for better performance
     }
 
     void cleanup()
@@ -632,8 +634,6 @@ public:
     }
 };
 
-/// TODO: Fix allocator binding
-/// EDIT: It already contains the allocator member in the game, so it's all good
 template <typename T, typename allocator = Hw::cHeap>
 class lib::DynamicArray : public lib::Array<T>
 {
@@ -726,7 +726,7 @@ public:
            if (newSize <= 0x20) // Minimum for 32? Why?
                newSize = 0x20;
 
-           T* newArray = (T*)m_Allocator->AllocateMemory(sizeof(T) * newSize, 32, 0, 0);
+           T* newArray = new(m_Allocator) T[newSize];
 
            if (newArray)
            {
@@ -769,7 +769,7 @@ public:
             if (size <= this->m_size) // new size of array cannot hold old elements
                 return;
 
-            T* newArray = (T*)m_Allocator->AllocateMemory(sizeof(T) * size, 32, 0, 0);
+            T* newArray = new(m_Allocator) T[size];
             if (newArray)
             {
                 if (this->m_size && this->m_array)

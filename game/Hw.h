@@ -128,6 +128,17 @@ namespace Hw
 		THREAD_ID_INVALID=0
 	};
 
+	enum ROT_ORDER
+	{
+        ROT_XYZ = 0,
+        ROT_XZY,
+        ROT_YXZ,
+        ROT_YZX,
+        ROT_ZXY, 
+        ROT_ZYX,
+    	ROT_DEFAULT = ROT_ZYX
+	};
+
 	class cHeap;
 	class cHeapVariableBase;
 	class cHeapVariable;
@@ -215,10 +226,7 @@ namespace Hw
 	struct cVec4;
 	struct cQuat;
 
-	inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y)
-	{
-		return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y);
-	}
+	inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y) { return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y); }
 
 	class TextureManager
 	{
@@ -237,10 +245,7 @@ namespace Hw
 			int field_24;
 		};
 
-		inline void removeTexture(Texture& texture)
-		{
-			((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture);
-		}
+		inline void removeTexture(Texture& texture) { ((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture); }
 
 		static inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
 		static inline cCriticalSection &TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
@@ -305,21 +310,10 @@ namespace Hw
 			void *m_pThreadParameter;
 		};
 
-		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char *threadName, int priority)
-		{
-			return ((BOOL(__cdecl *)(cWork*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority);
-		}
-
-		static inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority)
-		{
-			return ((BOOL(__cdecl *)(void (__cdecl *)(void *), void *, unsigned int, int, const char *, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority);
-		}
-		
+		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char *threadName, int priority) { return ((BOOL(__cdecl *)(cWork*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority); }
+		static inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority) { return ((BOOL(__cdecl *)(void (__cdecl *)(void *), void *, unsigned int, int, const char *, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority); }
 		// Should be always called at the end of the thread function
-		static inline void Exit()
-		{
-			((void(__cdecl *)())(shared::base + 0x9D7C70))();
-		}
+		static inline void Exit() { ((void(__cdecl *)())(shared::base + 0x9D7C70))(); }
 	};
 
 	class GraphicDevice
@@ -356,135 +350,38 @@ public:
 	const char* m_pHeapName;
 	unsigned int m_OutOfMemoryFlag;
 
-	cHeap()
-	{
-		((void(__thiscall*)(cHeap*))(shared::base + 0x9D3650))(this);
-	}
-
+	cHeap() { ((void(__thiscall*)(cHeap*))(shared::base + 0x9D3650))(this); }
 	virtual ~cHeap() {};
 
-	void cleanup()
-	{
-		CallVMTFunc<1, cHeap*>(this);
-	}
-
-	void destroy()
-	{
-		CallVMTFunc<2, cHeap*>(this);
-	}
-
-	BOOL isValid()
-	{
-		return ReturnCallVMTFunc<BOOL, 3, cHeap*>(this);
-	}
-
-	size_t getSize()
-	{
-		return ReturnCallVMTFunc<size_t, 4, cHeap*>(this);
-	}
-
-	size_t getUsedSize()
-	{
-		return ReturnCallVMTFunc<size_t, 5, cHeap*>(this);
-	}
-
-	size_t getAllocatableSize()
-	{
-		return ReturnCallVMTFunc<size_t, 6, cHeap*>(this);
-	}
-
-	void* getNextAlloc(void *block)
-	{
-		return ReturnCallVMTFunc<void*, 7, cHeap*, void *>(this, block);
-	}
-
-	size_t getAllocSize(void* block)
-	{
-		return ReturnCallVMTFunc<size_t, 8, cHeap*, void*>(this, block);
-	}
-
-	size_t getRestSizeLimit()
-	{
-		return ReturnCallVMTFunc<size_t, 9, cHeap*>(this);
-	}
-
-	size_t getChildHeapSize()
-	{
-		return ReturnCallVMTFunc<size_t, 10, cHeap*>(this);
-	}
-
-	void setDefragmentableFlag(void *a1)
-	{
-		CallVMTFunc<11, cHeap*, void*>(this, a1);
-	}
-
-	void* createChildHeap(HANDLE* pHandle, size_t Size)
-	{
-		return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
-	}
-
-	void destroyChildHeap(HANDLE* pHandle, size_t Size)
-	{
-		CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size);
-	}
-
-	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4)
-	{
-		return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, align, allocMode, a4);
-	}
-
-	void dealloc(void* block, size_t size)
-	{
-		CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size);
-	}
-
-	void *alloc(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a3)
-	{
-		return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, align, allocMode, a3);
-	}
-
-	void setSubHeap(Hw::cHeap &rHeap)
-	{
-		((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap);
-	}
-
-	void unsetSubHeap()
-	{
-		((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this);
-	}
+	void cleanup() { CallVMTFunc<1, cHeap*>(this); }
+	void destroy() { CallVMTFunc<2, cHeap*>(this); }
+	BOOL isValid() { return ReturnCallVMTFunc<BOOL, 3, cHeap*>(this); }
+	size_t getSize() { return ReturnCallVMTFunc<size_t, 4, cHeap*>(this); }
+	size_t getUsedSize() { return ReturnCallVMTFunc<size_t, 5, cHeap*>(this); }
+	size_t getAllocatableSize() { return ReturnCallVMTFunc<size_t, 6, cHeap*>(this); }
+	// Pass nullptr to get the first allocation
+	void* getNextAlloc(void *block) { return ReturnCallVMTFunc<void*, 7, cHeap*, void *>(this, block); }
+	size_t getAllocSize(void* block) { return ReturnCallVMTFunc<size_t, 8, cHeap*, void*>(this, block); }
+	size_t getRestSizeLimit() { return ReturnCallVMTFunc<size_t, 9, cHeap*>(this); }
+	size_t getChildHeapSize() { return ReturnCallVMTFunc<size_t, 10, cHeap*>(this); }
+	void setDefragmentableFlag(void *a1) { CallVMTFunc<11, cHeap*, void*>(this, a1); }
+	void* createChildHeap(HANDLE* pHandle, size_t Size) { return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
+	void destroyChildHeap(HANDLE* pHandle, size_t Size) { CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
+	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4) { return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, align, allocMode, a4); }
+	void dealloc(void* block, size_t size) { CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size); }
+	void *alloc(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a3) { return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, align, allocMode, a3); }
+	void setSubHeap(Hw::cHeap &rHeap) { ((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap); }
+	void unsetSubHeap() { ((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this); }
 };
 
-inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) 
-{
-	return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap);
-}
-
-inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) // to separate the delete operator
-{
-	return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0);
-}
-
-inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap)
-{
-	return ((void*(__cdecl*)(size_t, Hw::cHeap&))(shared::base + 0x9D3580))(s, rHeap);
-}
-
-inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) // to separate the delete[] operator
-{
-	return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block);
-}
-
+inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) { return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap); }
+inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) { return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0); } // Separated to avoid ambiguity
+inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap) { return ((void*(__cdecl*)(size_t, Hw::cHeap&))(shared::base + 0x9D3580))(s, rHeap); }
+inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) { return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block); } // Separated to avoid ambiguity
 // Usage after heap startup
-inline void* __cdecl memAlloc(size_t s)
-{
-	return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s);
-}
-
+inline void* __cdecl memAlloc(size_t s) { return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s); }
 // Usage after heap startup
-inline void __cdecl memDealloc(void* block)
-{
-	((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block);
-}
+inline void __cdecl memDealloc(void* block) { ((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block); }
 
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
@@ -492,44 +389,29 @@ public:
 	class cList
 	{
 	public:
-		cList* m_pPrev;
-		cList* m_pNext;
+		cList *m_pPrev, *m_pNext;
 		void* m_pMemoryBlock;
 		size_t m_MemorySize;
 		cHeapVariableBase* m_pAllocator;
 	};
 
 	HANDLE m_hHeap;
-	Hw::cHeapVariableBase::cList *m_pFirstList;
-	Hw::cHeapVariableBase::cList *m_pLastList;
+	Hw::cHeapVariableBase::cList *m_pFirstList, *m_pLastList;
 	size_t m_HeapSize;
 	size_t m_RestSize;
 	size_t m_ChildHeapSize;
 
-	cHeapVariableBase()
-	{
-		((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this);
-	}
+	cHeapVariableBase() { ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this); } 		
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapVariable()
-	{
-		((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this);
-	}
+	cHeapVariable() { ((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this); }
 
-	int create(size_t size, Hw::cHeap& rHeap, const char *pName)
-	{
-		return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName);
-	}
-
-	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName)
-	{
-		return ReturnCallVMTFunc<int, 17, Hw::cHeapVariable*, size_t, size_t, Hw::cHeap&, const char*>(this, size, align, rHeap, pName);
-	}
+	int create(size_t size, Hw::cHeap& rHeap, const char *pName) { return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName); }
+	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName) { return ReturnCallVMTFunc<int, 17, Hw::cHeapVariable*, size_t, size_t, Hw::cHeap&, const char*>(this, size, align, rHeap, pName); }
 };
 
 class Hw::cHeapPhysicalBase : public Hw::cHeap
@@ -538,8 +420,7 @@ public:
 	class cList
 	{
 	public:
-		cList* m_pPrevious;
-		cList* m_pNext;
+		cList *m_pPrevious, *m_pNext;
 		size_t m_TotalSize;
 		size_t m_Size;
 		int field_10;
@@ -547,9 +428,7 @@ public:
 		cHeapPhysicalBase* m_pAllocator;
 	};
 public:
-	cList* m_pMainBlock;
-	cList* m_pFirstBlock;
-	cList *m_pLastBlock;
+	cList *m_pMainBlock, *m_pFirstBlock, *m_pLastBlock;
 	size_t m_MemoryLimit;
 	size_t m_FreeMemory;
 	int field_54;
@@ -561,36 +440,23 @@ public:
 	int field_6C;
 	cList* m_pBlocks[256];
 
-	cHeapPhysicalBase()
-	{
-		((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this);
-	}
+	cHeapPhysicalBase() { ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this); }
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
 {
 public:
 
-	cHeapPhysical()
-	{
-		((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this);
-	}
+	cHeapPhysical() { ((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this); }
 
-	int create(size_t size, Hw::cHeap &rHeap, const char *name)
-	{
-		return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name);
-	}
+	int create(size_t size, Hw::cHeap &rHeap, const char *name) { return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name); }
 };
 
 class Hw::cHeapHook
 {
 public:
 
-	cHeapHook()
-	{
-		((void(__thiscall *)(cHeapHook *))(shared::base + 0x9D32E0))(this);
-	}
-
+	cHeapHook() { ((void(__thiscall *)(cHeapHook *))(shared::base + 0x9D32E0))(this); }
 	virtual ~cHeapHook() {};
 };
 
@@ -599,8 +465,7 @@ class Hw::cHeapFixed : public Hw::cHeap
 public:
 	struct cList 
 	{
-		cList *m_pPrevious;
-		cList *m_pNext;
+		cList *m_pPrevious, *m_pNext;
 		cHeapFixed *m_pHeap;
 	};
 public:
@@ -610,38 +475,15 @@ public:
 	size_t m_BlockNum;
 	size_t m_BlockAlign;
 	size_t m_RestNum;
-	Hw::cHeapFixed::cList *m_pFreeList;
-	Hw::cHeapFixed::cList *m_pFirstList;
+	Hw::cHeapFixed::cList *m_pFreeList, *m_pFirstList;
 
-	cHeapFixed()
-	{
-		((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this);
-	}
+	cHeapFixed() { ((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this); }
 
-	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name)
-	{
-		return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name);
-	}
-
-	void* alloc()
-	{
-		return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this);
-	}
-
-	int canAlloc(size_t size, size_t num)
-	{
-		return ((int (__thiscall*)(Hw::cHeapFixed*, size_t, size_t))(shared::base + 0x9D2BA0))(this, size, num);
-	}
-
-	unsigned int getBlockMaxNum()
-	{
-		return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C80))(this);
-	}
-
-	unsigned int getBlockUsedNum()
-	{
-		return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C90))(this);
-	}
+	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
+	void* alloc() { return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this); }
+	int canAlloc(size_t size, size_t num) { return ((int (__thiscall*)(Hw::cHeapFixed*, size_t, size_t))(shared::base + 0x9D2BA0))(this, size, num); }
+	unsigned int getBlockMaxNum() { return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C80))(this); }
+	unsigned int getBlockUsedNum() { return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C90))(this); }
 };
 
 class Hw::cHeapOneTime : public Hw::cHeap
@@ -649,8 +491,7 @@ class Hw::cHeapOneTime : public Hw::cHeap
 public:
 	struct cList
 	{
-		cList *m_pNext;
-		cList *m_pPrev;
+		cList *m_pNext, *m_pPrev;
 		void *m_pMemory;
 		cHeapOneTime *m_pHeap;
 	};
@@ -659,29 +500,19 @@ public:
 	int m_BlockSize;
 	size_t m_HeapSize;
 	int m_BlockRest;
-	Hw::cHeapOneTime::cList *m_pFirstList;
-	Hw::cHeapOneTime::cList *m_pLastList;
+	Hw::cHeapOneTime::cList *m_pFirstList, *m_pLastList;
 	int m_RestSize;
 
-	cHeapOneTime()
-	{
-		((void(__thiscall *)(Hw::cHeapOneTime *))(shared::base + 0x9D3800))(this);
-	}
+	cHeapOneTime() { ((void(__thiscall *)(Hw::cHeapOneTime *))(shared::base + 0x9D3800))(this); }
 };
 
 class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapGlobal()
-	{
-		((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this);
-	}
+	cHeapGlobal() { ((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this); }
 
-	static inline cHeapGlobal* GetInstance() // -> return Hw::cHeapGlobal::ms_Instance.GetInstance();
-	{
-		return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))();
-	}
+	static inline cHeapGlobal* GetInstance() { return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))(); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
 
 	BOOL create(size_t size, const char *target) // Got optimised away
 	{
@@ -714,20 +545,9 @@ class Hw::cShareHeapPhysical : public Hw::cHeapPhysical
 public:
 	cHeapPhysical *m_pShareHeap;
 
-	cShareHeapPhysical()
-	{
-		((void(__thiscall *)(cShareHeapPhysical *))(shared::base + 0x9D4BD0))(this);
-	}
-
-	int create(Hw::cHeapPhysical &shareHeap, const char *name)
-	{
-		return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name);
-	}
-
-	int startupShareHeap()
-	{
-		return ReturnCallVMTFunc<int, 19, cShareHeapPhysical*>(this);
-	}
+	cShareHeapPhysical() { ((void(__thiscall *)(cShareHeapPhysical *))(shared::base + 0x9D4BD0))(this); }
+	int create(Hw::cHeapPhysical &shareHeap, const char *name) { return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name); }
+	int startupShareHeap() { return ReturnCallVMTFunc<int, 19, cShareHeapPhysical*>(this); }
 };
 
 template <typename tC, unsigned const align, typename tHeapBinder = Hw::cHeap>
@@ -950,109 +770,31 @@ class Hw::cFmerge
 {
 public:
 	FmergeHeader* m_data;
-	char *m_dds;
+	char *m_dtt;
 
-	cFmerge(char* data) : m_data((FmergeHeader*)data), m_dds(nullptr) {};
+	cFmerge(char* data) : m_data((FmergeHeader*)data), m_dtt(nullptr) {};
+	cFmerge() { ((void(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3530))(this); }
 
-	cFmerge()
-	{
-		((void(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3530))(this);
-	}
+	void *getDtt() { return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3550))(this); }
+	void *getData() { return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3560))(this); }
+	void setData(void *data, int index) { ((void(__thiscall *)(Hw::cFmerge*, void*, int))(shared::base + 0x9E3570))(this, data, index); }
+	void *getDataAt(int index) { return ((void*(__thiscall *)(Hw::cFmerge*, int))(shared::base + 0x9E3580))(this, index); }
+	size_t getFileAmount() { return ((size_t(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3590))(this); }
+	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex); }
+	const char *getFileIndexFileName(size_t fileIndex) { return ((const char*(__thiscall *)(Hw::cFmerge *, size_t))(shared::base + 0x9E38D0))(this, fileIndex); }
+	BOOL getFileIndexExtension(char *pExt, size_t fileIndex) { return ((BOOL(__thiscall *)(Hw::cFmerge*, char *, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex); }
+	void *getIndexFileData(size_t fileIndex) { return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
+	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
+	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E3F20))(this, ext, no); }
+	size_t getFileNameIndexI(const char *name) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char*))(shared::base + 0x9E3FD0))(this, name);}
+	size_t getSubStrFileIndex(const char *name, unsigned int matchLimit) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit);}
+	void* getExtensionFileData(const char *name, unsigned int matchLimit) { return ((void*(__thiscall *)(Hw::cFmerge*, const char *, unsigned int))(shared::base + 0x9E44B0))(this, name, matchLimit);}
+	void* getFileNameData(const char *name) { return ((void*(__thiscall *)(Hw::cFmerge *, const char *))(shared::base + 0x9E4500))(this, name); }
+	void *getFileNameData(const char *name, unsigned int no) { return ((void*(__thiscall *)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4550))(this, name, no); }
+	size_t getFileNameSize(const char *name, unsigned int no) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E46D0))(this, name, no); }
+	void setData(char *data, char *dds = nullptr) { ((void(__thiscall *)(Hw::cFmerge*, char*, char*))(shared::base + 0x9E3540))(this, data, dds); }
 
-	void *getDtt()
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3550))(this);
-	}
-
-	void *getData()
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3560))(this);
-	}
-
-	void setData(void *data, int index)
-	{
-		((void(__thiscall *)(Hw::cFmerge*, void*, int))(shared::base + 0x9E3570))(this, data, index);
-	}
-
-	void *getDataAt(int index)
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge*, int))(shared::base + 0x9E3580))(this, index);
-	}
-
-	size_t getFileAmount()
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3590))(this);
-	}
-
-	size_t getFileIndexSize(size_t fileIndex)
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex);
-	}
-
-	const char *getFileIndexFileName(size_t fileIndex)
-	{
-		return ((const char*(__thiscall *)(Hw::cFmerge *, size_t))(shared::base + 0x9E38D0))(this, fileIndex);
-	}
-
-	BOOL getFileIndexExtension(char *pExt, size_t fileIndex)
-	{
-		return ((BOOL(__thiscall *)(Hw::cFmerge*, char *, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex);
-	}
-
-	void *getIndexFileData(size_t fileIndex)
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex);
-	}
-
-	size_t getFileIndexSize(size_t fileIndex)
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex);
-	}
-
-	size_t getExtensionFileIndex(const char* ext, unsigned int no)
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E3F20))(this, ext, no);
-	}
-
-	size_t getFileNameIndexI(const char *name)
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge *, const char*))(shared::base + 0x9E3FD0))(this, name);
-	}
-
-	size_t getSubStrFileIndex(const char *name, unsigned int matchLimit)
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit);
-	}
-
-	void* getExtensionFileData(const char *name, unsigned int matchLimit)
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge*, const char *, unsigned int))(shared::base + 0x9E44B0))(this, name, matchLimit);
-	}
-	
-	void* getFileNameData(const char *name)
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge *, const char *))(shared::base + 0x9E4500))(this, name);
-	}
-
-	void *getFileNameData(const char *name, unsigned int no)
-	{
-		return ((void*(__thiscall *)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4550))(this, name, no);
-	}
-
-	size_t getFileNameSize(const char *name, unsigned int no)
-	{
-		return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E46D0))(this, name, no);
-	}
-
-	operator bool()
-	{
-		return m_data != nullptr;
-	}
-
-	void setData(char *data, char *dds = nullptr)
-	{
-		((void(__thiscall *)(Hw::cFmerge*, char*, char*))(shared::base + 0x9E3540))(this, data, dds);
-	}
+	operator bool() { return m_data != nullptr; }
 };
 
 enum Hw::KEYBOARD_MAP
@@ -1186,7 +928,7 @@ public:
 		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D93A0))(this, vKey);
 	}
 
-	BOOL on(char vKey) // unused
+	BOOL on(char vKey)
 	{
 		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D93D0))(this, vKey);
 	}
@@ -1196,7 +938,7 @@ public:
 		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9400))(this, vKey);
 	}
 
-	BOOL trig(char vKey) // unused
+	BOOL trig(char vKey)
 	{
 		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9430))(this, vKey);
 	}
@@ -1206,7 +948,7 @@ public:
 		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9460))(this, vKey);
 	}
 
-	BOOL rel(char vKey) // unused
+	BOOL rel(char vKey)
 	{
 		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9490))(this, vKey);
 	}
@@ -1216,7 +958,7 @@ public:
 		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D94C0))(this, vKey);
 	}
 
-	BOOL rep(char vKey) // unused
+	BOOL rep(char vKey)
 	{
 		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D94F0))(this, vKey);
 	}
@@ -1235,18 +977,11 @@ public:
 class Hw::KeyboardManagerBase
 {
 public:
-	static inline int m_RepeatWait = *(int*)(shared::base + 0x14CD830);
-	static inline int m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
+	static inline int &m_RepeatWait = *(int*)(shared::base + 0x14CD830);
+	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
 
-	static inline void InitState(cKeyboardState& rState)
-	{
-		((void(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4A0))(rState);
-	}
-
-	static inline int UpdateStateOnToOld(cKeyboardState& rState)
-	{
-		return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4C0))(rState);
-	}
+	static inline void InitState(cKeyboardState& rState) { ((void(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4A0))(rState); }
+	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4C0))(rState); }
 };
 
 class Hw::KeyboardManager : public Hw::KeyboardManagerBase
@@ -1254,15 +989,8 @@ class Hw::KeyboardManager : public Hw::KeyboardManagerBase
 public:
 	enum{ MAX_KEY_MAP_FLAG=256 };
 
-	static inline int UpdateKeyState(cKeyboardState& rState)
-	{
-		return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA500))(rState);
-	}
-
-	static inline int UpdateState(cKeyboardState& rState)
-	{
-		return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA710))(rState);
-	}
+	static inline int UpdateKeyState(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA500))(rState); }
+	static inline int UpdateState(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA710))(rState); }
 };
 
 class Hw::cUcol
@@ -1270,52 +998,20 @@ class Hw::cUcol
 public:
 	unsigned int r, g, b, a;
 
-	cUcol(unsigned int color = 0) 
-	{
-		r = (color >> 16) & 0xFF;
-		g = (color >> 8) & 0xFF;
-		b = color & 0xFF;
-		a = (color >> 24) & 0xFF;
-	}
-
+	cUcol(unsigned int color = 0) { r = (color >> 16) & 0xFF; g = (color >> 8) & 0xFF; b = color & 0xFF; a = (color >> 24) & 0xFF; }
 	cUcol(const cFcol& fcol);
 	cUcol(unsigned int r, unsigned int g, unsigned int b, unsigned int a) : r(r), g(g), b(b), a(a) {}
 
-	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a) 
-	{
-		this->r = r;
-		this->g = g;
-		this->b = b;
-		this->a = a;
-	}
+	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a) { this->r = r; this->g = g; this->b = b; this->a = a; }
+	void setRGBAF(float r, float g, float b, float a) { this->r = r * 255; this->g = g * 255; this->b = b * 255; this->a = a * 255; }
 
-	void setRGBAF(float r, float g, float b, float a)
-	{
-		this->r = r * 255;
-	}
-
-	operator unsigned int() const 
-	{
-		return (a << 24) | (r << 16) | (g << 8) | b;
-	}
-
-	cUcol& operator=(unsigned int color) 
-	{
-		r = (color >> 16) & 0xFF;
-		g = (color >> 8) & 0xFF;
-		b = color & 0xFF;
-		a = (color >> 24) & 0xFF;
-
-		return *this;
-	}
-
+	operator unsigned int() const { return (a << 24) | (r << 16) | (g << 8) | b; }
+	cUcol& operator=(unsigned int color) { r = (color >> 16) & 0xFF; g = (color >> 8) & 0xFF; b = color & 0xFF; a = (color >> 24) & 0xFF; return *this; }
 	cUcol& operator=(const cFcol& fcol);
-
 	cUcol operator+(const cFcol& fcol) const;
 	cUcol operator-(const cFcol& fcol) const;
 	cUcol operator*(const cFcol& fcol) const;
 	cUcol operator/(const cFcol& fcol) const;
-
 	bool operator==(const cFcol& fcol) const;
 	bool operator!=(const cFcol& fcol) const;
 };
@@ -1326,89 +1022,28 @@ public:
 	float r, g, b, a;
 
 	cFcol(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 1.0f) : r(r), g(g), b(b), a(a) {}
-
 	cFcol(const cUcol& ucol);
-	cFcol(unsigned int color) 
-	{
-		r = ((color >> 16) & 0xFF) / 255.0f;
-		g = ((color >> 8) & 0xFF) / 255.0f;
-		b = (color & 0xFF) / 255.0f;
-		a = ((color >> 24) & 0xFF) / 255.0f;
-	}
+	cFcol(unsigned int color) { r = ((color >> 16) & 0xFF) / 255.0f; g = ((color >> 8) & 0xFF) / 255.0f; b = (color & 0xFF) / 255.0f; a = ((color >> 24) & 0xFF) / 255.0f; }
 
-	void setRGBAF(float r, float g, float b, float a) 
-	{
-		this->r = r;
-		this->g = g;
-		this->b = b;
-		this->a = a;
-	}
+	void setRGBAF(float r, float g, float b, float a) { this->r = r; this->g = g; this->b = b; this->a = a; }
+	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a) { this->r = (float)r / 255.f; this->g = (float)g / 255.f; this->b = (float)b / 255.f; this->a = (float)a / 255.f; }
 
-	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a)
-	{
-		this->r = (float)r / 255.f;
-		this->g = (float)g / 255.f;
-		this->b = (float)b / 255.f;
-		this->a = (float)a / 255.f;
-	}
+	operator unsigned int() const { return ((unsigned int)(a * 255) << 24) | ((unsigned int)(r * 255) << 16) | ((unsigned int)(g * 255) << 8) | (unsigned int)(b * 255); }
 
-	operator unsigned int() const 
-	{
-		return ((unsigned int)(a * 255) << 24) | ((unsigned int)(r * 255) << 16)
-			| ((unsigned int)(g * 255) << 8) | (unsigned int)(b * 255);
-	}
-
-	cFcol& operator=(unsigned int color) 
-	{
-		r = ((color >> 16) & 0xFF) / 255.0f;
-		g = ((color >> 8) & 0xFF) / 255.0f;
-		b = (color & 0xFF) / 255.0f;
-		a = ((color >> 24) & 0xFF) / 255.0f;
-
-		return *this;
-	}
-
+	cFcol& operator=(unsigned int color) { r = ((color >> 16) & 0xFF) / 255.0f; g = ((color >> 8) & 0xFF) / 255.0f; b = (color & 0xFF) / 255.0f; a = ((color >> 24) & 0xFF) / 255.0f; return *this; }
 	cFcol& operator=(const cUcol& ucol);
-
 	cFcol operator+(const cUcol& ucol) const;
 	cFcol operator-(const cUcol& ucol) const;
 	cFcol operator*(const cUcol& ucol) const;
 	cFcol operator/(const cUcol& ucol) const;
-
 	bool operator==(const cUcol& ucol) const;
 	bool operator!=(const cUcol& ucol) const;
 };
 
-Hw::cUcol::cUcol(const cFcol& fcol) 
-{
-	r = (unsigned int)(int)(fcol.r * 255.0f);
-	g = (unsigned int)(int)(fcol.g * 255.0f);
-	b = (unsigned int)(int)(fcol.b * 255.0f);
-	a = (unsigned int)(int)(fcol.a * 255.0f);
-}
-
-Hw::cFcol::cFcol(const cUcol& ucol) 
-{
-	r = ucol.r / 255.0f;
-	g = ucol.g / 255.0f;
-	b = ucol.b / 255.0f;
-	a = ucol.a / 255.0f;
-}
-
-Hw::cFcol &Hw::cFcol::operator=(const cUcol& ucol)
-{
-	setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a);
-
-	return *this;
-}
-
-Hw::cUcol &Hw::cUcol::operator=(const cFcol &fcol)
-{
-	setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a);
-
-	return *this;
-}
-
+Hw::cUcol::cUcol(const cFcol& fcol) { r = (unsigned int)(int)(fcol.r * 255.0f); g = (unsigned int)(int)(fcol.g * 255.0f); b = (unsigned int)(int)(fcol.b * 255.0f); a = (unsigned int)(int)(fcol.a * 255.0f); }
+Hw::cFcol::cFcol(const cUcol& ucol) { r = ucol.r / 255.0f; g = ucol.g / 255.0f; b = ucol.b / 255.0f; a = ucol.a / 255.0f; }
+Hw::cFcol &Hw::cFcol::operator=(const cUcol& ucol) { setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a); return *this; }
+Hw::cUcol &Hw::cUcol::operator=(const cFcol &fcol) { setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a); return *this; }
 Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const 
 {
 	return cUcol(
@@ -1676,117 +1311,30 @@ class Hw::cVec2
 public:
 	float x, y;
 
-	cVec2()
-	{
-		x = 0.f;
-		y = 0.f;
-	}
-
+	cVec2() { x = 0.f; y = 0.f; }
 	cVec2(float x, float y) : x(x), y(y) {}
 
-	void operator=(const cVec2& lhs)
-	{
-		x = lhs.x;
-		y = lhs.y;
-	}
+	void setXY(float x, float y) { this->x = x; this->y = y; }
 
-	cVec2 operator+(const cVec2& lhs) const
-	{
-		return cVec2(x + lhs.x, y + lhs.y);
-	}
+	void operator=(const cVec2& lhs) { x = lhs.x; y = lhs.y; }
+	cVec2 operator+(const cVec2& lhs) const { return cVec2(x + lhs.x, y + lhs.y); }
+	cVec2& operator+=(const cVec2& lhs) { x += lhs.x; y += lhs.y; return *this; }
+	cVec2 operator-(const cVec2& lhs) const { return cVec2(x - lhs.x, y - lhs.y); }
+	cVec2& operator-=(const cVec2& lhs) { x -= lhs.x; y -= lhs.y; return *this; }
+	cVec2 operator*(float scale) const { return cVec2(x * scale, y * scale); }
+	cVec2 operator*(const cVec2& lhs) const { return cVec2(x * lhs.x, y * lhs.y); }
+	cVec2& operator*=(float scale) { x *= scale; y *= scale; return *this; }
+	cVec2& operator*=(const cVec2& lhs) { x *= lhs.x; y *= lhs.y; return *this; }
+	cVec2 operator/(float scale) const { return cVec2(x / scale, y / scale); }
+	cVec2 operator/(const cVec2& lhs) const { return cVec2(x / lhs.x, y / lhs.y); }
+	cVec2& operator/=(float scale) { x /= scale; y /= scale; return *this; }
+	cVec2& operator/=(const cVec2& lhs) { x /= lhs.x; y /= lhs.y; return *this; }
+	bool operator==(const cVec2& rhs) const { return x == rhs.x && y == rhs.y; }
+	bool operator!=(const cVec2& rhs) const { return !(*this == rhs); }
 
-	cVec2& operator+=(const cVec2& lhs)
-	{
-		x += lhs.x;
-		y += lhs.y;
-		return *this;
-	}
-
-	cVec2 operator-(const cVec2& lhs) const
-	{
-		return cVec2(x - lhs.x, y - lhs.y);
-	}
-
-	cVec2& operator-=(const cVec2& lhs)
-	{
-		x -= lhs.x;
-		y -= lhs.y;
-		return *this;
-	}
-
-	cVec2 operator*(float scale) const
-	{
-		return cVec2(x * scale, y * scale);
-	}
-
-	cVec2 operator*(const cVec2& lhs) const
-	{
-		return cVec2(x * lhs.x, y * lhs.y);
-	}
-
-	cVec2& operator*=(float scale)
-	{
-		x *= scale;
-		y *= scale;
-		return *this;
-	}
-
-	cVec2& operator*=(const cVec2& lhs)
-	{
-		x *= lhs.x;
-		y *= lhs.y;
-		return *this;
-	}
-
-	cVec2 operator/(float scale) const
-	{
-		return cVec2(x / scale, y / scale);
-	}
-
-	cVec2 operator/(const cVec2& lhs) const
-	{
-		return cVec2(x / lhs.x, y / lhs.y);
-	}
-
-	cVec2& operator/=(float scale)
-	{
-		x /= scale;
-		y /= scale;
-		return *this;
-	}
-
-	cVec2& operator/=(const cVec2& lhs)
-	{
-		x /= lhs.x;
-		y /= lhs.y;
-		return *this;
-	}
-
-	float length()
-	{
-		return sqrtf(powf(x, 2) + powf(y, 2));
-	}
-
-	cVec2 Normalize()
-	{
-		float length = this->length();
-		return cVec2(x / length, y / length);
-	}
-
-	bool operator==(const cVec2& rhs) const
-	{
-		return x == rhs.x && y == rhs.y;
-	}
-
-	bool operator!=(const cVec2& rhs) const
-	{
-		return !(*this == rhs);
-	}
-
-	float dot(const cVec2& lhs) const 
-	{
-		return x * lhs.x + y * lhs.y;
-	}
+	float length() const { return sqrtf(powf(x, 2) + powf(y, 2)); }
+	cVec2 normalize() const { float length = this->length(); return cVec2(x / length, y / length); }
+	float dot(const cVec2& lhs) const  { return x * lhs.x + y * lhs.y; }
 };
 
 class Hw::cVec3
@@ -1794,139 +1342,50 @@ class Hw::cVec3
 public:
 	float x, y, z;
 
-	cVec3()
-	{
-		x = 0.f;
-		y = 0.f;
-		z = 0.f;
-	}
-
+	cVec3() { x = 0.f; y = 0.f; z = 0.f; }
+	cVec3(const Hw::cVec4& lhs);
+	cVec3(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
 	cVec3(float x, float y, float z) : x(x), y(y), z(z) {}
+	void setXYZ(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
 
-	void operator=(const cVec3& lhs)
-	{
-		x = lhs.x;
-		y = lhs.y;
-		z = lhs.z;
-	}
+	void setVec4(const Hw::cVec4& lhs);
+	cVec3& operator=(const Hw::cVec4& lhs);
+	cVec3 operator+(const Hw::cVec4& lhs);
+	cVec3& operator+=(const Hw::cVec4& lhs);
+	cVec3 operator-(const Hw::cVec4& lhs);
+	cVec3& operator-=(const Hw::cVec4& lhs);
+	cVec3 operator*(const Hw::cVec4& lhs);
+	cVec3& operator*=(const Hw::cVec4& lhs);
+	cVec3 operator/(const Hw::cVec4& lhs);
+	cVec3& operator/=(const Hw::cVec4& lhs);
+	bool operator==(const Hw::cVec4& lhs) const;
+	bool operator!=(const Hw::cVec4& lhs) const;
 
-	cVec3 operator+(const cVec3& lhs) const
-	{
-		return cVec3(x + lhs.x, y + lhs.y, z + lhs.z);
-	}
+	cVec3 operator*(Hw::cMtx& mat) const;
+	cVec3& operator*=(Hw::cMtx& mat);
 
-	cVec3& operator+=(const cVec3& lhs)
-	{
-		x += lhs.x;
-		y += lhs.y;
-		z += lhs.z;
-		return *this;
-	}
+	cVec3& operator=(const cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this;}
+	cVec3 operator+(const cVec3& lhs) const { return cVec3(x + lhs.x, y + lhs.y, z + lhs.z); }
+	cVec3& operator+=(const cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+	cVec3 operator-(const cVec3& lhs) const { return cVec3(x - lhs.x, y - lhs.y, z - lhs.z); }
+	cVec3 operator-() const { return cVec3(-x, -y, -z); }
+	cVec3& operator-=(const cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+	cVec3 operator*(float scale) const { return cVec3(x * scale, y * scale, z * scale); }
+	cVec3 operator*(const cVec3& lhs) const { return cVec3(x * lhs.x, y * lhs.y, z * lhs.z); }
+	cVec3& operator*=(float scale) { x *= scale; y *= scale; z *= scale; return *this; }
+	cVec3& operator*=(const cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+	cVec3 operator/(float scale) const { return cVec3(x / scale, y / scale, z / scale); }
+	cVec3 operator/(const cVec3& lhs) const { return cVec3(x / lhs.x, y / lhs.y, z / lhs.z); }
+	cVec3& operator/=(float scale) { x /= scale; y /= scale; z /= scale; return *this; }
+	cVec3& operator/=(const cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+	bool operator==(const cVec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
+	bool operator!=(const cVec3& rhs) const { return !(*this == rhs); }
 
-	cVec3 operator-(const cVec3& lhs) const
-	{
-		return cVec3(x - lhs.x, y - lhs.y, z - lhs.z);
-	}
-
-	cVec3& operator-=(const cVec3& lhs)
-	{
-		x -= lhs.x;
-		y -= lhs.y;
-		z -= lhs.z;
-		return *this;
-	}
-
-	cVec3 operator*(float scale) const
-	{
-		return cVec3(x * scale, y * scale, z * scale);
-	}
-
-	cVec3 operator*(const cVec3& lhs) const
-	{
-		return cVec3(x * lhs.x, y * lhs.y, z * lhs.z);
-	}
-
-	cVec3& operator*=(float scale)
-	{
-		x *= scale;
-		y *= scale;
-		z *= scale;
-		return *this;
-	}
-
-	cVec3& operator*=(const cVec3& lhs)
-	{
-		x *= lhs.x;
-		y *= lhs.y;
-		z *= lhs.z;
-		return *this;
-	}
-
-	cVec3 operator/(float scale) const
-	{
-		return cVec3(x / scale, y / scale, z / scale);
-	}
-
-	cVec3 operator/(const cVec3& lhs) const
-	{
-		return cVec3(x / lhs.x, y / lhs.y, z / lhs.z);
-	}
-
-	cVec3& operator/=(float scale)
-	{
-		x /= scale;
-		y /= scale;
-		z /= scale;
-		return *this;
-	}
-
-	cVec3& operator/=(const cVec3& lhs)
-	{
-		x /= lhs.x;
-		y /= lhs.y;
-		z /= lhs.z;
-		return *this;
-	}
-
-	float length()
-	{
-		return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
-	}
-
-	float length2D()
-	{
-		return sqrtf(powf(x, 2) + powf(z, 2));
-	}
-
-	cVec3 Normalize()
-	{
-		float length = this->length();
-		return cVec3(x / length, y / length, z / length);
-	}
-
-	bool operator==(const cVec3& rhs) const
-	{
-		return x == rhs.x && y == rhs.y && z == rhs.z;
-	}
-
-	bool operator!=(const cVec3& rhs) const
-	{
-		return !(*this == rhs);
-	}
-
-	float dot(const cVec3& lhs) const 
-	{
-		return x * lhs.x + y * lhs.y + z * lhs.z;
-	}
-
-	cVec3 cross(const cVec3& lhs) const 
-	{
-		return cVec3(
-			y * lhs.z - z * lhs.y,
-			z * lhs.x - x * lhs.z,
-			x * lhs.y - y * lhs.x
-		);
-	}
+	float length() const { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2)); }
+	float length2D() const { return sqrtf(powf(x, 2) + powf(z, 2)); }
+	cVec3 normalize() const { float length = this->length(); return cVec3(x / length, y / length, z / length); }
+	float dot(const cVec3& lhs) const { return x * lhs.x + y * lhs.y + z * lhs.z; }
+	cVec3 cross(const cVec3& lhs) const { return cVec3(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x ); }
 };
 
 class Hw::cVec4
@@ -1934,160 +1393,87 @@ class Hw::cVec4
 public:
 	float x, y, z, w;
 
-	void operator=(const cVec4& right)
-	{
-		this->x = right.x;
-		this->y = right.y;
-		this->z = right.z;
-		this->w = right.w;
-	}
+	cVec4() { x = 0.0f; y = 0.0f; z = 0.0f; w = 1.f; }
+	cVec4(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {}
+	cVec4(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = lhs.w; }
+	cVec4(const Hw::cVec3& lhs);
 
-	cVec4()
-	{
-		x = 0.0f;
-		y = 0.0f;
-		z = 0.0f;
-		w = 1.f;
-	}
+	void setVec3(const Hw::cVec3& lhs);
+	cVec4& operator=(const Hw::cVec3& lhs);
+	cVec4 operator+(const Hw::cVec3& lhs);
+	cVec4& operator+=(const Hw::cVec3& lhs);
+	cVec4 operator-(const Hw::cVec3& lhs);
+	cVec4& operator-=(const Hw::cVec3& lhs);
+	cVec4 operator*(const Hw::cVec3& lhs);
+	cVec4& operator*=(const Hw::cVec3& lhs);
+	cVec4 operator/(const Hw::cVec3& lhs);
+	cVec4& operator/=(const Hw::cVec3& lhs);
+	bool operator==(const Hw::cVec3& lhs) const;
+	bool operator!=(const Hw::cVec3& lhs) const;
 
-	cVec4(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w)
-	{
-	};
+	cVec4 operator*(Hw::cMtx& mat) const;
+	cVec4& operator*=(Hw::cMtx& mat);
 
-	float length()
-	{
-		return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
-	}
+	void setXYZ(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
+	void setXYZW(float x, float y, float z, float w) { this->x = x; this->y = y; this->z = z; this->w = w; }
 
-	float length2D()
-	{
-		return sqrtf(powf(x, 2) + powf(z, 2));
-	}
+	cVec4& operator=(const cVec4& right) { this->x = right.x; this->y = right.y; this->z = right.z; this->w = right.w; return *this; }
+	cVec4 operator+(const cVec4& rhs) const { return cVec4(x + rhs.x, y + rhs.y, z + rhs.z, 1.0f); }
+	cVec4& operator+=(const cVec4& rhs) { x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w; return *this; }
+	cVec4 operator-(const cVec4& rhs) const { return cVec4(x - rhs.x, y - rhs.y, z - rhs.z, w); }
+	cVec4& operator-=(const cVec4& rhs) { x -= rhs.x; y -= rhs.y; z -= rhs.z; w -= rhs.w; return *this; }
+	cVec4 operator*(float scale) const { return cVec4(x * scale, y * scale, z * scale, w); }
+	cVec4 operator*(const cVec4& rhs) const { return cVec4(x * rhs.x, y * rhs.y, z * rhs.z, w); }
+	cVec4& operator*=(float scale) { x *= scale; y *= scale; z *= scale; w *= scale; return *this; }
+	cVec4& operator*=(const cVec4& rhs) { x *= rhs.x; y *= rhs.y; z *= rhs.z; w *= rhs.w; return *this; }
+	cVec4 operator/(float scale) const { return cVec4(x / scale, y / scale, z / scale, w); }
+	cVec4 operator/(const cVec4& rhs) const { return cVec4(x / rhs.x, y / rhs.y, z / rhs.z, w); }
+	cVec4& operator/=(float scale) { x /= scale; y /= scale; z /= scale; w /= scale; return *this; }
+	cVec4& operator/=(const cVec4& rhs) { x /= rhs.x; y /= rhs.y; z /= rhs.z; w /= rhs.w; return *this; }
+	bool operator==(const cVec4& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
+	bool operator!=(const cVec4& rhs) const { return !(*this == rhs); }
 
-	cVec4 operator+(const cVec4& rhs) const
-	{
-		return cVec4(x + rhs.x, y + rhs.y, z + rhs.z, 1.0f);
-	}
-
-	cVec4& operator+=(const cVec4& rhs)
-	{
-		x += rhs.x;
-		y += rhs.y;
-		z += rhs.z;
-		return *this;
-	}
-
-	cVec4 operator-(const cVec4& rhs) const
-	{
-		return cVec4(x - rhs.x, y - rhs.y, z - rhs.z, w);
-	}
-
-	cVec4& operator-=(const cVec4& rhs)
-	{
-		x -= rhs.x;
-		y -= rhs.y;
-		z -= rhs.z;
-		return *this;
-	}
-
-	cVec4 operator*(float scale) const
-	{
-		return cVec4(x * scale, y * scale, z * scale, w);
-	}
-
-	cVec4 operator*(const cVec4& rhs) const
-	{
-		return cVec4(x * rhs.x, y * rhs.y, z * rhs.z, w);
-	}
-
-	cVec4& operator*=(float scale)
-	{
-		x *= scale;
-		y *= scale;
-		z *= scale;
-		return *this;
-	}
-
-	cVec4& operator*=(const cVec4& rhs)
-	{
-		x *= rhs.x;
-		y *= rhs.y;
-		z *= rhs.z;
-		return *this;
-	}
-
-	cVec4 operator/(float scale) const
-	{
-		return cVec4(x / scale, y / scale, z / scale, w);
-	}
-
-	cVec4 operator/(const cVec4& rhs) const
-	{
-		return cVec4(x / rhs.x, y / rhs.y, z / rhs.z, w);
-	}
-
-	cVec4& operator/=(float scale)
-	{
-		x /= scale;
-		y /= scale;
-		z /= scale;
-		return *this;
-	}
-
-	cVec4& operator/=(const cVec4& rhs)
-	{
-		x /= rhs.x;
-		y /= rhs.y;
-		z /= rhs.z;
-		return *this;
-	}
-
-	bool operator==(const cVec4& rhs) const
-	{
-		return x == rhs.x && y == rhs.y && z == rhs.z; // && w == rhs.w; <-- I'm not sure about using w here
-	}
-
-	bool operator!=(const cVec4& rhs) const
-	{
-		return !(*this == rhs);
-	}
-	
-	cVec4 Normalize()
-	{
-		float length = this->length();
-		return cVec4(x / length, y / length, z / length, w);
-	}
-
-	float dot(const cVec4& lhs) const 
-	{
-		return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w;
-	}
-
-	cVec4 cross(const cVec4& lhs) const 
-	{
-		return cVec4(
-			y * lhs.z - z * lhs.y,
-			z * lhs.x - x * lhs.z,
-			x * lhs.y - y * lhs.x,
-			1.0f
-		);
-	}
+	float length() const { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2) + powf(w, 2)); }
+	float length2D() const { return sqrtf(powf(x, 2) + powf(z, 2)); }
+	cVec4 normalize() const { float length = this->length(); return cVec4(x / length, y / length, z / length, w / length); }
+	float dot(const cVec4& lhs) const { return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w; }
+	cVec4 cross(const cVec4& lhs) const { return cVec4(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x, 1.0f ); }
 };
+
+Hw::cVec3::cVec3(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
+void Hw::cVec3::setVec4(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
+Hw::cVec3& Hw::cVec3::operator=(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this; }
+Hw::cVec3 Hw::cVec3::operator+(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+Hw::cVec3& Hw::cVec3::operator+=(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+Hw::cVec3 Hw::cVec3::operator-(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+Hw::cVec3& Hw::cVec3::operator-=(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+Hw::cVec3 Hw::cVec3::operator*(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+Hw::cVec3& Hw::cVec3::operator*=(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+Hw::cVec3 Hw::cVec3::operator/(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+Hw::cVec3& Hw::cVec3::operator/=(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+bool Hw::cVec3::operator==(const Hw::cVec4& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
+bool Hw::cVec3::operator!=(const Hw::cVec4& lhs) const { return !(*this == lhs); }
+
+Hw::cVec4::cVec4(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; }
+void Hw::cVec4::setVec3(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
+Hw::cVec4& Hw::cVec4::operator=(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; return *this; }
+Hw::cVec4 Hw::cVec4::operator+(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+Hw::cVec4& Hw::cVec4::operator+=(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+Hw::cVec4 Hw::cVec4::operator-(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+Hw::cVec4& Hw::cVec4::operator-=(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+Hw::cVec4 Hw::cVec4::operator*(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+Hw::cVec4& Hw::cVec4::operator*=(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+Hw::cVec4 Hw::cVec4::operator/(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+Hw::cVec4& Hw::cVec4::operator/=(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+bool Hw::cVec4::operator==(const Hw::cVec3& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
+bool Hw::cVec4::operator!=(const Hw::cVec3& lhs) const { return !(*this == lhs); }
 
 struct Hw::cQuat
 {
-	float x;
-	float y;
-	float z;
-	float w;
+	float x, y, z, w;
 
 	cQuat(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
 	cQuat() { x = 0.f; y = 0.f; z = 0.f; w = 1.f; };
-
-	static inline void Multiply(cQuat &out, const cVec4& rotation)
-	{
-		((void(__cdecl*)(cQuat&, const cVec4&))(shared::base + 0x9DB590))(out, rotation);
-	}
 };
 
 class Hw::cMtx
@@ -2112,15 +1498,10 @@ public:
 		r[3] = Hw::cVec4(0.0f, 0.0f, 0.0f, 1.0f);
 	}
 
-	D3DXMATRIX& toDxMtx()
-	{
-		return *(D3DXMATRIX*)this;
-	}
+	cMtx(const cMtx& other) { r[0] = other.r[0]; r[1] = other.r[1]; r[2] = other.r[2]; r[3] = other.r[3]; }
 
-	D3DXMATRIX& toDxMtx() const
-	{
-		return *(D3DXMATRIX*)this;
-	}
+	D3DXMATRIX& toDxMtx() { return *(D3DXMATRIX*)this; }
+	D3DXMATRIX& toDxMtx() const { return *(D3DXMATRIX*)this; }
 
 	cMtx& operator=(const cMtx& other)
 	{
@@ -2131,7 +1512,35 @@ public:
 
 		return *this;
 	}
+
+	cMtx operator*(const cMtx& other) const
+	{
+		cMtx result;
+
+		D3DXMatrixMultiply(&result.toDxMtx(), &toDxMtx(), &other.toDxMtx());
+
+		return result;
+	}
 };
+
+Hw::cVec3 Hw::cVec3::operator*(Hw::cMtx& mat) const
+{
+	return Hw::cVec3(
+		x * mat._11 + y * mat._21 + z * mat._31 + mat._41,
+		x * mat._12 + y * mat._22 + z * mat._32 + mat._42,
+		x * mat._13 + y * mat._23 + z * mat._33 + mat._43
+	);
+}
+Hw::cVec3& Hw::cVec3::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
+Hw::cVec4 Hw::cVec4::operator*(Hw::cMtx& mat) const
+{
+	return Hw::cVec4(
+		x * mat._11 + y * mat._21 + z * mat._31 + w * mat._41,
+		x * mat._12 + y * mat._22 + z * mat._32 + w * mat._42,
+		x * mat._13 + y * mat._23 + z * mat._33 + w * mat._43,
+		x * mat._14 + y * mat._24 + z * mat._34 + w * mat._44 );		
+}
+Hw::cVec4& Hw::cVec4::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
 
 VALIDATE_SIZE(Hw::cMtx, 0x40);
 
@@ -2737,9 +2146,9 @@ public:
 		Hw::cVec4 m_Target;
 		Hw::cVec4 m_Up;
 		Hw::cVec4 m_Rot;
-		float m_fRoll;
+		Hw::ROT_ORDER m_RotOrder;
 		float m_Dist;
-		float m_fFOV;
+		float m_Fovy;
 
 		cCameraMatrix &operator=(const cCameraMatrix &lvalue)
 		{

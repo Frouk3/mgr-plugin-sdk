@@ -11,6 +11,7 @@ Identify structures with their methods, static fields, and members.<br>
 Maintain inheritance relationships when reversing.<br>
 Check size validation of structures/classes, If it's not matching with the game, you should properly research & reverse the class.<br>
 If you break the rule of "loaded DLL" - suggesting the function that was not present in the application itself, your pull request might be ignored & closed.<br>
+Try to make calling from game function *inline* (in one line)
 
 ## Contribution Process
 1. Fork & Clone the Repository.

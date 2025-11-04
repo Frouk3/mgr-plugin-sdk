@@ -2,6 +2,12 @@
 #include <cSlowRateUnit.h>
 #include <Hw.h>
 
+class cSlowRate
+{
+public:
+	cSlowRateUnit *m_pUnit;
+};
+
 class cSlowRateManager
 {
 public:

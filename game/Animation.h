@@ -221,16 +221,9 @@ public:
             }
         };
 
-        class NodeHandle : public sHandle<Node>
+        class NodeHandle : public sHandle<Node> // might not be confirmed
         {
-        public:
-
-            operator Node*();
-
-            Node *getNode()
-            {
-                return *this;
-            }
+        public: 
         };
 
         class NodeBlend : public Node
@@ -730,24 +723,6 @@ public:
 };
 
 inline HandleManager<Animation::Motion::Node> &g_MotionNodeHandleManager = *(HandleManager<Animation::Motion::Node>*)(shared::base + 0x19D9488);
-
-inline Animation::Motion::NodeHandle::operator Animation::Motion::Node*()
-{
-    if (!this->m_Handle)
-        return nullptr;
-
-    size_t at = (this->m_Handle >> 8);
-
-    if (at >= g_MotionNodeHandleManager.m_capacity)
-    {
-        PrintfLog("[HandleManage] Invalid handle value.");
-        return nullptr;
-    }
-    if (((this->m_Handle ^ g_MotionNodeHandleManager.m_HandleArrayValue[at].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
-        return nullptr;
-
-    return g_MotionNodeHandleManager.m_HandleArrayValue[at].m_value;
-}
 
 VALIDATE_SIZE(Animation::HandIk, 0xF0);
 VALIDATE_SIZE(Animation, 0x344);

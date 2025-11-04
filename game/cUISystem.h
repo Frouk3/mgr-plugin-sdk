@@ -2,7 +2,6 @@
 
 #include <Hw.h>
 #include <RGBA32.h>
-#include <HkDataManagerImplement.h>
 #include <cCkMsgDataManager.h>
 
 class cUIDrawBase;
@@ -844,7 +843,7 @@ public:
 
 struct cUICtrlData
 {
-    cVec2 m_position;
+    Hw::cVec2 m_position;
     float m_fDepth;
     int field_C;
     int field_10;
@@ -2621,7 +2620,7 @@ public:
     int field_67C;
     int field_680;
     int field_684;
-    DataArchiveHolder field_688;
+    Hw::cFmerge field_688;
     Hw::cHeapPhysical m_PhysicalHeap;
 
     virtual ~cUIDataManager() {};

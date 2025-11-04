@@ -10,9 +10,9 @@ struct cModelData
 	struct ModelDataResource;
 	struct ModelData
 	{
-		cVec4 field_0;
-		cVec4 m_vecBBMin;
-		cVec4 m_vecBBMax;
+		Hw::cVec4 field_0;
+		Hw::cVec4 m_vecBBMin;
+		Hw::cVec4 m_vecBBMax;
 		float field_30;
 		int field_34;
 		int field_38;
@@ -65,7 +65,7 @@ struct cModelData
 		int field_F4;
 		ModelDataResource *m_Resource;
 
-		int getBonePartNum(unsigned short boneIndex)
+		int getPartsIndexNo(unsigned short boneIndex)
 		{
 			return ((int(__thiscall *)(ModelData*, unsigned short))(shared::base + 0x606DE0))(this, boneIndex);
 		}
@@ -222,8 +222,8 @@ struct cModelData::CutInfo
 
 struct cModelData::CutBoxInfo
 {
-	cVec4 m_vecMax;
-	cVec4 m_vecMin;
+	Hw::cVec4 m_vecMax;
+	Hw::cVec4 m_vecMin;
 	int m_nIndex;
 	int field_24;
 	int field_28;

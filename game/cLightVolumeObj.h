@@ -5,6 +5,7 @@
 /// This object doesn't emit any light unless it's material brightness is set to crazy values
 /// Light changes simply through the meshes
 /// Uses cnm00_SxXXX shader
+/// This object also changes it's brightness from time to time automatically
 class cLightVolumeObj : public Behavior
 {
 public:

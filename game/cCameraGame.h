@@ -16,8 +16,8 @@ public:
         EntityHandle m_TargetEntity;
         Behavior *m_pTarget;
         int m_nBone;
-        cVec4 field_10;
-        cVec4 m_vecPosition;
+        Hw::cVec4 field_10;
+        Hw::cVec4 m_vecPosition;
     } m_LockonSystem;
     int field_720;
     int field_724;
@@ -176,25 +176,23 @@ public:
     float field_1704;
     int field_1708;
     int field_170C;
-
-    static inline cCameraGame& Instance = *(cCameraGame*)(shared::base + 0x17EA1D0);
     
     // screenPos - Vector of screen position
     // screenPos.z - How far away it from the screen rect
     // screenPos.w - Distance between given worldPos position and camera position
-    BOOL worldToScreen(cVec4 &screenPos, const cVec4 &worldPos)
+    BOOL worldToScreen(Hw::cVec4 &screenPos, const Hw::cVec4 &worldPos)
     {
-        return ((BOOL(__thiscall*)(cCameraGame*, cVec4&, const cVec4&))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+        return ((BOOL(__thiscall*)(cCameraGame*, Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x99FA80))(this, screenPos, worldPos);
     }
 
-    void screenToWorld(cVec4& worldPos, const cVec4& screenPos)
+    void screenToWorld(Hw::cVec4& worldPos, const Hw::cVec4& screenPos)
     {
-        ((void(__thiscall*)(cCameraGame*, cVec4&, const cVec4&))(shared::base + 0x99FAB0))(this, worldPos, screenPos);
+        ((void(__thiscall*)(cCameraGame*, Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x99FAB0))(this, worldPos, screenPos);
     }
-
-    void safePositionTargetXz(const cVec4& pos, const cVec4& lookAt, const cVec4& offset, float fov)
+    
+    void safePositionTargetXz(const Hw::cVec4& pos, const Hw::cVec4& lookAt, const Hw::cVec4& offset, float fov)
     {
-        ((void(__thiscall*)(cCameraGame*, const cVec4&, const cVec4&, const cVec4&, float))(shared::base + 0x9B8CB0))(this, pos, lookAt, offset, fov);
+        ((void(__thiscall*)(cCameraGame*, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9B8CB0))(this, pos, lookAt, offset, fov);
     }
     
     void updateView()
@@ -212,3 +210,5 @@ public:
         ((void(__thiscall*)(cCameraGame*, int))(shared::base + 0x9C1300))(this, type);
     }
 };
+
+inline cCameraGame& g_GameCamera = *(cCameraGame*)(shared::base + 0x17EA1D0);

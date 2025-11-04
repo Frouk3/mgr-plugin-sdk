@@ -21,7 +21,7 @@ public:
     int field_A4;
     int field_A8;
     int field_AC;
-    cVec4 m_vecPlayerPosition;
+    Hw::cVec4 m_vecPlayerPosition;
     int field_C0;
     int field_C4;
     EntityHandle m_BalkanHandle;
@@ -64,9 +64,9 @@ public:
         CallVMTFunc<7, PlayerManagerImplement *, float, int, int>(this, SlowRate, a3, a4);
     }
 
-    cVec4 &getPlayerPosition()
+    Hw::cVec4 &getPlayerPosition()
     {
-        return ReturnCallVMTFunc<cVec4 &, 8, PlayerManagerImplement*>(this);
+        return ReturnCallVMTFunc<Hw::cVec4 &, 8, PlayerManagerImplement*>(this);
     }
 
     Entity *getEntity(unsigned int index) const
@@ -223,8 +223,8 @@ public:
     {
         return ((Entity *(__cdecl *)())(shared::base + 0x6C45B0))();
     }
-
-    static inline PlayerManagerImplement *&ms_Instance = *(PlayerManagerImplement **)(shared::base + 0x17EA100);
 };
+
+PlayerManagerImplement *&g_pPlayerManager = *(PlayerManagerImplement**)(shared::base + 0x17EA100);
 
 VALIDATE_SIZE(PlayerManagerImplement, 0x100);

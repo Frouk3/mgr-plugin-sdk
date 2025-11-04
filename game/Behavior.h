@@ -99,12 +99,12 @@ struct ClothSimulation
         unsigned short m_nBundleNum;
         unsigned short m_nBundleNum2;
         float m_fThick;
-        cVec3 m_vecGravity;
+        Hw::cVec3 m_vecGravity;
         int m_nGravityPartsNo;
         float m_fFirstBundleRate;
-        cVec3 m_vecWind;
+        Hw::cVec3 m_vecWind;
         int m_nWindPartsNo;
-        cVec3 m_vecWindOffset;
+        Hw::cVec3 m_vecWindOffset;
         float m_fWindSin;
         float m_fHitAdjustRate;
         float m_fOriginalRate;
@@ -124,7 +124,7 @@ struct ClothSimulation
             unsigned __int16 m_nNoFix;
             float m_fRotLimit;
             float field_C;
-            cVec3 m_vecOffset;
+            Hw::cVec3 m_vecOffset;
             float m_fOriginalRate;
         };
 
@@ -851,17 +851,17 @@ struct ClothSimulation
     int field_B24;
     int field_B28;
     int field_B2C;
-    cVec4 m_vecGravity;
+    Hw::cVec4 m_vecGravity;
     int m_nGravityPartsNo;
     float m_fFirstBundleRate;
     int field_B48;
     int field_B4C;
-    cVec4 m_vecWind;
+    Hw::cVec4 m_vecWind;
     int m_nWindPartsNo;
     int field_B64;
     int field_B68;
     int field_B6C;
-    cVec4 m_vecWindOffset;
+    Hw::cVec4 m_vecWindOffset;
     float m_fWindSin;
     float m_fHitAdjustRate;
     float field_B88;
@@ -908,8 +908,8 @@ struct Constraints
     int field_14;
     int field_18;
     int field_1C;
-    cVec4 m_vecRotation;
-    cVec4 m_vecOffset;
+    Hw::cVec4 m_vecRotation;
+    Hw::cVec4 m_vecOffset;
     int field_40;
     int field_44;
     int field_48;
@@ -969,8 +969,8 @@ public:
     struct AttackData // Logically it will be here, in this class
     {
         CollisionAttackData::HitData m_HitData;
-        cVec4 m_vecSeparation;
-        cVec4 field_110;
+        Hw::cVec4 m_vecSeparation;
+        Hw::cVec4 field_110;
         EntityHandle field_120;
         EntityHandle field_124;
         int field_128;
@@ -989,7 +989,7 @@ public:
     int field_534;
     int field_538;
     int field_53C;
-    cVec4 field_540;
+    Hw::cVec4 field_540;
     int field_550;
     int field_554;
     int field_558;
@@ -1014,7 +1014,7 @@ public:
     int field_5A4;
     int field_5A8;
     int field_5AC;
-    cVec4 m_avecGroundSupport[2];
+    Hw::cVec4 m_avecGroundSupport[2];
     int field_5D0;
     int field_5D4;
     int field_5D8;
@@ -1032,14 +1032,14 @@ public:
     BehaviorList::_BEHAVIOR_INFO* m_pBehaviorInfo;
     int field_610;
     int field_614;
-    unsigned int m_nCurrentAction;
-    unsigned int m_nCurrentActionId;
-    unsigned int field_620;
-    unsigned int field_624;
-    unsigned int m_nPreviousAction;
-    unsigned int m_nPreviousActionId;
-    int field_630;
-    int field_634;
+    unsigned int m_Rno0;
+    unsigned int m_Rno1;
+    unsigned int m_Rno2;
+    unsigned int m_Rno3;
+    unsigned int m_OldRno0;
+    unsigned int m_OldRno1;
+    unsigned int m_OldRno2;
+    unsigned int m_OldRno3;
     Hw::cCriticalSection* field_638;
     lib::AllocatedArray<InstructionContainer>* m_pInstructions;
     int field_640;
@@ -1214,19 +1214,19 @@ public:
         CallVMTFunc<25, Behavior*>(this);
     }
 
-    const cVec4 &getTransPos()
+    const Hw::cVec4 &getTransPos()
     {
-        return ReturnCallVMTFunc<const cVec4 &, 26, Behavior *>(this);
+        return ReturnCallVMTFunc<const Hw::cVec4 &, 26, Behavior *>(this);
     }
 
-    void setTransPos(const cVec4& transPos)
+    void setTransPos(const Hw::cVec4& transPos)
     {
-        CallVMTFunc<27, Behavior *, const cVec4&>(this, transPos);
+        CallVMTFunc<27, Behavior *, const Hw::cVec4&>(this, transPos);
     }
 
-    void offsetTransPos(const cVec4& offset)
+    void offsetTransPos(const Hw::cVec4& offset)
     {
-        CallVMTFunc<28, Behavior *, const cVec4&>(this, offset);
+        CallVMTFunc<28, Behavior *, const Hw::cVec4&>(this, offset);
     }
 
     void changeHeight(float height)
@@ -1234,34 +1234,34 @@ public:
         CallVMTFunc<29, Behavior *, float>(this, height);
     }
 
-    void place(const cVec4 &pos, const cVec4& rotation, const cVec4& size)
+    void place(const Hw::cVec4 &pos, const Hw::cVec4& rotation, const Hw::cVec4& size)
     {
-        CallVMTFunc<30, Behavior *, const cVec4&, const cVec4&, const cVec4&>(this, pos, rotation, size);
+        CallVMTFunc<30, Behavior *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation, size);
     }
 
-    void place(const cVec4 &pos, const cVec4 &rotation)
+    void place(const Hw::cVec4 &pos, const Hw::cVec4 &rotation)
     {
-        CallVMTFunc<31, Behavior *, const cVec4&, const cVec4&>(this, pos, rotation);
+        CallVMTFunc<31, Behavior *, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation);
     }
 
-    const cVec4& getRotation()
+    const Hw::cVec4& getRotation()
     {
-        return ReturnCallVMTFunc<const cVec4&, 33, Behavior *>(this);
+        return ReturnCallVMTFunc<const Hw::cVec4&, 33, Behavior *>(this);
     }
 
-    void setRotation(const cVec4& rotation)
+    void setRotation(const Hw::cVec4& rotation)
     {
-        CallVMTFunc<34, Behavior *, const cVec4&>(this, rotation);
+        CallVMTFunc<34, Behavior *, const Hw::cVec4&>(this, rotation);
     }
 
-    const cVec4& getSize()
+    const Hw::cVec4& getSize()
     {
-        return ReturnCallVMTFunc<const cVec4&, 35, Behavior *>(this);
+        return ReturnCallVMTFunc<const Hw::cVec4&, 35, Behavior *>(this);
     }
 
-    void setSize(const cVec4& size)
+    void setSize(const Hw::cVec4& size)
     {
-        CallVMTFunc<36, Behavior *, const cVec4&>(this, size);
+        CallVMTFunc<36, Behavior *, const Hw::cVec4&>(this, size);
     }
 
     int getSequence()
@@ -1339,10 +1339,10 @@ public:
         return ReturnCallVMTFunc<BOOL, 128, Behavior *>(this);
     }
 
-    cVec4 getOffsetPosition()
+    Hw::cVec4 getOffsetPosition()
     {
-        cVec4 result;
-        result = ReturnCallVMTFunc<cVec4&, 159, Behavior *, cVec4&>(this, result);
+        Hw::cVec4 result;
+        result = ReturnCallVMTFunc<Hw::cVec4&, 159, Behavior *, Hw::cVec4&>(this, result);
         return result;
     }
 
@@ -1393,24 +1393,54 @@ public:
         ((void(__thiscall *)(Behavior *))(shared::base + 0x68C820))(this);
     }
 
-    void setState(int action, int actId, int a3, int a4)
+    unsigned int getRno0()
     {
-        ((void (__thiscall *)(Behavior *, int, int, int, int))(shared::base + 0x68CAF0))(this, action, actId, a3, a4);
+        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
     }
 
-    int getCurrentActionId()
+    unsigned int getRno1()
     {
-        return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAC0))(this);
+        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAC0))(this);
     }
 
-    int getCurrentAction()
+    unsigned int getRno2()
     {
-        return ((int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
+        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAD0))(this);
     }
 
-    BOOL setupCloth(DataArchiveHolder *clothStorage) // initializes first cloth bxm(0)
+    unsigned int getRno3()
     {
-        return ((BOOL (__thiscall *)(Behavior *, DataArchiveHolder *))(shared::base + 0x692380))(this, clothStorage);
+        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAE0))(this);
+    }
+
+    void setRno(unsigned int rno0, unsigned int rno1, unsigned int rno2, unsigned int rno3)
+    {
+        ((void (__thiscall *)(Behavior *, unsigned int, unsigned int, unsigned int, unsigned int))(shared::base + 0x68CAF0))(this, rno0, rno1, rno2, rno3);
+    }
+
+    void setRno0(unsigned int rno0)
+    {
+        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB50))(this, rno0);
+    }
+
+    void setRno1(unsigned int rno1)
+    {
+        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB60))(this, rno1);
+    }
+
+    void setRno2(unsigned int rno2)
+    {
+        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB70))(this, rno2);
+    }
+
+    void setRno3(unsigned int rno3)
+    {
+        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB80))(this, rno3);
+    }
+
+    BOOL setupCloth(Hw::cFmerge *clothStorage) // initializes first cloth bxm(0)
+    {
+        return ((BOOL (__thiscall *)(Behavior *, Hw::cFmerge *))(shared::base + 0x692380))(this, clothStorage);
     }
 
     // return value is animation slot id
@@ -1496,9 +1526,9 @@ public:
        return ((int(__thiscall*)(Behavior*, void*, void*, int, float, float, unsigned int, float, float))(shared::base + 0x69EFB0))(this, mot, seq, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
-    int setAnimationByData(DataArchiveHolder *data, unsigned int index, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
+    int setAnimationByData(Hw::cFmerge *data, unsigned int index, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int(__thiscall*)(Behavior*, DataArchiveHolder*, unsigned int, int, float, float, unsigned int, float, float))(shared::base + 0x69F3C0))(this, data, index, node, interpolation, weight, flags, startFrame, playbackSpeed);
+        return ((int(__thiscall*)(Behavior*, Hw::cFmerge*, unsigned int, int, float, float, unsigned int, float, float))(shared::base + 0x69F3C0))(this, data, index, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     // Takes all values from the animation map and plays the animation
@@ -1527,11 +1557,6 @@ public:
     void setNodePlaybackSpeed(int node, float playbackSpeed)
     {
         ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, playbackSpeed);
-    }
-
-    static inline Behavior* __cdecl allocate(Hw::cHeapVariable *allocator)
-    {
-        return ((Behavior* (__cdecl *)(Hw::cHeapVariable *))(shared::base + 0x6A5F10))(allocator);
     }
 
     static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);

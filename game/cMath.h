@@ -7,33 +7,23 @@
 
 namespace cMath
 {
-    enum RotateMatrixOrder : int
-    {
-        ORDER_XYZ = 0x0,
-        ORDER_XZY = 0x1,
-        ORDER_YXZ = 0x2,
-        ORDER_YZX = 0x3,
-        ORDER_ZXY = 0x4,
-        ORDER_ZYX = 0x5
-    };
-
-    inline float __cdecl normalizeAngle(float angle)
+    inline float __cdecl RadAdjust(float angle)
     {
         return ((float(__cdecl *)(float))(shared::base + 0x9DBA30))(angle);
     }
 
-    inline void __cdecl rotateMatrix(D3DXMATRIX* matrix, const cVec4& rotation, RotateMatrixOrder order = ORDER_ZYX)
+    inline void __cdecl MtxInitRot(Hw::cMtx* matrix, const Hw::cVec4& rotation, Hw::ROT_ORDER order = Hw::ROT_DEFAULT)
     {
-        ((void(__cdecl*)(D3DXMATRIX*, const cVec4&, RotateMatrixOrder))(shared::base + 0x9DC1D0))(matrix, rotation, order);
+        ((void(__cdecl*)(Hw::cMtx*, const Hw::cVec4&, Hw::ROT_ORDER))(shared::base + 0x9DC1D0))(matrix, rotation, order);
     }
 
-    inline void __cdecl matrixSetScale(D3DXMATRIX* matrix, const cVec4& scale)
+    inline void __cdecl MtxInitScale(Hw::cMtx* matrix, const Hw::cVec4& scale)
     {
-        ((void(__cdecl*)(D3DXMATRIX*, const cVec4&))(shared::base + 0x9DD140))(matrix, scale);
+        ((void(__cdecl*)(Hw::cMtx*, const Hw::cVec4&))(shared::base + 0x9DD140))(matrix, scale);
     }
 
-    inline void __cdecl quatFromEulerAngles(cQuat& out, const cVec4& eulerAngles)
+    inline void __cdecl QuatFromRot(Hw::cQuat& out, const Hw::cVec4& eulerAngles)
     {
-        ((void(__cdecl*)(cQuat&, const cVec4&))(shared::base + 0x9DB590))(out, eulerAngles);
+        ((void(__cdecl*)(Hw::cQuat&, const Hw::cVec4&))(shared::base + 0x9DB590))(out, eulerAngles);
     }
 }
