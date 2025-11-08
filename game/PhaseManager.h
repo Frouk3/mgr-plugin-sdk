@@ -25,9 +25,9 @@ struct PhaseManager
     int field_28;
     int field_2C;
     int field_30;
-    unsigned int m_nCurrentSubPhase;
-    int m_nCurrentPhaseHash;
-    char m_CurrentPhase[16];
+    unsigned int m_CurrentPhase;
+    unsigned int m_PhaseHash;
+    char m_pCurrentSubPhase[16];
     int field_4C;
     int field_50;
     int field_54;
@@ -201,9 +201,9 @@ struct PhaseManager
     {
         ((void(__thiscall*)(PhaseManager*, const char*, BOOL, int))(shared::base + 0x95EA40))(this, phase, checkIfPass, a3);
     }
-    void requestPhaseChange(int subPhase, const char* phase)
+    void requestPhaseChange(int phase, const char* subPhase)
     {
-        ((void(__thiscall*)(PhaseManager*, int, const char*))(shared::base + 0x95E850))(this, subPhase, phase);
+        ((void(__thiscall*)(PhaseManager*, int, const char*))(shared::base + 0x95E850))(this, phase, subPhase);
     }
     static inline PhaseManager& ms_Instance = *(PhaseManager*)(shared::base + 0x14B9140);
 };

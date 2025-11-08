@@ -242,7 +242,7 @@ public:
     Array(std::initializer_list<T> &&list)
     {
         for (const T& item : list)
-            this->push_back(item);
+            this->pushBack(item);
     }
 
     Array(Array<T> &&from) : m_array(from.m_array), m_size(from.m_size), m_capacity(from.m_capacity)
@@ -264,7 +264,7 @@ public:
         return m_capacity;
     };
 
-    virtual bool push_back(const T &element) 
+    virtual bool pushBack(const T &element) 
     {
         if (!m_array)
             return false;
@@ -440,6 +440,17 @@ public:
     Array<T> copy()
     {
         return Array<T>(*this);
+    }
+
+    bool copy(T& rBegin, T& rEnd)
+    {
+        clear();
+        for (T* it = &rBegin; it != &rEnd; ++it)
+        {
+            if (!pushBack(*it))
+                return false;
+        }
+        return true;
     }
 
     // Bubble sort: Sorts the array using the bubble sort algorithm
@@ -666,7 +677,7 @@ public:
         memcpy(this->m_array, other.m_array, sizeof(T) * other.m_capacity);
     }
 
-    bool push_back(const T& element)
+    bool pushBack(const T& element)
     {
         if (this->m_size > this->m_capacity)
             return false;

@@ -7,21 +7,21 @@
 class BehaviorAppBase : public Behavior
 {
 public:
-    int m_nHealth;
-    int m_nMaxHealth;
+    int m_Hp;
+    int m_HpMax;
     int field_878;
     int field_87C;
     int field_880;
     int field_884;
     int field_888;
     int field_88C;
-    cVec4 m_vecVelocity;
+    Hw::cVec4 m_TransSpeed;
     int field_8A0;
     float field_8A4;
     float field_8A8;
     int field_8AC;
     int field_8B0;
-    int m_nAnimationFrame;
+    int m_AnimationFrame;
     int field_8B8;
     int field_8BC;
     int field_8C0;
@@ -32,10 +32,10 @@ public:
     int field_8D4;
     float field_8D8;
     float field_8DC;
-    cVec4 field_8E0;
-    cVec4 field_8F0;
-    cVec4 field_900;
-    float m_fEntityTickRate;
+    Hw::cVec4 field_8E0;
+    Hw::cVec4 field_8F0;
+    Hw::cVec4 field_900;
+    float m_SpeedRate;
     int field_914;
     Animation* m_pAnimation;
     EntityHandle m_QTETargetExecutor;
@@ -55,7 +55,7 @@ public:
     int field_954;
     int field_958;
     int field_95C;
-    cVec4 field_960;
+    Hw::cVec4 field_960;
     int field_970;
     float field_974;
     int field_978;
@@ -142,7 +142,7 @@ public:
         return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C24);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C24);
 };
 
 VALIDATE_SIZE(BehaviorAppBase, 0xA00);

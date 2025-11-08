@@ -10,9 +10,9 @@ public:
     int field_C;
     RGBA32 m_Color;
     RGBA32 m_ColorScale;
-    cModelData::cMaterial **m_pMaterials;
-    int m_nMaterialAmount;
-    int m_nMeshFlags;
+    cMaterial **m_ppMaterials;
+    int m_MaterialNum;
+    int m_MeshFlags;
     int field_3C;
     RGBA32 field_40;
     RGBA32 field_50;

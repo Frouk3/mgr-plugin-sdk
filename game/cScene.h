@@ -9,7 +9,7 @@ public:
     int field_0;
     int m_Rno0;
     int field_8;
-    cFade::Unit *m_pFade;
+    cFade::cWork *m_pFade;
     int field_10;
     Pl0000 *m_pPlayer;
     Entity *m_pPlayerEntity;

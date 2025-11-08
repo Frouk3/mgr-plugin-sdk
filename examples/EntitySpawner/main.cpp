@@ -122,7 +122,7 @@ public:
 				if (g_Keyboard.trig(Hw::KB_H)) // spawn boss Sam for example
 				{
 					eObjID objectId = eObjID(0x20020); 
-					m_EntQueue.push_back({ .mObjId = objectId, .iSetType = 0, .bWorkFail = !isObjExists(objectId) });
+					m_EntQueue.pushBack({ .mObjId = objectId, .iSetType = 0, .bWorkFail = !isObjExists(objectId) });
 				}
 			};
 	}

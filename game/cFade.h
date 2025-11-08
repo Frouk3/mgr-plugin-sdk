@@ -5,8 +5,9 @@
 class cFade
 {
 public:
-    struct Unit
+    class cWork
     {
+    public:
         int field_0;
         int m_nPriority;
         int m_nFadeFlags;
@@ -18,10 +19,8 @@ public:
         int field_20;
         int field_24;
     };
-    
-    int field_0;
-    int field_4;
-    Hw::cHeapFixed m_UnitFactory;
-    Hw::cFixedList<Unit*> m_UnitList;
+
+    Hw::cFactoryFixed<cWork, 4> m_UnitFactory;
+    Hw::cFixedList<cWork*> m_UnitList;
     int field_84;
 };

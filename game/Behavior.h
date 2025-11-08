@@ -924,14 +924,14 @@ public:
     class AnimationSlot
     {
     public:
-        int m_nSlotId;
+        int m_SlotId;
         int field_4;
-        char m_AnimName[16];
+        char m_pAnimName[16];
         Behavior* m_pAnimationTarget;
         int field_1C;
         AnimationMap::Unit* m_pAnimationMap;
         int field_24;
-        float m_fCycle; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
+        float m_AnimationTime; // basically current time, hence it takes the `getCurrentTime` from the node that plays animation
         int field_2C;
     };
 
@@ -969,7 +969,7 @@ public:
     struct AttackData // Logically it will be here, in this class
     {
         CollisionAttackData::HitData m_HitData;
-        Hw::cVec4 m_vecSeparation;
+        Hw::cVec4 m_Separation;
         Hw::cVec4 field_110;
         EntityHandle field_120;
         EntityHandle field_124;
@@ -1115,7 +1115,7 @@ public:
     float field_784;
     int field_788;
     int field_78C;
-    unsigned int m_aAnimFlag[2];
+    unsigned int m_pSeqFlags[2];
     EspCtrlCustomImpl* m_pEspCtrlCustomImpl;
     cEspControler* field_79C;
     lib::StaticArray<EffectIntegrationContainer, 32>* m_pEffectIntegrationContainer;
@@ -1548,7 +1548,7 @@ public:
         return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
     }
 
-    BOOL isFlagSet(_In_range_(0, 63) int flagBit)
+    BOOL ckSeqFlag(_In_range_(0, 63) int flagBit)
     {
         return ((BOOL(__thiscall*)(Behavior*, int))(shared::base + 0x68C760))(this, flagBit);
     }

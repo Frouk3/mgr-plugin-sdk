@@ -2,153 +2,29 @@
 
 #include <Hw.h>
 
-struct cModelData
+class cModelData;
+
+class cModelDataManager
 {
-	struct ClsInfo;
-	struct CutBoxInfo;
-	struct CutInfo;
-	struct ModelDataResource;
-	struct ModelData
-	{
-		Hw::cVec4 field_0;
-		Hw::cVec4 m_vecBBMin;
-		Hw::cVec4 m_vecBBMax;
-		float field_30;
-		int field_34;
-		int field_38;
-		int field_3C;
-		int field_40;
-		unsigned __int16 m_nBoneAmount;
-		unsigned __int16 *m_pBoneSet;
-		int field_4C;
-		int m_nMaterialAmount;
-		int field_54;
-		int field_58;
-		int field_5C;
-		int field_60;
-		int m_pMeshes;
-		int m_nMeshAmount;
-		int field_6C;
-		int field_70;
-		int field_74;
-		int field_78;
-		int field_7C;
-		int field_80;
-		int field_84;
-		int field_88;
-		int field_8C;
-		int field_90;
-		int field_94;
-		int field_98;
-		int field_9C;
-		int field_A0;
-		int field_A4;
-		int field_A8;
-		int field_AC;
-		int field_B0;
-		int field_B4;
-		int field_B8;
-		int field_BC;
-		int field_C0;
-		int field_C4;
-		int field_C8;
-		int field_CC;
-		int field_D0;
-		int field_D4;
-		int field_D8;
-		int field_DC;
-		int field_E0;
-		int field_E4;
-		int field_E8;
-		int field_EC;
-		int field_F0;
-		int field_F4;
-		ModelDataResource *m_Resource;
+public:
+	class EntryModelData;
 
-		int getPartsIndexNo(unsigned short boneIndex)
-		{
-			return ((int(__thiscall *)(ModelData*, unsigned short))(shared::base + 0x606DE0))(this, boneIndex);
-		}
-	};
-
-	struct cMaterial;
-	struct Batch;
-	struct VertexGroup;
-	struct VertexGroupBatchData
-	{
-		cModelData::VertexGroup* m_vertexGroups;
-		unsigned int m_nVertexGroupAmount;
-		cModelData::Batch* m_Batch;
-		unsigned int m_nBatchAmount;
-		unsigned int field_10;
-		unsigned int m_nVertexFormat;
-		unsigned int field_18;
-	};
-	struct ModelDataResource
-	{
-		int m_nReferences;
-		char* m_pWmb;
-		cModelData::VertexGroupBatchData m_VertexGroupBatchData;
-		float field_24;
-		int field_28;
-		int field_2C;
-		int field_30;
-		int field_34;
-		int field_38;
-		int field_3C;
-		int field_40;
-		int field_44;
-		int field_48;
-		int field_4C;
-		int field_50;
-		int field_54;
-		int field_58;
-		int field_5C;
-		int field_60;
-		int field_64;
-		int field_68;
-		int field_6C;
-		int field_70;
-		int field_74;
-		int field_78;
-		int field_7C;
-		int field_80;
-		int field_84;
-		int field_88;
-		int field_8C;
-		int field_90;
-		int field_94;
-		int field_98;
-		int field_9C;
-		int field_A0;
-		int field_A4;
-		int field_A8;
-		int field_AC;
-		cModelData::CutInfo* m_pCutInfo;
-		int field_B4;
-	};
-
-	int field_0;
 	int field_4;
 	int field_8;
 	int field_C;
-	cModelData::ModelData m_ModelData;
-	int field_10C;
-	ModelDataResource field_110;
-	int field_1C8;
-	int field_1CC;
-	int field_1D0;
-	int field_1D4;
-	int field_1D8;
-	int field_1DC;
-	int field_1E0;
-	int field_1E4;
-	int field_1E8;
-	int field_1EC;
+	int field_10;
+	int field_14;
+	cModelData *m_ModelData;
+	int field_1C;
+	Hw::cHeap *m_pHeap;
+	int field_24;
+
+	virtual ~cModelDataManager() {};
 };
 
-struct cModelData::VertexGroup
+class cVertexGroup
 {
+public:
 	int field_0;
 	int field_4;
 	int field_8;
@@ -195,13 +71,163 @@ struct cModelData::VertexGroup
 	int field_AC;
 };
 
-struct cModelData::Batch
+class cModelDataBatch
 {
+public:
 	int field_0;
 	int field_4;
 	int field_8;
 	int field_C;
 	int field_10;
+};
+
+class cVertexGroupBatchData
+{
+public:
+	cVertexGroup* m_pVertexGroups;
+	unsigned int m_VertexGroupNum;
+	cModelDataBatch* m_pBatch;
+	unsigned int m_BatchNum;
+	unsigned int field_10;
+	unsigned int m_VertexFormat;
+	unsigned int field_18;
+};
+
+class cModelDataResource
+{
+public:
+	int m_RefCount;
+	char* m_pWmb;
+	cVertexGroupBatchData m_VertexGroupBatchData;
+	float field_24;
+	int field_28;
+	int field_2C;
+	int field_30;
+	int field_34;
+	int field_38;
+	int field_3C;
+	int field_40;
+	int field_44;
+	int field_48;
+	int field_4C;
+	int field_50;
+	int field_54;
+	int field_58;
+	int field_5C;
+	int field_60;
+	int field_64;
+	int field_68;
+	int field_6C;
+	int field_70;
+	int field_74;
+	int field_78;
+	int field_7C;
+	int field_80;
+	int field_84;
+	int field_88;
+	int field_8C;
+	int field_90;
+	int field_94;
+	int field_98;
+	int field_9C;
+	int field_A0;
+	int field_A4;
+	int field_A8;
+	int field_AC;
+	cModelData::CutInfo* m_pCutInfo;
+	int field_B4;
+};
+
+
+class cModelDataManager::EntryModelData
+{
+public:
+	Hw::cVec4 field_0;
+	Hw::cVec4 m_BoundsMin;
+	Hw::cVec4 m_BoundsMax;
+	float field_30;
+	int field_34;
+	int field_38;
+	int field_3C;
+	void *m_pJointData;
+	int m_JointNum;
+	void *m_pBoneSet;
+	void* m_pMaterials;
+	int m_MaterialNum;
+	void* m_pTexData;
+	int m_TexNum;
+	int field_5C;
+	int field_60;
+	void* m_pMeshes;
+	int m_MeshNum;
+	int field_6C;
+	int field_70;
+	int field_74;
+	int field_78;
+	int field_7C;
+	int field_80;
+	int field_84;
+	int field_88;
+	int field_8C;
+	int field_90;
+	int field_94;
+	int field_98;
+	int field_9C;
+	int field_A0;
+	int field_A4;
+	int field_A8;
+	int field_AC;
+	int field_B0;
+	int field_B4;
+	int field_B8;
+	int field_BC;
+	int field_C0;
+	int field_C4;
+	int field_C8;
+	int field_CC;
+	int field_D0;
+	int field_D4;
+	int field_D8;
+	int field_DC;
+	int field_E0;
+	int field_E4;
+	int field_E8;
+	int field_EC;
+	int field_F0;
+	int field_F4;
+	cModelDataResource *m_pResource;
+
+	int getPartsIndexNo(unsigned short boneIndex)
+	{
+		return ((int(__thiscall *)(EntryModelData*, unsigned short))(shared::base + 0x606DE0))(this, boneIndex);
+	}
+};
+
+class cModelData
+{
+public:
+	struct ClsInfo;
+	struct CutBoxInfo;
+	struct CutInfo;
+	struct ModelDataResource;
+
+	int field_0;
+	int field_4;
+	int field_8;
+	int field_C;
+	cModelDataManager::EntryModelData m_ModelData;
+	int field_10C;
+	cModelDataResource field_110;
+	int field_1C8;
+	int field_1CC;
+	int field_1D0;
+	int field_1D4;
+	int field_1D8;
+	int field_1DC;
+	int field_1E0;
+	int field_1E4;
+	int field_1E8;
+	int field_1EC;
 };
 
 struct cModelData::ClsInfo
@@ -222,16 +248,17 @@ struct cModelData::CutInfo
 
 struct cModelData::CutBoxInfo
 {
-	Hw::cVec4 m_vecMax;
-	Hw::cVec4 m_vecMin;
-	int m_nIndex;
+	Hw::cVec4 m_Max;
+	Hw::cVec4 m_Min;
+	int m_Index;
 	int field_24;
 	int field_28;
 	int field_2C;
 };
 
-struct cModelData::cMaterial
+class cMaterial
 {
+public:
 	int field_0;
 	int field_4;
 	int field_8;
@@ -559,7 +586,7 @@ struct cModelData::cMaterial
 	float field_510;
 	int field_514;
 	int field_518;
-	int m_nMaterialFlags;
+	unsigned int m_MaterialFlags;
 	int field_520;
 	int field_524;
 	int field_528;
@@ -582,24 +609,8 @@ struct cModelData::cMaterial
 		((void(__thiscall *)(cMaterial *))(shared::base + 0x607FA0))(this);
 	}
 
-	void deallocate()
+	void cleanup()
 	{
 		((void(__thiscall *)(cMaterial *))(shared::base + 0x6118E0))(this);
 	}
-};
-
-class cModelDataManager
-{
-public:
-	int field_4;
-	int field_8;
-	int field_C;
-	int field_10;
-	int field_14;
-	cModelData *m_ModelData;
-	int field_1C;
-	Hw::cHeapVariable *m_Allocator;
-	int field_24;
-
-	virtual ~cModelDataManager() {};
 };

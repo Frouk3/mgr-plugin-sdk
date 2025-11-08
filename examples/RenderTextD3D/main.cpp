@@ -14,7 +14,7 @@ class RenderTextD3DX9
 public:
     RenderTextD3DX9()
     {
-        Events::OnGameStartupEvent += [](GameManager*) // set a name to capture GameManager parameter
+        Events::OnGameStartupEvent += [](cGame*) // set a name to capture cGame parameter
         {
             if (D3DXCreateFontA(Hw::GraphicDevice::m_pDevice, 17, 0, FW_BOLD, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &font) == S_OK)
                 canRender = true;

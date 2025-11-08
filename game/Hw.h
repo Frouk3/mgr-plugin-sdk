@@ -12,11 +12,102 @@ extern void PrintfLog(const char* fmt, ...);
 
 namespace Hw
 {
+	// Input
+
 	class KeyboardManagerBase;
 	class KeyboardManager;
-
 	class cKeyboardState;
+
+	class MouseManagerBase;
+	class MouseManager;
+	class cMouseState;
+
+	class PadManager;
+	class cPadState;
+
 	enum KEYBOARD_MAP;
+	enum MAUSE_MAP { MOUSE_BTN_L = 1, MOUSE_BTN_R = 2, MOUSE_BTN_M = 4 }; // don't ask about it's name, it's like that in the original code
+	enum INPUT_PAD_ANALOG { INPUT_PAD_ANALOG_STICK_LEFT = 0, INPUT_PAD_ANALOG_STICK_RIGHT, INPUT_PAD_ANALOG_TRIGGER_LEFT, INPUT_PAD_ANALOG_TRIGGER_RIGHT, INPUT_PAD_ANALOG_NUM, INPUT_PAD_ANALOG_ALL };
+	enum PAD_MAP
+	{
+		PAD_BTN_L = 0x1, // Left DPad
+		PAD_BTN_R = 0x2, // Right DPad
+		PAD_BTN_D = 0x4, // Down DPad
+		PAD_BTN_U = 0x8, // Up DPad
+		PAD_BTN_A = 0x10, // A/Cross
+		PAD_BTN_B = 0x20, // B/Circle
+		PAD_BTN_X = 0x40, // X/Square
+		PAD_BTN_Y = 0x80, // Y/Triangle
+		PAD_BTN_ST = 0x100, // Start
+		PAD_BTN_SL = 0x200, // Select
+		PAD_BTN_L1 = 0x400, // L1/LB/Left Shoulder
+		PAD_BTN_L2 = 0x800, // L2/LT/Left Trigger
+		PAD_BTN_L3 = 0x1000, // L3/Left Stick Button
+		PAD_BTN_R1 = 0x2000, // R1/RB/Right Shoulder
+		PAD_BTN_R2 = 0x4000, // R2/RT/Right Trigger
+		PAD_BTN_R3 = 0x8000, // R3/Right Stick Button
+		PAD_BTN_LAL = 0x10000, // LAnalogLeft
+		PAD_BTN_LAR = 0x20000, // LAnalogRight
+		PAD_BTN_LAU = 0x40000, // LAnalogUp
+		PAD_BTN_LAD = 0x80000, // LAnalogDown
+		PAD_BTN_RAL = 0x100000, // RAnalogLeft
+		PAD_BTN_RAR = 0x200000, // RAnalogRight
+		PAD_BTN_RAU = 0x400000, // RAnalogUp
+		PAD_BTN_RAD = 0x800000, // RAnalogDown
+		PAD_BTN_PVL = 0x1000000,
+		PAD_BTN_PVR = 0x2000000,
+		PAD_BTN_PVD = 0x4000000,
+		PAD_BTN_PVU = 0x8000000,
+		PAD_BTN_1 = 0x40,
+		PAD_BTN_2 = 0x80,
+		PAD_BTN_C = 0x400,
+		PAD_BTN_Z = 0x800,
+		PAD_BTN_PLUS = 0x100,
+		PAD_BTN_MINUS = 0x200,
+		PAD_BTN_HOME = 0x80000000,
+		PAD_BTN_BL = 0x40,
+		PAD_BTN_BR = 0x20,
+		PAD_BTN_BU = 0x80,
+		PAD_BTN_BD = 0x10,
+	};
+
+	/*
+	enum eSaveKeybind <- probably needs to be in pl0000 class
+	{
+		KEYBIND_FORWARD,
+		KEYBIND_BACK,
+		KEYBIND_LEFT,
+		KEYBIND_RIGHT,
+		KEYBIND_WALK,
+		KEYBIND_JUMP,
+		KEYBIND_LIGHT_ATTACK,
+		KEYBIND_HEAVY_ATTACK,
+		KEYBIND_BLADEMODE,
+		KEYBIND_NINJARUN,
+		KEYBIND_ACTION,
+		KEYBIND_RIPPERMODE,
+		KEYBIND_SWITCH_LOCK_ON,
+		KEYBIND_USE_SUBWEAPON,
+		KEYBIND_USE_ITEM,
+		KEYBIND_AR_MODE,
+		KEYBIND_WEAPON_SELECT_SCREEN,
+		KEYBIND_CODEC_SCREEN,
+		KEYBIND_PAUSE,
+		KEYBIND_CAMERA_RESET,
+		KEYBIND_EXECUTION,
+		KEYBIND_DEFFENSIVE_OFFENSIVE,
+		KEYBIND_FIRE_SUBWEAPON,
+
+		KEYBIND_TOTAL
+	};
+	*/
+
+	class InputSystem;
+	// user
+
+	class UserReplace;
+	enum REAL_USER_NO { REAL_USER_NO_INVALID=-1, REAL_USER_NO_0=0, REAL_USER_NO_1=1, REAL_USER_NO_2=2, REAL_USER_NO_3=3 };
+
 	class cFmerge;
 	struct FmergeHeader;
 
@@ -111,16 +202,6 @@ namespace Hw
 		CULL_CCW = 0x6,
 		CULL_DEFAULT = 0x6,
 		CULL_DEFAULT_REV = 0x2
-	};
-
-	enum INPUT_PAD_ANALOG
-	{
-		INPUT_PAD_ANALOG_STICK_LEFT = 0x0,
-		INPUT_PAD_ANALOG_STICK_RIGHT = 0x1,
-		INPUT_PAD_ANALOG_TRIGGER_LEFT = 0x2,
-		INPUT_PAD_ANALOG_TRIGGER_RIGHT = 0x3,
-		INPUT_PAD_ANALOG_NUM = 0x4,
-		INPUT_PAD_ANALOG_ALL = 0x5
 	};
 
 	enum eThreadId
@@ -247,9 +328,11 @@ namespace Hw
 
 		inline void removeTexture(Texture& texture) { ((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture); }
 
-		static inline cFixedList<Texture> &Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
-		static inline cCriticalSection &TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
+		static inline cFixedList<Texture> &m_Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
+		static inline cCriticalSection &m_TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
 	};
+
+	class ResourceManager;
 
 	class Wwise
 	{
@@ -320,6 +403,9 @@ namespace Hw
 	{
 	public:
 
+		static inline D3DPRESENT_PARAMETERS *&m_pD3DParams = *(D3DPRESENT_PARAMETERS**)(shared::base + 0x1B205E4);
+		static inline D3DPRESENT_PARAMETERS &m_D3DFullscreenParams = *(D3DPRESENT_PARAMETERS*)(shared::base + 0x1B205E8);
+		static inline D3DPRESENT_PARAMETERS &m_D3DWindowParams = *(D3DPRESENT_PARAMETERS*)(shared::base + 0x1B20620);
 		static inline LPDIRECT3D9 &m_pD3D = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
 		static inline LPDIRECT3DDEVICE9 &m_pDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
 	};
@@ -755,15 +841,31 @@ public:
 	}
 };
 
+class Hw::ResourceManager
+{
+public:
+	class cWork
+	{
+	public:
+		void *m_pResourceData;
+		unsigned int m_ResourceSize;
+		char m_pResourceName[32];
+	};
+
+	static inline int __cdecl registResource(void *pResourceData, unsigned int resource_size, const char *pResourceName) { return ((int(__cdecl *)(void *, unsigned int, const char *))(shared::base + 0x9E4420))(pResourceData, resource_size, pResourceName); }
+};
+
+inline Hw::cFactoryFixed<Hw::ResourceManager::cWork, 4> &g_ResourceWorkFactory = *(Hw::cFactoryFixed<Hw::ResourceManager::cWork, 4>*)(shared::base + 0x19D0818);
+
 struct Hw::FmergeHeader
 {
     char magic[4];
-    size_t m_nAmountOfFiles;
-    size_t m_nPositionOffset;
-    size_t m_nExtensionOffset;
-    size_t m_nNamesOffset;
-    size_t m_nSizesOffset;
-    size_t m_nHashMapOffset;
+    size_t m_AmountOfFiles;
+    size_t m_PositionOffset;
+    size_t m_ExtensionOffset;
+    size_t m_NamesOffset;
+    size_t m_SizesOffset;
+    size_t m_HashMapOffset;
 };
 
 class Hw::cFmerge
@@ -911,6 +1013,14 @@ enum Hw::KEYBOARD_MAP
     KB_MAP_INVALID=183
 };
 
+class Hw::UserReplace
+{
+public:
+	static inline REAL_USER_NO &m_MainUserNo = *(REAL_USER_NO*)(shared::base + 0x14CEA10);
+
+	static inline REAL_USER_NO GetRealUserNo(int userNo) { return ((REAL_USER_NO(__cdecl *)(int))(shared::base + 0x9FD140))(userNo); }
+};
+
 class Hw::cKeyboardState
 {
 public:
@@ -923,55 +1033,31 @@ public:
 	unsigned int m_pOld[KB_MAP_FLAG_SIZE];
 	int m_RepCount;
 
-	BOOL on(KEYBOARD_MAP vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D93A0))(this, vKey);
-	}
+	BOOL on(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D93A0))(this, vKey); }
+	BOOL on(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D93D0))(this, vKey); }
+	BOOL trig(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9400))(this, vKey); }
+	BOOL trig(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9430))(this, vKey); }
+	BOOL rel(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9460))(this, vKey); }
+	BOOL rel(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9490))(this, vKey); }
+	BOOL rep(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D94C0))(this, vKey); }
+	BOOL rep(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D94F0))(this, vKey); }
+	void setOn(KEYBOARD_MAP vKey, BOOL bDown) { ((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP, BOOL))(shared::base + 0x9D9620))(this, vKey, bDown); }
+	void setTrig(KEYBOARD_MAP vKey) { ((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9650))(this, vKey); }
+};
 
-	BOOL on(char vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D93D0))(this, vKey);
-	}
-
-	BOOL trig(KEYBOARD_MAP vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9400))(this, vKey);
-	}
-
-	BOOL trig(char vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9430))(this, vKey);
-	}
-
-	BOOL rel(KEYBOARD_MAP vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9460))(this, vKey);
-	}
-
-	BOOL rel(char vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9490))(this, vKey);
-	}
-
-	BOOL rep(KEYBOARD_MAP vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D94C0))(this, vKey);
-	}
-
-	BOOL rep(char vKey)
-	{
-		return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D94F0))(this, vKey);
-	}
-
-	void setOn(KEYBOARD_MAP vKey, BOOL bDown)
-	{
-		((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP, BOOL))(shared::base + 0x9D9620))(this, vKey, bDown);
-	}
-
-	void setTrig(KEYBOARD_MAP vKey)
-	{
-		((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9650))(this, vKey);
-	}
+class Hw::cMouseState
+{
+public:
+	unsigned int m_On;
+	unsigned int m_Trig;
+	unsigned int m_Rel;
+	unsigned int m_Rep;
+	float x;
+	float y;
+	int m_Wheel;
+	int m_RepCount;
+	float prevX;
+	float prevY;
 };
 
 class Hw::KeyboardManagerBase
@@ -984,6 +1070,25 @@ public:
 	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4C0))(rState); }
 };
 
+class Hw::MouseManagerBase
+{
+public:
+	static inline void UpdateState(cMouseState& rState) { ((void(__cdecl*)(cMouseState&))(shared::base + 0x9D9800))(rState); }
+
+	static inline int &m_RepeatWait = *(int*)(shared::base + 0x14CDDEC);
+	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x14CDDF0);
+
+	static inline char *m_pStateHidFlag = (char*)(shared::base + 0x19D06D0); //char m_pStateHidFlag[20];
+	static inline int& m_IsStrokeValid = *(int*)(shared::base + 0x19D07F8);
+};
+
+class Hw::MouseManager : public Hw::MouseManagerBase
+{
+public:
+
+	static inline LPDIRECTINPUTDEVICE8W& m_pInputDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
+};
+
 class Hw::KeyboardManager : public Hw::KeyboardManagerBase
 {
 public:
@@ -991,6 +1096,57 @@ public:
 
 	static inline int UpdateKeyState(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA500))(rState); }
 	static inline int UpdateState(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA710))(rState); }
+
+	static inline char *m_pStateHidFlag = (char*)(shared::base + 0x19D06F8); //char m_pStateHidFlag[256];
+	static inline int &m_IsStateValid = *(int*)(shared::base + 0x14CDDE8);
+	static inline LPDIRECTINPUTDEVICE8W &m_pInputDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
+};
+
+class Hw::PadManager
+{
+public:
+	class cVibState { public: float m_fCurrent; float m_fTarget; };
+	class cPadInfo
+	{
+	public:
+		XINPUT_STATE m_XInputState;
+		int m_IsValid;
+		cVibState m_VibState[2];
+		float m_LeftMotorSpeed;
+		float m_RightMotorSpeed;
+		int m_CurrentVibrationTime;
+		int m_VibrationTotal;
+		int m_bVibrationEnabled;
+	};
+	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { ((void(__cdecl*)(float, float, float, Hw::INPUT_PAD_ANALOG))(shared::base + 0x9D99F0))(range, thres, ambit, analog); }
+	static inline void UpdatePad(cPadInfo& rInfo, int controllerId) {((void(__cdecl*)(cPadInfo&, int))(shared::base + 0x9DA900))(rInfo, controllerId); }
+	static inline void SetVib(int controllerId, float leftMotorSpeed, float rightMotorSpeed, int time) { ((void(__cdecl*)(int, float, float, int))(shared::base + 0x9DA360))(controllerId, leftMotorSpeed, rightMotorSpeed, time); }
+	static inline void SetTriggerState(Hw::cPadState &pad, unsigned int buttons) { ((void(__cdecl*)(Hw::cPadState&, unsigned int))(shared::base + 0x9DA210))(pad, buttons); }
+
+	static inline int &m_RepeatWait = *(int*)(shared::base + 0x19D05B8);
+	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x19D05BC);
+
+	static inline float *m_pAnalogAmbit = (float*)(shared::base + 0x19D05C0); // float m_pAnalogAmbit[4];
+	static inline float *m_pAnalogThres = (float*)(shared::base + 0x19D05D0); // float m_pAnalogThres[4];
+	static inline float *m_pAnalogRange = (float*)(shared::base + 0x19D05E0); // float m_pAnalogRange[4];
+
+	static inline cPadInfo *m_pPadInfo = (cPadInfo*)(shared::base + 0x19D05F0); // Hw::PadManager::cPadInfo m_pPadInfo[4];
+	static inline LPDIRECTINPUTDEVICE8W *m_pControllerDevices = (LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D05A8); // LPDIRECTINPUTDEVICE8W m_pControllerDevices[4];
+};
+
+class Hw::InputSystem
+{
+public:
+	static inline void InitKeyboard(Hw::cKeyboardState& rState) { ((void(__cdecl*)(Hw::cKeyboardState&))(shared::base + 0x9DAFF0))(rState); }
+	static inline void UpdateKeyboard(Hw::cKeyboardState& rState) { ((void(__cdecl*)(Hw::cKeyboardState&))(shared::base + 0x9DB010))(rState); }
+
+	static inline void UpdateMouse(Hw::cMouseState& rState) { ((void(__cdecl*)(Hw::cMouseState&))(shared::base + 0x9DA450))(rState); }
+
+	static inline void InitPad(Hw::cPadState& rState) { ((void(__cdecl*)(Hw::cPadState&))(shared::base + 0x9DAFC0))(rState); }
+	static inline void UpdatePad(Hw::cPadState& rState, int controllerId) { ((void(__cdecl*)(Hw::cPadState&, int))(shared::base + 0x9DAFE0))(rState, controllerId); }
+	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { ((void(__cdecl*)(float, float, float, Hw::INPUT_PAD_ANALOG))(shared::base + 0x9DA270))(range, thres, ambit, analog); }
+
+	static inline LPDIRECTINPUT8 &m_pInputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
 };
 
 class Hw::cUcol
@@ -1153,57 +1309,21 @@ bool Hw::cFcol::operator!=(const cUcol& ucol) const
 class Hw::cRand
 {
 private:
-	unsigned int m_nSeed;
+	unsigned int m_Seed;
 public:
-	cRand()
-	{
-		((void(__thiscall *)(cRand *))(shared::base + 0x9DBBB0))(this);
-	}
+	cRand() { ((void(__thiscall *)(cRand *))(shared::base + 0x9DBBB0))(this); }
+	~cRand() { ((void(__thiscall *)(cRand *))(shared::base + 0x9DBBC0))(this); }
 
-	~cRand()
-	{
-		((void(__thiscall *)(cRand *))(shared::base + 0x9DBBC0))(this);
-	}
-
-	void setSeed(unsigned int seed)
-	{
-		((void(__thiscall*)(cRand*, unsigned int))(shared::base + 0x9DBBD0))(this, seed);
-	}
-
-	unsigned int getSeed()
-	{
-		return ((unsigned int(__thiscall *)(cRand *))(shared::base + 0x9DBBE0))(this);
-	}
-
-	unsigned short rollU16()
-	{
-		return ((unsigned short(__thiscall *)(cRand*))(shared::base + 0x9DBBF0))(this);
-	}
-
-	unsigned int rollU32()
-	{
-		return ((unsigned int(__thiscall *)(cRand*))(shared::base + 0x9DBC10))(this);
-	}
-
-	void initSeed()
-	{
-		((void(__thiscall *)(cRand*))(shared::base + 0x9DE290))(this);
-	}
-
-	unsigned short getU16(unsigned short min, unsigned short max)
-	{
-		return ((unsigned short(__thiscall*)(cRand*, unsigned short, unsigned short))(shared::base + 0x9DE2A0))(this, min, max);
-	}
-
-	short getS16(short min, short max)
-	{
-		return ((int(__thiscall*)(cRand*, int, int))(shared::base + 0x9DE2D0))(this, min, max);
-	}
-
-	float getF32(float min, float max)
-	{
-		return ((float(__thiscall*)(cRand*, float, float))(shared::base + 0x9DE300))(this, min, max);
-	}
+	void setSeed(unsigned int seed) { ((void(__thiscall*)(cRand*, unsigned int))(shared::base + 0x9DBBD0))(this, seed); }
+	unsigned int getSeed() { return ((unsigned int(__thiscall *)(cRand *))(shared::base + 0x9DBBE0))(this); }
+	unsigned short rollU16() { return ((unsigned short(__thiscall *)(cRand*))(shared::base + 0x9DBBF0))(this); }
+	unsigned int rollU32() { return ((unsigned int(__thiscall *)(cRand*))(shared::base + 0x9DBC10))(this); }
+	void initSeed() { ((void(__thiscall *)(cRand*))(shared::base + 0x9DE290))(this); }
+	unsigned short getU16(unsigned short min, unsigned short max) { return ((unsigned short(__thiscall*)(cRand*, unsigned short, unsigned short))(shared::base + 0x9DE2A0))(this, min, max); }
+	short getS16(short min, short max) { return ((int(__thiscall*)(cRand*, int, int))(shared::base + 0x9DE2D0))(this, min, max); }
+	float getF32(float min, float max) { return ((float(__thiscall*)(cRand*, float, float))(shared::base + 0x9DE300))(this, min, max); }
+	float getF0_1() { return getF32(0.0f, 1.0f); }
+	float getF1_1() { return getF32(-1.0f, 1.0f); }
 };
 
 class Hw::cSemaphore
@@ -1211,30 +1331,12 @@ class Hw::cSemaphore
 public:
 	HANDLE m_hSemaphore;
 
-	cSemaphore()
-	{
-		((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D7360))(this);
-	}
-		
-	BOOL startup(long init_count, long max_count)
-	{
-		return ((BOOL(__thiscall *)(cSemaphore *, long, long))(shared::base + 0x9D7370))(this, init_count, max_count);
-	}
-
-	void cleanup()
-	{
-		((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D73B0))(this);
-	}
+	cSemaphore() { ((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D7360))(this); }
 	
-	void hold()
-	{
-		((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73D0))(this);
-	}
-
-	void release()
-	{
-		((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73E0))(this);
-	}
+	BOOL startup(long init_count, long max_count) { return ((BOOL(__thiscall *)(cSemaphore *, long, long))(shared::base + 0x9D7370))(this, init_count, max_count); }
+	void cleanup() { ((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D73B0))(this); }
+	void hold() { ((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73D0))(this); }
+	void release() { ((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73E0))(this); }
 };
 
 class Hw::cCriticalSection
@@ -1243,30 +1345,11 @@ public:
 	RTL_CRITICAL_SECTION m_critsection;
 	BOOL m_bInit;
 
-	cCriticalSection()
-	{
-		this->m_bInit = FALSE;
-	}
-
-	BOOL startup()
-	{
-		return ((BOOL(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7240))(this);
-	}
-
-	void enter()
-	{
-		((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6C0))(this);
-	}
-
-	void leave()
-	{
-		((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6D0))(this);
-	}
-
-	void cleanup()
-	{
-		((void(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7270))(this);
-	}
+	cCriticalSection() { this->m_bInit = FALSE; }
+	BOOL startup() { return ((BOOL(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7240))(this); }
+	void enter() { ((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6C0))(this); }
+	void leave() { ((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6D0))(this); }
+	void cleanup() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7270))(this); }
 };
 
 template <typename tC>
@@ -1550,7 +1633,7 @@ public:
 	class cWork
 	{
 	public:
-		cJobManager* m_Owner;
+		cJobManager* m_pManager;
 		int m_nThreadIndex;
 		HANDLE m_hSemaphore;
 		HANDLE m_hTask;
@@ -1855,196 +1938,6 @@ public:
 	}
 };
 
-namespace cInput
-{
-	enum eInputButton
-	{
-		DPAD_LEFT = 1,
-		DPAD_RIGHT = 2,
-		DPAD_DOWN = 4,
-		DPAD_UP = 8,
-		BUTTON_A = 0x10,
-		BUTTON_B = 0x20,
-		BUTTON_X = 0x40,
-		BUTTON_Y = 0x80,
-		BUTTON_START = 0x100,
-		BUTTON_BACK = 0x200,
-		LEFT_SHOULDER = 0x400,
-		LEFT_TRIGGER = 0x800,
-		LEFT_STICK = 0x1000,
-		RIGHT_SHOULDER = 0x2000,
-		RIGHT_TRIGGER = 0x4000,
-		RIGHT_STICK = 0x8000
-	};
-
-	enum eSaveKeybind
-	{
-		KEYBIND_FORWARD,
-		KEYBIND_BACK,
-		KEYBIND_LEFT,
-		KEYBIND_RIGHT,
-		KEYBIND_WALK,
-		KEYBIND_JUMP,
-		KEYBIND_LIGHT_ATTACK,
-		KEYBIND_HEAVY_ATTACK,
-		KEYBIND_BLADEMODE,
-		KEYBIND_NINJARUN,
-		KEYBIND_ACTION,
-		KEYBIND_RIPPERMODE,
-		KEYBIND_SWITCH_LOCK_ON,
-		KEYBIND_USE_SUBWEAPON,
-		KEYBIND_USE_ITEM,
-		KEYBIND_AR_MODE,
-		KEYBIND_WEAPON_SELECT_SCREEN,
-		KEYBIND_CODEC_SCREEN,
-		KEYBIND_PAUSE,
-		KEYBIND_CAMERA_RESET,
-		KEYBIND_EXECUTION,
-		KEYBIND_DEFFENSIVE_OFFENSIVE,
-		KEYBIND_FIRE_SUBWEAPON,
-
-		KEYBIND_TOTAL
-	};
-
-	struct ControllerState
-	{
-		XINPUT_STATE m_XInputState;
-		int m_bAvailable;
-		float m_fCurrentLeftVibration;
-		float m_fTargetLeftVibration;
-		float m_fCurrentRightVibration;
-		float m_fTargetRightVibration;
-		float m_fLeftMotorSpeed;
-		float m_fRightMotorSpeed;
-		int m_nCurrentVibrationTime;
-		int m_nVibrationTotal;
-		int m_bVibrationEnabled;
-	};
-
-	struct cKeyboardState
-	{
-		unsigned int m_aKeysDown[6];
-		unsigned int m_aKeysPressed[6]; // bit is set when the key is pressed once
-		unsigned int m_aKeysReleased[6];
-		unsigned int m_aKeysAlternated[6];
-		unsigned int m_aKeyHistory[6];
-		int m_nPressDelay; // used for pressed last time timer
-
-		
-	};
-
-	struct MouseInput
-	{
-		int m_nMouseButtons;
-		int m_nButtonsPressed;
-		int m_nButtonsReleased;
-		int m_nButtonsAlternated;
-		Hw::cVec2 m_MousePosition;
-		int field_18;
-		int m_nRepeatCount;
-		Hw::cVec2 m_LastMousePosition;
-	};
-
-	struct InputUnit
-	{
-		unsigned int m_nButtonsDown;
-		unsigned int m_nButtonsPressed;
-		unsigned int m_nButtonsReleased;
-		unsigned int m_nButtonsAlternated;
-		Hw::cVec2 m_fLeftStick;
-		Hw::cVec2 m_fRightStick;
-		float m_fLeftTrigger;
-		float m_fRightTrigger;
-		int m_bValidInput;
-		int m_nRepeatCount;
-	};
-
-	struct GlobalInput
-	{
-		char field_0;
-		char field_1;
-		char field_2;
-		char field_3;
-		__int16 field_4;
-		__int16 field_6;
-		int field_8;
-		int field_C;
-		int field_10;
-		bool m_bIsPCInput;
-		int field_18;
-		int field_1C;
-		int field_20;
-		int field_24;
-		int field_28;
-	};
-
-	inline void resetInputUnit(InputUnit* unit)
-	{
-		((void(__cdecl*)(InputUnit*))(shared::base + 0x9DAFC0))(unit);
-	}
-
-	inline int getControllerIndex(int dwUserIndex)
-	{
-		return ((int(__cdecl*)(int))(shared::base + 0x9FD140))(dwUserIndex);
-	}
-
-	inline int isControllerAvailable(int index)
-	{
-		return ((int(__cdecl*)(int))(shared::base + 0x9DA340))(index);
-	}
-
-	inline void updateInputUnit(InputUnit *unit, int dwUserIndex)
-	{
-		((void(__cdecl*)(InputUnit*, int))(shared::base + 0x9DAFE0))(unit, dwUserIndex);
-	}
-
-	inline void setVibrationEnabled(BOOL bEnabled)
-	{
-		((void(__cdecl*)(BOOL))(shared::base + 0x9DA2F0))(bEnabled);
-	}
-
-	inline void setInputUnitButtons(InputUnit *unit, unsigned int buttons)
-	{
-		((void(__cdecl*)(InputUnit*, unsigned int))(shared::base + 0x9DA210))(unit, buttons);
-	}
-
-	inline BOOL isKeybindDown(eSaveKeybind keybind)
-	{
-		return ((BOOL(__cdecl*)(eSaveKeybind))(shared::base + 0x61D280))(keybind);
-	}
-
-	inline void updateControllerStateInput(ControllerState* state, int index)
-	{
-		((void(__cdecl*)(ControllerState*, int))(shared::base + 0x9DA900))(state, index);
-	}
-
-	inline LPDIRECTINPUT8& ms_InputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
-	inline LPDIRECTINPUTDEVICE8W* ms_aControllerDevices = (LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D05A8); // 4 elements
-	inline LPDIRECTINPUTDEVICE8W& ms_MouseDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
-	inline LPDIRECTINPUTDEVICE8W& ms_PCInputDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
-
-	inline MouseInput& ms_MouseInput = *(MouseInput*)(shared::base + 0x177B798);
-	inline cKeyboardState& ms_cKeyboardState = *(cKeyboardState*)(shared::base + 0x177B7C0);
-	inline ControllerState *ms_aControllers = (ControllerState*)(shared::base + 0x19D05F0); // Maximum 4 controllers
-	inline GlobalInput& ms_GlobalInput = *(GlobalInput*)(shared::base + 0x19C1404);
-
-	inline char* ms_InputKeys = (char*)(shared::base + 0x19D06F8); // 256 elements
-	inline char* ms_MouseStateInput = (char*)(shared::base + 0x19D06D0); // 20 elements
-
-	inline bool& ms_bUpdateKeyboard = *(bool*)(shared::base + 0x14CDDE8);
-	inline bool& ms_bUpdateMouse = *(bool*)(shared::base + 0x19D07F8);
-	inline bool& ms_bMouseAvailable = *(bool*)(shared::base + 0x19D0800);
-	inline bool& ms_bKeyboardAvailable = *(bool*)(shared::base + 0x19D06EC);
-
-	inline int* ms_aKeyMap = (int*)(shared::base + 0x14CD838); // 364 elements...
-	inline int* ms_aAvailableKeys = (int*)(shared::base + 0x14B5D80); // 107 elements, briefly, this array consists of keys that can be pressed
-	inline int* ms_aMouseButtons = (int*)(shared::base + 0x14B5D74); // 3 elements, buttons that are checked via binary operations(and, xor, or, etc.)
-	inline int& ms_nControllersAmount = *(int*)(shared::base + 0x19D0808); // how much were acquired
-
-	inline float* ms_aStickButtonThreshold = (float*)(shared::base + 0x19D05C0); // 4 elements, threshold in any direction that will convert as a button press, also used for left or right triggers
-	inline float* ms_aStickDeadzone = (float*)(shared::base + 0x19D05D0); // 4 elements
-	inline float* ms_aMaxStickThreshold = (float*)(shared::base + 0x19D05E0); // 4 elements, threshold until the stick is fully moved
-};
 class Hw::cTexture
 {
 public:
@@ -2117,15 +2010,12 @@ public:
 class Hw::CameraProj
 {
 public:
-	int field_4;
-	int field_8;
-	int field_C;
-	D3DXMATRIX m_projectionMatrix;
-	D3DXMATRIX m_invertedProjectionMatrix;
-	float m_fAspectRatio;
-	float m_fFOV;
-	float m_fNearClip;
-	float m_fFarClip;
+	__declspec(align(16)) Hw::cMtx m_ProjMatrix;
+	Hw::cMtx m_InverseProjMatrix;
+	float m_Aspect;
+	float m_Fovy;
+	float m_NearZ;
+	float m_FarZ;
 	int field_A0;
 	int field_A4;
 	int field_A8;
@@ -2136,17 +2026,19 @@ public:
 
 VALIDATE_SIZE(Hw::CameraProj, 0xB0);
 
-class Hw::cCameraBase
+// using declspec alignment is better than creating padding manually
+
+class __declspec(align(16)) Hw::cCameraBase 
 {
 public:
-	class cCameraMatrix
+	class __declspec(align(16)) cCameraMatrix
 	{
 	public:
 		Hw::cVec4 m_Trans;
 		Hw::cVec4 m_Target;
 		Hw::cVec4 m_Up;
 		Hw::cVec4 m_Rot;
-		Hw::ROT_ORDER m_RotOrder;
+		float m_Roll;
 		float m_Dist;
 		float m_Fovy;
 
@@ -2168,8 +2060,13 @@ public:
 	Hw::cMtx m_TransposeViewMatrix;
 	Hw::cMtx m_InverseViewMatrix;
 	Hw::cMtx m_ViewMatrixOld;
-	cCameraMatrix m_CameraMatrix;
-	float field_14C;
+	Hw::cVec4 m_Trans;
+	Hw::cVec4 m_Target;
+	Hw::cVec4 m_Up;
+	Hw::cVec4 m_Rot;
+	Hw::ROT_ORDER m_RotOrder;
+	float m_Dist;
+	float m_Fovy;
 
 	void setViewMatrix(const D3DXMATRIX& matrix)
 	{
@@ -3427,3 +3324,5 @@ VALIDATE_SIZE(Hw::cHeap, 0x40);
 
 inline Hw::cTaskManager& g_MainTaskManager = *(Hw::cTaskManager*)(shared::base + 0x17E9164);
 inline Hw::cKeyboardState& g_Keyboard = *(Hw::cKeyboardState*)(shared::base + 0x177B7C0);
+inline Hw::cMouseState& g_Mouse = *(Hw::cMouseState*)(shared::base + 0x177B798);
+inline Hw::cPadState &g_dbPad = *(Hw::cPadState*)(shared::base + 0x177BA90);
