@@ -2,9 +2,10 @@
 
 #include <Hw.h>
 
-class cViewFrustum
+class __declspec(align(16)) cViewFrustum
 {
-    Hw::cVec4 m_planes[6];
+    Hw::cVec4 m_planes[5];
+    Hw::cVec4 m_Trans;
     float m_Aspect;
     float m_CosX;
     float m_SinX;
@@ -28,8 +29,7 @@ class cCameraFrustum
 {
 public:
     __declspec(align(16)) cViewFrustum m_Vfrustum;
-    int field_8C;
-    int m_bUpdateFrustum;
+    int m_bFrustum;
     int field_94;
     int field_98;
     int field_9C;
@@ -38,4 +38,4 @@ public:
 };
 
 VALIDATE_SIZE(cCameraFrustum, 0xA0);
-VALIDATE_SIZE(cViewFrustum, 0x7C);
+VALIDATE_SIZE(cViewFrustum, 0x80);

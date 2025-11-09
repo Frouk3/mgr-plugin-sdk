@@ -13,17 +13,17 @@ class cObj : public cModel
 {
 public:
     int field_490;
-    DataArchiveHolder m_DataFile;
+    Hw::cFmerge m_DataFile;
     void* m_pModel;
-    int m_nSetType;
-    int m_nType;
-    int m_nSetFlag;
-    int m_nSetRtn;
+    int m_SetType;
+    int m_Type;
+    int m_SetFlag;
+    int m_SetRtn;
     eObjID m_ObjId;
     eObjID m_ModelIndex;
     int field_4B8;
     int field_4BC;
-    int m_nObjectFlags;
+    int m_ObjectFlags;
     int field_4C4;
     char field_4C8;
     char field_4C9;

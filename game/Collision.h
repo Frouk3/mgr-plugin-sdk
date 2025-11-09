@@ -3,6 +3,7 @@
 #include <lib.h>
 #include <hkpAllCdPointCollector.h>
 #include <CollisionUserData.h>
+#include <Entity.h>
 
 class ShapeBase;
 
@@ -175,10 +176,10 @@ public:
         CallVMTFunc<3, Collision *, Collision *>(this, collider);
     }
 
-    cVec4 getMaxShapeExpansion(const cVec4& scale)
+    Hw::cVec4 getMaxShapeExpansion(const Hw::cVec4& scale)
     {
-        cVec4 result;
-        ReturnCallVMTFunc<cVec4&, 6, Collision *, cVec4&, const cVec4&>(this, result, scale);
+        Hw::cVec4 result;
+        ReturnCallVMTFunc<Hw::cVec4&, 6, Collision *, Hw::cVec4&, const Hw::cVec4&>(this, result, scale);
         return result;
     }
 

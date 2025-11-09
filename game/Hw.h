@@ -2016,7 +2016,7 @@ public:
 	float m_Fovy;
 	float m_NearZ;
 	float m_FarZ;
-	int field_A0;
+	int m_bAspect; // do we want to update matrix for changing aspect ratio?
 	int field_A4;
 	int field_A8;
 	int field_AC;

@@ -111,7 +111,7 @@ public:
 
 					instance->place(pos, rot);
 
-					g_ObjReadManager.removeRequest(instance->m_ObjId, instance->m_nSetType); // Removes reference
+					g_ObjReadManager.removeRequest(instance->m_ObjId, instance->m_SetType); // Removes reference
 				}
 
 				shared::ExPressKeyUpdate();

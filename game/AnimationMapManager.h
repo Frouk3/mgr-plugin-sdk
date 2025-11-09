@@ -2,27 +2,27 @@
 
 #include <lib.h>
 #include <eObjID.h>
-#include <HkDataManagerImplement.h>
+#include <Hw.h>
 
 struct AnimationMap
 {
     struct Unit
     {
-        int m_nId;
+        int m_Id;
         int field_4;
-        char m_name4[4];
+        char m_pName[4];
         int field_C;
-        int m_nLoop;
-        float m_fInterpolate;
-        float m_fStartFrame;
-        float m_fCancelStartFrame;
-        float m_fCancelValidFrame;
-        int m_nCancelToFreeFall;
-        int m_nCancelToLanding;
-        int m_nYTranslateEaseOff;
-        int m_nZTranslateEaseOff;
-        int m_nMirror;
-        int m_nOther;
+        int m_Loop;
+        float m_Interpolate;
+        float m_StartFrame;
+        float m_CancelStartFrame;
+        float m_CancelValidFrame;
+        int m_CancelToFreeFall;
+        int m_CancelToLanding;
+        int m_YTranslateEaseOff;
+        int m_ZTranslateEaseOff;
+        int m_Mirror;
+        int m_Other;
     };
 
     lib::AllocatedArray<Unit> *m_pUnits;
@@ -86,9 +86,9 @@ struct AnimationMap
 class AnimationMapResource
 {
 public:
-    int m_nReferences;
+    int m_RefCount;
     int m_bWantsToBeRemoved;
-    eObjID m_nObject;
+    eObjID m_Object;
     AnimationMap* m_pAnimationMap;
 };
 
@@ -97,7 +97,7 @@ class AnimationMapManager
 public:
 
     virtual void tick() {}
-    virtual AnimationMap *addReference(eObjID object, DataArchiveHolder *data) { return nullptr; /* nullptr for no raised exception */ } // they don't check if there's already an animation map resource for the object
+    virtual AnimationMap *addReference(eObjID object, Hw::cFmerge *data) { return nullptr; /* nullptr for no raised exception */ } // they don't check if there's already an animation map resource for the object
     virtual void release(eObjID object) {}
     virtual ~AnimationMapManager() {}
 };

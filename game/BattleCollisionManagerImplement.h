@@ -9,7 +9,7 @@
 class BattleCollisionManagerImplement : public BattleCollisionManager
 {
 public:
-    Hw::cHeapVariable *m_Allocator;
+    Hw::cHeap *m_pHeap;
     lib::StaticArray<Collision *, 128> *m_pOffenseCollisions;
     lib::StaticArray<Collision *, 128> *field_C;
     lib::StaticArray<Collision *, 1024> *m_pDefenseCollisions;

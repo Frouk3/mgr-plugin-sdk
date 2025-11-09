@@ -25,18 +25,18 @@ public:
     int field_A58;
     int field_A5C;
     int field_A60;
-    DataArchiveHolder field_A64;
-    DataArchiveHolder field_A6C;
-    DataArchiveHolder field_A74;
+    Hw::cFmerge field_A64;
+    Hw::cFmerge field_A6C;
+    Hw::cFmerge field_A74;
     int field_A7C;
     int field_A80;
     Pl0000 *m_pEnemy;
     Entity *m_pEnemyEntity;
-    float m_fDistance;
-    float m_fDistance2D; // X && Z distance
+    float m_Distance;
+    float m_Distance2D; // X && Z distance
     float field_A94;
     float field_A98;
-    float m_fAngleToEnemy;
+    float m_AngleToEnemy;
     float field_AA0;
     int field_AA4;
     int field_AA8;

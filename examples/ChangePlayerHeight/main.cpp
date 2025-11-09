@@ -20,7 +20,7 @@ public:
                 player->m_TransPos.y -= 5.0f;
             
             if (g_Keyboard.on(Hw::KB_K) || g_Keyboard.on(Hw::KB_L))
-                player->m_vecVelocity.y = 0.0f;
+                player->m_TransSpeed.y = 0.0f;
         };
     }
 } example;

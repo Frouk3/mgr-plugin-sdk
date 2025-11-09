@@ -14,16 +14,16 @@ namespace BehaviorUtility
         int field_4;
         int field_8;
         int field_C;
-        cVec4 m_vecOut;
-        cVec4 m_vecOutDirection;
+        Hw::cVec4 m_TransHit;
+        Hw::cVec4 m_HitDir;
         Entity *field_30;
         int field_34;
         int field_38;
         int field_3C;
         hkpAllRayHitCollector m_RayHitCollector;
         hkpAllCdPointCollector m_CdPointCollector;
-        cVec4 m_vecOrigin;
-        cVec4 m_vecEndRayPoint;
+        Hw::cVec4 m_TransStart;
+        Hw::cVec4 m_TransEnd;
 
         RayCast()
         {
@@ -43,11 +43,11 @@ namespace BehaviorUtility
 
     struct RayInfo
     {
-        cVec4 m_vecOrigin;
-        cVec4 m_vecEndRayPoint;
-        int m_nCollisionFilter;
-        int m_nIgnoreObjectFilter;
-        float m_fRadius;
+        Hw::cVec4 m_TransStart;
+        Hw::cVec4 m_TransEnd;
+        int m_CollisionFilter;
+        int m_IgnoreObjectFilter;
+        float m_Radius;
         BOOL m_bMultiHit;
         BOOL m_bLinearCast;
 

@@ -3,7 +3,7 @@
 #include <Hw.h>
 #include <shared.h>
 #include <d3dx9math.h>
-#include <cMath.h>
+#include <HwMath.h>
 
 class cParts
 {
@@ -47,15 +47,10 @@ public:
     int field_AC;
 
     cParts() { ((void(__thiscall*)(cParts*))(shared::base + 0x607410))(this); }
-
     cParts(const cParts& other, BOOL bWorldFixed) { ((void(__thiscall*)(cParts*, const cParts&, BOOL))(shared::base + 0x6074D0))(this, other, bWorldFixed); }
-
     void init(const Hw::cVec4& transPos, short boneIndex) { ((void(__thiscall*)(cParts*, const Hw::cVec4&, short))(shared::base + 0x6075A0))(this, transPos, boneIndex); }
-
     void convertRotationToQuaternion() { ((void(__thiscall*)(cParts*))(shared::base + 0x3F790))(this); }
-
     void updateLocalMatrix() { ((void(__thiscall*)(cParts*))(shared::base + 0x615310))(this); }
-
     void updateLocalTransform() { ((void(__thiscall*)(cParts*))(shared::base + 0x615190))(this); }
 
     virtual ~cParts() {};

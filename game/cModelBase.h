@@ -34,7 +34,7 @@ public:
 
         void updateBoundingBox(const Hw::cMtx& matrix, BOOL calculateTransformExtent) { ((void(__thiscall *)(RenderMatrix*, const Hw::cMtx&, BOOL))(shared::base + 0x610CF0))(this, matrix, calculateTransformExtent); }
 
-        void initializeBoundsFromBone(cParts* rootBone, int boneIndex, cModelData::EntryModelData *modelData) { ((void(__thiscall *)(RenderMatrix*, cParts*, int, cModelData::EntryModelData*))(shared::base + 0x607AC0))(this, rootBone, boneIndex, modelData); }
+        void initializeBoundsFromBone(cParts* rootBone, int boneIndex, cModelDataManager::EntryModelData *modelData) { ((void(__thiscall *)(RenderMatrix*, cParts*, int, cModelDataManager::EntryModelData*))(shared::base + 0x607AC0))(this, rootBone, boneIndex, modelData); }
     };
 
     D3DXMATRIX m_ViewModelMatrix;
@@ -150,7 +150,7 @@ public:
     short m_MeshNum;
     cMaterial *m_pMaterials;
     short m_MaterialNum;
-    cModelData::EntryModelData *m_pModelData;
+    cModelDataManager::EntryModelData *m_pModelData;
     cParts *m_pRootBone;
     int field_338;
     int field_33C;
@@ -200,24 +200,24 @@ public:
         ((void(__thiscall*)(cModelBase*))(shared::base + 0x617A40))(this);
     }
 
-    BOOL initializeBones(cModelData::EntryModelData *modelData, Hw::cHeap *allocator)
+    BOOL initializeBones(cModelDataManager::EntryModelData *modelData, Hw::cHeap *allocator)
     {
-        return ((BOOL(__thiscall*)(cModelBase*, cModelData::EntryModelData*, Hw::cHeap*))(shared::base + 0x60A680))(this, modelData, allocator);
+        return ((BOOL(__thiscall*)(cModelBase*, cModelDataManager::EntryModelData*, Hw::cHeap*))(shared::base + 0x60A680))(this, modelData, allocator);
     }
 
-    BOOL meshStartup(cModelData::EntryModelData *modelData, Hw::cHeap *allocator)
+    BOOL meshStartup(cModelDataManager::EntryModelData *modelData, Hw::cHeap *allocator)
     {
-        return ((BOOL(__thiscall*)(cModelBase*, cModelData::EntryModelData*, Hw::cHeap*))(shared::base + 0x611E20))(this, modelData, allocator);
+        return ((BOOL(__thiscall*)(cModelBase*, cModelDataManager::EntryModelData*, Hw::cHeap*))(shared::base + 0x611E20))(this, modelData, allocator);
     }
 
-    BOOL materialStartup(cModelData::EntryModelData *modelData, Hw::cHeap *allocator)
+    BOOL materialStartup(cModelDataManager::EntryModelData *modelData, Hw::cHeap *allocator)
     {
-        return ((BOOL(__thiscall*)(cModelBase*, cModelData::EntryModelData*, Hw::cHeap*))(shared::base + 0x611D20))(this, modelData, allocator);
+        return ((BOOL(__thiscall*)(cModelBase*, cModelDataManager::EntryModelData*, Hw::cHeap*))(shared::base + 0x611D20))(this, modelData, allocator);
     }
 
-    BOOL initialize(cModelData::EntryModelData *modelData, void *textureInfo, void *textures, void *a5, Hw::cHeap *allocator)
+    BOOL initialize(cModelDataManager::EntryModelData *modelData, void *textureInfo, void *textures, void *a5, Hw::cHeap *allocator)
     {
-        return ((BOOL(__thiscall*)(cModelBase*, cModelData::EntryModelData*, void*, void*, void*, Hw::cHeap*))(shared::base + 0x617860))(this, modelData, textureInfo, textures, a5, allocator);
+        return ((BOOL(__thiscall*)(cModelBase*, cModelDataManager::EntryModelData*, void*, void*, void*, Hw::cHeap*))(shared::base + 0x617860))(this, modelData, textureInfo, textures, a5, allocator);
     }
 
     void setShadowCast(BOOL disabled)

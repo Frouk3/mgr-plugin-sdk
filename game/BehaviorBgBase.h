@@ -25,7 +25,7 @@ public:
     float field_8B4;
     int field_8B8;
     int field_8BC;
-    cVec4 field_8C0;
+    Hw::cVec4 field_8C0;
     float field_8D0;
     float field_8D4;
     float field_8D8;

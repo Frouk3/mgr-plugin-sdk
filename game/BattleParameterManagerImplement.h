@@ -15,13 +15,13 @@ struct BattleParameterResource
 class BattleParameterManagerImplement : public BattleParameterManager
 {
 public:
-    Hw::cHeapVariable *m_Allocator;
+    Hw::cHeapVariable *m_pHeap;
     Hw::cCriticalSection field_8;
     int field_24;
-    lib::AllocatedArray<BattleParameterResource *> *m_BattleParameterResources;
+    lib::AllocatedArray<BattleParameterResource *> *m_pBattleParameterResources;
     int field_2C;
-
-    static inline BattleParameterManagerImplement*& ms_Instance = *(BattleParameterManagerImplement**)(shared::base + 0x19C5260);
 };
+
+inline BattleParameterManagerImplement *&g_BattleParamMan = *(BattleParameterManagerImplement **)(shared::base + 0x19C5260);
 
 VALIDATE_SIZE(BattleParameterManagerImplement, 0x30);

@@ -1,7 +1,7 @@
 #include <cGameUIManager.h>
 #include <cSlowRateManager.h>
-#include <Trigger.h>
 #include <Events.h>
+#include <cGame.h>
 
 class PlayerAdrenaline
 {
@@ -13,9 +13,9 @@ class PlayerAdrenaline
             Pl0000 *player = g_GameUIManager.m_pPlayer;
             static bool once = false;
 
-            if (player->m_nHealth / player->getMaxHealth() <= 0.4f)
+            if (player->m_Hp / player->getMaxHealth() <= 0.4f)
             {
-                Trigger::GameFlags.GAME_MUGEN_ZANGEKI = true;
+                g_GameFlags.GAME_MUGEN_ZANGEKI = true;
                 player->enableRipperMode();
 
                 SlowRateManager->setSlowRate(SLOWRATE_GLOBAL, 0.6);
@@ -24,9 +24,9 @@ class PlayerAdrenaline
 
                 once = false;
             }
-            else if (player->m_nHealth / player->getMaxHealth() > 0.4f && !once)
+            else if (player->m_Hp / player->getMaxHealth() > 0.4f && !once)
             {
-                Trigger::GameFlags.GAME_MUGEN_ZANGEKI = false;
+                g_GameFlags.GAME_MUGEN_ZANGEKI = false;
 
                 SlowRateManager->resetSlowRate();
 

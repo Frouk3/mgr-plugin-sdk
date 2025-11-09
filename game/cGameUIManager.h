@@ -29,11 +29,11 @@ public:
 	cParts *m_pPlayerParts[13];
 	Pl1500 *m_pPlayer;
 	int m_nPlayerEntityHandle;
-	Hw::cVec4 m_vecPlayerPosition;
+	Hw::cVec4 m_PlayerTransPos;
 	Hw::cVec4 field_B0;
 	cActionMessageParts *m_pActionMessageParts;
 	int field_C4;
-	cDryCellGauge2 *m_pcDryCellGauge2;
+	cDryCellGauge2 *m_pDryCellGauge2;
 	int field_CC;
 	cRadarMap *m_pRadarMap;
 	cWeaponInfoDispParts *m_pWeaponInfoDispParts;
