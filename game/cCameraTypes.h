@@ -6,18 +6,15 @@ class Pl0000;
 
 struct cCameraTypes
 {
-	float m_fVerticalAngle; // pitch
-	float m_fHorizontalAngle; // yaw
-	float m_fZAngle;
-	float m_fWAngle;
+	Hw::cVec4 m_CamRot;
 	EntityHandle m_PlayerHandle;
-	Pl0000* m_apPlayer[2];
-	float m_fSmoothness;
-	float field_20;
+	Pl0000* m_pPlayer[2];
+	float m_CurrentLerp;
+	float m_TargetLerp;
 	int field_24;
 	float field_28;
 	float field_2C;
-	D3DXMATRIX field_30;
+	Hw::cMtx m_MulMtx;
 };
 
 VALIDATE_SIZE(cCameraTypes, 0x70);

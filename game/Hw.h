@@ -240,6 +240,8 @@ namespace Hw
 	template <typename tC, unsigned const align>
 	class cFactoryFixed;
 
+	class cViewPort;
+
 	class CameraProj;
 	class cCameraBase;
 	
@@ -302,10 +304,10 @@ namespace Hw
 	template <typename tC, typename tHeapBinder>
 	struct cExpandableVector;
 
-	struct cVec2;
-	struct cVec3;
-	struct cVec4;
-	struct cQuat;
+	class cVec2;
+	class cVec3;
+	class cVec4;
+	class cQuat;
 
 	inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y) { return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y); }
 
@@ -458,6 +460,8 @@ public:
 	void *alloc(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a3) { return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, align, allocMode, a3); }
 	void setSubHeap(Hw::cHeap &rHeap) { ((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap); }
 	void unsetSubHeap() { ((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this); }
+
+	static inline void free(void *block) { ((void(__cdecl *)(void *))(shared::base + 0x9D4920))(block); }
 };
 
 inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) { return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap); }
@@ -860,12 +864,12 @@ inline Hw::cFactoryFixed<Hw::ResourceManager::cWork, 4> &g_ResourceWorkFactory =
 struct Hw::FmergeHeader
 {
     char magic[4];
-    size_t m_AmountOfFiles;
-    size_t m_PositionOffset;
-    size_t m_ExtensionOffset;
-    size_t m_NamesOffset;
-    size_t m_SizesOffset;
-    size_t m_HashMapOffset;
+    size_t m_FileNum;
+    size_t m_OffsetTblOffs;
+    size_t m_ExtOffs;
+    size_t m_NamesOffs;
+    size_t m_SizeOffs;
+    size_t m_HashMapOffs;
 };
 
 class Hw::cFmerge
@@ -1043,6 +1047,13 @@ public:
 	BOOL rep(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D94F0))(this, vKey); }
 	void setOn(KEYBOARD_MAP vKey, BOOL bDown) { ((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP, BOOL))(shared::base + 0x9D9620))(this, vKey, bDown); }
 	void setTrig(KEYBOARD_MAP vKey) { ((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9650))(this, vKey); }
+};
+
+class Hw::cViewPort
+{
+public:
+	float m_X, m_Y, m_W, m_H;
+	float m_Near, m_Far;
 };
 
 class Hw::cMouseState
@@ -2007,7 +2018,7 @@ public:
 	int field_4C;
 };
 
-class Hw::CameraProj
+class __declspec(align(16)) Hw::CameraProj
 {
 public:
 	__declspec(align(16)) Hw::cMtx m_ProjMatrix;
@@ -2016,12 +2027,16 @@ public:
 	float m_Fovy;
 	float m_NearZ;
 	float m_FarZ;
-	int m_bAspect; // do we want to update matrix for changing aspect ratio?
-	int field_A4;
-	int field_A8;
-	int field_AC;
+	int m_bAspect; // do we want to update projection matrix after changing aspect ratio?
+
+	CameraProj() { ((void(__thiscall *)(CameraProj *))(shared::base + 0x812610))(this); }
+	// non virtual destructor at 0x812450
 
 	virtual ~CameraProj() {};
+
+	void set(float nearZ, float farZ, float fovy) { ((void(__thiscall *)(CameraProj *, float, float, float))(shared::base + 0x9E4D60))(this, nearZ, farZ, fovy); }
+	void updateProjMatrixPers() { ((void(__thiscall *)(CameraProj *))(shared::base + 0x9E5AA0))(this); }
+	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { ((void(__thiscall *)(CameraProj *, const Hw::cMtx&, int))(shared::base + 0x9E5B30))(this, mat, __formal); }
 };
 
 VALIDATE_SIZE(Hw::CameraProj, 0xB0);
@@ -2031,31 +2046,6 @@ VALIDATE_SIZE(Hw::CameraProj, 0xB0);
 class __declspec(align(16)) Hw::cCameraBase 
 {
 public:
-	class __declspec(align(16)) cCameraMatrix
-	{
-	public:
-		Hw::cVec4 m_Trans;
-		Hw::cVec4 m_Target;
-		Hw::cVec4 m_Up;
-		Hw::cVec4 m_Rot;
-		float m_Roll;
-		float m_Dist;
-		float m_Fovy;
-
-		cCameraMatrix &operator=(const cCameraMatrix &lvalue)
-		{
-			((void(__thiscall *)(cCameraMatrix *, const cCameraMatrix &))(shared::base + 0x9A01F0))(this, lvalue);
-			return *this;
-		}
-
-		cVec4 calculateViewOffset()
-		{
-			cVec4 result;
-			result = *((cVec4*(__thiscall*)(cCameraMatrix*, cVec4*))(shared::base + 0x9B9090))(this, &result);
-			return result;
-		}
-	};
-
 	Hw::cMtx m_ViewMatrix;
 	Hw::cMtx m_TransposeViewMatrix;
 	Hw::cMtx m_InverseViewMatrix;
@@ -2068,125 +2058,36 @@ public:
 	float m_Dist;
 	float m_Fovy;
 
-	void setViewMatrix(const D3DXMATRIX& matrix)
-	{
-		((void(__thiscall *)(cCameraBase *, const D3DXMATRIX&))(shared::base + 0x9E5170))(this, matrix);
-	}
-
-	void move(const cVec4& offset)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E4F20))(this, offset);
-	}
-
-	// Move camera according to the offset of camera
-	void moveWithOffset(const cVec4& offset)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E4FA0))(this, offset);
-	}
-
-	// Move camera according to the Y offset
-	void moveWithY(const cVec4& offset)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5090))(this, offset);
-	}
-
-	void setPosition(const cVec4& position)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5F20))(this, position);
-	}
-
-	void setOffset(const cVec4& offset)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6060))(this, offset);
-	}
-
-	void setLookAt(const cVec4& lookAt)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E5FC0))(this, lookAt);
-	}
-
-	void setCameraOffset(const cVec4& cameraOffset)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6090))(this, cameraOffset);
-	}
-
-	void setDistance(float distance)
-	{
-		((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E62D0))(this, distance);
-	}
-
-	// m_fDistance += clamp(distance, minDistance, maxDistance)
-	void adjustDistanceToLookAt(float distance, float maxDistance, float minDistance)
-	{
-		((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E62F0))(this, distance, maxDistance, minDistance);
-	}
-
-	void adjustDistanceToPosition(float distance, float maxDistance, float minDistance)
-	{
-		((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E6390))(this, distance, maxDistance, minDistance);
-	}
-
-	// m_vecLookAtPosition += with
-	void setLookAtAlong(const cVec4& with)
-	{
-		((void(__thiscall *)(cCameraBase *, const cVec4&))(shared::base + 0x9E6000))(this, with);
-	}
-
-	void place(const cVec4& position, const cVec4& lookAt, const cVec4& offset)
-	{
-		((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, const cVec4&))(shared::base + 0x9E5D10))(this, position, lookAt, offset);
-	}
-
-	void place(const cVec4& position, const cVec4& cameraOffset, float distance)
-	{
-		((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, float))(shared::base + 0x9E5DA0))(this, position, cameraOffset, distance);
-	}
-
-	void lookAt(const cVec4& lookAt, const cVec4& cameraOffset, float distance)
-	{
-		((void(__thiscall *)(cCameraBase*, const cVec4&, const cVec4&, float))(shared::base + 0x9E5E60))(this, lookAt, cameraOffset, distance);
-	}
-
-	// m_vecPosition += with
-	void moveAlong(const cVec4& with)
-	{
-		((void(__thiscall *)(cCameraBase*, const cVec4&))(shared::base + 0x9E5F60))(this, with);
-	}
-
-	void updatePosition()
-	{
-		((void(__thiscall *)(cCameraBase*))(shared::base + 0x9E51B0))(this);
-	}
-
-	void updateLookAtPos() // z = -distance
-	{
-		((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5260))(this);
-	}
-
-	void resetOffset()
-	{
-		((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5310))(this);
-	}
-
-	void calculateCameraOffset()
-	{
-		((void(__thiscall *)(cCameraBase*))(shared::base + 0x9E5380))(this);
-	}
-
-	void calculateCameraDistance()
-	{
-		((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E54E0))(this);
-	}
-
-	void updateCameraViewMatrix()
-	{
-		((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E6410))(this);
-	}
-
-	void calculateInverseViewMatrix()
-	{
-		((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5170))(this);
-	}
+	void initialize() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E4EC0))(this); }
+	void movePos(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E4F20))(this, pos); }
+	// Move according to the rotation vector, Z would be forward
+	void movePosFront(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E4FA0))(this, pos); }
+	// Move camera according to the Y rotation axis, Z is forward, it ignores X and Z rotation
+	void movePosFrontY(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5090))(this, pos); }
+	void updateViewInverseMatrix() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5170))(this); }
+	void setViewMatrix(const Hw::cMtx& mat) { ((void(__thiscall *)(cCameraBase *, const Hw::cMtx&))(shared::base + 0x9E5180))(this, mat); }
+	void updateTrans() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E51B0))(this); }
+	void updateTarget() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5260))(this); }
+	void updateUp() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5310))(this); }
+	void updateRot() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5380))(this); }
+	void updateDist() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E54E0))(this); }
+	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x9E5D10))(this, trans, target, up); }
+	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9E5DA0))(this, trans, rot, dist); }
+	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9E5E60))(this, target, rot, dist); }
+	void setTrans(const Hw::cVec4& trans) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5F20))(this, trans); }
+	void addTrans(const Hw::cVec4& trans) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5F60))(this, trans); }
+	void setTarget(const Hw::cVec4& target) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5FC0))(this, target); }
+	void addTarget(const Hw::cVec4& target) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6000))(this, target); }
+	void setUp(const Hw::cVec4& up) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6060))(this, up); }
+	void setTargetRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6090))(this, rot); }
+	void addTargetRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6120))(this, rot); }
+	void setTransRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E61B0))(this, rot); }
+	void addTransRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6240))(this, rot); }
+	void setTargetDist(float dist) { ((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E62D0))(this, dist); }
+	void addTargetDist(float dist, float min, float max) { ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E62F0))(this, dist, min, max); }
+	void setTransDist(float dist) { ((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E6370))(this, dist); }
+	void addTransDist(float dist, float min, float max) { ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E6390))(this, dist, min, max); }
+	void updateViewMatrix() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E6410))(this); }
 };
 
 VALIDATE_SIZE(Hw::cCameraBase, 0x150);

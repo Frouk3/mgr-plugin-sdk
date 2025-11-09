@@ -6,13 +6,32 @@
 class cCameraApp : public cCamera, public cCameraTypes
 {
 public:
-	D3DXMATRIX field_3D0;
+	class __declspec(align(16)) cCameraMatrix
+	{
+	public:
+		Hw::cVec4 m_Trans;
+		Hw::cVec4 m_Target;
+		Hw::cVec4 m_Up;
+		Hw::cVec4 m_Rot;
+		float m_Roll;
+		float m_Dist;
+		float m_Fovy;
+
+		void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { ((void(__thiscall *)(cCameraMatrix *, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9A11A0))(this, target, rot, dist); }
+		cCameraMatrix &operator=(const cCameraMatrix &lvalue) { ((void(__thiscall *)(cCameraMatrix *, const cCameraMatrix &))(shared::base + 0x9A01F0))(this, lvalue); return *this; }
+
+		Hw::cVec4 calculateViewOffset()
+		{
+			Hw::cVec4 result;
+			result = *((Hw::cVec4*(__thiscall*)(cCameraMatrix*, Hw::cVec4*))(shared::base + 0x9B9090))(this, &result);
+			return result;
+		}
+	};
+	
+	Hw::cMtx field_3D0;
 	cCameraMatrix field_410;
-	int field_45C;
-	cCameraMatrix m_CurrentViewMatrix;
-	int field_4AC;
-	cCameraMatrix m_TranslationMatrix;
-	int field_4FC;
+	cCameraMatrix m_NowMatrix;
+	cCameraMatrix m_TarMatrix;
 	int field_500;
 	float field_504;
 	int field_508;
@@ -130,6 +149,13 @@ public:
 	int field_6D4;
 	float field_6D8;
 	int field_6DC;
+
+	cCameraApp() { ((void(__thiscall *)(cCameraApp *))(shared::base + 0x840760))(this); }
+	void updateCamAng() {((void(__thiscall *)(cCameraApp *))(shared::base + 0x9B7E00))(this); }
+
+	void startup() { CallVMTFunc<2, cCameraApp*>(this); }
+	void cleanup() { CallVMTFunc<3, cCameraApp*>(this); }
+	void update() { CallVMTFunc<4, cCameraApp*>(this); }
 };
 
 VALIDATE_SIZE(cCameraApp, 0x6E0);

@@ -5,16 +5,6 @@
 
 namespace Camera
 {
-    struct ProjectionData
-    {
-        int field_0;
-        int field_4;
-        int m_ResX;
-        int m_ResY;
-        float field_10;
-        float field_14;
-    };
-
     namespace Math
     {
 
@@ -165,14 +155,14 @@ public:
     float field_24;
     float field_28;
     float field_2C;
-    cVec4 field_30;
-    cVec4 field_40;
+    Hw::cVec4 field_30;
+    Hw::cVec4 field_40;
     int field_50;
     int field_54;
     int field_58;
     int field_5C;
-    cVec4 field_60;
-    cVec4 field_70;
+    Hw::cVec4 field_60;
+    Hw::cVec4 field_70;
     EntityHandle field_80;
     EntityHandle field_84;
     int field_88;
@@ -196,8 +186,8 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    cVec4 field_10;
-    cVec4 field_20;
+    Hw::cVec4 field_10;
+    Hw::cVec4 field_20;
 };
 
 class Camera::StateDiveKill : public Camera::StateNode
@@ -206,7 +196,7 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    cVec4 field_10;
+    Hw::cVec4 field_10;
     float field_20;
     float field_24;
     float field_28;
@@ -235,8 +225,8 @@ public:
     int field_84;
     int field_88;
     int field_8C;
-    cVec4 field_90;
-    cVec4 field_A0;
+    Hw::cVec4 field_90;
+    Hw::cVec4 field_A0;
     float field_B0;
     float field_B4;
     float field_B8;

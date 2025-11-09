@@ -11,15 +11,8 @@ class cCamera : public cCameraViewProj, public cCameraFrustum
 {
 public:
 
-    void initialize()
-    {
-        CallVMTFunc<1, cCamera *>(this);
-    }
-
-    void setProjectionMatrix(const D3DXMATRIX& matrix, int a3)
-    {
-        ((void(__thiscall *)(cCamera *, const D3DXMATRIX&, int))(shared::base + 0x9E5B30))(this, matrix, a3);
-    }
+    cCamera() { ((void(__thiscall *)(cCamera *))(shared::base + 0x8406F0))(this); }
+    void startup() {((void(__thiscall *)(cCamera *))(shared::base + 0x9A8390))(this); }
 };
 
 VALIDATE_SIZE(cCamera, 0x360);

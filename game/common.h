@@ -228,15 +228,15 @@ inline void Core_PlaySound(const char* se, int unused)
 	((void(__cdecl*)(const char*, int))(shared::base + 0xA5E050))(se, unused);
 }
 
-inline void __declspec(naked) PrintfLog(const char* fmt, ...)
-{
-	__asm
-	{
-		mov eax, shared::base
-		add eax, 0x9D5650
-		jmp eax
-	}
-}
+// inline void __declspec(naked) PrintfLog(const char* fmt, ...) -> Hw::cDebugLog::addMess
+// {
+// 	__asm
+// 	{
+// 		mov eax, shared::base
+// 		add eax, 0x9D5650
+// 		jmp eax
+// 	}
+// }
 
 inline unsigned int crc32lower(const char* str, size_t length) // then later used for function that doesn't uses length
 {
@@ -248,10 +248,10 @@ inline unsigned int crc32lower(const char* str)
 	return ((unsigned int (__cdecl *)(const char*))(shared::base + 0xA03EA0))(str);
 }
 
-inline void * __cdecl eFree(void *block)
-{
-	return ((void *(__cdecl *)(void *))(shared::base + 0x9D4920))(block);
-}
+// inline void * __cdecl eFree(void *block) -> Hw::cHeap::free
+// {
+// 	return ((void *(__cdecl *)(void *))(shared::base + 0x9D4920))(block);
+// }
 
 inline void *__cdecl AllocateMemory(size_t size)
 {
