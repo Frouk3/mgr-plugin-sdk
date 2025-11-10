@@ -176,6 +176,9 @@ public:
     float field_1704;
     int field_1708;
     int field_170C;
+
+    cCameraGame() { ((void(__thiscall*)(cCameraGame*))(shared::base + 0x856CE0))(this); }
+    void startupScene() { ((void(__thiscall*)(cCameraGame*))(shared::base + 0x9C0CE0))(this); }
     
     // screenPos - Vector of screen position
     // screenPos.z - How far away it from the screen rect

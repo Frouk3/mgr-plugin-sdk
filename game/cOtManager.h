@@ -2,6 +2,11 @@
 
 #include <Hw.h>
 
+enum OT_TYPE
+{
+
+};
+
 class cOtManager : public Hw::cOtManagerBase
 {
 public:
