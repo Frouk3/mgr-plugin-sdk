@@ -12,7 +12,7 @@ public:
     int field_64;
     int field_68;
     int field_6C;
-    cVec4 field_70;
+    Hw::cVec4 field_70;
     int field_80;
     int field_84;
     int field_88;

@@ -9845,7 +9845,7 @@ struct NodeManager::NodeSystem::NodeLink
 
 struct NodeManager::NodeSystem::Node
 {
-    cVec3 m_vecPosition;
+    Hw::cVec3 m_vecPosition;
     int m_nId;
     float m_fRadius;
     int m_Flags;

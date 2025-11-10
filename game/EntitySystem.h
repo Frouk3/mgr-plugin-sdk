@@ -13,13 +13,13 @@ struct EntitySystem
     struct EntityCreationData
     {
         eObjID m_ObjectID;
-        void *(__cdecl *m_pfnConstructor)(Hw::cHeapVariable *);
+        void *(__cdecl *m_pfnConstructor)(Hw::cHeap *);
         int field_8;
         const char *m_className;
     };
 
-    size_t m_nEntityCapacity; // how much entities can we hold?
-    Hw::cHeapVariable* m_pHeapVariable;
+    size_t m_EntityCapacity; // how much entities can we hold?
+    Hw::cHeap* m_pHeap;
     SceneModelSystem* m_pSceneModelSystem;
     BehaviorList *m_pBehaviorList;
     int field_10;
@@ -80,9 +80,9 @@ struct EntitySystem
         return ((size_t(__thiscall*)(EntitySystem*, eObjID))(shared::base + 0x67F5B0))(this, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const cVec4& position, const float distance)
+    Entity* getClosestEntity(eObjID objId, const Hw::cVec4& position, const float distance)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const cVec4&, const float))(shared::base + 0x67F660))(this, objId, position, distance);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4&, const float))(shared::base + 0x67F660))(this, objId, position, distance);
     }
 
     Entity* findEntity(const char* name, eObjID objId)
@@ -90,9 +90,9 @@ struct EntitySystem
         return ((Entity * (__thiscall*)(EntitySystem*, const char*, eObjID))(shared::base + 0x67F710))(this, name, objId);
     }
 
-    Entity* getClosestEntity(eObjID objId, const cVec4& position)
+    Entity* getClosestEntity(eObjID objId, const Hw::cVec4& position)
     {
-        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const cVec4&))(shared::base + 0x67F7B0))(this, objId, position);
+        return ((Entity * (__thiscall*)(EntitySystem*, eObjID, const Hw::cVec4&))(shared::base + 0x67F7B0))(this, objId, position);
     }
 
     size_t getAmountOfEntities()
@@ -166,10 +166,10 @@ struct EntitySystem::SetInfo
     short field_4;
     int field_8;
     eObjID m_nEntityId;
-    cVec3 m_vecBaseRot;
-    cVec3 m_vecTrans;
-    cVec3 m_vecBaseRotL;
-    cVec3 m_vecTransL;
+    Hw::cVec3 m_vecBaseRot;
+    Hw::cVec3 m_vecTrans;
+    Hw::cVec3 m_vecBaseRotL;
+    Hw::cVec3 m_vecTransL;
     float m_fRotation;
     int m_nSetType;
     int m_nType;
@@ -209,7 +209,7 @@ struct EntitySystem::SetInfo
     Entity* m_pRoomUnitEntity;
     int m_nInitialRtn;
     float m_fInitialTime;
-    cVec3 m_vecInitialPos;
+    Hw::cVec3 m_vecInitialPos;
     float m_fInitialPosDirY;
     int field_EC;
     int field_F0;
@@ -234,18 +234,18 @@ struct EntitySystem::SetInfo
 
 struct EntitySystem::EntityInfo
 {
-    const char *m_Name;
+    const char *m_pName;
     eObjID m_ModelIndex;
     eObjID m_ObjectIndex;
-    EntitySystem::ObjectInfo *m_ObjectInfo;
+    EntitySystem::ObjectInfo *m_pObjectInfo;
     int field_10;
     int field_14;
     Behavior *field_18;
     int field_1C;
-    void *m_ModelData; // wmb
-    void *m_TexturesFile;
-    void *m_WtbFile;
-    void *m_Param;
+    void *m_pModelData; // wmb
+    void *m_pTexturesFile;
+    void *m_pWtbFile;
+    void *m_pParam;
 
     EntityInfo()
     {
@@ -275,9 +275,9 @@ struct EntitySystem::ObjectInfo
     float field_44;
     float field_48;
     float field_4C;
-    cVec3 m_vecTransformPosition;
-    cVec3 m_vecRotation;
-    cVec3 m_vecSize;
+    Hw::cVec3 m_vecTransformPosition;
+    Hw::cVec3 m_vecRotation;
+    Hw::cVec3 m_vecSize;
     int field_74;
     int field_78;
     int field_7C;

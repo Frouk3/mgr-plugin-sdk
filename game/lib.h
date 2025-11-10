@@ -103,7 +103,7 @@ namespace lib
 
                 virtual void* allocate(size_t size)
                 {
-                    return this->m_Allocator->AllocateMemory(size, 32, 0, 0);
+                    return this->m_Allocator->alloc(size, 32, Hw::HW_ALLOC_VIRTUAL, 0);
                 }
 
                 virtual void free(void* block)

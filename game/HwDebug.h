@@ -2,16 +2,16 @@
 
 #include <Hw.h>
 
-#define MAKE_JUMPINTOFUNC(address) __asm { __asm mov eax, shared::base __asm add eax, address __asm jmp eax }
+#define MAKE_JUMPINTOFUNC(address) do { __asm { __asm mov eax, shared::base  __asm add eax, address  __asm jmp eax  } } while(0)
 
 namespace Hw
 {
 	namespace DebugDrawSystem
 	{
-		inline void __cdecl __declspec(naked)  String(float x, float y, float fontsize, unsigned int color, const char* fmt, ...) { MAKE_JUMPINTOFUNC(0xB963B0); }
-		inline void __cdecl __declspec(naked)  String(float x, float y, const char* fmt, ...) { MAKE_JUMPINTOFUNC(0xB96550); }
-		inline void __cdecl __declspec(naked) String(float x, float y, unsigned int color, int page, const char* format, ...) { MAKE_JUMPINTOFUNC(0xB96570); }
-		inline void __cdecl __declspec(naked) String(float x, float y, float fontsize, unsigned int color, int page, const char* fmt, ...) { MAKE_JUMPINTOFUNC(0xB96580); }
+		inline void __declspec(naked) __cdecl String(float x, float y, float fontsize, unsigned int color, const char* fmt, ...) { MAKE_JUMPINTOFUNC(0xB963B0); }
+		inline void __declspec(naked) __cdecl String(float x, float y, const char* fmt, ...) { MAKE_JUMPINTOFUNC(0xB96550); }
+		inline void __declspec(naked) __cdecl String(float x, float y, unsigned int color, int page, const char* format, ...) { MAKE_JUMPINTOFUNC(0xB96570); }
+		inline void __declspec(naked) __cdecl String(float x, float y, float fontsize, unsigned int color, int page, const char* fmt, ...) { MAKE_JUMPINTOFUNC(0xB96580); }
 
 		inline int __cdecl GetPageNo() { return ((int(__cdecl*)())(shared::base + 0xB96420))(); }
 		inline void __cdecl Circle(float x, float y, float r, unsigned int c) { ((void(__cdecl*)(float, float, float, unsigned int))(shared::base + 0xB95EB0))(x, y, r, c); }
@@ -32,44 +32,50 @@ namespace Hw
 	class cDebugLog;
 }
 
+namespace // what a mess...
+{
+	inline void __declspec(naked) __cdecl HwDebugLog_addMess(const char* fmt, ...) { MAKE_JUMPINTOFUNC(0x9D5650); }
+	inline void __declspec(naked) __cdecl HwDebugLog_addErr(const char* fmt, ...) { MAKE_JUMPINTOFUNC(0x9D56A0); }
+}
+
 class Hw::cDebugLog
 {
 public:
-	static inline void __cdecl __declspec(naked) addMess(const char* fmt, ...) { MAKE_JUMPINTOFUNC(0x9D5650); }
-	static inline void __cdecl __declspec(naked) addErr(const char* fmt, ...) { MAKE_JUMPINTOFUNC(0x9D56A0); }
+	static inline void (__cdecl* addMess)(const char* fmt, ...) = HwDebugLog_addMess;
+	static inline void (__cdecl* addErr)(const char* fmt, ...) = HwDebugLog_addErr;
 };
 
 #undef MAKE_JUMPINTOFUNC
 
 struct DebugEventInfo
 {
-    int m_nSeTotal;
-    int m_nSeInUse;
-    int m_nSeFree;
-    int m_nBgmTotal;
-    int m_nBgmInUse;
-    int m_nBgmFree;
-    int m_nObjTotal;
-    int m_nObjInUse;
-    int m_nObjFree;
-    int field_24;
-    int field_28;
-    int field_2C;
-    Hw::cVec4 m_vecListenerPosition;
-    Hw::cVec4 m_vecListenerDirection;
-    int m_nSysEventTotal;
-    int m_nSysEventInUse;
-    int m_nSysEventFree;
-    int m_nSysObjTotal;
-    int m_nSysObjInUse;
-    int m_nSysObjFree;
-    int m_nCommandTotal;
-    int m_nCommandInUse;
-    int m_nCommandFree;
-    int m_nTransferTotal;
-    int m_nTransferInUse;
-    int m_nTransferFree;
-    float m_fSync;
-    float m_fAsync;
-    Hw::cHeap *m_pSysHeap;
+	int m_nSeTotal;
+	int m_nSeInUse;
+	int m_nSeFree;
+	int m_nBgmTotal;
+	int m_nBgmInUse;
+	int m_nBgmFree;
+	int m_nObjTotal;
+	int m_nObjInUse;
+	int m_nObjFree;
+	int field_24;
+	int field_28;
+	int field_2C;
+	Hw::cVec4 m_vecListenerPosition;
+	Hw::cVec4 m_vecListenerDirection;
+	int m_nSysEventTotal;
+	int m_nSysEventInUse;
+	int m_nSysEventFree;
+	int m_nSysObjTotal;
+	int m_nSysObjInUse;
+	int m_nSysObjFree;
+	int m_nCommandTotal;
+	int m_nCommandInUse;
+	int m_nCommandFree;
+	int m_nTransferTotal;
+	int m_nTransferInUse;
+	int m_nTransferFree;
+	float m_fSync;
+	float m_fAsync;
+	Hw::cHeap *m_pSysHeap;
 };

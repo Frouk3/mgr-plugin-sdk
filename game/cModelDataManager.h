@@ -4,6 +4,35 @@
 
 class cModelData;
 
+class cModelClsInfo
+{
+public:
+	int* field_0;
+	int m_nCapacity;
+	int field_8;
+};
+
+class cModelCutBoxInfo
+{
+public:
+	Hw::cVec4 m_Max;
+	Hw::cVec4 m_Min;
+	int m_Index;
+	int field_24;
+	int field_28;
+	int field_2C;
+};
+
+class cModelCutInfo
+{
+public:
+	cModelCutBoxInfo* m_pBoxInfo;
+	int* field_4;
+	int m_nCapacity;
+	cModelClsInfo* m_pClsInfo;
+	int field_10;
+};
+
 class cModelDataManager
 {
 public:
@@ -134,7 +163,7 @@ public:
 	int field_A4;
 	int field_A8;
 	int field_AC;
-	cModelData::CutInfo* m_pCutInfo;
+	cModelCutInfo* m_pCutInfo;
 	int field_B4;
 };
 
@@ -206,9 +235,6 @@ public:
 class cModelData
 {
 public:
-	struct ClsInfo;
-	struct CutBoxInfo;
-	struct CutInfo;
 	struct ModelDataResource;
 
 	int field_0;
@@ -228,32 +254,6 @@ public:
 	int field_1E4;
 	int field_1E8;
 	int field_1EC;
-};
-
-struct cModelData::ClsInfo
-{
-	int* field_0;
-	int m_nCapacity;
-	int field_8;
-};
-
-struct cModelData::CutInfo
-{
-	cModelData::CutBoxInfo* m_pBoxInfo;
-	int* field_4;
-	int m_nCapacity;
-	cModelData::ClsInfo* m_pClsInfo;
-	int field_10;
-};
-
-struct cModelData::CutBoxInfo
-{
-	Hw::cVec4 m_Max;
-	Hw::cVec4 m_Min;
-	int m_Index;
-	int field_24;
-	int field_28;
-	int field_2C;
 };
 
 class cMaterial

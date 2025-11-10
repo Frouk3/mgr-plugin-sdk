@@ -4,8 +4,8 @@
 #include <functional>
 #include "injector/hooking.hpp"
 
-struct cGame;
-struct cScene;
+class cGame;
+class cScene;
 
 class Events
 {
@@ -26,7 +26,7 @@ public:
 			std::vector<std::function<void(Args...)>>& getVector() { return m_vector; }
 
 			void add(std::function<void(Args...)> cb) { m_vector.push_back(std::move(cb)); }
-			void remove(std::function<void(Args...)> cb) { for (auto& fn : m_vector) { if (fn == cb) { m_vector.erase(fn) break; } } }
+			void remove(std::function<void(Args...)> cb) { for (auto it = m_vector.begin(); it != m_vector.end(); ++it) { if (*it == cb) { m_vector.erase(it); break; } } }
 
 			Key& operator+=(std::function<void(Args...)> cb) { add(std::move(cb)); return *this; }
 			Key& operator-=(std::function<void(Args...)> cb) { remove(std::move(cb)); return *this; }

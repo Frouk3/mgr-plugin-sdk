@@ -14,7 +14,7 @@ public:
         EntityHandle m_Entity;
         eObjID m_Object;
         int field_C;
-        cVec4 m_vecEventPosition;
+        Hw::cVec4 m_vecEventPosition;
     };
 
     Hw::cHeapVariable *m_Allocator;

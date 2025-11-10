@@ -10,14 +10,14 @@ struct cObjReadManager
     int field_4; // From what I've seen in the code, this member might or might not be a set type
     int m_Tries; // How many tries we have to load the object?
 
-    BOOL getObjectData(DataArchiveHolder* holder, eObjID object)
+    BOOL getObjectData(Hw::cFmerge* holder, eObjID object)
     {
-        return ((BOOL(__thiscall*)(cObjReadManager*, DataArchiveHolder*, eObjID))(shared::base + 0x5FE6B0))(this, holder, object);
+        return ((BOOL(__thiscall*)(cObjReadManager*, Hw::cFmerge*, eObjID))(shared::base + 0x5FE6B0))(this, holder, object);
     }
 
-    BOOL getDataAtSet(DataArchiveHolder* data, eObjID object, int setType)
+    BOOL getDataAtSet(Hw::cFmerge* data, eObjID object, int setType)
     {
-        return ((BOOL(__thiscall*)(cObjReadManager*, DataArchiveHolder*, eObjID, int))(shared::base + 0x601170))(this, data, object, setType);
+        return ((BOOL(__thiscall*)(cObjReadManager*, Hw::cFmerge*, eObjID, int))(shared::base + 0x601170))(this, data, object, setType);
     }
 
     BOOL requestObject(eObjID object, int setType)

@@ -13,7 +13,7 @@ struct cZandatsuTarget
     float field_14;
     float field_18;
     int field_1C;
-    cVec4 m_vecOffset;
+    Hw::cVec4 m_vecOffset;
     int field_30;
     int field_34;
     unsigned short field_38;

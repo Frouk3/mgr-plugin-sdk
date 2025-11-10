@@ -5,8 +5,8 @@
 class Em0041 : public Behavior
 {
 public:
-    DataArchiveHolder field_870;
-    DataArchiveHolder field_878;
+    Hw::cFmerge field_870;
+    Hw::cFmerge field_878;
     EntityHandle field_880;
     float field_884;
     float field_888;
@@ -45,7 +45,7 @@ public:
         ((void(__thiscall *)(Em0041 *))(shared::base + 0x6A61F0))(this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1734C54);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x1734C54);
 };
 
 VALIDATE_SIZE(Em0041, 0x900);

@@ -46,8 +46,8 @@ public:
     int field_904;
     int field_908;
     int field_90C;
-    cVec4 field_910;
-    cVec4 field_920;
+    Hw::cVec4 field_910;
+    Hw::cVec4 field_920;
     int field_930;
     int field_934;
     int field_938;
@@ -485,7 +485,7 @@ public:
         ((void (__thiscall *)(BehaviorBulletBase *))(shared::base + 0x6CCE00))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C94);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C94);
 };
 
 VALIDATE_SIZE(BehaviorBulletBase, 0x1210);

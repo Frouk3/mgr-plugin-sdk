@@ -296,13 +296,13 @@ namespace Hw
 	struct RenderBufferHeapManager;
 
 	template <typename T>
-	struct cFixedVector;
+	class cFixedVector;
 
 	template <typename T>
-	struct cFixedList;
+	class cFixedList;
 
 	template <typename tC, typename tHeapBinder>
-	struct cExpandableVector;
+	class cExpandableVector;
 
 	class cVec2;
 	class cVec3;
@@ -423,6 +423,32 @@ namespace Hw
 	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 
 	inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
+};
+
+class Hw::cSemaphore
+{
+public:
+	HANDLE m_hSemaphore;
+
+	cSemaphore() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D7360))(this); }
+
+	BOOL startup(long init_count, long max_count) { return ((BOOL(__thiscall*)(cSemaphore*, long, long))(shared::base + 0x9D7370))(this, init_count, max_count); }
+	void cleanup() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D73B0))(this); }
+	void hold() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D73D0))(this); }
+	void release() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D73E0))(this); }
+};
+
+class Hw::cCriticalSection
+{
+public:
+	RTL_CRITICAL_SECTION m_critsection;
+	BOOL m_bInit;
+
+	cCriticalSection() { this->m_bInit = FALSE; }
+	BOOL startup() { return ((BOOL(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7240))(this); }
+	void enter() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0xA6C0))(this); }
+	void leave() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0xA6D0))(this); }
+	void cleanup() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7270))(this); }
 };
 
 class Hw::cHeap
@@ -644,32 +670,43 @@ template <typename tC, unsigned const align, typename tHeapBinder = Hw::cHeap>
 class Hw::cFactory
 {
 public:
+	class const_iterator;
+
+	const const_iterator npos;
+private:
+	void* _pad01;
+public:
+	tHeapBinder m_Heap;
+public:
 	class const_iterator
 	{
 	protected:
 		tC *m_Ptr;
+		Hw::cFactory<tC, align, tHeapBinder> *m_pParent;
 
 		cHeap *getHeapPtr()
 		{
-			return &m_Heap;
+			return &m_pParent->m_Heap;
 		}
 
 		tC* getNextPtr()
 		{
-			return m_Heap.getNextAlloc(m_Ptr);
+			return (tC*)m_pParent->m_Heap.getNextAlloc(m_Ptr);
 		}
 
 	public:
 		const_iterator(void *pPtr) : m_Ptr((tC*)pPtr) {}
+		const_iterator(void* pPtr, Hw::cFactory<tC, align, tHeapBinder>* pParent) : m_Ptr((tC*)pPtr), m_pParent(pParent) {}
 		const_iterator(const const_iterator &other) : m_Ptr(other.m_Ptr) {}
 		const_iterator() : m_Ptr(nullptr) {}
 
 		const_iterator& operator++(int offset)
 		{
-			while (offset--)
-				m_Ptr = getNextPtr();
+			const_iterator temp = m_Ptr;
 
-			return *this;
+			m_Ptr = getNextPtr();
+
+			return temp;
 		}
 
 		const_iterator& operator++()
@@ -709,6 +746,7 @@ public:
 	{
 	public:
 		iterator(void *pPtr) : const_iterator(pPtr) {}
+		iterator(void* pPtr, Hw::cFactory<tC, align, tHeapBinder>* pParent) : const_iterator(pPtr, pParent) {}
 		iterator(const iterator &other) : const_iterator(other) {}
 		iterator() : const_iterator() {}
 
@@ -728,34 +766,27 @@ public:
 		}
 	};
 
-	const const_iterator npos;
-private:
-	void *_pad01;
-protected:
-	tHeapBinder m_Heap;
-public:
-
 	cFactory() : npos(nullptr) {}
 	~cFactory() { destroy(); }
 
 	iterator begin()
 	{
-		return iterator(m_Heap.getNextAlloc(nullptr));
+		return iterator(m_Heap.getNextAlloc(nullptr), this);
 	}
 
 	const_iterator begin() const
 	{
-		return const_iterator(m_Heap.getNextAlloc(nullptr));
+		return const_iterator(m_Heap.getNextAlloc(nullptr), this);
 	}
 
 	iterator end()
 	{
-		return iterator(nullptr);
+		return iterator(nullptr, this);
 	}
 
 	const_iterator end() const
 	{
-		return const_iterator(nullptr);
+		return const_iterator(nullptr, this);
 	}
 
 	void destroy()
@@ -829,9 +860,9 @@ public:
 		return (tC*)this->m_Heap.alloc();
 	}
 
-	cFactory::iterator newWorkIt()
+	cFactory<tC, align, Hw::cHeapFixed>::iterator newWorkIt()
 	{
-		return cFactory::iterator(this->m_Heap.alloc());
+		return cFactory<tC, align, Hw::cHeapFixed>::iterator(this->m_Heap.alloc());
 	}
 
 	size_t getUsedNum()
@@ -890,7 +921,7 @@ public:
 	const char *getFileIndexFileName(size_t fileIndex) { return ((const char*(__thiscall *)(Hw::cFmerge *, size_t))(shared::base + 0x9E38D0))(this, fileIndex); }
 	BOOL getFileIndexExtension(char *pExt, size_t fileIndex) { return ((BOOL(__thiscall *)(Hw::cFmerge*, char *, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex); }
 	void *getIndexFileData(size_t fileIndex) { return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
-	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
+	size_t _getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
 	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E3F20))(this, ext, no); }
 	size_t getFileNameIndexI(const char *name) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char*))(shared::base + 0x9E3FD0))(this, name);}
 	size_t getSubStrFileIndex(const char *name, unsigned int matchLimit) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit);}
@@ -1170,7 +1201,7 @@ public:
 	cUcol(unsigned int r, unsigned int g, unsigned int b, unsigned int a) : r(r), g(g), b(b), a(a) {}
 
 	void setRGBAU(unsigned int r, unsigned int g, unsigned int b, unsigned int a) { this->r = r; this->g = g; this->b = b; this->a = a; }
-	void setRGBAF(float r, float g, float b, float a) { this->r = r * 255; this->g = g * 255; this->b = b * 255; this->a = a * 255; }
+	void setRGBAF(float r, float g, float b, float a) { this->r = (int)(r * 255); this->g = (int)(g * 255); this->b = (int)(b * 255); this->a = (int)(a * 255); }
 
 	operator unsigned int() const { return (a << 24) | (r << 16) | (g << 8) | b; }
 	cUcol& operator=(unsigned int color) { r = (color >> 16) & 0xFF; g = (color >> 8) & 0xFF; b = color & 0xFF; a = (color >> 24) & 0xFF; return *this; }
@@ -1207,11 +1238,11 @@ public:
 	bool operator!=(const cUcol& ucol) const;
 };
 
-Hw::cUcol::cUcol(const cFcol& fcol) { r = (unsigned int)(int)(fcol.r * 255.0f); g = (unsigned int)(int)(fcol.g * 255.0f); b = (unsigned int)(int)(fcol.b * 255.0f); a = (unsigned int)(int)(fcol.a * 255.0f); }
-Hw::cFcol::cFcol(const cUcol& ucol) { r = ucol.r / 255.0f; g = ucol.g / 255.0f; b = ucol.b / 255.0f; a = ucol.a / 255.0f; }
-Hw::cFcol &Hw::cFcol::operator=(const cUcol& ucol) { setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a); return *this; }
-Hw::cUcol &Hw::cUcol::operator=(const cFcol &fcol) { setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a); return *this; }
-Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const 
+inline Hw::cUcol::cUcol(const cFcol& fcol) { r = (unsigned int)(int)(fcol.r * 255.0f); g = (unsigned int)(int)(fcol.g * 255.0f); b = (unsigned int)(int)(fcol.b * 255.0f); a = (unsigned int)(int)(fcol.a * 255.0f); }
+inline Hw::cFcol::cFcol(const cUcol& ucol) { r = ucol.r / 255.0f; g = ucol.g / 255.0f; b = ucol.b / 255.0f; a = ucol.a / 255.0f; }
+inline Hw::cFcol &Hw::cFcol::operator=(const cUcol& ucol) { setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a); return *this; }
+inline Hw::cUcol &Hw::cUcol::operator=(const cFcol &fcol) { setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a); return *this; }
+inline Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const 
 {
 	return cUcol(
 		min(255, r + (unsigned int)(fcol.r * 255)),
@@ -1221,7 +1252,7 @@ Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const
 	);
 }
 
-Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const 
+inline Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const 
 {
 	return cUcol(
 		max(0, r - (unsigned int)(fcol.r * 255)),
@@ -1231,7 +1262,7 @@ Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const
 	);
 }
 
-Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const 
+inline Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const 
 {
 	return cUcol(
 		min(255, (int)(r * fcol.r)),
@@ -1241,17 +1272,17 @@ Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const
 	);
 }
 
-Hw::cUcol Hw::cUcol::operator/(const cFcol& fcol) const 
+inline Hw::cUcol Hw::cUcol::operator/(const cFcol& fcol) const 
 {
 	return cUcol(
-		min(255, r / max(fcol.r, 1e-6f)),
-		min(255, g / max(fcol.g, 1e-6f)),
-		min(255, b / max(fcol.b, 1e-6f)),
-		min(255, a / max(fcol.a, 1e-6f))
+		min(255, (int)((float)r / max(fcol.r, 1e-6f))),
+		min(255, (int)((float)g / max(fcol.g, 1e-6f))),
+		min(255, (int)((float)b / max(fcol.b, 1e-6f))),
+		min(255, (int)((float)a / max(fcol.a, 1e-6f)))
 	);
 }
 
-bool Hw::cUcol::operator==(const cFcol& fcol) const 
+inline bool Hw::cUcol::operator==(const cFcol& fcol) const 
 {
 	return r == (unsigned int)(fcol.r * 255) &&
 		g == (unsigned int)(fcol.g * 255) &&
@@ -1259,12 +1290,12 @@ bool Hw::cUcol::operator==(const cFcol& fcol) const
 		a == (unsigned int)(fcol.a * 255);
 }
 
-bool Hw::cUcol::operator!=(const cFcol& fcol) const 
+inline bool Hw::cUcol::operator!=(const cFcol& fcol) const 
 {
 	return !(*this == fcol);
 }
 
-Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const 
 {
 	return cFcol(
 		r + ucol.r / 255.0f,
@@ -1274,7 +1305,7 @@ Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const
 	);
 }
 
-Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const 
 {
 	return cFcol(
 		r - ucol.r / 255.0f,
@@ -1284,7 +1315,7 @@ Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const
 	);
 }
 
-Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const 
 {
 	return cFcol(
 		r * ucol.r / 255.0f,
@@ -1294,7 +1325,7 @@ Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const
 	);
 }
 
-Hw::cFcol Hw::cFcol::operator/(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator/(const cUcol& ucol) const 
 {
 	return cFcol(
 		r / max(ucol.r, 1u) / 255.0f,
@@ -1304,7 +1335,7 @@ Hw::cFcol Hw::cFcol::operator/(const cUcol& ucol) const
 	);
 }
 
-bool Hw::cFcol::operator==(const cUcol& ucol) const
+inline bool Hw::cFcol::operator==(const cUcol& ucol) const
 {
 	return fabs(r - ucol.r / 255.0f) < 1e-6f &&
 		fabs(g - ucol.g / 255.0f) < 1e-6f &&
@@ -1312,7 +1343,7 @@ bool Hw::cFcol::operator==(const cUcol& ucol) const
 		fabs(a - ucol.a / 255.0f) < 1e-6f;
 };
 
-bool Hw::cFcol::operator!=(const cUcol& ucol) const 
+inline bool Hw::cFcol::operator!=(const cUcol& ucol) const
 {
 	return !(*this == ucol);
 }
@@ -1335,32 +1366,6 @@ public:
 	float getF32(float min, float max) { return ((float(__thiscall*)(cRand*, float, float))(shared::base + 0x9DE300))(this, min, max); }
 	float getF0_1() { return getF32(0.0f, 1.0f); }
 	float getF1_1() { return getF32(-1.0f, 1.0f); }
-};
-
-class Hw::cSemaphore
-{
-public:
-	HANDLE m_hSemaphore;
-
-	cSemaphore() { ((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D7360))(this); }
-	
-	BOOL startup(long init_count, long max_count) { return ((BOOL(__thiscall *)(cSemaphore *, long, long))(shared::base + 0x9D7370))(this, init_count, max_count); }
-	void cleanup() { ((void(__thiscall *)(cSemaphore*))(shared::base + 0x9D73B0))(this); }
-	void hold() { ((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73D0))(this); }
-	void release() { ((void(__thiscall *)(cSemaphore *))(shared::base + 0x9D73E0))(this); }
-};
-
-class Hw::cCriticalSection
-{
-public:
-	RTL_CRITICAL_SECTION m_critsection;
-	BOOL m_bInit;
-
-	cCriticalSection() { this->m_bInit = FALSE; }
-	BOOL startup() { return ((BOOL(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7240))(this); }
-	void enter() { ((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6C0))(this); }
-	void leave() { ((void(__thiscall *)(cCriticalSection*))(shared::base + 0xA6D0))(this); }
-	void cleanup() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7270))(this); }
 };
 
 template <typename tC>
@@ -1411,24 +1416,28 @@ public:
 	void setXY(float x, float y) { this->x = x; this->y = y; }
 
 	void operator=(const cVec2& lhs) { x = lhs.x; y = lhs.y; }
+	cVec2 operator+(const cVec2& lhs) { return cVec2(x + lhs.x, y + lhs.y); }
 	cVec2 operator+(const cVec2& lhs) const { return cVec2(x + lhs.x, y + lhs.y); }
 	cVec2& operator+=(const cVec2& lhs) { x += lhs.x; y += lhs.y; return *this; }
+	cVec2 operator-(const cVec2& lhs) { return cVec2(x - lhs.x, y - lhs.y); }
 	cVec2 operator-(const cVec2& lhs) const { return cVec2(x - lhs.x, y - lhs.y); }
 	cVec2& operator-=(const cVec2& lhs) { x -= lhs.x; y -= lhs.y; return *this; }
-	cVec2 operator*(float scale) const { return cVec2(x * scale, y * scale); }
+	cVec2 operator*(float scale) { return cVec2(x * scale, y * scale); }
+	cVec2 operator*(const cVec2& lhs) { return cVec2(x * lhs.x, y * lhs.y); }
 	cVec2 operator*(const cVec2& lhs) const { return cVec2(x * lhs.x, y * lhs.y); }
 	cVec2& operator*=(float scale) { x *= scale; y *= scale; return *this; }
 	cVec2& operator*=(const cVec2& lhs) { x *= lhs.x; y *= lhs.y; return *this; }
-	cVec2 operator/(float scale) const { return cVec2(x / scale, y / scale); }
+	cVec2 operator/(float scale) { return cVec2(x / scale, y / scale); }
+	cVec2 operator/(const cVec2& lhs) { return cVec2(x / lhs.x, y / lhs.y); }
 	cVec2 operator/(const cVec2& lhs) const { return cVec2(x / lhs.x, y / lhs.y); }
 	cVec2& operator/=(float scale) { x /= scale; y /= scale; return *this; }
 	cVec2& operator/=(const cVec2& lhs) { x /= lhs.x; y /= lhs.y; return *this; }
 	bool operator==(const cVec2& rhs) const { return x == rhs.x && y == rhs.y; }
 	bool operator!=(const cVec2& rhs) const { return !(*this == rhs); }
 
-	float length() const { return sqrtf(powf(x, 2) + powf(y, 2)); }
-	cVec2 normalize() const { float length = this->length(); return cVec2(x / length, y / length); }
-	float dot(const cVec2& lhs) const  { return x * lhs.x + y * lhs.y; }
+	float length() { return sqrtf(powf(x, 2) + powf(y, 2)); }
+	cVec2 normalize() { float length = this->length(); return cVec2(x / length, y / length); }
+	float dot(const cVec2& lhs) { return x * lhs.x + y * lhs.y; }
 };
 
 class Hw::cVec3
@@ -1455,31 +1464,35 @@ public:
 	bool operator==(const Hw::cVec4& lhs) const;
 	bool operator!=(const Hw::cVec4& lhs) const;
 
-	cVec3 operator*(Hw::cMtx& mat) const;
+	cVec3 operator*(Hw::cMtx& mat);
 	cVec3& operator*=(Hw::cMtx& mat);
 
 	cVec3& operator=(const cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this;}
+	cVec3 operator+(const cVec3& lhs) { return cVec3(x + lhs.x, y + lhs.y, z + lhs.z); }
 	cVec3 operator+(const cVec3& lhs) const { return cVec3(x + lhs.x, y + lhs.y, z + lhs.z); }
 	cVec3& operator+=(const cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+	cVec3 operator-(const cVec3& lhs) { return cVec3(x - lhs.x, y - lhs.y, z - lhs.z); }
 	cVec3 operator-(const cVec3& lhs) const { return cVec3(x - lhs.x, y - lhs.y, z - lhs.z); }
 	cVec3 operator-() const { return cVec3(-x, -y, -z); }
 	cVec3& operator-=(const cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-	cVec3 operator*(float scale) const { return cVec3(x * scale, y * scale, z * scale); }
+	cVec3 operator*(float scale) { return cVec3(x * scale, y * scale, z * scale); }
+	cVec3 operator*(const cVec3& lhs) { return cVec3(x * lhs.x, y * lhs.y, z * lhs.z); }
 	cVec3 operator*(const cVec3& lhs) const { return cVec3(x * lhs.x, y * lhs.y, z * lhs.z); }
 	cVec3& operator*=(float scale) { x *= scale; y *= scale; z *= scale; return *this; }
 	cVec3& operator*=(const cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-	cVec3 operator/(float scale) const { return cVec3(x / scale, y / scale, z / scale); }
+	cVec3 operator/(float scale) { return cVec3(x / scale, y / scale, z / scale); }
+	cVec3 operator/(const cVec3& lhs) { return cVec3(x / lhs.x, y / lhs.y, z / lhs.z); }
 	cVec3 operator/(const cVec3& lhs) const { return cVec3(x / lhs.x, y / lhs.y, z / lhs.z); }
 	cVec3& operator/=(float scale) { x /= scale; y /= scale; z /= scale; return *this; }
 	cVec3& operator/=(const cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
 	bool operator==(const cVec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
 	bool operator!=(const cVec3& rhs) const { return !(*this == rhs); }
 
-	float length() const { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2)); }
-	float length2D() const { return sqrtf(powf(x, 2) + powf(z, 2)); }
-	cVec3 normalize() const { float length = this->length(); return cVec3(x / length, y / length, z / length); }
-	float dot(const cVec3& lhs) const { return x * lhs.x + y * lhs.y + z * lhs.z; }
-	cVec3 cross(const cVec3& lhs) const { return cVec3(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x ); }
+	float length() { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2)); }
+	float length2D() { return sqrtf(powf(x, 2) + powf(z, 2)); }
+	cVec3 normalize() { float length = this->length(); return cVec3(x / length, y / length, z / length); }
+	float dot(const cVec3& lhs) { return x * lhs.x + y * lhs.y + z * lhs.z; }
+	cVec3 cross(const cVec3& lhs) { return cVec3(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x ); }
 };
 
 class Hw::cVec4
@@ -1505,65 +1518,70 @@ public:
 	bool operator==(const Hw::cVec3& lhs) const;
 	bool operator!=(const Hw::cVec3& lhs) const;
 
-	cVec4 operator*(Hw::cMtx& mat) const;
+	cVec4 operator*(Hw::cMtx& mat);
 	cVec4& operator*=(Hw::cMtx& mat);
 
 	void setXYZ(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
 	void setXYZW(float x, float y, float z, float w) { this->x = x; this->y = y; this->z = z; this->w = w; }
 
 	cVec4& operator=(const cVec4& right) { this->x = right.x; this->y = right.y; this->z = right.z; this->w = right.w; return *this; }
+	cVec4 operator+(const cVec4& rhs) { return cVec4(x + rhs.x, y + rhs.y, z + rhs.z, 1.0f); }
 	cVec4 operator+(const cVec4& rhs) const { return cVec4(x + rhs.x, y + rhs.y, z + rhs.z, 1.0f); }
 	cVec4& operator+=(const cVec4& rhs) { x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w; return *this; }
+	cVec4 operator-(const cVec4& rhs) { return cVec4(x - rhs.x, y - rhs.y, z - rhs.z, w); }
 	cVec4 operator-(const cVec4& rhs) const { return cVec4(x - rhs.x, y - rhs.y, z - rhs.z, w); }
 	cVec4& operator-=(const cVec4& rhs) { x -= rhs.x; y -= rhs.y; z -= rhs.z; w -= rhs.w; return *this; }
-	cVec4 operator*(float scale) const { return cVec4(x * scale, y * scale, z * scale, w); }
+	cVec4 operator*(float scale) { return cVec4(x * scale, y * scale, z * scale, w); }
+	cVec4 operator*(const cVec4& rhs) { return cVec4(x * rhs.x, y * rhs.y, z * rhs.z, w); }
 	cVec4 operator*(const cVec4& rhs) const { return cVec4(x * rhs.x, y * rhs.y, z * rhs.z, w); }
 	cVec4& operator*=(float scale) { x *= scale; y *= scale; z *= scale; w *= scale; return *this; }
 	cVec4& operator*=(const cVec4& rhs) { x *= rhs.x; y *= rhs.y; z *= rhs.z; w *= rhs.w; return *this; }
-	cVec4 operator/(float scale) const { return cVec4(x / scale, y / scale, z / scale, w); }
+	cVec4 operator/(float scale) { return cVec4(x / scale, y / scale, z / scale, w); }
+	cVec4 operator/(const cVec4& rhs) { return cVec4(x / rhs.x, y / rhs.y, z / rhs.z, w); }
 	cVec4 operator/(const cVec4& rhs) const { return cVec4(x / rhs.x, y / rhs.y, z / rhs.z, w); }
 	cVec4& operator/=(float scale) { x /= scale; y /= scale; z /= scale; w /= scale; return *this; }
 	cVec4& operator/=(const cVec4& rhs) { x /= rhs.x; y /= rhs.y; z /= rhs.z; w /= rhs.w; return *this; }
 	bool operator==(const cVec4& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
 	bool operator!=(const cVec4& rhs) const { return !(*this == rhs); }
 
-	float length() const { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2) + powf(w, 2)); }
-	float length2D() const { return sqrtf(powf(x, 2) + powf(z, 2)); }
-	cVec4 normalize() const { float length = this->length(); return cVec4(x / length, y / length, z / length, w / length); }
-	float dot(const cVec4& lhs) const { return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w; }
-	cVec4 cross(const cVec4& lhs) const { return cVec4(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x, 1.0f ); }
+	float length() { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2) + powf(w, 2)); }
+	float length2D() { return sqrtf(powf(x, 2) + powf(z, 2)); }
+	cVec4 normalize() { float length = this->length(); return cVec4(x / length, y / length, z / length, w / length); }
+	float dot(const cVec4& lhs) { return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w; }
+	cVec4 cross(const cVec4& lhs) { return cVec4(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x, 1.0f ); }
 };
 
-Hw::cVec3::cVec3(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
-void Hw::cVec3::setVec4(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
-Hw::cVec3& Hw::cVec3::operator=(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this; }
-Hw::cVec3 Hw::cVec3::operator+(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
-Hw::cVec3& Hw::cVec3::operator+=(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
-Hw::cVec3 Hw::cVec3::operator-(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-Hw::cVec3& Hw::cVec3::operator-=(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-Hw::cVec3 Hw::cVec3::operator*(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-Hw::cVec3& Hw::cVec3::operator*=(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-Hw::cVec3 Hw::cVec3::operator/(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
-Hw::cVec3& Hw::cVec3::operator/=(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
-bool Hw::cVec3::operator==(const Hw::cVec4& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
-bool Hw::cVec3::operator!=(const Hw::cVec4& lhs) const { return !(*this == lhs); }
+inline Hw::cVec3::cVec3(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
+inline void Hw::cVec3::setVec4(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
+inline Hw::cVec3& Hw::cVec3::operator=(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator+(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+inline Hw::cVec3& Hw::cVec3::operator+=(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator-(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+inline Hw::cVec3& Hw::cVec3::operator-=(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator*(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+inline Hw::cVec3& Hw::cVec3::operator*=(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator/(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+inline Hw::cVec3& Hw::cVec3::operator/=(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+inline bool Hw::cVec3::operator==(const Hw::cVec4& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
+inline bool Hw::cVec3::operator!=(const Hw::cVec4& lhs) const { return !(*this == lhs); }
 
-Hw::cVec4::cVec4(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; }
-void Hw::cVec4::setVec3(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
-Hw::cVec4& Hw::cVec4::operator=(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; return *this; }
-Hw::cVec4 Hw::cVec4::operator+(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
-Hw::cVec4& Hw::cVec4::operator+=(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
-Hw::cVec4 Hw::cVec4::operator-(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-Hw::cVec4& Hw::cVec4::operator-=(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-Hw::cVec4 Hw::cVec4::operator*(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-Hw::cVec4& Hw::cVec4::operator*=(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-Hw::cVec4 Hw::cVec4::operator/(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
-Hw::cVec4& Hw::cVec4::operator/=(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
-bool Hw::cVec4::operator==(const Hw::cVec3& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
-bool Hw::cVec4::operator!=(const Hw::cVec3& lhs) const { return !(*this == lhs); }
+inline Hw::cVec4::cVec4(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; }
+inline void Hw::cVec4::setVec3(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
+inline Hw::cVec4& Hw::cVec4::operator=(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator+(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+inline Hw::cVec4& Hw::cVec4::operator+=(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator-(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+inline Hw::cVec4& Hw::cVec4::operator-=(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator*(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+inline Hw::cVec4& Hw::cVec4::operator*=(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator/(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+inline Hw::cVec4& Hw::cVec4::operator/=(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+inline bool Hw::cVec4::operator==(const Hw::cVec3& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
+inline bool Hw::cVec4::operator!=(const Hw::cVec3& lhs) const { return !(*this == lhs); }
 
-struct Hw::cQuat
+class Hw::cQuat
 {
+public:
 	float x, y, z, w;
 
 	cQuat(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {};
@@ -1617,7 +1635,7 @@ public:
 	}
 };
 
-Hw::cVec3 Hw::cVec3::operator*(Hw::cMtx& mat) const
+inline Hw::cVec3 Hw::cVec3::operator*(Hw::cMtx& mat)
 {
 	return Hw::cVec3(
 		x * mat._11 + y * mat._21 + z * mat._31 + mat._41,
@@ -1625,8 +1643,8 @@ Hw::cVec3 Hw::cVec3::operator*(Hw::cMtx& mat) const
 		x * mat._13 + y * mat._23 + z * mat._33 + mat._43
 	);
 }
-Hw::cVec3& Hw::cVec3::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
-Hw::cVec4 Hw::cVec4::operator*(Hw::cMtx& mat) const
+inline Hw::cVec3& Hw::cVec3::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator*(Hw::cMtx& mat)
 {
 	return Hw::cVec4(
 		x * mat._11 + y * mat._21 + z * mat._31 + w * mat._41,
@@ -1634,9 +1652,24 @@ Hw::cVec4 Hw::cVec4::operator*(Hw::cMtx& mat) const
 		x * mat._13 + y * mat._23 + z * mat._33 + w * mat._43,
 		x * mat._14 + y * mat._24 + z * mat._34 + w * mat._44 );		
 }
-Hw::cVec4& Hw::cVec4::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
+inline Hw::cVec4& Hw::cVec4::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
 
 VALIDATE_SIZE(Hw::cMtx, 0x40);
+
+class Hw::cPadState
+{
+public:
+	unsigned int m_On;
+	unsigned int m_Trig;
+	unsigned int m_Rel;
+	unsigned int m_Rep;
+	Hw::cVec2 m_fLeftStick;
+	Hw::cVec2 m_fRightStick;
+	float m_fLeftTrigger;
+	float m_fRightTrigger;
+	int m_bValidInput;
+	int m_RepCount;
+};
 
 class Hw::cJobManager
 {
@@ -2062,7 +2095,7 @@ public:
 	void movePos(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E4F20))(this, pos); }
 	// Move according to the rotation vector, Z would be forward
 	void movePosFront(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E4FA0))(this, pos); }
-	// Move camera according to the Y rotation axis, Z is forward, it ignores X and Z rotation
+	// Move camera according to the Y rotation axis, Z is forward, it doesn't affect pitch at all
 	void movePosFrontY(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5090))(this, pos); }
 	void updateViewInverseMatrix() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5170))(this); }
 	void setViewMatrix(const Hw::cMtx& mat) { ((void(__thiscall *)(cCameraBase *, const Hw::cMtx&))(shared::base + 0x9E5180))(this, mat); }
@@ -2344,8 +2377,9 @@ public:
 class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
 
 template <typename T>
-struct Hw::cFixedVector
+class Hw::cFixedVector
 {
+public:
 	int field_0;
 	T* m_vector;
 	size_t m_capacity;
@@ -2371,12 +2405,12 @@ struct Hw::cFixedVector
 		}
 	}
 
-	BOOL create(size_t capacity, Hw::cHeap* allocator)
+	BOOL create(size_t capacity, Hw::cHeap& rHeap)
 	{
 		if (m_vector)
 			return 0;
 
-		m_vector = allocator->AllocateMemory(sizeof(T) * capacity);
+		m_vector = rHeap.alloc(sizeof(T) * capacity);
 		if (m_vector)
 		{
 			m_capacity = capacity;
@@ -2386,7 +2420,7 @@ struct Hw::cFixedVector
 		}
 		else
 		{
-			ePrintf("cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", allocator->m_TargetAlloc, sizeof(T) * capacity, allocator->getFreeMemory());
+			ePrintf("cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", rHeap.m_pHeapName, sizeof(T) * capacity, rHeap.getAllocatableSize());
 			return 0;
 		}
 		return 0;
@@ -2586,66 +2620,66 @@ public:
 	public:
 		iterator(const iterator& it)
 		{
-			m_pTag = it.m_pTag;
+			this->m_pTag = it.m_pTag;
 		}
 
 		iterator(cTag *pTag)
 		{
-			m_pTag = pTag;
+			this->m_pTag = pTag;
 		}
 
 		iterator(const const_iterator &it)
 		{
-			m_pTag = it.m_pTag;
+			this->m_pTag = it.m_pTag;
 		}
 
 		iterator()
 		{
-			m_pTag = nullptr;
+			this->m_pTag = nullptr;
 		}
 
 		iterator &operator=(const iterator& it)
 		{
-			m_pTag = it.m_pTag;
+			this->m_pTag = it.m_pTag;
 
 			return *this;
 		}
 
 		tC& operator*()
 		{
-			return m_pTag->m_value;
+			return this->m_pTag->m_value;
 		}
 
 		tC *operator->()
 		{
-			return &m_pTag->m_value;
+			return &this->m_pTag->m_value;
 		}
 
 		iterator getPrev()
 		{
-			return m_pTag->m_prev;
+			return this->m_pTag->m_prev;
 		}
 
 		iterator getNext()
 		{
-			return m_pTag->m_next;
+			return this->m_pTag->m_next;
 		}
 	};
 
-	const iterator m_npos;
+	const iterator npos;
 	cTag* m_pAllocated;
-	size_t m_capacity;
-	size_t m_size;
-	iterator m_freeBegin;
-	iterator m_first;
-	iterator m_last;
+	int m_Capacity;
+	int m_UsedNum;
+	iterator m_FreeBegin;
+	iterator m_UsedBegin;
+	iterator m_UsedEnd;
 
-	cFixedList() : m_npos(nullptr)
+	cFixedList() : npos(nullptr)
 	{
 		m_pAllocated = nullptr;
-		m_freeBegin = m_npos;
-		m_first = m_npos;
-		m_last = m_npos;
+		m_FreeBegin = npos;
+		m_UsedBegin = npos;
+		m_UsedEnd = npos;
 	};
 
 	~cFixedList()
@@ -2653,17 +2687,17 @@ public:
 		destroy();
 	}
 
-	BOOL create(size_t capacity, Hw::cHeap &allocator)
+	BOOL create(int capacity, Hw::cHeap &allocator)
 	{
 		if (m_pAllocated)
 			return FALSE;
 
-		m_pAllocated = (cTag*)allocator.AllocateMemory(sizeof(cTag) * capacity + sizeof(cTag), 32, 0, 0);
+		m_pAllocated = (cTag*)allocator.alloc(sizeof(cTag) * capacity + sizeof(cTag), 32, 0, 0);
 		if (m_pAllocated)
 		{
-			m_capacity = capacity;
-			m_size = 0;
-			m_last = m_pAllocated + capacity;
+			m_Capacity = capacity;
+			m_UsedNum = 0;
+			m_UsedEnd = m_pAllocated + capacity;
 
 			resetChain();
 
@@ -2682,21 +2716,21 @@ public:
 				m_pAllocated = nullptr;
 			}
 
-			m_capacity = 0;
-			m_size = 0;
-			m_first = m_npos;
-			m_last = m_npos;
-			m_freeBegin = m_npos;
+			m_Capacity = 0;
+			m_UsedNum = 0;
+			m_UsedBegin = npos;
+			m_UsedEnd = npos;
+			m_FreeBegin = npos;
 		}
 	}
 
 	iterator insert(const_iterator &where, const tC& element)
 	{
-		cTag* free = m_freeBegin;
-		if (m_freeBegin == m_npos)
+		cTag* free = m_FreeBegin;
+		if (m_FreeBegin == npos)
 		{
 			PrintfLog("cFixedList<tC>::insert  list max over!");
-			return m_npos;
+			return npos;
 		}
 
 		free = createIterator();
@@ -2713,20 +2747,20 @@ public:
 		if (where->m_pTag)
 			where->m_pTag->m_prev = free;
 
-		if (m_first == where)
-			m_first = free;
+		if (m_UsedBegin == where)
+			m_UsedBegin = free;
 
 		return free;
 	}
 
 	iterator pushBack(const tC& element)
 	{
-		return insert(m_last, element);
+		return insert(m_UsedEnd, element);
 	}
 
 	iterator pushFront(const tC& element)
 	{
-		return insert(m_first, element);
+		return insert(m_UsedBegin, element);
 	}
 
 	iterator erase(iterator &it)
@@ -2739,20 +2773,20 @@ public:
 		if (next)
 			next->m_prev = prev;
 
-		if (m_first == it)
-			m_first = next;
+		if (m_UsedBegin == it)
+			m_UsedBegin = next;
 
-		--m_size;
+		--m_UsedNum;
 
-		it->m_pTag->m_prev = m_freeBegin.getPrev();
-		it->m_pTag->m_next = m_freeBegin.m_pTag;
+		it->m_pTag->m_prev = m_FreeBegin.getPrev();
+		it->m_pTag->m_next = m_FreeBegin.m_pTag;
 
-		if (m_freeBegin.getPrev())
-			m_freeBegin.getPrev()->m_next = it->m_pTag;
-		if (m_freeBegin.m_pTag)
-			m_freeBegin.m_pTag->m_prev = it->m_pTag;
+		if (m_FreeBegin.getPrev())
+			m_FreeBegin.getPrev()->m_next = it->m_pTag;
+		if (m_FreeBegin.m_pTag)
+			m_FreeBegin.m_pTag->m_prev = it->m_pTag;
 
-		m_freeBegin = it->m_pTag;
+		m_FreeBegin = it->m_pTag;
 
 		return next;
 	}
@@ -2764,37 +2798,37 @@ public:
 
 	iterator begin()
 	{
-		return m_first;
+		return m_UsedBegin;
 	}
 
 	const_iterator begin() const
 	{
-		return m_first;
+		return m_UsedBegin;
 	}
 
 	const_iterator end() const
 	{
-		return m_last;
+		return m_UsedEnd;
 	}
 
 	iterator end()
 	{
-		return m_last;
+		return m_UsedEnd;
 	}
 
-	size_t getSize() const
+	int getSize() const
 	{
-		return m_size;
+		return m_UsedNum;
 	}
 
-	size_t getCapacity() const
+	int getCapacity() const
 	{
-		return m_capacity;
+		return m_Capacity;
 	}
 
 	BOOL canAdd() const
 	{
-		return m_size < m_capacity && m_freeBegin != m_npos;
+		return m_UsedNum < m_Capacity /* && m_freeBegin != npos // this one is  */;
 	}
 
 	void chain(iterator &it)
@@ -2818,19 +2852,19 @@ public:
 		if (next)
 			next->m_prev = prev;
 
-		if (m_first == it)
-			m_first = next;
+		if (m_UsedBegin == it)
+			m_UsedBegin = next;
 
-		if (m_last == it)
-			m_last = prev;
+		if (m_UsedEnd == it)
+			m_UsedEnd = prev;
 	}
 
 	void resetChain()
 	{
-		if (m_capacity > 0)
+		if (m_Capacity > 0)
 		{
 			cTag* current = m_pAllocated;
-			for (int i = 0; i < m_capacity; i++)
+			for (int i = 0; i < m_Capacity; i++)
 			{
 				current->m_prev = (current - 1);
 				current->m_next = (current + 1);
@@ -2840,54 +2874,55 @@ public:
 
 		m_pAllocated->m_prev = nullptr;
 
-		m_pAllocated[m_capacity - 1].m_next = 0;
+		m_pAllocated[m_Capacity - 1].m_next = 0;
 
-		m_last->m_prev = nullptr;
-		m_last->m_next = nullptr;
+		m_UsedEnd->m_prev = nullptr;
+		m_UsedEnd->m_next = nullptr;
 
-		m_first = m_last;
-		m_freeBegin = m_pAllocated;
+		m_UsedBegin = m_UsedEnd;
+		m_FreeBegin = m_pAllocated;
 
-		m_size = 0;
+		m_UsedNum = 0;
 	}
 
 	iterator createIterator()
 	{
-		iterator &free = m_freeBegin;
-		if (free == m_npos)
-			return m_npos;
+		iterator &free = m_FreeBegin;
+		if (free == npos)
+			return npos;
 
 		chain(free);
 
-		m_freeBegin = free->getNext();
-		++m_size;
+		m_FreeBegin = free->getNext();
+		++m_UsedNum;
 
 		return free;
 	}
 
 	void releaseIterator(iterator &it)
 	{
-		if (it == m_npos)
+		if (it == npos)
 			return;
 
 		cTag* tag = it.m_pTag;
 
 		unchain(it);
 
-		tag->m_next = m_freeBegin.m_pTag; 
+		tag->m_next = m_FreeBegin.m_pTag; 
 		tag->m_prev = nullptr;         
-		if (m_freeBegin != m_npos)
-			m_freeBegin.m_pTag->m_prev = tag;
+		if (m_FreeBegin != npos)
+			m_FreeBegin.m_pTag->m_prev = tag;
 
-		m_freeBegin = it;
+		m_FreeBegin = it;
 
-		--m_size;
+		--m_UsedNum;
 	}
 };
 
 template <typename tC, typename tHeapBinder = Hw::cHeap>
-struct Hw::cExpandableVector
+class Hw::cExpandableVector
 {
+public:
 	int field_0;
 	tC *m_vector;
 	size_t m_capacity;

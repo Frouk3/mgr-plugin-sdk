@@ -255,7 +255,7 @@ public:
     int field_164;
     int field_168;
     int field_16C;
-    cVec4 field_170;
+    Hw::cVec4 field_170;
     int field_180;
     int field_184;
     int field_188;
@@ -272,12 +272,12 @@ public:
     int field_1B4;
     int field_1B8;
     int field_1BC;
-    cVec4 field_1C0;
+    Hw::cVec4 field_1C0;
     int field_1D0;
     int field_1D4;
     int field_1D8;
     int field_1DC;
-    cVec4 field_1E0;
+    Hw::cVec4 field_1E0;
     float field_1F0;
     float field_1F4;
     float field_1F8;
@@ -1963,7 +1963,7 @@ struct cSceneEspManager
     int field_A4;
     int field_A8;
     int field_AC;
-    cVec4 field_B0;
+    Hw::cVec4 field_B0;
     int field_C0;
     int field_C4;
     int field_C8;

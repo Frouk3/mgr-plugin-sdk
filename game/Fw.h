@@ -23,7 +23,7 @@ namespace Fw
         template <size_t N>
         inline void copy(char(&buffer)[N], const char *str, rsize_t maxCount)
         {
-            strncpy_s(buffer, N, str, maxCount)
+            strncpy_s(buffer, N, str, maxCount);
         }
     }
 }

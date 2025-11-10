@@ -76,7 +76,7 @@ public:
 	int field_114;
 	int field_118;
 	float field_11C;
-	cVec4 m_vecSpotPos;
+	Hw::cVec4 m_SpotPos;
 	EntityHandle m_SpottedEntity;
 	int field_134;
 	int field_138;

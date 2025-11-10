@@ -106,7 +106,7 @@ public:
         CallVMTFunc<214, BehaviorEmBase *, int, cEspControler *>(this, effId, pEsp);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C78);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C78);
 };
 
 VALIDATE_SIZE(BehaviorEmBase, 0xDC0);

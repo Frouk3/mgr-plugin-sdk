@@ -27,4 +27,4 @@ public:
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C3C);
 };
 
-VALIDATE_SIZE(EmBaseDLC, 0xE8C);
+VALIDATE_SIZE(EmBaseDLC, 0xE90);

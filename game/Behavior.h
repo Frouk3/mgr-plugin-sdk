@@ -1559,7 +1559,7 @@ public:
         ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, playbackSpeed);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C20);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9C20);
 };
 
 class BehaviorData

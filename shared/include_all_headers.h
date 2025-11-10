@@ -1,3 +1,4 @@
+
 #include <Events.h>
 #include <Hooks.h>
 #include <shared.h>
@@ -157,6 +158,7 @@
 #include <BehaviorImpactWave.h>
 #include <BehaviorLockOnMarker.h>
 #include <BehaviorPartsModel.h>
+#include <BehaviorSystem.h>
 #include <BehaviorTest.h>
 #include <BehaviorUniqueAllocator.h>
 #include <BehaviorUniqueAllocatorImplement.h>
@@ -207,6 +209,7 @@
 #include <cCameraApp.h>
 #include <cCameraFrustum.h>
 #include <cCameraGame.h>
+#include <cCameraShakeManager.h>
 #include <cCameraTypes.h>
 #include <cCameraViewProj.h>
 #include <cChainCombo.h>
@@ -260,9 +263,9 @@
 #include <cFade.h>
 #include <cFilter.h>
 #include <cFreeMissionDisp.h>
+#include <cGame.h>
 #include <cGameOverHackingMenu.h>
 #include <cGameOverNormalMenu.h>
-#include <cGameRuntime.h>
 #include <cGameUIManager.h>
 #include <cGeckoBattery.h>
 #include <cGrenadeGuideLine.h>
@@ -294,13 +297,11 @@
 #include <cItemViscelaBase.h>
 #include <cJammingDie.h>
 #include <cJammingWall.h>
-#include <cJobManager.h>
 #include <cKeyConfigHelpMenu.h>
 #include <cLightManager.h>
 #include <cLightVolumeObj.h>
 #include <cLockOnMarkerDisp.h>
 #include <cLockonPartsList.h>
-#include <cMath.h>
 #include <cMenuKeyInfo.h>
 #include <cMesh.h>
 #include <cMeshBase.h>
@@ -323,6 +324,7 @@
 #include <CollisionAttackDataProxy.h>
 #include <CollisionIDAllocator.h>
 #include <CollisionIDAllocatorImplement.h>
+#include <CollisionSystem.h>
 #include <CollisionUniqueIDAllocator.h>
 #include <CollisionUniqueIDAllocatorImplement.h>
 #include <CollisionUserData.h>
@@ -363,6 +365,7 @@
 #include <cRpgSite.h>
 #include <cSavingDisp.h>
 #include <cSavingIcon.h>
+#include <cScene.h>
 #include <cSceneEspManager.h>
 #include <cScrObj.h>
 #include <cSentryGunSite.h>
@@ -376,12 +379,12 @@
 #include <cStealthKillTarget.h>
 #include <cStingerMissileSite.h>
 #include <cSubWeaponInfoDisp.h>
-#include <cTaskManager.h>
 #include <cTitleDisp.h>
 #include <cTitleMenu.h>
 #include <cTitleStart.h>
 #include <cUISystem.h>
 #include <cUnLockInfoDisp.h>
+#include <cViewFrustum.h>
 #include <cVisorMode.h>
 #include <cVRGoalPointSign.h>
 #include <cVRMissionBackPanel.h>
@@ -407,7 +410,6 @@
 #include <DebrisLeaveSlot.h>
 #include <DebrisManager.h>
 #include <DebrisManagerImplement.h>
-#include <DebugUtils.h>
 #include <DlcCatBehavior.h>
 #include <DlcMoveBlock.h>
 #include <DoorBehaviorBase.h>
@@ -519,7 +521,7 @@
 #include <ExcelObj.h>
 #include <ExcelStage.h>
 #include <FileRead.h>
-#include <GameManager.h>
+#include <Fw.h>
 #include <GameMenuStatus.h>
 #include <GameStageManager.h>
 #include <GameStageManagerImplement.h>
@@ -531,6 +533,8 @@
 #include <HoldEntitySignalContext.h>
 #include <HoldEntitySlot.h>
 #include <Hw.h>
+#include <HwDebug.h>
+#include <HwMath.h>
 #include <It0500.h>
 #include <It0510.h>
 #include <KamaitatiObj.h>
@@ -583,6 +587,7 @@
 #include <ScenarioManagerImplement.h>
 #include <ScenarioRegionManager.h>
 #include <ScenarioRegionManagerImplement.h>
+#include <SceneBehaviorSystem.h>
 #include <SceneBgManager.h>
 #include <SceneBgManagerImplement.h>
 #include <SceneModelSystem.h>

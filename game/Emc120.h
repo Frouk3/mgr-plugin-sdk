@@ -5,7 +5,6 @@
 class Emc120 : public EmBaseDLC
 {
 public:
-    int field_E8C;
     int field_E90;
     int field_E94;
     int field_E98;

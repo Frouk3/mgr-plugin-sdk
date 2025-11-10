@@ -42,19 +42,19 @@ struct CharacterControl
     int field_84;
     int field_88;
     int field_8C;
-    cVec4 field_90;
-    cVec4 field_A0;
-    cVec4 field_B0;
-    cVec4 field_C0;
-    cVec4* m_pVelocity;
+    Hw::cVec4 field_90;
+    Hw::cVec4 field_A0;
+    Hw::cVec4 field_B0;
+    Hw::cVec4 field_C0;
+    Hw::cVec4* m_pVelocity;
     int field_D4;
     int field_D8;
     int field_DC;
-    cVec4 field_E0;
-    Behavior* m_Owner;
+    Hw::cVec4 field_E0;
+    Behavior* m_pOwner;
     float field_F4;
-    float m_fHeight;
-    float m_fRadius;
+    float m_Height;
+    float m_Radius;
     int field_100;
     int field_104;
     int field_108;
@@ -71,7 +71,7 @@ struct CharacterControl
     int field_134;
     int field_138;
     int field_13C;
-    cVec3 field_140;
+    Hw::cVec3 field_140;
     int field_14C;
     int field_150;
     int field_154;
@@ -85,13 +85,13 @@ struct CharacterControl
     int field_174;
     int field_178;
     int field_17C;
-    cVec4 field_180;
+    Hw::cVec4 field_180;
     float field_190;
     float field_194;
     float field_198;
     float field_19C;
-    cVec4 field_1A0;
-    cVec4 field_1B0;
+    Hw::cVec4 field_1A0;
+    Hw::cVec4 field_1B0;
     int field_1C0;
     int field_1C4;
     int field_1C8;
@@ -111,9 +111,9 @@ struct CharacterControl
         ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E6C60))(this, bEnabled);
     }
 
-    void setPosition(const cVec4& position, BOOL bResetVelocity)
+    void setPosition(const Hw::cVec4& position, BOOL bResetVelocity)
     {
-        ((void(__thiscall*)(CharacterControl*, const cVec4&, BOOL))(shared::base + 0x4E4580))(this, position, bResetVelocity);
+        ((void(__thiscall*)(CharacterControl*, const Hw::cVec4&, BOOL))(shared::base + 0x4E4580))(this, position, bResetVelocity);
     }
 
     void toggleFalling(BOOL bEnable)

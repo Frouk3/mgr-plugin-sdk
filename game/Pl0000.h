@@ -166,7 +166,7 @@ public:
     int field_BBC;
     Hw::cCriticalSection field_BC0;
     int field_BDC;
-    cVec4 field_BE0;
+    Hw::cVec4 field_BE0;
     int field_BF0;
     int field_BF4;
     int field_BF8;
@@ -190,7 +190,7 @@ public:
     cEspControler m_BloodLArmControler;
     int m_nCuttedLArm;
     EntityHandle field_CF4;
-    cInput::InputUnit m_CurrentInput;
+    Hw::cPadState m_CurrentInput;
     float m_fInputMagnitudeSquared;
     float m_fInputDirection;
     float m_fDesiredHeading;
@@ -217,27 +217,27 @@ public:
     D3DXMATRIX field_DC0;
     float field_E00;
     float field_E04;
-    int m_nButtonSwitchLockOn;
+    int m_ButtonSwitchLockOn;
     int field_E0C;
     int field_E10;
     int field_E14;
-    int m_nButtonJump;
+    int m_ButtonJump;
     int field_E1C;
-    int m_nButtonLightAttack;
-    int m_nButtonHeavyAttack;
+    int m_ButtonLightAttack;
+    int m_ButtonHeavyAttack;
     int field_E28;
     int field_E2C;
     int field_E30;
     int field_E34;
-    int m_nButtonAction;
-    int m_nButtonUseSubweapon;
-    int m_nButtonFireSubweapon;
+    int m_ButtonAction;
+    int m_ButtonUseSubweapon;
+    int m_ButtonFireSubweapon;
     int field_E44;
-    int m_nButtonNinjarun;
+    int m_ButtonNinjarun;
     int field_E4C;
-    int m_nButtonBlademode;
+    int m_ButtonBlademode;
     int field_E54;
-    int m_nButtonUseItem;
+    int m_ButtonUseItem;
     int field_E5C;
     int field_E60;
     int field_E64;
@@ -247,8 +247,8 @@ public:
     int field_E74;
     int field_E78;
     int field_E7C;
-    float m_fHeavyAttackHeldTimer; // time the heavy attack button has been held down
-    float m_fLightAttackHeldTimer; // time the light attack button has been held down
+    float m_HeavyAttackHeldTimer; // time the heavy attack button has been held down
+    float m_LightAttackHeldTimer; // time the light attack button has been held down
     int field_E88;
     int field_E8C;
     cEspControler field_E90;
@@ -304,8 +304,8 @@ public:
     int field_1014;
     int field_1018;
     int field_101C;
-    cVec4 field_1020;
-    cVec4 field_1030;
+    Hw::cVec4 field_1020;
+    Hw::cVec4 field_1030;
     Hw::cFixedVector<int> field_1040;
     Hw::cFixedList<int> field_1054;
     float field_1070;
@@ -352,7 +352,7 @@ public:
     float field_1114;
     int field_1118;
     int field_111C;
-    cVec4 field_1120;
+    Hw::cVec4 field_1120;
     float field_1130;
     int field_1134;
     int field_1138;
@@ -418,7 +418,7 @@ public:
     int field_1418;
     float field_141C;
     int field_1420;
-    int m_nCustomWeaponBone;
+    int m_CustomWeaponBone;
     float field_1428;
     int field_142C;
     int field_1430;
@@ -1065,7 +1065,7 @@ public:
     float field_1E34;
     float field_1E38;
     float field_1E3C;
-    int m_nHealthUpgradeBoost;
+    int m_HealthUpgradeBoost;
     int field_1E44;
     int field_1E48;
     int field_1E4C;
@@ -1080,10 +1080,10 @@ public:
     float field_2324;
     int field_2328;
     int field_232C;
-    cVec4 field_2330;
-    cVec4 field_2340;
-    cVec4 field_2350;
-    cVec4 field_2360;
+    Hw::cVec4 field_2330;
+    Hw::cVec4 field_2340;
+    Hw::cVec4 field_2350;
+    Hw::cVec4 field_2360;
     int field_2370;
     int field_2374;
     int field_2378;
@@ -1346,7 +1346,7 @@ public:
     int field_2BB4;
     int field_2BB8;
     int field_2BBC;
-    cVec4 field_2BC0;
+    Hw::cVec4 field_2BC0;
     float field_2BD0;
     float field_2BD4;
     float field_2BD8;
@@ -1713,8 +1713,8 @@ public:
     float field_319C;
     float field_31A0;
     float field_31A4;
-    float m_fHurtTime;
-    float m_fHealTime;
+    float m_HurtTime;
+    float m_HealTime;
     short field_31B0;
     short field_31B2;
     int field_31B4;
@@ -1805,21 +1805,21 @@ public:
     float field_3410;
     float field_3414;
     float field_3418;
-    float m_fChanceSlowTime;
-    float m_fEmChanceSlowRate;
-    float m_fPlChanceSlowRate;
-    float m_fInterEmChanceSlowRate;
-    float m_fInterPlChanceSlowRate;
+    float m_ChanceSlowTime;
+    float m_EmChanceSlowRate;
+    float m_PlChanceSlowRate;
+    float m_InterEmChanceSlowRate;
+    float m_InterPlChanceSlowRate;
     float field_3430;
     int field_3434;
     int field_3438;
-    float m_fSlowRateDuration;
-    float m_fSlowMoRate;
+    float m_SlowRateDuration;
+    float m_SlowMoRate;
     int field_3444;
     float field_3448;
     float field_344C;
     int field_3450;
-    float m_fTimeCantSlowMo;
+    float m_TimeCantSlowMo;
     int field_3458;
     int field_345C;
     char field_3460;
@@ -1835,7 +1835,7 @@ public:
     float field_37E4;
     int field_37E8;
     int field_37EC;
-    cVec4 field_37F0;
+    Hw::cVec4 field_37F0;
     float field_3800;
     int field_3804;
     int field_3808;
@@ -1847,9 +1847,9 @@ public:
     {
     public:
         int field_0;
-        float m_fFuelContainer;
+        float m_FuelContainer;
         int field_8;
-        float m_fFuelContainerCapacity;
+        float m_FuelContainerCapacity;
         float field_10;
         int field_14;
     };
@@ -1890,8 +1890,8 @@ public:
     int field_3B64;
     int field_3B68;
     int field_3B6C;
-    cVec4 field_3B70;
-    cVec4 field_3B80;
+    Hw::cVec4 field_3B70;
+    Hw::cVec4 field_3B80;
     int field_3B90;
     float field_3B94;
     int field_3B98;
@@ -1954,7 +1954,7 @@ public:
     int field_3E54;
     int field_3E58;
     int field_3E5C;
-    cVec4 field_3E60;
+    Hw::cVec4 field_3E60;
     float field_3E70;
     float field_3E74;
     float field_3E78;
@@ -2068,10 +2068,10 @@ public:
     ConstantStruct* m_pConstant;
     int field_40D8;
     int field_40DC;
-    cVec4 field_40E0;
-    cVec4 field_40F0;
-    cVec4 field_4100;
-    cVec4 field_4110;
+    Hw::cVec4 field_40E0;
+    Hw::cVec4 field_40F0;
+    Hw::cVec4 field_4100;
+    Hw::cVec4 field_4110;
     float field_4120;
     float field_4124;
     float field_4128;
@@ -2108,8 +2108,8 @@ public:
     GetMoneySlotPl0010 *m_pGetMoneySlot;
     float field_41A8;
     int field_41AC;
-    cVec4 field_41B0;
-    cVec4 field_41C0;
+    Hw::cVec4 field_41B0;
+    Hw::cVec4 field_41C0;
     float field_41D0;
     float field_41D4;
     float field_41D8;
@@ -2998,17 +2998,17 @@ public:
     int field_4FA4;
     int field_4FA8;
     int field_4FAC;
-    cVec4 field_4FB0;
-    cVec4 field_4FC0;
-    cVec4 field_4FD0;
-    cVec4 field_4FE0;
+    Hw::cVec4 field_4FB0;
+    Hw::cVec4 field_4FC0;
+    Hw::cVec4 field_4FD0;
+    Hw::cVec4 field_4FE0;
     int field_4FF0;
     float field_4FF4;
     float field_4FF8;
     float field_4FFC;
-    cVec4 field_5000;
-    cVec4 field_5010;
-    cVec4 field_5020;
+    Hw::cVec4 field_5000;
+    Hw::cVec4 field_5010;
+    Hw::cVec4 field_5020;
     int field_5030;
     int field_5034;
     int field_5038;
@@ -3039,8 +3039,8 @@ public:
     int field_509C;
     hkpAllCdPointCollector field_50A0;
     hkpAllCdPointCollector field_5240;
-    float m_fNinjaRunSpeedRate;
-    float m_fWallRunSpeedRate;
+    float m_NinjaRunSpeedRate;
+    float m_WallRunSpeedRate;
     int field_53E8;
     int field_53EC;
     int field_53F0;
@@ -3203,12 +3203,7 @@ public:
         ((void(__thiscall *)(Pl0000 *))(shared::base + 0x779E20))(this);
     }
 
-    static inline Pl0000 *__cdecl allocate(Hw::cHeapVariable *allocator)
-    {
-        return ((Pl0000 * (__cdecl*)(Hw::cHeapVariable*))(shared::base + 0x6C3340))(allocator);
-    }
-
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);
 };
 
 VALIDATE_SIZE(Pl0000, 0x5400);

@@ -49,13 +49,12 @@ public:
         ((void(__thiscall *)(Em0130Debris *))(shared::base + 0x6B5A70))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735518);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735518);
 };
 
 class Em0130 : public EmBaseDLC
 {
 public:
-    int field_E8C;
     int field_E90;
     int field_E94;
     int field_E98;

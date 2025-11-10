@@ -8,7 +8,7 @@
 class Pl2040 : public BehaviorAppBase
 {
 public:
-    cVec4 field_A00;
+    Hw::cVec4 field_A00;
     float field_A10;
     int field_A14;
     int field_A18;

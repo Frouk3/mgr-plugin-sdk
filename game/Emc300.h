@@ -5,7 +5,6 @@
 class Emc300 : public EmBaseDLC
 {
 public:
-    int field_E8C;
     int field_E90;
     int field_E94;
     int field_E98;
@@ -28,7 +27,7 @@ public:
         ((void(__thiscall *)(Emc300 *))(shared::base + 0x6B1540))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735A30);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735A30);
 };
 
 VALIDATE_SIZE(Emc300, 0xED0);

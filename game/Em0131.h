@@ -30,7 +30,6 @@ public:
 class Em0131 : public EmBaseDLC
 {
 public:
-    int field_E8C;
     int field_E90;
     EntityHandle field_E94;
     EntityHandle field_E98;

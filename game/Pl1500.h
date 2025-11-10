@@ -14,12 +14,13 @@ public:
         ((void(__thiscall *)(Pl1500KnifeSet *))(shared::base + 0x6A6F00))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735B98);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735B98);
 };
 
 class Pl1500 : public PlBaseDLC
 {
 public:
+    int field_5400;
     int field_5404;
     int field_5408;
     int field_540C;

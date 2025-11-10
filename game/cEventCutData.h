@@ -8,8 +8,8 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    cVec4 m_vecViewTargetPos;
-    cVec4 m_vecViewTrans;
+    Hw::cVec4 m_vecViewTargetPos;
+    Hw::cVec4 m_vecViewTrans;
     int m_nInterpolationType;
     int m_fFrame;
     float m_fInterpolationValue;
@@ -32,8 +32,8 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    cVec4 m_vecPlayerRot;
-    cVec4 m_vecSoftEvEndCamRot;
+    Hw::cVec4 m_vecPlayerRot;
+    Hw::cVec4 m_vecSoftEvEndCamRot;
     int field_30;
     int field_34;
     int field_38;

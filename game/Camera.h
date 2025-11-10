@@ -44,9 +44,9 @@ public:
         ((void(__thiscall *)(StateNode *))(shared::base + 0x9A42D0))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x19C558C);
+    static inline ContextInstance& m_Context = *(ContextInstance *)(shared::base + 0x19C558C);
 
-    virtual ContextInstance& getContext() { return ms_Context; }
+    virtual ContextInstance& getContext() { return *(ContextInstance *)(shared::base + 0x19C558C); }
     virtual ~StateNode() {}
 };
 
@@ -74,7 +74,7 @@ public:
         ((void(__thiscall *)(StateAnimation*))(shared::base + 0x9A7DE0))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63F8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x19C63F8);
 };
 
 class Camera::StateBattle : public Camera::StateNode
@@ -102,7 +102,7 @@ public:
         ((void(__thiscall *)(StateBattle*))(shared::base + 0x9A43F0))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63E4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x19C63E4);
 };
 
 class Camera::StatePerpetrator : public Camera::StateNode
