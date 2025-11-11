@@ -5,7 +5,6 @@
 #include <dinput.h>
 #include <shared.h>
 #include <Xinput.h>
-#include <CriFs.h>
 #include <DirectXMath.h>
 
 extern void PrintfLog(const char* fmt, ...);
@@ -682,25 +681,23 @@ public:
 	{
 	protected:
 		tC *m_Ptr;
-		Hw::cFactory<tC, align, tHeapBinder> *m_pParent;
 
 		cHeap *getHeapPtr()
 		{
-			return &m_pParent->m_Heap;
+			return (cHeap*)(*((DWORD*)m_Ptr - 1)); // Tricky way to get heap pointer from allocation
 		}
 
 		tC* getNextPtr()
 		{
-			return (tC*)m_pParent->m_Heap.getNextAlloc(m_Ptr);
+			return (tC*)getHeapPtr()->getNextAlloc(m_Ptr);
 		}
 
 	public:
 		const_iterator(void *pPtr) : m_Ptr((tC*)pPtr) {}
-		const_iterator(void* pPtr, Hw::cFactory<tC, align, tHeapBinder>* pParent) : m_Ptr((tC*)pPtr), m_pParent(pParent) {}
 		const_iterator(const const_iterator &other) : m_Ptr(other.m_Ptr) {}
 		const_iterator() : m_Ptr(nullptr) {}
 
-		const_iterator& operator++(int offset)
+		const_iterator& operator++(int)
 		{
 			const_iterator temp = m_Ptr;
 
@@ -746,7 +743,6 @@ public:
 	{
 	public:
 		iterator(void *pPtr) : const_iterator(pPtr) {}
-		iterator(void* pPtr, Hw::cFactory<tC, align, tHeapBinder>* pParent) : const_iterator(pPtr, pParent) {}
 		iterator(const iterator &other) : const_iterator(other) {}
 		iterator() : const_iterator() {}
 
@@ -771,22 +767,22 @@ public:
 
 	iterator begin()
 	{
-		return iterator(m_Heap.getNextAlloc(nullptr), this);
+		return iterator(m_Heap.getNextAlloc(nullptr));
 	}
 
 	const_iterator begin() const
 	{
-		return const_iterator(m_Heap.getNextAlloc(nullptr), this);
+		return const_iterator(m_Heap.getNextAlloc(nullptr));
 	}
 
 	iterator end()
 	{
-		return iterator(nullptr, this);
+		return iterator(nullptr);
 	}
 
 	const_iterator end() const
 	{
-		return const_iterator(nullptr, this);
+		return const_iterator(nullptr);
 	}
 
 	void destroy()
@@ -798,7 +794,7 @@ public:
 			operator delete(&(*it), &m_Heap);
 	}
 
-	iterator erase(iterator pos)
+	iterator erase(iterator &pos)
 	{
 		iterator next = pos;
 		++next;
@@ -857,7 +853,10 @@ public:
 
 	tC* newWork()
 	{
-		return (tC*)this->m_Heap.alloc();
+		void *pAlloc = this->m_Heap.alloc();
+		memset(pAlloc, 0, sizeof(tC));
+		
+		return new (pAlloc) tC();
 	}
 
 	cFactory<tC, align, Hw::cHeapFixed>::iterator newWorkIt()
@@ -3169,96 +3168,9 @@ public:
 	}
 };
 
-struct Hw::cDvdFst
-{
-	int field_0;
-	int field_4;
-	int field_8;
-	int field_C;
-	int field_10;
-	int field_14;
-	int field_18;
-	int field_1C;
-	int field_20;
-	int field_24;
-	int field_28;
-	int field_2C;
-	int field_30;
-	int field_34;
-	int field_38;
-	int field_3C;
-	int field_40;
-	int field_44;
-	int field_48;
-	int field_4C;
-	int field_50;
-	int field_54;
-	int field_58;
-	int field_5C;
-	int field_60;
-	int field_64;
-	int field_68;
-	int field_6C;
-	int field_70;
-	int field_74;
-	int field_78;
-	int field_7C;
-	int field_80;
-	int field_84;
-	int field_88;
-	int field_8C;
-	int field_90;
-	int field_94;
-	int field_98;
-	int field_9C;
-	int field_A0;
-	int field_A4;
-	int field_A8;
-	int field_AC;
-	int field_B0;
-	int field_B4;
-	int field_B8;
-
-	struct Work
-	{
-		int m_State;
-		CriFsBinderWork *m_CriBinderWork;
-		CriFsLoaderHn *m_CriLoader;
-		char m_Filepath[64];
-		int m_MaxTime;
-		int m_AttemptTime;
-		void *m_Filedata;
-		int m_Buffersize;
-		int m_Priority;
-		int field_60;
-		int field_64;
-		int field_68;
-		Work *m_pNext;
-		Work *m_pPrevious;
-	};
-
-	struct ReadWork : Work // Probably FileReadWork
-	{
-		char m_Filepath[64];
-		void *m_Filedata;
-		int m_Buffersize;
-		int field_BC;
-		int m_WaitAmount;
-		int m_ReaderFlags;
-		int m_Priority;
-	}; 
-};
-
-struct Hw::DvdReadManager
-{
-	int field_0;
-	int field_4;
-	Hw::cHeapFixed m_DvdReadFactory;
-};
-
-VALIDATE_SIZE(Hw::cHeap, 0x40);
-
 inline Hw::cTaskManager& g_MainTaskManager = *(Hw::cTaskManager*)(shared::base + 0x17E9164);
 inline Hw::cKeyboardState& g_Keyboard = *(Hw::cKeyboardState*)(shared::base + 0x177B7C0);
 inline Hw::cMouseState& g_Mouse = *(Hw::cMouseState*)(shared::base + 0x177B798);
 inline Hw::cPadState &g_dbPad = *(Hw::cPadState*)(shared::base + 0x177BA90);
+
+VALIDATE_SIZE(Hw::cHeap, 0x40);

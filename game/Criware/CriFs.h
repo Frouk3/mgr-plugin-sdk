@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CriBase.h>
+#include <shared.h>
 
 struct CriFsConfig
 {
@@ -302,24 +303,7 @@ struct CriFsLoaderHn
     int field_348;
 };
 
-struct CriFsBinderWork // Platinum addon
-{
-    int m_nStatus;
-    CriFsBinderHn *m_CriBinderHn;
-    CriFsBindId m_BinderId;
-    int m_nBindStatus;
-    int m_nPriority;
-
-    BOOL bindCpkFileSync(const char* path, int a3, int a4, int priority)
-    {
-        return ((BOOL(__thiscall*)(CriFsBinderWork*, const char*, int, int, int))(shared::base + 0x9EAFB0))(this, path, a3, a4, priority);
-    }
-
-    BOOL bindCpk(const char* path, int a3, int a4, int priority)
-    {
-        return ((BOOL(__thiscall*)(CriFsBinderWork*, const char*, int, int, int))(shared::base + 0x9EB530))(this, path, a3, a4, priority);
-    }
-};
+// struct CriFsBinderWork -> Hw::cDvdCriFsBinder
 
 struct CriFsBinderHn
 {
