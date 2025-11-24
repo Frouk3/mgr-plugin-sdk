@@ -7,8 +7,10 @@
 
 class cParts
 {
+private:
+    int _pad00[3]; // 0x4 -> 0x10
 public:
-    __declspec(align(16)) Hw::cMtx m_LocalMatrix;
+    Hw::cMtx m_LocalMatrix;
     Hw::cVec4 m_TransPos;
     Hw::cQuat m_QuatRot;
     Hw::cVec4 m_Scale;
@@ -44,25 +46,18 @@ public:
     } m_PartsFlag;
     Hw::cMtx* m_pMulMtx;
     cParts* m_pPartsParent;
-    int field_AC;
+    int field_AC; // maybe unused and/or padding
 
-    cParts() { ((void(__thiscall*)(cParts*))(shared::base + 0x607410))(this); }
-    cParts(const cParts& other, BOOL bWorldFixed) { ((void(__thiscall*)(cParts*, const cParts&, BOOL))(shared::base + 0x6074D0))(this, other, bWorldFixed); }
-    void init(const Hw::cVec4& transPos, short boneIndex) { ((void(__thiscall*)(cParts*, const Hw::cVec4&, short))(shared::base + 0x6075A0))(this, transPos, boneIndex); }
-    void convertRotationToQuaternion() { ((void(__thiscall*)(cParts*))(shared::base + 0x3F790))(this); }
-    void updateLocalMatrix() { ((void(__thiscall*)(cParts*))(shared::base + 0x615310))(this); }
-    void updateLocalTransform() { ((void(__thiscall*)(cParts*))(shared::base + 0x615190))(this); }
+    cParts() { CallMethod<0x607410, cParts *>(this); }
+    void init(const cParts& other, BOOL bWorldFixed) { CallMethod<0x6074D0, cParts *, const cParts&, BOOL>(this, other, bWorldFixed); } // it was a copy constructor, but it didn't mention virtual table setup, so I made it a normal method
+    void init(const Hw::cVec4& transPos, short boneIndex) { CallMethod<0x6075A0, cParts *, const Hw::cVec4&, short>(this, transPos, boneIndex); }
+    void convertRotationToQuaternion() { CallMethod<0x3F790, cParts *>(this); }
+    void updateLocalMatrix() { CallMethod<0x615310, cParts *>(this); }
+    void updateLocalTransform() { CallMethod<0x615190, cParts *>(this); }
 
-    virtual ~cParts() {};
+    virtual ~cParts() {} // Non virtual destructor at 0x6074C0
 
-    /*
-    ~cParts() // non-virtual destructor 
-    {
-        ((void(__thiscall*)(cParts*))(shared::base + 0x6074C0))(this);
-    }
-    */
-
-	Hw::cVec4& getPosition() { return m_LocalMatrix.r[3]; }
+	const Hw::cVec4& getPos() { return m_LocalMatrix.r[3]; }
 };
 
 VALIDATE_SIZE(cParts, 0xB0);

@@ -1,68 +1,40 @@
 #pragma once
 
-enum eSlowRateType : int
+enum eSlowRate : int
 {
-    SLOWRATE_GLOBAL,
-    SLOWRATE_PL,
-    SLOWRATE_EM,
-    SLOWRATE_ETC
+    eRateType_Scene,
+    eRateType_Pl,
+    eRateType_Em,
+    eRateType_Etc,
+    eRateType_Max
 };
 
 class cSlowRateUnit
 {
 public:
-    int field_0;
-    eSlowRateType m_nSlowRateType;
-    int m_nRefCount;
-    float m_fSlowRate;
-    float m_fRate;
-    float m_fRateBefore;
-    float m_fDelta;
-    int m_bIsActive;
-    int m_nFadeOutTicks;
-    int m_nInitialFadeOut;
+    void* m_pAllocList; // maybe unused
+    eSlowRate m_SlowRateType;
+    int m_RefCount;
+    float m_SlowRate;
+    float m_Rate;
+    float m_RateBefore;
+    float m_Delta;
+    int m_IsActive;
+    int m_FadeOutTicks;
+    int m_InitialFadeOut;
     cSlowRateUnit *m_pPrev, *m_pNext;
     int field_30;
 
-    cSlowRateUnit()
-    {
-        ((void(__thiscall *)(cSlowRateUnit*))(shared::base + 0xA03B60))(this);
-    }
-
-    void updateDelta()
-    {
-        ((void(__thiscall *)(cSlowRateUnit*))(shared::base + 0xA03BD0))(this);
-    }
-
-    void setSlowRateType(eSlowRateType type)
-    {
-        ((void(__thiscall *)(cSlowRateUnit*, int))(shared::base + 0xA03C20))(this, type);
-    }
-
-    eSlowRateType getSlowRateType()
-    {
-        return ((eSlowRateType(__thiscall *)(cSlowRateUnit*))(shared::base + 0xA03C30))(this);
-    }
-
-    float getDelta()
-    {
-        return ((float(__thiscall *)(cSlowRateUnit*))(shared::base + 0xA03CB0))(this);
-    }
-
-    void setSlowRate(float slowRate)
-    {
-        ((void(__thiscall *)(cSlowRateUnit*, float))(shared::base + 0xA03CC0))(this, slowRate);
-    }
-
-    float getSlowRate()
-    {
-        return ((float(__thiscall *)(cSlowRateUnit*))(shared::base + 0xA03CE0))(this);
-    }
-
-    int getRefCount()
-    {
-        return ((int(__thiscall *)(cSlowRateUnit*))(shared::base + 0xA03CF0))(this);
-    }
+    cSlowRateUnit() { CallMethod<0xA03B60, cSlowRateUnit *>(this); }
+    void move() { CallMethod<0xA03B90, cSlowRateUnit *>(this); }
+    float updateDelta() { return ReturnCallMethod<float, 0xA03BD0, cSlowRateUnit *>(this);}
+    void setType(eSlowRate type) { CallMethod<0xA03C20, cSlowRateUnit *>(this, type); }
+    eSlowRate getType() { return ReturnCallMethod<eSlowRate, 0xA03C30, cSlowRateUnit *>(this); }
+    void set(float rate) { CallMethod<0xA03C40, cSlowRateUnit *>(this, rate); }
+    float get() { return ReturnCallMethod<float, 0xA03CB0, cSlowRateUnit *>(this); }
+    void setSlowRate(float slowRate) { CallMethod<0xA03CC0, cSlowRateUnit *>(this, slowRate); }
+    float getSlowRate() { return ReturnCallMethod<float, 0xA03CE0, cSlowRateUnit *>(this); }
+    int getRefCount() { return ReturnCallMethod<int, 0xA03CF0, cSlowRateUnit *>(this); }
 };
 
 VALIDATE_SIZE(cSlowRateUnit, 0x34);

@@ -56,9 +56,9 @@ public:
     int field_430;
     int field_434;
     int field_438;
-    int m_nHemishphereNo;
+    int m_HemishphereNo;
     int field_440;
-    int m_nEventLight;
+    int m_EventLight;
     int field_448;
     short field_44C;
     char field_44E;
@@ -66,15 +66,15 @@ public:
     int field_450;
     int field_454;
     int field_458;
-    float m_fCurrentCamAlphaRate;
-    float m_fCamAlphaRate;
+    float m_CurrentCamAlphaRate;
+    float m_CamAlphaRate;
     int field_464;
     int field_468;
     int field_46C;
     char field_470;
     char field_471;
     char field_472;
-    char m_nShadowLOD;
+    char m_ShadowLOD;
     int field_474;
     int field_478;
     int field_47C;
@@ -83,10 +83,7 @@ public:
     int field_488;
     int field_48C;
 
-    cModel()
-    {
-        ((void(__thiscall*)(cModel*))(shared::base + 0x619480))(this);
-    }
+    cModel() { CallMethod<0x619480, cModel *>(this); }
 };
 
 VALIDATE_SIZE(cModel, 0x490);

@@ -7,8 +7,6 @@
 #include <Xinput.h>
 #include <DirectXMath.h>
 
-extern void PrintfLog(const char* fmt, ...);
-
 namespace Hw
 {
 	// Input
@@ -119,9 +117,6 @@ namespace Hw
 	class cSemaphore;
 	class cRand;
 
-	struct cDvdFst;
-	struct DvdReadManager;
-
 	template <typename tC>
 	class cSingleton;
 
@@ -181,7 +176,7 @@ namespace Hw
 		COMP_ALPHATEST_DEFAULT=7
 	};
 
-	enum HW_ALLOC_MODE
+	enum HW_ALLOC_MODE : int
 	{
 		HW_ALLOC_VIRTUAL = 0x0,
 		HW_ALLOC_PHYSICAL = 0x1,
@@ -397,7 +392,7 @@ namespace Hw
 		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char *threadName, int priority) { return ((BOOL(__cdecl *)(cWork*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority); }
 		static inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority) { return ((BOOL(__cdecl *)(void (__cdecl *)(void *), void *, unsigned int, int, const char *, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority); }
 		// Should be always called at the end of the thread function
-		static inline void Exit() { ((void(__cdecl *)())(shared::base + 0x9D7C70))(); }
+		static inline void Exit() { CdeclCall<0x9D7C70>(); }
 	};
 
 	class GraphicDevice
@@ -429,12 +424,12 @@ class Hw::cSemaphore
 public:
 	HANDLE m_hSemaphore;
 
-	cSemaphore() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D7360))(this); }
+	cSemaphore() { CallMethod<0x9D7360, cSemaphore *>(this); }
 
-	BOOL startup(long init_count, long max_count) { return ((BOOL(__thiscall*)(cSemaphore*, long, long))(shared::base + 0x9D7370))(this, init_count, max_count); }
-	void cleanup() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D73B0))(this); }
-	void hold() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D73D0))(this); }
-	void release() { ((void(__thiscall*)(cSemaphore*))(shared::base + 0x9D73E0))(this); }
+	BOOL startup(long init_count, long max_count) { return ReturnCallMethod<BOOL, 0x9D7370, cSemaphore *, long, long>(this, init_count, max_count); }
+	void cleanup() { CallMethod<0x9D73B0, cSemaphore *>(this); }
+	void hold() { CallMethod<0x9D73D0, cSemaphore *>(this); }
+	void release() { CallMethod<0x9D73E0, cSemaphore *>(this); }
 };
 
 class Hw::cCriticalSection
@@ -444,10 +439,10 @@ public:
 	BOOL m_bInit;
 
 	cCriticalSection() { this->m_bInit = FALSE; }
-	BOOL startup() { return ((BOOL(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7240))(this); }
-	void enter() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0xA6C0))(this); }
-	void leave() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0xA6D0))(this); }
-	void cleanup() { ((void(__thiscall*)(cCriticalSection*))(shared::base + 0x9D7270))(this); }
+	BOOL startup() { return ReturnCallMethod<BOOL, 0x9D7240, cCriticalSection *>(this); }
+	void enter() { CallMethod<0xA6C0, cCriticalSection *>(this); }
+	void leave() { CallMethod<0xA6D0, cCriticalSection *>(this); }
+	void cleanup() { CallMethod<0x9D7270, cCriticalSection *>(this); }
 };
 
 class Hw::cHeap
@@ -463,7 +458,7 @@ public:
 	const char* m_pHeapName;
 	unsigned int m_OutOfMemoryFlag;
 
-	cHeap() { ((void(__thiscall*)(cHeap*))(shared::base + 0x9D3650))(this); }
+	cHeap() { CallMethod<0x9D3650, cHeap *>(this); }
 	virtual ~cHeap() {};
 
 	void cleanup() { CallVMTFunc<1, cHeap*>(this); }
@@ -475,6 +470,7 @@ public:
 	// Pass nullptr to get the first allocation
 	void* getNextAlloc(void *block) { return ReturnCallVMTFunc<void*, 7, cHeap*, void *>(this, block); }
 	size_t getAllocSize(void* block) { return ReturnCallVMTFunc<size_t, 8, cHeap*, void*>(this, block); }
+	// returns critical size at which it cannot allocate more memory
 	size_t getRestSizeLimit() { return ReturnCallVMTFunc<size_t, 9, cHeap*>(this); }
 	size_t getChildHeapSize() { return ReturnCallVMTFunc<size_t, 10, cHeap*>(this); }
 	void setDefragmentableFlag(void *a1) { CallVMTFunc<11, cHeap*, void*>(this, a1); }
@@ -482,21 +478,21 @@ public:
 	void destroyChildHeap(HANDLE* pHandle, size_t Size) { CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
 	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4) { return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, align, allocMode, a4); }
 	void dealloc(void* block, size_t size) { CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size); }
-	void *alloc(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a3) { return ((void*(__thiscall*)(Hw::cHeap *, size_t, size_t, HW_ALLOC_MODE, int))(shared::base + 0x9D29B0))(this, size, align, allocMode, a3); }
-	void setSubHeap(Hw::cHeap &rHeap) { ((void(__thiscall *)(Hw::cHeap *, Hw::cHeap&))(shared::base + 0x9D2930))(this, rHeap); }
-	void unsetSubHeap() { ((void(__thiscall *)(Hw::cHeap *))(shared::base + 0x9D2940))(this); }
+	void *alloc(unsigned int size, int align, HW_ALLOC_MODE allocMode, int a3) { return ReturnCallMethod<void *, 0x9D29B0, cHeap *, unsigned int, int, HW_ALLOC_MODE, int>(this, size, align, allocMode, a3); }
+	void setSubHeap(Hw::cHeap &rHeap) { CallMethod<0x9D2930, cHeap *, cHeap&>(this, rHeap); }
+	void unsetSubHeap() { CallMethod<0x9D2940, cHeap *>(this); }
 
-	static inline void free(void *block) { ((void(__cdecl *)(void *))(shared::base + 0x9D4920))(block); }
+	static inline void free(void *block) { CdeclCall<0x9D4920, void *>(block); }
 };
 
-inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) { return ((void*(__cdecl *)(size_t, Hw::cHeap &))(shared::base + 0x9D3500))(s, rHeap); }
-inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) { return ((void(__cdecl*)(void*, size_t))(shared::base + 0x9D48D0))(block, 0); } // Separated to avoid ambiguity
-inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap) { return ((void*(__cdecl*)(size_t, Hw::cHeap&))(shared::base + 0x9D3580))(s, rHeap); }
-inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) { return ((void(__cdecl*)(void*))(shared::base + 0x9D4940))(block); } // Separated to avoid ambiguity
+inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) { return ReturnCdeclCall<void *, 0x9D3500, size_t, Hw::cHeap&>(s, rHeap); }
+inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) { CdeclCall<0x9D48D0, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
+inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap) { return ReturnCdeclCall<void *, 0x9D3580, size_t, Hw::cHeap&>(s, rHeap); }
+inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) { CdeclCall<0x9D4940, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
 // Usage after heap startup
-inline void* __cdecl memAlloc(size_t s) { return ((void* (__cdecl*)(size_t))(shared::base + 0x61E180))(s); }
+inline void* __cdecl memAlloc(size_t s) { return ReturnCdeclCall<void*, 0x61E180, size_t>(s); }
 // Usage after heap startup
-inline void __cdecl memDealloc(void* block) { ((void(__cdecl*)(void*))(shared::base + 0x61D3D0))(block); }
+inline void __cdecl memDealloc(void* block) { CdeclCall<0x61D3D0, void*>(block); }
 
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
@@ -516,14 +512,14 @@ public:
 	size_t m_RestSize;
 	size_t m_ChildHeapSize;
 
-	cHeapVariableBase() { ((void(__thiscall*)(Hw::cHeapVariableBase*))(shared::base + 0x9D3AF0))(this); } 		
+	cHeapVariableBase() { CallMethod<0x9D3AF0, cHeapVariableBase *>(this); } 		
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapVariable() { ((void(__thiscall*)(Hw::cHeapVariable*))(shared::base + 0x9D44F0))(this); }
+	cHeapVariable() { CallMethod<0x9D44F0, cHeapVariable *>(this); }
 
 	int create(size_t size, Hw::cHeap& rHeap, const char *pName) { return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName); }
 	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName) { return ReturnCallVMTFunc<int, 17, Hw::cHeapVariable*, size_t, size_t, Hw::cHeap&, const char*>(this, size, align, rHeap, pName); }
@@ -555,14 +551,14 @@ public:
 	int field_6C;
 	cList* m_pBlocks[256];
 
-	cHeapPhysicalBase() { ((void(__thiscall*)(Hw::cHeapPhysicalBase*))(shared::base + 0x9D3860))(this); }
+	cHeapPhysicalBase() { CallMethod<0x9D3860, cHeapPhysicalBase *>(this); }
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
 {
 public:
 
-	cHeapPhysical() { ((void(__thiscall*)(Hw::cHeapPhysical*))(shared::base + 0x9D48F0))(this); }
+	cHeapPhysical() { CallMethod<0x9D48F0, cHeapPhysical *>(this); }
 
 	int create(size_t size, Hw::cHeap &rHeap, const char *name) { return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name); }
 };
@@ -571,7 +567,7 @@ class Hw::cHeapHook
 {
 public:
 
-	cHeapHook() { ((void(__thiscall *)(cHeapHook *))(shared::base + 0x9D32E0))(this); }
+	cHeapHook() { CallMethod<0x9D32E0, cHeapHook *>(this); }
 	virtual ~cHeapHook() {};
 };
 
@@ -592,13 +588,13 @@ public:
 	size_t m_RestNum;
 	Hw::cHeapFixed::cList *m_pFreeList, *m_pFirstList;
 
-	cHeapFixed() { ((void(__thiscall *)(Hw::cHeapFixed*))(shared::base + 0x9D36F0))(this); }
+	cHeapFixed() { CallMethod<0x9D36F0, Hw::cHeapFixed *>(this); }
 
 	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
-	void* alloc() { return ((void* (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2BC0))(this); }
-	int canAlloc(size_t size, size_t num) { return ((int (__thiscall*)(Hw::cHeapFixed*, size_t, size_t))(shared::base + 0x9D2BA0))(this, size, num); }
-	unsigned int getBlockMaxNum() { return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C80))(this); }
-	unsigned int getBlockUsedNum() { return ((unsigned int (__thiscall*)(Hw::cHeapFixed*))(shared::base + 0x9D2C90))(this); }
+	void* alloc() { return ReturnCallMethod<void *, 0x9D2BC0, Hw::cHeapFixed *>(this); }
+	int canAlloc(size_t size, size_t num) { return ReturnCallMethod<int, 0x9D2BA0, Hw::cHeapFixed*, size_t, size_t>(this, size, num); }
+	unsigned int getBlockMaxNum() { return ReturnCallMethod<unsigned int, 0x9D2C80, Hw::cHeapFixed *>(this); }
+	unsigned int getBlockUsedNum() { return ReturnCallMethod<unsigned int, 0x9D2C90, Hw::cHeapFixed *>(this); }
 };
 
 class Hw::cHeapOneTime : public Hw::cHeap
@@ -618,16 +614,16 @@ public:
 	Hw::cHeapOneTime::cList *m_pFirstList, *m_pLastList;
 	int m_RestSize;
 
-	cHeapOneTime() { ((void(__thiscall *)(Hw::cHeapOneTime *))(shared::base + 0x9D3800))(this); }
+	cHeapOneTime() { CallMethod<0x9D3800, cHeapOneTime *>(this); }
 };
 
 class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapGlobal() { ((void(__thiscall *)(cHeapGlobal *))(shared::base + 0x9D3F20))(this); }
+	cHeapGlobal() { CallMethod<0x9D3F20, cHeapGlobal *>(this); }
 
-	static inline cHeapGlobal* GetInstance() { return ((cHeapGlobal * (__cdecl*)())(shared::base + 0x61D830))(); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
+	static inline cHeapGlobal* GetInstance() { return ReturnCdeclCall<cHeapGlobal *, 0x61D830>(); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
 
 	BOOL create(size_t size, const char *target) // Got optimised away
 	{
@@ -660,7 +656,7 @@ class Hw::cShareHeapPhysical : public Hw::cHeapPhysical
 public:
 	cHeapPhysical *m_pShareHeap;
 
-	cShareHeapPhysical() { ((void(__thiscall *)(cShareHeapPhysical *))(shared::base + 0x9D4BD0))(this); }
+	cShareHeapPhysical() { CallMethod<0x9D4BD0, cShareHeapPhysical *>(this); }
 	int create(Hw::cHeapPhysical &shareHeap, const char *name) { return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name); }
 	int startupShareHeap() { return ReturnCallVMTFunc<int, 19, cShareHeapPhysical*>(this); }
 };
@@ -684,7 +680,7 @@ public:
 
 		cHeap *getHeapPtr()
 		{
-			return (cHeap*)(*((DWORD*)m_Ptr - 1)); // Tricky way to get heap pointer from allocation
+			return ((cHeap**)m_Ptr)[-1]; // Tricky way to get heap pointer from allocation
 		}
 
 		tC* getNextPtr()
@@ -919,7 +915,7 @@ public:
 	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex); }
 	const char *getFileIndexFileName(size_t fileIndex) { return ((const char*(__thiscall *)(Hw::cFmerge *, size_t))(shared::base + 0x9E38D0))(this, fileIndex); }
 	BOOL getFileIndexExtension(char *pExt, size_t fileIndex) { return ((BOOL(__thiscall *)(Hw::cFmerge*, char *, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex); }
-	void *getIndexFileData(size_t fileIndex) { return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
+	void *getFileIndexData(size_t fileIndex) { return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
 	size_t _getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
 	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E3F20))(this, ext, no); }
 	size_t getFileNameIndexI(const char *name) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char*))(shared::base + 0x9E3FD0))(this, name);}
@@ -2728,7 +2724,7 @@ public:
 		cTag* free = m_FreeBegin;
 		if (m_FreeBegin == npos)
 		{
-			PrintfLog("cFixedList<tC>::insert  list max over!");
+			((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("cFixedList<tC>::insert  list max over!");
 			return npos;
 		}
 
@@ -2972,7 +2968,7 @@ public:
 			return TRUE;
 		}
 
-		ePrintf("Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_TargetAlloc, sizeof(tC) * size, m_Allocator->getFreeMemory());
+		((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_pHeapName, sizeof(tC) * size, m_Allocator->getAllocatableSize());
 		return FALSE;
 	}
 
@@ -3144,7 +3140,7 @@ public:
 		}
 		else
 		{
-			PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+			((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
 			return FALSE;
 		}
 
@@ -3161,7 +3157,7 @@ public:
 		}
 		else
 		{
-			PrintfLog("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+			((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
 			return FALSE;
 		}
 		return FALSE;

@@ -6,7 +6,7 @@
 #include <hkpRayShapeCollectionFilter.h>
 #include <hkpRayCollidableFilter.h>
 
-class hkpCollisionFilter : public hkReferencedObject, public hkBaseObject, public hkpCollidableCollidableFilter, public hkpShapeCollectionFilter, public hkpRayShapeCollectionFilter, public hkpRayCollidableFilter
+class hkpCollisionFilter : public hkBaseObject, public hkpCollidableCollidableFilter, public hkpShapeCollectionFilter, public hkpRayShapeCollectionFilter, public hkpRayCollidableFilter
 {
 
 };

@@ -9,23 +9,26 @@
 #include <SceneBehaviorSystem.h>
 #include <cSlowRateManager.h>
 
+class cObj;
 struct EntitySystem;
 class Behavior;
 
 class Entity
 {
 public:
+	enum ALIVE_FLAG : unsigned int { ALIVE_RELEASE = 1, ALIVE_DELETE = 2};
+
     cSlowRate m_SlowRate;
     char m_pName[32];
     eObjID m_ObjId;
-    int m_Flags;
+    unsigned int m_AliveFlag;
     EntityHandle m_Handle;
     Hw::cFmerge m_EntityData;
     SceneModelSystem *m_pSceneManager;
-    Behavior *m_pSceneModel;                 ///< There's no difference between m_pSceneModel and m_pInstance
+    Behavior *m_pSceneModel;                 ///< There's no difference between m_pSceneModel and m_pBehavior
     Animation *m_pAnimation;
     BehaviorList *m_pBehaviorList;
-    Behavior *m_pInstance;
+    Behavior *m_pBehavior;
     BOOL m_bStartupImmediately; 
     BOOL m_bDebris;
     BOOL m_bDatsuEntity;
@@ -34,90 +37,32 @@ public:
 
     struct ConstructInfo;
 
-    BOOL construct(ConstructInfo* pConstructInfo)
-    {
-        return ((BOOL(__thiscall*)(Entity*, ConstructInfo*))(shared::base + 0x680E70))(this, pConstructInfo);
-    }
+    Entity() { CallMethod<0x67CDE0, Entity *>(this); }
+    ~Entity() { CallMethod<0x681290, Entity *>(this); } // as it is called on operator delete, I suspect it to be the destructor 
 
-    BOOL createAnimation()
-    {
-        return ((BOOL(__thiscall*)(Entity*))(shared::base + 0x67C810))(this);
-    }
+    BOOL isAlive() { return ReturnCallMethod<BOOL, 0x67C7E0, Entity *>(this); }
+    EntityHandle& getEntityHandle() { return ReturnCallMethod<EntityHandle&, 0x67C7F0, Entity *>(this); }
+    Behavior *getSceneModel() { return ReturnCallMethod<Behavior*, 0x67C800, Entity *>(this); }
+    BOOL createAnimation() { return ReturnCallMethod<BOOL, 0x67C810, Entity *>(this); }
+    Animation* getAnimation() { return ReturnCallMethod<Animation*, 0x67C890, Entity *>(this); }
+    Behavior *getBehavior() { return ReturnCallMethod<Behavior*, 0x67C8A0, Entity *>(this); }
+    const Hw::cVec4& getTransPos() { return ReturnCallMethod<const Hw::cVec4&, 0x67C8B0, Entity *>(this); }
+    const Hw::cVec4& getRot() { return ReturnCallMethod<const Hw::cVec4&, 0x67C8D0, Entity *>(this); }
+    const Hw::cVec4& getScale() { return ReturnCallMethod<const Hw::cVec4&, 0x67C8F0, Entity *>(this); }
+    cSlowRate *getSlowRate() { return ReturnCallMethod<cSlowRate*, 0x67C910, Entity *>(this); }
+    void cleanupAnimation() { CallMethod<0x67CE60, Entity *>(this); }
+    void setTransPos(const Hw::cVec4& pos) { CallMethod<0x67CE90, Entity *>(this, pos); }
+    void addTransPos(const Hw::cVec4& pos) { CallMethod<0x67CEC0, Entity *>(this, pos); }
+    void setRot(const Hw::cVec4& rot) { CallMethod<0x67CF00, Entity *>(this, rot); }
+    void addRot(const Hw::cVec4& rot) { CallMethod<0x67CF40, Entity *>(this, rot); }
+    void setScale(const Hw::cVec4& scale) { CallMethod<0x67CF90, Entity *>(this, scale); }
+    void shutdownEntity() { CallMethod<0x6805F0, Entity *>(this); }
+    BOOL construct(ConstructInfo& info) { return ReturnCallMethod<BOOL, 0x680E70, Entity *, ConstructInfo&>(this, info); }
 
-    template <typename T>
-    T *getEntityInstance()
+    template <typename T = cObj>
+    T* as()
     {
-        return ((T *(__thiscall*)(Entity*))(shared::base + 0x67C8A0))(this);
-    }
-
-    void setTransPos(const Hw::cVec4& transPos)
-    {
-        ((void(__thiscall*)(Entity*, const Hw::cVec4&))(shared::base + 0x67CE90))(this, transPos);
-    }
-
-    const Hw::cVec4& getTransPos()
-    {
-        return ((const Hw::cVec4&(__thiscall*)(Entity*))(shared::base + 0x67C8B0))(this);
-    }
-
-    void offsetTransPos(const Hw::cVec4& offset)
-    {
-        ((void(__thiscall*)(Entity*, const Hw::cVec4&))(shared::base + 0x67CEC0))(this, offset);
-    }
-
-    void setRotation(const Hw::cVec4& rotation)
-    {
-        ((void(__thiscall*)(Entity*, const Hw::cVec4&))(shared::base + 0x67CF00))(this, rotation);
-    }
-
-    const Hw::cVec4& getRotation()
-    {
-        return ((const Hw::cVec4&(__thiscall*)(Entity*))(shared::base + 0x67C8D0))(this);
-    }
-
-    void setSize(const Hw::cVec4& size)
-    {
-        ((void(__thiscall*)(Entity*, const Hw::cVec4&))(shared::base + 0x67CF90))(this, size);
-    }
-
-    const Hw::cVec4& getSize()
-    {
-        return ((const Hw::cVec4&(__thiscall*)(Entity*))(shared::base + 0x67C8F0))(this);
-    }
-
-    Animation* getAnimation()
-    {
-        return ((Animation * (__thiscall*)(Entity*))(shared::base + 0x67C890))(this);
-    }
-
-    BOOL isValid()
-    {
-        return ((BOOL(__thiscall*)(Entity*))(shared::base + 0x67C7E0))(this);
-    }
-
-    ~Entity()
-    {
-        ((void(__thiscall*)(Entity*))(shared::base + 0x6805F0))(this);
-    }
-
-    void shutdownAnimation()
-    {
-        ((void(__thiscall*)(Entity*))(shared::base + 0x67CE60))(this);
-    }
-
-    void shutdown()
-    {
-        ((void(__thiscall*)(Entity*))(shared::base + 0x681290))(this);
-    }
-
-    void shutdownSlowRateUnit()
-    {
-        ((void(__thiscall*)(Entity*))(shared::base + 0xA085E0))(this);
-    }
-
-    EntityHandle& getEntityHandle()
-    {
-        return ((EntityHandle & (__thiscall*)(Entity*))(shared::base + 0x67C7F0))(this);
+        return (T*)getBehavior();
     }
 };
 

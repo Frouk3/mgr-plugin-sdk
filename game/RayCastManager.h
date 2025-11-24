@@ -6,36 +6,6 @@
 #include <hkpAllCdPointCollector.h>
 #include <hkpAllRayHitCollector.h>
 
-class RayCastManager
-{
-public:
-    int field_4;
-    int field_8;
-    int field_C;
-    Hw::cHeapVariable m_RayCastFactory;
-    Hw::cFixedVector<int> field_68;
-    Hw::cFixedVector<int> field_7C[5];
-    int field_E0;
-    int field_E4;
-    Hw::cCriticalSection field_E8;
-    int field_104;
-    Hw::cCriticalSection field_108;
-    int field_124;
-    int field_128;
-    int field_12C;
-    int field_130;
-    int field_134;
-    int field_138[5];
-    void *field_14C[5]; // huh?
-
-    BOOL setLinearCast(hkpAllCdPointCollector* cd, Hw::cVec4* out, const Hw::cVec4& origin, float radius, const Hw::cVec4& rayDir, int collisionFilter, const char* debugPurpose = "")
-    {
-        return ((BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, Hw::cVec4*, const Hw::cVec4&, float, const Hw::cVec4&, int, const char*))(shared::base + 0x50EEA0))(this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
-    }
-};
-
-RayCastManager &g_RayCastManager = *(RayCastManager*)(shared::base + 0x1735DF8);
-
 class RayCastWork
 {
 public:
@@ -170,6 +140,43 @@ class RayCastClosestPointsWork : public RayCastWork
     int field_1D8;
     int field_1DC;
 };
+
+class RayCastFactory : public Hw::cFactoryVariable<RayCastWork, 16>
+{
+public:
+    RayCastFactory() : Hw::cFactoryVariable<RayCastWork, 16>() {}
+
+    RayCastMultiHitWork *newWork() { return ReturnCallMethod<RayCastMultiHitWork*, 0x50EF80, RayCastFactory *>(this); } // don't blame me for not writing code
+};
+
+class RayCastManager
+{
+public:
+    int field_4;
+    RayCastFactory m_RayCastFactory;
+    Hw::cFixedVector<int> field_68;
+    Hw::cFixedVector<int> field_7C[5];
+    int field_E0;
+    int field_E4;
+    Hw::cCriticalSection field_E8;
+    int field_104;
+    Hw::cCriticalSection field_108;
+    int field_124;
+    int field_128;
+    int field_12C;
+    int field_130;
+    int field_134;
+    int field_138[5];
+    void *field_14C[5]; // huh?
+
+    BOOL setLinearCast(hkpAllCdPointCollector* cd, Hw::cVec4* out, const Hw::cVec4& origin, float radius, const Hw::cVec4& rayDir, int collisionFilter, const char* debugPurpose = "")
+    {
+        return ((BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, Hw::cVec4*, const Hw::cVec4&, float, const Hw::cVec4&, int, const char*))(shared::base + 0x50EEA0))(this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
+    }
+};
+
+RayCastManager &g_RayCastMan = *(RayCastManager*)(shared::base + 0x1735DF8);
+
 
 VALIDATE_SIZE(RayCastWork, 0x20);
 VALIDATE_SIZE(RayCastMultiHitWork, 0x3A0);

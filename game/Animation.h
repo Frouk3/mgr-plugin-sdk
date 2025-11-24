@@ -524,6 +524,8 @@ public:
     {
         ((void (__thiscall *)(Animation *))(shared::base + 0xA35190))(this);
     }
+
+    // scalar deleting at 0x67C870
 };
 
 class Animation::PostControl::Work

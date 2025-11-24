@@ -1350,7 +1350,7 @@ public:
     float field_2BD0;
     float field_2BD4;
     float field_2BD8;
-    Hw::cFixedVector<AttackData> field_2BDC;
+    Hw::cFixedVector<cAtHit> field_2BDC;
     float field_2BF0;
     float field_2BF4;
     float field_2BF8;
@@ -1373,7 +1373,7 @@ public:
     float field_2C3C;
     int field_2C40;
     int field_2C44;
-    Hw::cFixedVector<AttackData> field_2C48;
+    Hw::cFixedVector<cAtHit> field_2C48;
     float field_2C5C;
     float field_2C60;
     int field_2C64;
@@ -3048,10 +3048,7 @@ public:
     int field_53F8;
     int field_53FC;
 
-    Pl0000()
-    {
-        ((void(__thiscall*)(Pl0000*))(shared::base + 0x6C0310))(this);
-    }
+    Pl0000() { CallMethod<0x6C0310, Pl0000*>(this); }
 
     // vft start
 

@@ -83,7 +83,7 @@ public:
         ((void(__thiscall *)(Pl001c*))(shared::base + 0x6A6100))(this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17353E0);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17353E0);
 };
 
 VALIDATE_SIZE(Pl001c, 0x990);

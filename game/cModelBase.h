@@ -14,9 +14,7 @@ public:
     void *m_pBoneData;
 
     void clear() { ((void(__thiscall *)(cPartsPtrData*))(shared::base + 0x607600))(this); }
-
-    BOOL initialize(short boneAmount, void *boneData, Hw::cHeapVariable *allocator) { return ((BOOL(__thiscall *)(cPartsPtrData*, short, void*, Hw::cHeapVariable*))(shared::base + 0x607660))(this, boneAmount, boneData, allocator); }
-
+    BOOL initialize(short boneAmount, void *boneData, Hw::cHeap *allocator) { return ((BOOL(__thiscall *)(cPartsPtrData*, short, void*, Hw::cHeap*))(shared::base + 0x607660))(this, boneAmount, boneData, allocator); }
     void updateBoneMatrices(cParts *rootBone, const D3DXMATRIX& viewMatrix) { ((void(__thiscall *)(cPartsPtrData*, cParts*, const D3DXMATRIX&))(shared::base + 0x616680))(this, rootBone, viewMatrix); }
     cParts *getPartsPtrIndex(int index) { return ((cParts* (__thiscall *)(cPartsPtrData*, int))(shared::base + 0x3F7E0))(this, index); }
 };
@@ -33,17 +31,16 @@ public:
         Hw::cVec4 field_40;
 
         void updateBoundingBox(const Hw::cMtx& matrix, BOOL calculateTransformExtent) { ((void(__thiscall *)(RenderMatrix*, const Hw::cMtx&, BOOL))(shared::base + 0x610CF0))(this, matrix, calculateTransformExtent); }
-
         void initializeBoundsFromBone(cParts* rootBone, int boneIndex, cModelDataManager::EntryModelData *modelData) { ((void(__thiscall *)(RenderMatrix*, cParts*, int, cModelDataManager::EntryModelData*))(shared::base + 0x607AC0))(this, rootBone, boneIndex, modelData); }
     };
 
-    D3DXMATRIX m_ViewModelMatrix;
-    D3DXMATRIX m_ModelRotationMatrix;
+    Hw::cMtx m_ViewModelMatrix;
+    Hw::cMtx m_ModelRotationMatrix;
     cModelBase::RenderMatrix m_RenderMatrix;
-    float m_fDistRate0;
-    float m_fDistRate1;
-    float m_fDistRate2;
-    float m_fLostDistRate;
+    float m_DistRate0;
+    float m_DistRate1;
+    float m_DistRate2;
+    float m_LostDistRate;
     float field_190;
     float field_194;
     float field_198;
@@ -151,7 +148,7 @@ public:
     cMaterial *m_pMaterials;
     short m_MaterialNum;
     cModelDataManager::EntryModelData *m_pModelData;
-    cParts *m_pRootBone;
+    cParts *m_pRootParts;
     int field_338;
     int field_33C;
     int m_AnisotropicType;
@@ -161,10 +158,10 @@ public:
     cPartsPtrData m_PartsData;
     cModelBase *m_pParent;
     unsigned int m_ModelFlags;
-    int m_RootBoneIndex;
+    int m_RootPartsIndex;
     void *m_pMeshData;
 
-    cModelBase() { ((void(__thiscall*)(cModelBase*))(shared::base + 0x619210))(this); }
+    cModelBase() { CallMethod<0x619210, cModelBase *>(this); }
 
     inline void toggleAnyMesh(const char *meshName, bool bToggle)
     {
@@ -191,14 +188,9 @@ public:
     }
 
     cParts *getPartsPtrNo(unsigned int bone) { return ((cParts *(__thiscall *)(cModelBase *, unsigned int))(shared::base + 0x612210))(this, bone); }
-
     float getYawToTarget(const Hw::cVec4& target) { return ((float(__thiscall*)(cModelBase*, const Hw::cVec4&))(shared::base + 0x68EC30))(this, target); }
-
     // update bone matrices
-    void updateHierarchicalTransformations()
-    {
-        ((void(__thiscall*)(cModelBase*))(shared::base + 0x617A40))(this);
-    }
+    void updateHierarchicalTransformations() { CallMethod<0x617A40, cModelBase *>(this); }
 
     BOOL initializeBones(cModelDataManager::EntryModelData *modelData, Hw::cHeap *allocator)
     {
@@ -220,15 +212,8 @@ public:
         return ((BOOL(__thiscall*)(cModelBase*, cModelDataManager::EntryModelData*, void*, void*, void*, Hw::cHeap*))(shared::base + 0x617860))(this, modelData, textureInfo, textures, a5, allocator);
     }
 
-    void setShadowCast(BOOL disabled)
-    {
-        ((void(__thiscall*)(cModelBase*, BOOL))(shared::base + 0x60BA60))(this, disabled);
-    }
-
-    void setShadowTransparency(BOOL enable)
-    {
-        ((void(__thiscall*)(cModelBase*, BOOL))(shared::base + 0x613340))(this, enable);
-    }
+    void setNoCastShadow(BOOL toggle) { CallMethod<0x60BA60, cModelBase*, BOOL>(this, toggle); }
+    void setShadowAlpha(BOOL toggle) { CallMethod<0x613340, cModelBase*, BOOL>(this, toggle); }
 };
 
 VALIDATE_SIZE(cModelBase, 0x370);

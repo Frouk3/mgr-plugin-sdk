@@ -11,7 +11,7 @@ public:
         ((void(__thiscall *)(ef0000 *))(shared::base + 0x6A6930))(this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x177B378);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x177B378);
 };
 
 VALIDATE_SIZE(ef0000, 0x870);

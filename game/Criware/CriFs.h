@@ -320,9 +320,9 @@ struct CriFsBinderHn
     int field_28;
 };
 
-inline int CRIAPI criFsBinder_GetStatus(int binderId, int* bindStatus)
+inline int CRIAPI criFsBinder_GetStatus(int binderId, CriFsBinderStatus* bindStatus)
 {
-    return ((int(CRIAPI*)(int, int*))(shared::base + 0xE97D56))(binderId, bindStatus);
+    return ((int(CRIAPI*)(int, CriFsBinderStatus*))(shared::base + 0xE97D56))(binderId, bindStatus);
 }
 
 inline int CRIAPI criFsBinder_UnBind(int binderId)

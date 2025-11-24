@@ -15,18 +15,15 @@ public:
 				{
 					for (Entity* entity : EntitySystem::ms_Instance.m_EntityList)
 					{
-						if (!entity)
+						if (entity->m_AliveFlag & Entity::ALIVE_DELETE || entity->m_AliveFlag & Entity::ALIVE_RELEASE)
 							continue;
 
-						if (entity->m_EntityFlags & 2 || entity->m_EntityFlags & 1)
+						if ((entity->m_ObjId & 0xF0000) != 0x20000) // NOT EM
 							continue;
 
-						if ((entity->m_EntityIndex & 0xF0000) != 0x20000) // NOT EM
-							continue;
+						BehaviorEmBase* enemy = (BehaviorEmBase*)entity->getBehavior();
 
-						BehaviorEmBase* enemy = entity->getEntityInstance<BehaviorEmBase>();
-
-						if (enemy->getContext().hasInheritance(BehaviorEmBase::ms_Context))
+						if (enemy->getContext().hasInheritance(BehaviorEmBase::m_Context))
 						{
 							enemy->m_TransPos.y = -1000.0f;
 							enemy->place(enemy->m_TransPos, enemy->m_Rot);

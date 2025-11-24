@@ -148,10 +148,6 @@ struct EntitySystem
     EntitySystem() = delete;
     EntitySystem(EntitySystem const &) = delete;
     EntitySystem(EntitySystem&&) = delete;
-
-    static inline HandleManager<Entity> &ms_HandleManager = *(HandleManager<Entity>*)(shared::base + 0x17E9A60); // now it makes sense
-    static inline EntitySystem& ms_Instance = *(EntitySystem*)(shared::base + 0x17E9A98);
-
     /*
     from what I can say from the field down below, it seems that PlatinumGames had their own way of adding entities without troubles, as if creating array of data with different functions and data would be pain in ass
     */
@@ -159,34 +155,37 @@ struct EntitySystem
     static inline EntitySystem::EntityCreationData* ms_aEntities = (EntitySystem::EntityCreationData*)(shared::base + 0x14A1D70); // max 791
 };
 
+inline HandleManager<Entity> &g_EntityHandleManager = *(HandleManager<Entity>*)(shared::base + 0x17E9A60); // now it makes sense
+inline EntitySystem& g_EntitySystem = *(EntitySystem*)(shared::base + 0x17E9A98);
+
 struct EntitySystem::SetInfo
 {
     short field_0;
     short field_2;
     short field_4;
     int field_8;
-    eObjID m_nEntityId;
-    Hw::cVec3 m_vecBaseRot;
-    Hw::cVec3 m_vecTrans;
-    Hw::cVec3 m_vecBaseRotL;
-    Hw::cVec3 m_vecTransL;
-    float m_fRotation;
-    int m_nSetType;
-    int m_nType;
-    int m_nSetRtn;
-    int m_nSetFlag;
+    eObjID m_EntityId;
+    Hw::cVec3 m_BaseRot;
+    Hw::cVec3 m_Trans;
+    Hw::cVec3 m_BaseRotL;
+    Hw::cVec3 m_TransL;
+    float m_Rotation;
+    int m_SetType;
+    int m_Type;
+    int m_SetRtn;
+    int m_SetFlag;
     int field_54;
-    int m_nPathNo;
-    int m_nWaypointNo;
-    int m_nSetWait;
-    int m_nParentId;
-    int m_nPartsNo;
-    int m_nHashNo;
-    int m_nParam;
-    int m_nBezierNo;
+    int m_PathNo;
+    int m_WaypointNo;
+    int m_SetWait;
+    int m_ParentId;
+    int m_PartsNo;
+    int m_HashNo;
+    int m_Param;
+    int m_BezierNo;
     int field_78;
-    int m_nItemId;
-    int m_nGroupPos;
+    int m_ItemId;
+    int m_GroupPos;
     int field_84;
     int field_88;
     int field_8C;
@@ -207,23 +206,23 @@ struct EntitySystem::SetInfo
     int field_C8;
     int field_CC;
     Entity* m_pRoomUnitEntity;
-    int m_nInitialRtn;
-    float m_fInitialTime;
-    Hw::cVec3 m_vecInitialPos;
-    float m_fInitialPosDirY;
+    int m_InitialRtn;
+    float m_InitialTime;
+    Hw::cVec3 m_InitialPos;
+    float m_InitialPosDirY;
     int field_EC;
     int field_F0;
-    int m_nItemAlias;
+    int m_ItemAlias;
     char m_Free0;
     char m_DropItemNormal;
     char m_DropItemStealth;
     char m_VisceraTableNo;
-    float m_fReflexViewAngY;
-    float m_fReflexViewAngX;
-    float m_fReflexViewDist;
-    float m_fScoutViewAngY;
-    float m_fScoutViewAngX;
-    float m_fScoutViewDist;
+    float m_ReflexViewAngY;
+    float m_ReflexViewAngX;
+    float m_ReflexViewDist;
+    float m_ScoutViewAngY;
+    float m_ScoutViewAngX;
+    float m_ScoutViewDist;
     int field_114;
 
     SetInfo()
@@ -240,7 +239,7 @@ struct EntitySystem::EntityInfo
     EntitySystem::ObjectInfo *m_pObjectInfo;
     int field_10;
     int field_14;
-    Behavior *field_18;
+    Behavior *m_pCopyBehavior;
     int field_1C;
     void *m_pModelData; // wmb
     void *m_pTexturesFile;
@@ -255,31 +254,16 @@ struct EntitySystem::EntityInfo
 
 struct EntitySystem::ObjectInfo
 {
-    int m_nSetType;
-    int m_nType;
-    int m_nSetRtn;
-    int m_nSetFlag;
-    float field_10;
-    float field_14;
-    float field_18;
-    float field_1C;
-    float field_20;
-    float field_24;
-    float field_28;
-    float field_2C;
-    float field_30;
-    float field_34;
-    float field_38;
-    float field_3C;
-    float field_40;
-    float field_44;
-    float field_48;
-    float field_4C;
-    Hw::cVec3 m_vecTransformPosition;
-    Hw::cVec3 m_vecRotation;
-    Hw::cVec3 m_vecSize;
+    int m_SetType;
+    int m_Type;
+    int m_SetRtn;
+    int m_SetFlag;
+    Hw::cMtx m_WorldMatrix;
+    Hw::cVec3 m_TransPos;
+    Hw::cVec3 m_Rot;
+    Hw::cVec3 m_Scale;
     int field_74;
-    int field_78;
+    void *m_pModel;
     int field_7C;
 
     ObjectInfo()

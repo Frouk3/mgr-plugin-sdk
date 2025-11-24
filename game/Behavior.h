@@ -20,6 +20,26 @@
 #include <BehaviorDatabaseImplement.h>
 #include <SceneBehaviorSystem.h>
 
+class cAtHit
+{
+public:
+    CollisionAttackData::HitData m_HitData;
+    Hw::cVec4 m_Separation;
+    Hw::cVec4 field_110;
+    EntityHandle field_120;
+    EntityHandle field_124;
+    int field_128;
+    int field_12C;
+    float field_130;
+    float field_134;
+    float field_138;
+    float field_13C;
+    float field_140;
+    int field_144;
+    int field_148;
+    int field_14C;
+};
+
 struct ClothSimulation
 {
     struct ClothWork
@@ -966,25 +986,6 @@ public:
         int field_3C;
     };
 
-    struct AttackData // Logically it will be here, in this class
-    {
-        CollisionAttackData::HitData m_HitData;
-        Hw::cVec4 m_Separation;
-        Hw::cVec4 field_110;
-        EntityHandle field_120;
-        EntityHandle field_124;
-        int field_128;
-        int field_12C;
-        float field_130;
-        float field_134;
-        float field_138;
-        float field_13C;
-        float field_140;
-        int field_144;
-        int field_148;
-        int field_14C;
-    };
-
     int field_530;
     int field_534;
     int field_538;
@@ -1056,7 +1057,7 @@ public:
     EntityHandle field_66C;
     int field_670;
     int field_674;
-    Hw::cFixedVector<AttackData> field_678;
+    Hw::cFixedVector<cAtHit> m_AttackHits;
     int field_68C;
     int field_690;
     float field_694;
@@ -1338,6 +1339,8 @@ public:
     {
         return ReturnCallVMTFunc<BOOL, 128, Behavior *>(this);
     }
+
+    void setMutekiTime(float time) { CallVMTFunc<136, Behavior *, float>(this, time); }
 
     Hw::cVec4 getOffsetPosition()
     {

@@ -1,6 +1,7 @@
 #pragma once
 #include <shared.h>
 #include <Minhook/include/MinHook.h>
+#include <assert.h>
 
 #pragma comment(lib, "libMinHook.x86.lib")
 
@@ -12,9 +13,9 @@
 		typedef ret(callconv *name##_t)(__VA_ARGS__);		\
 		static inline name##_t o##name = NULL;				\
 															\
-		void Enable() { MH_EnableHook((LPVOID)(target)); }	\
+		void Enable() { if (MH_EnableHook((LPVOID)(target)) != MH_OK) _wassert(L#name " hook enable failed!", L"", 0); }	\
 		void Disable() { MH_DisableHook((LPVOID)(target)); }\
-		sHooked_##name() { MH_CreateHook((LPVOID)(target), hk##name, (LPVOID*)&o##name); if (!startDisabled) Enable(); }  \
+		sHooked_##name() { if (MH_CreateHook((LPVOID)(target), hk##name, (LPVOID*)&o##name) != MH_OK) _wassert(L#name " hook creation failed!", L"", 0); if constexpr (!startDisabled) Enable(); }  \
 		~sHooked_##name() { Disable(); MH_RemoveHook((LPVOID)(target)); }						\
 	} Hooked_##name;																							\
 	ret callconv sHooked_##name::hk##name(__VA_ARGS__)
@@ -27,9 +28,9 @@
 		typedef ret(__thiscall *name##_t)(self pThis, __VA_ARGS__);		\
 		static inline name##_t o##name = NULL;				\
 															\
-		void Enable() { MH_EnableHook((LPVOID)(target)); }	\
+		void Enable() { if (MH_EnableHook((LPVOID)(target)) != MH_OK) _wassert(L#name " hook enable failed!", L"", 0); }	\
 		void Disable() { MH_DisableHook((LPVOID)(target)); }\
-		sHooked_##name() { MH_CreateHook((LPVOID)(target), hk##name, (LPVOID*)&o##name); if (!startDisabled) Enable(); }  \
+		sHooked_##name() { if (MH_CreateHook((LPVOID)(target), hk##name, (LPVOID*)&o##name) != MH_OK) _wassert(L#name " hook creation failed!", L"", 0); if constexpr (!startDisabled) Enable(); }  \
 		~sHooked_##name() { Disable(); MH_RemoveHook((LPVOID)(target)); }						\
 	} Hooked_##name;																							\
 	ret __fastcall sHooked_##name::hk##name(self pThis, void *, __VA_ARGS__)

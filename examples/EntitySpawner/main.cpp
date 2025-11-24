@@ -64,7 +64,7 @@ Entity* EntSpawnQueue::getLastEntity()
 		resultEntity = queue->m_Entity;
 
 	if (queue)
-		remove(*queue);
+		erase(*queue);
 
 	return resultEntity;
 }
@@ -77,7 +77,7 @@ public:
 	{
 		Events::OnUpdateEvent.after += []()
 			{
-				if (m_EntQueue.m_size)
+				if (m_EntQueue.m_Size)
 				{
 					for (EntSpawn& str : m_EntQueue)
 					{
@@ -90,12 +90,12 @@ public:
 						}
 					}
 
-					for (int i = 0; i < m_EntQueue.m_size; i++)
+					for (int i = 0; i < m_EntQueue.m_Size; i++)
 					{
 						EntSpawn& elem = m_EntQueue[i];
 
 						if (elem.bWorkFail)
-							m_EntQueue.remove(elem);
+							m_EntQueue.erase(elem);
 
 						if (!elem.bWorkFail && elem.bDone && !elem.m_Entity)
 							elem.m_Entity = EntitySystem::ms_Instance.createEntity("SpawnedObject", elem.mObjId, nullptr);
@@ -104,7 +104,7 @@ public:
 
 				if (Entity* entity = m_EntQueue.getLastEntity(); entity)
 				{
-					Behavior* instance = entity->getEntityInstance<Behavior>();
+					Behavior* instance = entity->getBehavior();
 
 					Hw::cVec4 pos = g_GameUIManager.m_pPlayer ? g_GameUIManager.m_pPlayer->m_TransPos : Hw::cVec4();
 					Hw::cVec4 rot = g_GameUIManager.m_pPlayer ? g_GameUIManager.m_pPlayer->m_Rot : Hw::cVec4();

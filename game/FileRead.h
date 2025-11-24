@@ -10,6 +10,7 @@ enum eFileId
 
 namespace FileRead
 {
+	enum { FILE_PATH_MAX = 32, RESOURCE_NAME_MAX = 32 }; // do NOT edit any of these values
 	class Listener
 	{
 	public:
@@ -20,28 +21,21 @@ namespace FileRead
 	class cPathStr
 	{
 	public:
-		char m_pStr[32];
+		char m_pStr[FILE_PATH_MAX];
 
-		const char *c_str() const { return m_pStr; }
-	};
+		cPathStr() { CallMethod<0xA9C980, cPathStr *>(this); }
+		cPathStr(const char *pStr) { CallMethod<0xA9C9A0, cPathStr *, const char *>(this, pStr); }
+		void copy(const cPathStr &rOther) { CallMethod<0xA9C9C0, cPathStr *, const cPathStr &>(this, rOther); }
+		void set(const char *pStr) { CallMethod<0xA9C120, cPathStr *, const char *>(this, pStr); }
+		int isEqual(const cPathStr &rOther) const { return ReturnCallMethod<int, 0xA9C170, const cPathStr *, const cPathStr &>(this, rOther); }
+		const char *c_str() const { return ReturnCallMethod<const char *, 0xA9C1F0, const cPathStr *>(this); } // wasn't even inlined lol
+	}; // Class is complete
 
 
 	class cWork
 	{
 	public:
-		enum MOVE_RNO
-		{
-			MOVE_INVALID = 0x0,
-			MOVE_ALLOC = 0x1,
-			MOVE_READ_START = 0x2,
-			MOVE_READ_WAIT = 0x3,
-			MOVE_CANCEL_START = 0x4,
-			MOVE_CANCEL_WAIT = 0x5,
-			MOVE_FILE_VALID = 0x6,
-			MOVE_FILE_NONE = 0x7,
-			MOVE_RELEASE_START = 0x8,
-			MOVE_RELEASE_WAIT = 0x9,
-		};
+		enum MOVE_RNO { MOVE_INVALID = 0x0, MOVE_ALLOC, MOVE_READ_START, MOVE_READ_WAIT, MOVE_CANCEL_START, MOVE_CANCEL_WAIT, MOVE_FILE_VALID, MOVE_FILE_NONE, MOVE_RELEASE_START, MOVE_RELEASE_WAIT };
 
 		Hw::eDvdId m_DvdId;
 		int m_FileType;
@@ -51,13 +45,13 @@ namespace FileRead
 		void* m_pFileData;
 		int m_NeedSize;
 		Hw::cHeap* m_pHeap;
-		int m_Flag;
+		unsigned int m_Flag;
 		int m_RequestCount;
 		int m_UseCount;
-		int field_48;
+		int m_ReservingTime;
 		FileRead::cWork::MOVE_RNO m_MoveRno;
 		int m_WaitCount;
-		Hw::DVD_PRIO m_DvdPrio;
+		Hw::DVD_PRIO m_Prio;
 		FileRead::Listener* m_pListener;
 
 		void removeRequest()
@@ -114,6 +108,8 @@ namespace FileRead
 		{
 			((void(__thiscall *)(cWork *))(shared::base + 0xA9E630))(this);
 		}
+
+		void onDestroyHeap() { CallMethod<0xA9EE50, cWork *>(this);}
 	};
 
 	class Manager
@@ -225,6 +221,8 @@ namespace FileRead
 		{
 			return ((cWork*(__thiscall *)(Manager *))(shared::base + 0xA9F7A0))(this);
 		}
+
+		void onDestroyHeap(Hw::cHeap &rHeap) { CallMethod<0xA9EF20, Manager *, Hw::cHeap&>(this, rHeap); }
 	};
 
 	static inline Manager& g_FileReadManager = *(Manager*)(shared::base + 0x19DA840);

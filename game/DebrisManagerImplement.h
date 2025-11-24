@@ -11,7 +11,7 @@ public:
     struct DebrisHandle
     {
         EntityHandle m_Entity;
-        float m_fLifetime;
+        float m_Lifetime;
     };
 
     Hw::cHeapVariable *m_Allocator;
@@ -19,8 +19,8 @@ public:
     Hw::cFixedVector<DebrisHandle> m_DebrisHandles;
     Hw::cCriticalSection field_20;
     int field_3C;
-
-    static inline DebrisManagerImplement * &ms_Instance = *(DebrisManagerImplement**)(shared::base + 0x17EA18C);
 };
+
+inline DebrisManagerImplement *&g_DebrisMan = *(DebrisManagerImplement**)(shared::base + 0x17EA18C);
 
 VALIDATE_SIZE(DebrisManagerImplement, 0x40);

@@ -23,7 +23,7 @@ public:
     eObjID m_ModelIndex;
     int field_4B8;
     int field_4BC;
-    int m_ObjectFlags;
+    unsigned int m_ObjectFlags;
     int field_4C4;
     char field_4C8;
     char field_4C9;
@@ -46,51 +46,21 @@ public:
     int field_528;
     int field_52C;
 
+    cObj() { CallMethod<0x5FD150, cObj*>(this); }
+
     // vft
 
-    ContextInstance& getContext()
-    {
-        return ReturnCallVMTFunc<ContextInstance&, 1, cObj*>(this);
-    }
-
-    BOOL createDummy()
-    {
-        return ReturnCallVMTFunc<BOOL, 2, cObj*>(this);
-    }
-
-    void fadeOut()
-    {
-        CallVMTFunc<3, cObj*>(this);
-    }
-
-    void updateBoneTransform()
-    {
-        CallVMTFunc<6, cObj*>(this);
-    }
-
-    void enableRender()
-    {
-        CallVMTFunc<7, cObj*>(this);
-    }
-
-    void disableRender()
-    {
-        CallVMTFunc<8, cObj*>(this);
-    }
-
-    void setCollisionFilter(int* pCollisionFilter)
-    {
-        CallVMTFunc<15, cObj*, int*>(this, pCollisionFilter);
-    }
+    ContextInstance& getContext() { return ReturnCallVMTFunc<ContextInstance&, 1, cObj*>(this); }
+    BOOL createDummy() { return ReturnCallVMTFunc<BOOL, 2, cObj*>(this); }
+    void fadeOut() { CallVMTFunc<3, cObj*>(this); }
+    void updateBoneTransform() { CallVMTFunc<6, cObj*>(this); }
+    void onDisp() { CallVMTFunc<7, cObj*>(this); }
+    void offDisp() { CallVMTFunc<8, cObj*>(this); }
+    void setCollisionFilter(int* pCollisionFilter) { CallVMTFunc<15, cObj*, int*>(this, pCollisionFilter); }
 
     // vft end 
 
-    cObj()
-    {
-        ((void(__thiscall*)(cObj*))(shared::base + 0x5FD150))(this);
-    }
-
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x177B380);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x177B380);
 };
 
 VALIDATE_SIZE(cObj, 0x530);

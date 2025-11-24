@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <shared.h>
 #include <Hw.h>
+#include <HwDebug.h>
 
 template <typename tC>
 class sHandle
@@ -87,70 +88,71 @@ struct cString // incomplete class, needs further research
 };
 
 template <typename tC>
-struct HandleManager
+class HandleManager
 {
-	size_t m_capacity;
-	size_t m_size;
-	unsigned int m_lastPreshiftIndex;
-	unsigned int m_lastPreshift;
+public:
+	unsigned int m_Capacity;
+	unsigned int m_Size;
+	unsigned int m_LastPreshiftIndex;
+	unsigned int m_LastPreshift;
 	struct HandleHolder
 	{
 		sHandle<tC> m_Handle;
 		tC *m_value;
-	} *m_HandleArrayValue;
+	} *m_pHandleArrayValue;
 	int field_14;
-	Hw::cCriticalSection m_ArraySection;
+	Hw::cCriticalSection m_CriticalSection;
 
 
-	BOOL startup(size_t capacity, Hw::cHeap &allocator)
+	BOOL startup(int capacity, Hw::cHeap &allocator)
 	{
-		if (m_HandleArrayValue)
+		if (m_pHandleArrayValue)
 			return FALSE;
 
-		if (capacity >= 0x10000)
+		if (capacity >= 8192 * sizeof(HandleHolder))
 			return FALSE;
 
-		m_HandleArrayValue = new(allocator) HandleHolder[capacity];
-		if (!m_HandleArrayValue)
+		m_pHandleArrayValue = new(allocator) HandleHolder[capacity];
+		if (!m_pHandleArrayValue)
 			return FALSE;
 
-		for (size_t i = 0; i < capacity; i++)
+		for (int i = 0; i < capacity; i++)
 		{
-			m_HandleArrayValue[i].m_Handle.m_Handle = -1;
-			m_HandleArrayValue[i].m_value = nullptr;
+			m_pHandleArrayValue[i].m_Handle.m_Handle = -1;
+			m_pHandleArrayValue[i].m_value = nullptr;
 		}
 
-		m_capacity = capacity;
-		m_size = 0u;
-		m_lastPreshiftIndex = 0;
-		m_lastPreshift = 0;
-		m_ArraySection.startup();
+		m_Capacity = capacity;
+		m_Size = 0u;
+		m_LastPreshiftIndex = 0;
+		m_LastPreshift = 0;
+		m_CriticalSection.startup();
 		return TRUE;
 	}
 
 	unsigned int add(tC *value)
 	{
-		m_ArraySection.enter();
+		m_CriticalSection.enter();
 
-		if (m_size == m_capacity)
+		if (m_Size == m_Capacity)
 		{
-			m_ArraySection.leave();
+			m_CriticalSection.leave();
 			return 0;
 		}
 
-		unsigned int preshiftIndex = m_lastPreshiftIndex;
-		unsigned int preshift = m_lastPreshift; 
+		unsigned int preshiftIndex = m_LastPreshiftIndex;
+		unsigned int preshift = m_LastPreshift; 
 
-		for (size_t i = 0; i < m_capacity; ++i)
+		for (size_t i = 0; i < m_Capacity; ++i)
 		{
-			if (preshiftIndex >= m_capacity)
+			if (preshiftIndex >= m_Capacity)
 			{
 				++preshift;
 				preshiftIndex = 0;
 				if (preshift >= 0x100)
 					preshift = 0;
 			}
-			if (!m_HandleArrayValue[preshiftIndex].m_Handle.m_Handle)
+			if (!m_pHandleArrayValue[preshiftIndex].m_Handle.m_Handle)
 				break;
 			++preshiftIndex;
 		}
@@ -163,31 +165,71 @@ struct HandleManager
 			j = (preshiftIndex | (preshift << 16)) << 8;
 		}
 
-		m_HandleArrayValue[preshiftIndex].m_Handle.m_Handle = j;
-		m_HandleArrayValue[preshiftIndex].m_value = value;
-		++m_size;
-		m_lastPreshiftIndex = preshiftIndex + 1;
-		m_lastPreshift = preshift;
+		m_pHandleArrayValue[preshiftIndex].m_Handle.m_Handle = j;
+		m_pHandleArrayValue[preshiftIndex].m_value = value;
+		++m_Size;
+		m_LastPreshiftIndex = preshiftIndex + 1;
+		m_LastPreshift = preshift;
 
-		m_ArraySection.leave();
+		m_CriticalSection.leave();
 
 		return j;
+	}
+
+	void release(unsigned int handle)
+	{
+		m_CriticalSection.enter();
+		if (handle & 0xFFFFFF00)
+		{
+			unsigned int index = (unsigned short)(handle >> 8);
+			if (index >= m_Capacity)
+			{
+				Hw::cDebugLog::addMess("[HandleManage] Handle release error: Invalid handle");
+				m_CriticalSection.leave();
+				return;
+			}
+
+			if (HandleHolder *holder = &m_pHandleArrayValue[index]; holder->m_Handle.m_Handle & 0xFFFFFF00)
+			{
+				if ((holder->m_Handle.m_Handle & 0xFFFFFF00) == (handle & 0xFFFFFF00))
+				{
+					holder->m_Handle.m_Handle = 0;
+					holder->m_value = nullptr;
+					--m_Size;
+					m_CriticalSection.leave();
+					return;
+				}
+				else
+				{
+					Hw::cDebugLog::addMess("[HandleManage] Handle release error: Handle mismatch");
+					m_CriticalSection.leave();
+					return;
+				}
+			}
+			else
+			{
+				Hw::cDebugLog::addMess("[HandleManage] Handle release error: Invalid work");
+				m_CriticalSection.leave();
+				return;
+			}
+		}
+		m_CriticalSection.leave();
 	}
 
 	tC* get(unsigned int handle)
 	{
 		size_t index = (unsigned short)(handle >> 8);
 
-		if (index >= m_capacity)
+		if (index >= m_Capacity)
 		{
-			PrintfLog("[HandleManage] Handle error: Invalid handle");
+			Hw::cDebugLog::addMess("[HandleManage] Handle error: Invalid handle");
 			return nullptr;
 		}
 
-		if (((handle ^ m_HandleArrayValue[index].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
+		if (((handle ^ m_pHandleArrayValue[index].m_Handle.m_Handle) & 0xFFFFFF00) != 0)
 			return nullptr;
 
-		return m_HandleArrayValue[index].m_value;
+		return m_pHandleArrayValue[index].m_value;
 	}
 };
 

@@ -5,8 +5,8 @@
 #pragma warning(disable : 26495)
 
 #define PI 3.14159265359f
-#define DEG_TO_RAD(x) (x * PI / 180)
-#define RAD_TO_DEG(x) (x * 180 / PI)
+#define DEG_TO_RAD(x) (x * (PI / 180))
+#define RAD_TO_DEG(x) (x * (180 / PI))
 #define VALIDATE_SIZE(struc, size) static_assert(sizeof(struc) == size, "Invalid structure size of " #struc)
 
 class shared
@@ -95,74 +95,37 @@ public:
 #endif
 
 	template <typename T>
-	static inline T clamp(T x, T min, T max)
-	{
-		if (x < min)
-			return min;
-		else if (x > max)
-			return max;
-
-		return x;
-	}
+	static inline T clamp(T x, T min, T max) { return (x < min) ? min : (x > max) ? max : x; }
 };
 
-inline void** GetVMT(const void* self)
-{
-	return *(void***)(self);
-}
+__forceinline void** GetVMT(const void* self) { return *(void***)(self); }
+__forceinline void *GetVMT(const void* self, size_t index) { return GetVMT(self)[index]; }
 
-inline void *GetVMT(const void* self, size_t index)
-{
-	return GetVMT(self)[index];
-}
+// for these functions for calling, you better fill the template parameters explicitly, as automatic deduction may fail in some cases and it may waste resources of compiler and intellisense
 
 template <typename ret, size_t index, typename C, typename... Args>
-inline ret ReturnCallVMTFunc(C self, Args... args)
-{
-	return ((ret (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
-}
+__forceinline ret ReturnCallVMTFunc(C self, Args... args) { return ((ret (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...); }
 
 template <size_t index, typename C, typename... Args>
-inline void CallVMTFunc(C self, Args... args)
-{
-	((void (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...);
-}
+__forceinline void CallVMTFunc(C self, Args... args) { ((void (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...); }
 
 template <typename ret, unsigned int address, typename C, typename... Args>
-inline ret ReturnCallMethod(C self, Args... args)
-{
-	return ((ret (__thiscall *)(C, Args...))address)(self, args...);
-}
+__forceinline ret ReturnCallMethod(C self, Args... args) { return ((ret (__thiscall *)(C, Args...))(shared::base + address))(self, args...); }
 
 template <unsigned int address, typename C, typename... Args>
-inline void CallMethod(C self, Args... args)
-{
-	((void (__thiscall *)(C, Args...))address)(self, args...);
-}
+__forceinline void CallMethod(C self, Args... args) { ((void (__thiscall *)(C, Args...))(shared::base + address))(self, args...); }
 
 template<unsigned int address, typename... Args>
-inline void CdeclCall(Args... args)
-{
-	((void (__cdecl*)(Args...))address)(args...);
-}
+__forceinline void CdeclCall(Args... args) { ((void (__cdecl*)(Args...))(shared::base + address))(args...); }
 
 template<typename ret, unsigned int address, typename... Args>
-inline ret ReturnCdeclCall(Args... args)
-{
-	return ((ret (__cdecl *)(Args...))address)(args...);
-}
+__forceinline ret ReturnCdeclCall(Args... args) { return ((ret (__cdecl *)(Args...))(shared::base + address))(args...); }
 
 template<typename ret, unsigned int address, typename... Args>
-inline ret ReturnStdcall(Args... args)
-{
-	return ((ret (__stdcall *)(Args...))address)(args...);
-}
+__forceinline ret ReturnStdcall(Args... args) { return ((ret (__stdcall *)(Args...))(shared::base + address))(args...); }
 
 template<unsigned int address, typename... Args>
-inline void Stdcall(Args... args)
-{
-	((void (__stdcall *)(Args...))address)(args...);
-}
+__forceinline void Stdcall(Args... args) { ((void (__stdcall *)(Args...))(shared::base + address))(args...); }
 
 #define NO_DEFAULT_CONSTRUCTION(className) \
     public: \

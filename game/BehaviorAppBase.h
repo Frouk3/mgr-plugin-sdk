@@ -16,9 +16,9 @@ public:
     int field_888;
     int field_88C;
     Hw::cVec4 m_TransSpeed;
-    int field_8A0;
-    float field_8A4;
-    float field_8A8;
+    int m_bOnGround; // constant, cannot be set, only read
+    float field_8A4; // perhaps friction?
+    float m_Gravity;
     int field_8AC;
     int field_8B0;
     int m_AnimationFrame;
@@ -30,7 +30,7 @@ public:
     int field_8CC;
     int field_8D0;
     int field_8D4;
-    float field_8D8;
+    float m_MutekiTimer;
     float field_8DC;
     Hw::cVec4 field_8E0;
     Hw::cVec4 field_8F0;
@@ -88,7 +88,7 @@ public:
     float field_9E4;
     float field_9E8;
     float field_9EC;
-    float m_fYawDifference;
+    float m_YawDifference;
     int field_9F4;
     int field_9F8;
     int field_9FC;
@@ -115,17 +115,14 @@ public:
         CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
     }
 
-    void updateVelocity()
-    {
-        CallVMTFunc<199, BehaviorAppBase *>(this);
-    }
-
-    BOOL updateGroundVelocity(float deltaTime)
-    {
-        return ReturnCallVMTFunc<BOOL, 200, BehaviorAppBase *, float>(this, deltaTime);
-    }
+    // return 0 in air, 1 on ground
+    BOOL updateVelocity(float deltaTime) { return ReturnCallVMTFunc<BOOL, 200, BehaviorAppBase *, float>(this, deltaTime);}
+    BOOL isOnGround() { return ReturnCallVMTFunc<BOOL, 201, BehaviorAppBase *>(this); }
+    void updateMutekiTimer(float deltaTime) { CallVMTFunc<202, BehaviorAppBase *, float>(this, deltaTime); }
 
     // vft end
+
+    int isMuteki() { return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EF10))(this); }
 
     void setupHealth(int health)
     {
