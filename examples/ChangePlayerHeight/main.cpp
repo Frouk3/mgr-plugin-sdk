@@ -1,4 +1,4 @@
-#include <cGameUIManager.h>
+#include <cScene.h>
 #include <Hw.h> // for input
 #include <Events.h>
 
@@ -9,7 +9,7 @@ public:
     {
         Events::OnTickEvent += []()
         {
-            Pl0000 *player = g_GameUIManager.m_pPlayer;
+            Pl0000 *player = g_Scene.m_pPlayer;
 
             if (!player)
                 return;

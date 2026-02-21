@@ -13,12 +13,12 @@ public:
 			{
 				if (g_Keyboard.trig(Hw::KB_O))
 				{
-					for (Entity* entity : EntitySystem::ms_Instance.m_EntityList)
+					for (Entity* entity : g_EntitySystem.getEntityList())
 					{
-						if (entity->m_AliveFlag & Entity::ALIVE_DELETE || entity->m_AliveFlag & Entity::ALIVE_RELEASE)
+						if ((entity->m_AliveFlag & Entity::ALIVE_DELETE) || (entity->m_AliveFlag & Entity::ALIVE_RELEASE))
 							continue;
 
-						if ((entity->m_ObjId & 0xF0000) != 0x20000) // NOT EM
+						if ((entity->m_ObjId & OBJ_CATEGORY_MASK) != OBJ_CATEGORY_EM)
 							continue;
 
 						BehaviorEmBase* enemy = (BehaviorEmBase*)entity->getBehavior();

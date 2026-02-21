@@ -1413,33 +1413,13 @@ public:
 
     unsigned int getRno3()
     {
-        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAE0))(this);
-    }
+        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAE0))(this); }
 
-    void setRno(unsigned int rno0, unsigned int rno1, unsigned int rno2, unsigned int rno3)
-    {
-        ((void (__thiscall *)(Behavior *, unsigned int, unsigned int, unsigned int, unsigned int))(shared::base + 0x68CAF0))(this, rno0, rno1, rno2, rno3);
-    }
-
-    void setRno0(unsigned int rno0)
-    {
-        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB50))(this, rno0);
-    }
-
-    void setRno1(unsigned int rno1)
-    {
-        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB60))(this, rno1);
-    }
-
-    void setRno2(unsigned int rno2)
-    {
-        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB70))(this, rno2);
-    }
-
-    void setRno3(unsigned int rno3)
-    {
-        ((void (__thiscall *)(Behavior *, unsigned int))(shared::base + 0x68CB80))(this, rno3);
-    }
+    void setRno(unsigned int rno0, unsigned int rno1, unsigned int rno2, unsigned int rno3) { CallMethod<0x68CAF0, Behavior *, unsigned int, unsigned int, unsigned int, unsigned int>(this, rno0, rno1, rno2, rno3); }
+    void setRno0(unsigned int rno0) { CallMethod<0x68CB50, Behavior *, unsigned int>(this, rno0); }
+    void setRno1(unsigned int rno1) { CallMethod<0x68CB60, Behavior *, unsigned int>(this, rno1); }
+    void setRno2(unsigned int rno2) { CallMethod<0x68CB70, Behavior *, unsigned int>(this, rno2); }
+    void setRno3(unsigned int rno3) { CallMethod<0x68CB80, Behavior *, unsigned int>(this, rno3); }
 
     BOOL setupCloth(Hw::cFmerge *clothStorage) // initializes first cloth bxm(0)
     {

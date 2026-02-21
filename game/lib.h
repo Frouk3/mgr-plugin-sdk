@@ -29,10 +29,7 @@ namespace lib
             int field_8;
             // ^^ these two represent reference count, but for what exactly?
 
-            SharedCoreImplBase()
-            {
-                ((void(__thiscall*)(SharedCoreImplBase*))(shared::base + 0x1310))(this);
-            }
+            SharedCoreImplBase() { CallMethod<0x1310, SharedCoreImplBase *>(this); }
 
             virtual ~SharedCoreImplBase() {};
             virtual void destroyAllocator() = 0;
@@ -65,7 +62,7 @@ namespace lib
 
             virtual void shutdown()
             {
-                operator delete(this, (Hw::cHeap*)m_Allocator); // calls destructor and free's memory
+                operator delete(this, (Hw::cHeap*)m_Allocator); // Oh no
             }
         };
 
@@ -79,10 +76,7 @@ namespace lib
             {
             public:
 
-                Core()
-                {
-                    ((void(__thiscall*)(Core*))(shared::base + 0x13C0))(this);
-                }
+                Core() { CallMethod<0x13C0>(this); }
 
                 virtual ~Core() {};
 
@@ -140,14 +134,14 @@ namespace lib
 
 			}
 
-            bool create(allocator* pAllocator)
+            bool create(allocator& pAllocator)
             {
-                return ((bool(__thiscall *)(AllocatorHelper<allocator>*, allocator))(shared::base + 0x20E0))(this, pAllocator); // A bit too complex to recreate
+                return ReturnCallMethod<bool, 0x20E0, AllocatorHelper<allocator>*, allocator&>(this, pAllocator); // A bit too complex to recreate
             }
 
             AllocatorHelper<allocator>& operator=(const AllocatorHelper<allocator>& other)
             {
-                ((void(__thiscall*)(AllocatorHelper<allocator>*, const AllocatorHelper<allocator>&))(shared::base + 0x1F90))(this, other);
+                CallMethod<0x1F90, AllocatorHelper<allocator>*, const AllocatorHelper<allocator>&>(this, other);
                 return *this;
             }
 
@@ -174,21 +168,11 @@ namespace lib
     public:
         int field_4;
 
-        Archive()
-        {
-            *(void***)this = (void**)(shared::base + 0x12A785C);
-            field_4 = 0;
-        }
+        Archive() { *(void***)this = (void**)(shared::base + 0x12A785C); field_4 = 0; }
 
-        Archive(int a2)
-        {
-            ((void(__thiscall *)(Archive *, int))(shared::base + 0x8677F0))(this, a2);
-        }
+        Archive(int a2) { CallMethod<0x8677F0, Archive *, int>(this, a2); }
 
-        ~Archive()
-        {
-            ((void(__thiscall *)(Archive *))(shared::base + 0x867920))(this);
-        }
+        ~Archive() { CallMethod<0x867920, Archive *>(this); }
 
         virtual bool dummy() {return false;}
     };
@@ -197,21 +181,9 @@ namespace lib
     {
     public:
 
-        InputArchive()
-        {
-            *(void***)this = (void**)(shared::base + 0x12A78DC);
-            field_4 = 0;
-        }    
-
-        InputArchive(int a2)
-        {
-            ((void(__thiscall *)(InputArchive*, int))(shared::base + 0x867950))(this, a2);
-        }
-
-        ~InputArchive()
-        {
-            ((void(__thiscall *)(InputArchive *))(shared::base + 0x867980))(this);
-        }
+        InputArchive() { *(void***)this = (void**)(shared::base + 0x12A78DC); field_4 = 0; }
+        InputArchive(int a2) { CallMethod<0x867950, InputArchive *, int>(this, a2); }
+        ~InputArchive() { CallMethod<0x867980, InputArchive *>(this); }
     };
 };
 
@@ -245,12 +217,6 @@ public:
     {
         m_Size = other.m_Size;
         m_Capacity = other.m_Capacity;
-    }
-
-    Array(std::initializer_list<T> &&list)
-    {
-        for (const T& item : list)
-            this->pushBack(item);
     }
 
     Array(Array<T> &&from) : m_pArray(from.m_pArray), m_Size(from.m_Size), m_Capacity(from.m_Capacity)
@@ -314,11 +280,11 @@ public:
         std::swap(m_Size, array.m_Size);
     }
 
-    virtual void reallocate(size_t newSize)  {}
+    virtual void reallocate(unsigned int newSize)  {}
 
     int getSize() { return m_Size; /* perhaps fields are private or protected? */}
 
-    bool push_front(const T& element)
+    bool pushFront(const T& element)
     {
         insert(m_pArray, element);
         return true;
@@ -360,15 +326,15 @@ public:
         return m_pArray;
     }
 
-    void erase(T& element) // pass the existing element from array
+    void erase(T* element) // pass the existing element from array
     {
         if (!m_pArray)
             return;
 
-        if ((unsigned int)(&element - m_pArray) >= m_Size)
+        if (element - m_pArray >= m_Size)
             return;
 
-        for (T* elem = &element; elem != end() - 1; elem++)
+        for (T* elem = element; elem != end() - 1; elem++)
             *elem = elem[1];
 
         --m_Size;
@@ -395,19 +361,24 @@ public:
         m_pArray[elementTo] = temp;
     }
 
-    T& at(size_t at)
+    T& at(int at)
     {
         return m_pArray[at];
     }
 
-    T& operator [](size_t index)
+    T& operator [](int index)
     {
         return at(index);
     }
 
-    T& operator [](size_t index) const
+    T& operator [](int index) const
     {
         return at(index);
+    }
+
+    bool canAdd()
+    {
+        return m_Size < m_Capacity;
     }
 
     void clear()
@@ -446,10 +417,10 @@ public:
         return Array<T>(*this);
     }
 
-    bool copy(T& rBegin, T& rEnd)
+    bool copy(T* pBegin, T* pEnd)
     {
         clear();
-        for (T* it = &rBegin; it != &rEnd; ++it)
+        for (T* it = pBegin; it != pEnd; ++it)
         {
             if (!pushBack(*it))
                 return false;
@@ -458,50 +429,58 @@ public:
     }
 
     // Bubble sort: Sorts the array using the bubble sort algorithm
-    void bubbleSort(bool(*callback)(T& current, T& next)) // do not let the user modify the array
+    void bubbleSort(const bool(*callback)(T* current, T* next)) // do not let the user modify the array
     {
-        for (size_t i = 0; i < m_Size - 1; ++i)
+        if (m_Size < 2) return;
+
+        for (int i = 0; i < m_Size - 1; ++i)
         {
-            for (size_t j = 0; j < m_Size - i - 1; ++j)
+            bool swapped = false; // to prevent unnecessary iterations
+            for (int j = 0; j < m_Size - i - 1; ++j)
             {
-                if (callback(m_pArray[j], m_pArray[j + 1]))
+                if (callback(&m_pArray[j], &m_pArray[j + 1]))
+                {
                     std::swap(m_pArray[j], m_pArray[j + 1]);
+                    swapped = true;
+                }
             }
+            if (!swapped)
+                break;
         }
     }
 
     // Quick sort: Sorts the array using the quick sort algorithm
-    void quickSort(bool(*callback)(T& current, T& next))
+    void quickSort(const bool(*callback)(T* current, T* next))
     {
-        quickSortRecursive(0, m_Size - 1, callback);
-    }
+        // using lambdas to avoid user poking around class methods
 
-    int partition(int low, int high, bool(*callback)(T& current, T& next))
-    {
-        T &pivot = m_pArray[high];
-        int i = low - 1;
-
-        for (int j = low; j <= high - 1; j++)
+        auto partition = [this, &callback](int low, int high) -> int
         {
-            if (callback(m_pArray[j], pivot))
+            T *pivot = &m_pArray[high];
+            int i = low - 1;
+
+            for (int j = low; j <= high - 1; j++)
             {
-                i++;
-                std::swap(m_pArray[i], m_pArray[j]);
+                if (callback(&m_pArray[j], pivot))
+                {
+                    i++;
+                    std::swap(m_pArray[i], m_pArray[j]);
+                }
             }
-        }
 
-        std::swap(m_pArray[i + 1], m_pArray[high]);
-        return (i + 1);
-    }
-
-    void quickSortRecursive(int low, int high, bool(*callback)(T& current, T& next))
-    {
-        if (low < high)
+            std::swap(m_pArray[i + 1], m_pArray[high]);
+            return (i + 1);
+        };
+        auto quickSortRecursive = [this, &callback, &partition](int low, int high, auto&& quickSortRef) -> void
         {
-            int pivotIndex = partition(low, high, callback);
-            quickSortRecursive(low, pivotIndex - 1, callback);
-            quickSortRecursive(pivotIndex + 1, high, callback);
-        }
+            if (low < high)
+            {
+                int pivotIndex = partition(low, high);
+                quickSortRef(low, pivotIndex - 1, quickSortRef);
+                quickSortRef(pivotIndex + 1, high, quickSortRef);
+            }
+        };
+        quickSortRecursive(0, m_Size - 1, quickSortRecursive);
     }
 
     // Selection sort: Sorts the array using the selection sort algorithm
@@ -589,14 +568,13 @@ public:
             memcpy(this->m_pArray, other.m_pArray, sizeof(T) * other.m_Capacity);
     }
 
-    template <typename Allocator>
-    bool create(size_t capacity, Allocator *allocator)
+    bool create(size_t capacity, Hw::cHeap*& pHeap)
     {
         cleanup();
-        helper::AllocatorHelper<Allocator> helpa(allocator);
-        if (helpa.create(*allocator) && helpa.m_Allocator)
+        helper::AllocatorHelper<Hw::cHeap> helpa(pHeap);
+        if (helpa.create(*pHeap) && helpa.m_Allocator)
         {
-            if (T* mem = new(helpa.m_Allocator) T[capacity]; mem)
+            if (T* mem = new(*helpa.m_Allocator) T[capacity]; mem)
             {
                 m_Helper = helpa;
                 if (this->m_pArray)
@@ -727,14 +705,14 @@ public:
         return -1;
     }
 
-    void reallocate(int newSize)
+    void reallocate(unsigned int newSize)
     {
-       if (this->m_Capacity < newSize)
+       if (this->m_Capacity < (signed)newSize)
        {
            if (newSize <= 0x20) // Minimum for 32? Why?
                newSize = 0x20;
 
-           T* newArray = new(m_Allocator) T[newSize];
+           T* newArray = new(*m_Allocator) T[newSize];
 
            if (newArray)
            {
@@ -758,12 +736,12 @@ public:
        }
     }
 
-    virtual void _swap(lib::DynamicArray<T, allocator>& other) // duplicate?
+    virtual void swap(lib::DynamicArray<T, allocator>& other) // more like of a different type of swap for dynamic arrays
     {
         std::swap(this->m_pArray, other.m_pArray);
         std::swap(this->m_Size, other.m_Size);
         std::swap(this->m_Capacity, other.m_Capacity);
-        std::swap(m_Allocator, other.m_Allocator);
+        // std::swap(this->m_Allocator, other.m_Allocator); // for clearence // I'm not sure if this is actually in the Engine's code
     }
 
     void resize(size_t size)
@@ -777,7 +755,7 @@ public:
             if (size <= this->m_Size) // new size of array cannot hold old elements
                 return;
 
-            T* newArray = new(m_Allocator) T[size];
+            T* newArray = new(*m_Allocator) T[size];
             if (newArray)
             {
                 if (this->m_Size && this->m_pArray)

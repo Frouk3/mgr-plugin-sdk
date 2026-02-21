@@ -9,7 +9,7 @@
 
 namespace Hw
 {
-	// Input
+// Input
 
 	class KeyboardManagerBase;
 	class KeyboardManager;
@@ -100,7 +100,7 @@ namespace Hw
 	*/
 
 	class InputSystem;
-	// user
+// user
 
 	class UserReplace;
 	enum REAL_USER_NO { REAL_USER_NO_INVALID=-1, REAL_USER_NO_0=0, REAL_USER_NO_1=1, REAL_USER_NO_2=2, REAL_USER_NO_3=3 };
@@ -205,13 +205,13 @@ namespace Hw
 
 	enum ROT_ORDER
 	{
-        ROT_XYZ = 0,
-        ROT_XZY,
-        ROT_YXZ,
-        ROT_YZX,
-        ROT_ZXY, 
-        ROT_ZYX,
-    	ROT_DEFAULT = ROT_ZYX
+		ROT_XYZ = 0,
+		ROT_XZY,
+		ROT_YXZ,
+		ROT_YZX,
+		ROT_ZXY, 
+		ROT_ZYX,
+		ROT_DEFAULT = ROT_ZYX
 	};
 
 	class cHeap;
@@ -234,6 +234,7 @@ namespace Hw
 	template <typename tC, unsigned const align>
 	class cFactoryFixed;
 
+// Graphics
 	class cViewPort;
 
 	class CameraProj;
@@ -284,6 +285,12 @@ namespace Hw
 	class cVertexFormatPT;
 	class cVertexFormatPV;
 
+	class cUv;
+
+// etc.
+
+	class cTimeUnit;
+
 	class cTaskManager;
 	class cJobManager;
 
@@ -297,6 +304,9 @@ namespace Hw
 
 	template <typename tC, typename tHeapBinder>
 	class cExpandableVector;
+
+	template <typename tC>
+	class cHwLFFreeListTemp;
 
 	class cVec2;
 	class cVec3;
@@ -414,6 +424,27 @@ namespace Hw
 		static inline HWND &m_SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
 	};
 
+	class OsTime
+	{
+	public:
+		static inline int Startup() { return ReturnCdeclCall<int, 0x9F8110>(); }
+		static inline float GetHiSystemTime() { return ReturnCdeclCall<float, 0x9F81D0>(); }
+		static inline LONGLONG GetHiSystemTickCount() { return ReturnCdeclCall<LONGLONG, 0x9F8230>(); }
+		static inline float GetSystemSecPerTick() { return ReturnCdeclCall<float, 0x9F8260>(); }
+		static inline int GetSystemTime() { return ReturnCdeclCall<int, 0xB98000>(); }
+
+		static inline float &m_SecondsPerTick = *(float*)(shared::base + 0x19D4F14);
+		static inline LARGE_INTEGER &m_SystemHiTime = *(LARGE_INTEGER*)(shared::base + 0x19D4F18);
+		static inline LARGE_INTEGER &m_SystemFreq = *(LARGE_INTEGER*)(shared::base + 0x19D4F20);
+		static inline int &m_bSystemTimeInit = *(int*)(shared::base + 0x19D4F40);
+	};
+
+	class OsSystem
+	{
+	public:
+		static inline float GetHiSystemTime() { return ReturnCdeclCall<float, 0x9F8C10>(); }	
+	};
+
 	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 
 	inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
@@ -421,28 +452,31 @@ namespace Hw
 
 class Hw::cSemaphore
 {
+private:
+	void* m_hSemaphore;
 public:
-	HANDLE m_hSemaphore;
+	cSemaphore() { CallMethod<0x9D7360, cSemaphore*>(this); }
 
-	cSemaphore() { CallMethod<0x9D7360, cSemaphore *>(this); }
-
-	BOOL startup(long init_count, long max_count) { return ReturnCallMethod<BOOL, 0x9D7370, cSemaphore *, long, long>(this, init_count, max_count); }
-	void cleanup() { CallMethod<0x9D73B0, cSemaphore *>(this); }
-	void hold() { CallMethod<0x9D73D0, cSemaphore *>(this); }
-	void release() { CallMethod<0x9D73E0, cSemaphore *>(this); }
+	int startup(unsigned int init_count, unsigned int max_count) { return ReturnCallMethod<BOOL, 0x9D7370, cSemaphore*, unsigned int, unsigned int>(this, init_count, max_count); }
+	void cleanup() { CallMethod<0x9D73B0, cSemaphore*>(this); }
+	void hold() { CallMethod<0x9D73D0, cSemaphore*>(this); }
+	void release() { CallMethod<0x9D73E0, cSemaphore*>(this); }
 };
 
 class Hw::cCriticalSection
 {
+private:
+	CRITICAL_SECTION m_CriticalSection;
+	BOOL m_IsStartuped;
+	// private: int pad1C; public: // +4 for alignment
 public:
-	RTL_CRITICAL_SECTION m_critsection;
-	BOOL m_bInit;
 
-	cCriticalSection() { this->m_bInit = FALSE; }
+	cCriticalSection() { m_IsStartuped = FALSE; }
 	BOOL startup() { return ReturnCallMethod<BOOL, 0x9D7240, cCriticalSection *>(this); }
+	void cleanup() { CallMethod<0x9D7270, cCriticalSection*>(this); }
 	void enter() { CallMethod<0xA6C0, cCriticalSection *>(this); }
 	void leave() { CallMethod<0xA6D0, cCriticalSection *>(this); }
-	void cleanup() { CallMethod<0x9D7270, cCriticalSection *>(this); }
+	int isValid() { return m_IsStartuped; }
 };
 
 class Hw::cHeap
@@ -590,7 +624,7 @@ public:
 
 	cHeapFixed() { CallMethod<0x9D36F0, Hw::cHeapFixed *>(this); }
 
-	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap *creator, const char *name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap *, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
+	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap &creator, const char *name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap &, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
 	void* alloc() { return ReturnCallMethod<void *, 0x9D2BC0, Hw::cHeapFixed *>(this); }
 	int canAlloc(size_t size, size_t num) { return ReturnCallMethod<int, 0x9D2BA0, Hw::cHeapFixed*, size_t, size_t>(this, size, num); }
 	unsigned int getBlockMaxNum() { return ReturnCallMethod<unsigned int, 0x9D2C80, Hw::cHeapFixed *>(this); }
@@ -648,7 +682,7 @@ public:
 
 	// non virtual ~cHeapGlobal() -> at 0x9D3F60
 
-	static inline cHeapGlobal &ms_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
+	static inline cHeapGlobal &m_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
 };
 
 class Hw::cShareHeapPhysical : public Hw::cHeapPhysical
@@ -666,10 +700,11 @@ class Hw::cFactory
 {
 public:
 	class const_iterator;
+	class iterator;
 
-	const const_iterator npos;
+	const iterator npos;
 private:
-	void* _pad01;
+	void* _pad04;
 public:
 	tHeapBinder m_Heap;
 public:
@@ -780,14 +815,31 @@ public:
 	{
 		return const_iterator(nullptr);
 	}
+private:
+	// optimize makes it confusing to reverse
+
+	void destroyLocal()
+	{
+		iterator it = begin();
+		iterator itEnd = end();
+
+		while (it != itEnd)
+		{
+			iterator current = it;
+			++it;
+
+			operator delete(&(*current), &m_Heap);
+		}
+	}
+public:
 
 	void destroy()
 	{
 		if (!m_Heap.isValid())
 			return;
 
-		for (iterator it = begin(); it != end(); it++)
-			operator delete(&(*it), &m_Heap);
+		destroyLocal();
+		m_Heap.destroy();
 	}
 
 	iterator erase(iterator &pos)
@@ -860,42 +912,26 @@ public:
 		return cFactory<tC, align, Hw::cHeapFixed>::iterator(this->m_Heap.alloc());
 	}
 
-	size_t getUsedNum()
+	unsigned int getUsedNum()
 	{
 		return this->m_Heap.getBlockUsedNum();
 	}
 
-	size_t getMaxNum()
+	unsigned int getMaxNum()
 	{
 		return this->m_Heap.getBlockMaxNum();
 	}
 };
 
-class Hw::ResourceManager
-{
-public:
-	class cWork
-	{
-	public:
-		void *m_pResourceData;
-		unsigned int m_ResourceSize;
-		char m_pResourceName[32];
-	};
-
-	static inline int __cdecl registResource(void *pResourceData, unsigned int resource_size, const char *pResourceName) { return ((int(__cdecl *)(void *, unsigned int, const char *))(shared::base + 0x9E4420))(pResourceData, resource_size, pResourceName); }
-};
-
-inline Hw::cFactoryFixed<Hw::ResourceManager::cWork, 4> &g_ResourceWorkFactory = *(Hw::cFactoryFixed<Hw::ResourceManager::cWork, 4>*)(shared::base + 0x19D0818);
-
 struct Hw::FmergeHeader
 {
-    char magic[4];
-    size_t m_FileNum;
-    size_t m_OffsetTblOffs;
-    size_t m_ExtOffs;
-    size_t m_NamesOffs;
-    size_t m_SizeOffs;
-    size_t m_HashMapOffs;
+	char magic[4];
+	size_t m_FileNum;
+	size_t m_OffsetTblOffs;
+	size_t m_ExtOffs;
+	size_t m_NamesOffs;
+	size_t m_SizeOffs;
+	size_t m_HashMapOffs;
 };
 
 class Hw::cFmerge
@@ -931,116 +967,116 @@ public:
 
 enum Hw::KEYBOARD_MAP
 {
-    KB_SPACE=32,
-    KB_A=65,
-    KB_B=66,
-    KB_C=67,
-    KB_D=68,
-    KB_E=69,
-    KB_F=70,
-    KB_G=71,
-    KB_H=72,
-    KB_I=73,
-    KB_J=74,
-    KB_K=75,
-    KB_L=76,
-    KB_M=77,
-    KB_N=78,
-    KB_O=79,
-    KB_P=80,
-    KB_Q=81,
-    KB_R=82,
-    KB_S=83,
-    KB_T=84,
-    KB_U=85,
-    KB_V=86,
-    KB_W=87,
-    KB_X=88,
-    KB_Y=89,
-    KB_Z=90,
-    KB_0=48,
-    KB_1=49,
-    KB_2=50,
-    KB_3=51,
-    KB_4=52,
-    KB_5=53,
-    KB_6=54,
-    KB_7=55,
-    KB_8=56,
-    KB_9=57,
-    KB_MINUS=45,
-    KB_EQ=61,
-    KB_BRAC_L=91,
-    KB_BRAC_R=93,
-    KB_PERIOD=46,
-    KB_APOS=39,
-    KB_SLASH=47,
-    KB_COMMA=44,
-    KB_SEMICOLON=59,
-    KB_GRAVE=96,
-    KB_COLON=58,
-    KB_AT=64,
-    KB_YEN=92,
-    KB_CIRCUMFLEX=94,
-    KB_RET=10,
-    KB_TAB=9,
-    KB_BS=8,
-    KB_F1=128,
-    KB_F2=129,
-    KB_F3=130,
-    KB_F4=131,
-    KB_F5=132,
-    KB_F6=133,
-    KB_F7=134,
-    KB_F8=135,
-    KB_F9=136,
-    KB_F10=137,
-    KB_F11=138,
-    KB_F12=139,
-    KB_DN=140,
-    KB_LT=141,
-    KB_RT=142,
-    KB_UP=143,
-    KB_CAP=144,
-    KB_ESC=145,
-    KB_INS=146,
-    KB_DEL=147,
-    KB_HOME=148,
-    KB_END=149,
-    KB_PAGE_UP=150,
-    KB_PAGE_DN=151,
-    KB_SYSRQ=152,
-    KB_SCRLOCK=153,
-    KB_PAUSE=154,
-    KB_CTRL_L=155,
-    KB_CTRL_R=156,
-    KB_ALT_L=157,
-    KB_ALT_R=158,
-    KB_SHIFT_L=159,
-    KB_SHIFT_R=160,
-    KB_WIN_L=161,
-    KB_WIN_R=162,
-    KB_APPS=163,
-    KB_BACKSLASH=164,
-    KB_NUMLOCK=165,
-    KB_NUM0=166,
-    KB_NUM1=167,
-    KB_NUM2=168,
-    KB_NUM3=169,
-    KB_NUM4=170,
-    KB_NUM5=171,
-    KB_NUM6=172,
-    KB_NUM7=173,
-    KB_NUM8=174,
-    KB_NUM9=175,
-    KB_NUM_ADD=176,
-    KB_NUM_SUB=177,
-    KB_NUM_DEC=178,
-    KB_NUM_DIV=179,
-    KB_NUM_MUL=180,
-    KB_NUM_ENT=181,
-    KB_MAP_MAX=182,
-    KB_MAP_INVALID=183
+	KB_SPACE=32,
+	KB_A=65,
+	KB_B=66,
+	KB_C=67,
+	KB_D=68,
+	KB_E=69,
+	KB_F=70,
+	KB_G=71,
+	KB_H=72,
+	KB_I=73,
+	KB_J=74,
+	KB_K=75,
+	KB_L=76,
+	KB_M=77,
+	KB_N=78,
+	KB_O=79,
+	KB_P=80,
+	KB_Q=81,
+	KB_R=82,
+	KB_S=83,
+	KB_T=84,
+	KB_U=85,
+	KB_V=86,
+	KB_W=87,
+	KB_X=88,
+	KB_Y=89,
+	KB_Z=90,
+	KB_0=48,
+	KB_1=49,
+	KB_2=50,
+	KB_3=51,
+	KB_4=52,
+	KB_5=53,
+	KB_6=54,
+	KB_7=55,
+	KB_8=56,
+	KB_9=57,
+	KB_MINUS=45,
+	KB_EQ=61,
+	KB_BRAC_L=91,
+	KB_BRAC_R=93,
+	KB_PERIOD=46,
+	KB_APOS=39,
+	KB_SLASH=47,
+	KB_COMMA=44,
+	KB_SEMICOLON=59,
+	KB_GRAVE=96,
+	KB_COLON=58,
+	KB_AT=64,
+	KB_YEN=92,
+	KB_CIRCUMFLEX=94,
+	KB_RET=10,
+	KB_TAB=9,
+	KB_BS=8,
+	KB_F1=128,
+	KB_F2=129,
+	KB_F3=130,
+	KB_F4=131,
+	KB_F5=132,
+	KB_F6=133,
+	KB_F7=134,
+	KB_F8=135,
+	KB_F9=136,
+	KB_F10=137,
+	KB_F11=138,
+	KB_F12=139,
+	KB_DN=140,
+	KB_LT=141,
+	KB_RT=142,
+	KB_UP=143,
+	KB_CAP=144,
+	KB_ESC=145,
+	KB_INS=146,
+	KB_DEL=147,
+	KB_HOME=148,
+	KB_END=149,
+	KB_PAGE_UP=150,
+	KB_PAGE_DN=151,
+	KB_SYSRQ=152,
+	KB_SCRLOCK=153,
+	KB_PAUSE=154,
+	KB_CTRL_L=155,
+	KB_CTRL_R=156,
+	KB_ALT_L=157,
+	KB_ALT_R=158,
+	KB_SHIFT_L=159,
+	KB_SHIFT_R=160,
+	KB_WIN_L=161,
+	KB_WIN_R=162,
+	KB_APPS=163,
+	KB_BACKSLASH=164,
+	KB_NUMLOCK=165,
+	KB_NUM0=166,
+	KB_NUM1=167,
+	KB_NUM2=168,
+	KB_NUM3=169,
+	KB_NUM4=170,
+	KB_NUM5=171,
+	KB_NUM6=172,
+	KB_NUM7=173,
+	KB_NUM8=174,
+	KB_NUM9=175,
+	KB_NUM_ADD=176,
+	KB_NUM_SUB=177,
+	KB_NUM_DEC=178,
+	KB_NUM_DIV=179,
+	KB_NUM_MUL=180,
+	KB_NUM_ENT=181,
+	KB_MAP_MAX=182,
+	KB_MAP_INVALID=183
 };
 
 class Hw::UserReplace
@@ -1048,7 +1084,7 @@ class Hw::UserReplace
 public:
 	static inline REAL_USER_NO &m_MainUserNo = *(REAL_USER_NO*)(shared::base + 0x14CEA10);
 
-	static inline REAL_USER_NO GetRealUserNo(int userNo) { return ((REAL_USER_NO(__cdecl *)(int))(shared::base + 0x9FD140))(userNo); }
+	static inline REAL_USER_NO GetRealUserNo(int userNo) { return ReturnCdeclCall<REAL_USER_NO, 0x9FD140, int>(userNo); }
 };
 
 class Hw::cKeyboardState
@@ -1063,17 +1099,17 @@ public:
 	unsigned int m_pOld[KB_MAP_FLAG_SIZE];
 	int m_RepCount;
 
-	BOOL on(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D93A0))(this, vKey); }
-	BOOL on(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D93D0))(this, vKey); }
-	BOOL trig(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9400))(this, vKey); }
-	BOOL trig(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9430))(this, vKey); }
-	BOOL rel(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9460))(this, vKey); }
-	BOOL rel(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D9490))(this, vKey); }
-	BOOL rep(KEYBOARD_MAP vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D94C0))(this, vKey); }
-	BOOL rep(char vKey) { return ((BOOL(__thiscall*)(cKeyboardState*, char))(shared::base + 0x9D94F0))(this, vKey); }
-	void setOn(KEYBOARD_MAP vKey, BOOL bDown) { ((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP, BOOL))(shared::base + 0x9D9620))(this, vKey, bDown); }
-	void setTrig(KEYBOARD_MAP vKey) { ((void(__thiscall*)(cKeyboardState*, KEYBOARD_MAP))(shared::base + 0x9D9650))(this, vKey); }
-};
+	BOOL on(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D93A0, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
+	BOOL on(char vKey) { return ReturnCallMethod<BOOL, 0x9D93D0, cKeyboardState*, char>(this, vKey); }
+	BOOL trig(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D9400, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
+	BOOL trig(char vKey) { return ReturnCallMethod<BOOL, 0x9D9430, cKeyboardState*, char>(this, vKey); }
+	BOOL rel(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D9460, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
+	BOOL rel(char vKey) { return ReturnCallMethod<BOOL, 0x9D9490, cKeyboardState*, char>(this, vKey); }
+	BOOL rep(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D94C0, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
+	BOOL rep(char vKey) { return ReturnCallMethod<BOOL, 0x9D94F0, cKeyboardState*, char>(this, vKey); }
+	void setOn(KEYBOARD_MAP vKey, BOOL bDown) { CallMethod<0x9D9620, cKeyboardState*, KEYBOARD_MAP, BOOL>(this, vKey, bDown); }
+	void setTrig(KEYBOARD_MAP vKey) { CallMethod<0x9D9650, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
+}; // class is complete
 
 class Hw::cViewPort
 {
@@ -1103,14 +1139,14 @@ public:
 	static inline int &m_RepeatWait = *(int*)(shared::base + 0x14CD830);
 	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
 
-	static inline void InitState(cKeyboardState& rState) { ((void(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4A0))(rState); }
-	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA4C0))(rState); }
+	static inline void InitState(cKeyboardState& rState) { CdeclCall<0x9DA4A0, cKeyboardState&>(rState); }
+	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA4C0, cKeyboardState&>(rState); }
 };
 
 class Hw::MouseManagerBase
 {
 public:
-	static inline void UpdateState(cMouseState& rState) { ((void(__cdecl*)(cMouseState&))(shared::base + 0x9D9800))(rState); }
+	static inline void UpdateState(cMouseState& rState) { CdeclCall<0x9D9800, cMouseState&>(rState); }
 
 	static inline int &m_RepeatWait = *(int*)(shared::base + 0x14CDDEC);
 	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x14CDDF0);
@@ -1123,7 +1159,7 @@ class Hw::MouseManager : public Hw::MouseManagerBase
 {
 public:
 
-	static inline LPDIRECTINPUTDEVICE8W& m_pInputDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
+	static inline LPDIRECTINPUTDEVICE8W& m_pMouseDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06F4);
 };
 
 class Hw::KeyboardManager : public Hw::KeyboardManagerBase
@@ -1131,12 +1167,14 @@ class Hw::KeyboardManager : public Hw::KeyboardManagerBase
 public:
 	enum{ MAX_KEY_MAP_FLAG=256 };
 
-	static inline int UpdateKeyState(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA500))(rState); }
-	static inline int UpdateState(cKeyboardState& rState) { return ((int(__cdecl*)(cKeyboardState&))(shared::base + 0x9DA710))(rState); }
+	static inline int UpdateKeyState(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA500, cKeyboardState&>(rState); }
+	static inline int UpdateState(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA710, cKeyboardState&>(rState); }
 
-	static inline char *m_pStateHidFlag = (char*)(shared::base + 0x19D06F8); //char m_pStateHidFlag[256];
+	static inline int* m_pStrokeHidFlag = (int*)(shared::base + 0x14CD838); // int m_pStrokeHidFlag[KB_MAP_MAX][2];
+	static inline char *m_pStateHidFlag = (char*)(shared::base + 0x19D06F8); //char m_pStateHidFlag[MAX_KEY_MAP_FLAG];
 	static inline int &m_IsStateValid = *(int*)(shared::base + 0x14CDDE8);
-	static inline LPDIRECTINPUTDEVICE8W &m_pInputDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
+
+	static inline LPDIRECTINPUTDEVICE8W &m_pKeyboardDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
 };
 
 class Hw::PadManager
@@ -1155,10 +1193,10 @@ public:
 		int m_VibrationTotal;
 		int m_bVibrationEnabled;
 	};
-	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { ((void(__cdecl*)(float, float, float, Hw::INPUT_PAD_ANALOG))(shared::base + 0x9D99F0))(range, thres, ambit, analog); }
-	static inline void UpdatePad(cPadInfo& rInfo, int controllerId) {((void(__cdecl*)(cPadInfo&, int))(shared::base + 0x9DA900))(rInfo, controllerId); }
-	static inline void SetVib(int controllerId, float leftMotorSpeed, float rightMotorSpeed, int time) { ((void(__cdecl*)(int, float, float, int))(shared::base + 0x9DA360))(controllerId, leftMotorSpeed, rightMotorSpeed, time); }
-	static inline void SetTriggerState(Hw::cPadState &pad, unsigned int buttons) { ((void(__cdecl*)(Hw::cPadState&, unsigned int))(shared::base + 0x9DA210))(pad, buttons); }
+	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { CdeclCall<0x9D99F0, float, float, float, Hw::INPUT_PAD_ANALOG>(range, thres, ambit, analog); }
+	static inline void UpdatePad(cPadInfo& rInfo, int controllerId) { CdeclCall<0x9DA900, cPadInfo&, int>(rInfo, controllerId); }
+	static inline void SetVib(int controllerId, float leftMotorSpeed, float rightMotorSpeed, int time) { CdeclCall<0x9DA360, int, float, float, int>(controllerId, leftMotorSpeed, rightMotorSpeed, time); }
+	static inline void SetTriggerState(Hw::cPadState &pad, unsigned int buttons) { CdeclCall<0x9DA210, Hw::cPadState&, unsigned int>(pad, buttons); }
 
 	static inline int &m_RepeatWait = *(int*)(shared::base + 0x19D05B8);
 	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x19D05BC);
@@ -1174,16 +1212,16 @@ public:
 class Hw::InputSystem
 {
 public:
-	static inline void InitKeyboard(Hw::cKeyboardState& rState) { ((void(__cdecl*)(Hw::cKeyboardState&))(shared::base + 0x9DAFF0))(rState); }
-	static inline void UpdateKeyboard(Hw::cKeyboardState& rState) { ((void(__cdecl*)(Hw::cKeyboardState&))(shared::base + 0x9DB010))(rState); }
+	static inline void InitKeyboard(Hw::cKeyboardState& rState) { CdeclCall<0x9DAFF0, Hw::cKeyboardState&>(rState); }
+	static inline void UpdateKeyboard(Hw::cKeyboardState& rState) { CdeclCall<0x9DB010, Hw::cKeyboardState&>(rState); }
 
-	static inline void UpdateMouse(Hw::cMouseState& rState) { ((void(__cdecl*)(Hw::cMouseState&))(shared::base + 0x9DA450))(rState); }
+	static inline void UpdateMouse(Hw::cMouseState& rState) { CdeclCall<0x9DA450, Hw::cMouseState&>(rState); }
 
-	static inline void InitPad(Hw::cPadState& rState) { ((void(__cdecl*)(Hw::cPadState&))(shared::base + 0x9DAFC0))(rState); }
-	static inline void UpdatePad(Hw::cPadState& rState, int controllerId) { ((void(__cdecl*)(Hw::cPadState&, int))(shared::base + 0x9DAFE0))(rState, controllerId); }
-	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { ((void(__cdecl*)(float, float, float, Hw::INPUT_PAD_ANALOG))(shared::base + 0x9DA270))(range, thres, ambit, analog); }
+	static inline void InitPad(Hw::cPadState& rState) { CdeclCall<0x9DAFC0, Hw::cPadState&>(rState); }
+	static inline void UpdatePad(Hw::cPadState& rState, int controllerId) { CdeclCall<0x9DAFE0, Hw::cPadState&, int>(rState, controllerId); }
+	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { CdeclCall<0x9DA270, float, float, float, Hw::INPUT_PAD_ANALOG>(range, thres, ambit, analog); }
 
-	static inline LPDIRECTINPUT8 &m_pInputDevice = *(LPDIRECTINPUT8*)(shared::base + 0x19D06E4);
+	static inline LPDIRECTINPUT8W &m_pInputDevice = *(LPDIRECTINPUT8W*)(shared::base + 0x19D06E4);
 };
 
 class Hw::cUcol
@@ -1348,20 +1386,20 @@ class Hw::cRand
 private:
 	unsigned int m_Seed;
 public:
-	cRand() { ((void(__thiscall *)(cRand *))(shared::base + 0x9DBBB0))(this); }
-	~cRand() { ((void(__thiscall *)(cRand *))(shared::base + 0x9DBBC0))(this); }
+	cRand() { CallMethod<0x9DBBB0, cRand*>(this); }
+	~cRand() { CallMethod<0x9DBBC0, cRand*>(this); }
 
-	void setSeed(unsigned int seed) { ((void(__thiscall*)(cRand*, unsigned int))(shared::base + 0x9DBBD0))(this, seed); }
-	unsigned int getSeed() { return ((unsigned int(__thiscall *)(cRand *))(shared::base + 0x9DBBE0))(this); }
-	unsigned short rollU16() { return ((unsigned short(__thiscall *)(cRand*))(shared::base + 0x9DBBF0))(this); }
-	unsigned int rollU32() { return ((unsigned int(__thiscall *)(cRand*))(shared::base + 0x9DBC10))(this); }
-	void initSeed() { ((void(__thiscall *)(cRand*))(shared::base + 0x9DE290))(this); }
-	unsigned short getU16(unsigned short min, unsigned short max) { return ((unsigned short(__thiscall*)(cRand*, unsigned short, unsigned short))(shared::base + 0x9DE2A0))(this, min, max); }
-	short getS16(short min, short max) { return ((int(__thiscall*)(cRand*, int, int))(shared::base + 0x9DE2D0))(this, min, max); }
-	float getF32(float min, float max) { return ((float(__thiscall*)(cRand*, float, float))(shared::base + 0x9DE300))(this, min, max); }
+	void setSeed(unsigned int seed) { CallMethod<0x9DBBD0, cRand*, unsigned int>(this, seed); }
+	unsigned int getSeed() { return ReturnCallMethod<unsigned int, 0x9DBBE0, cRand*>(this); }
+	unsigned short rollU16() { return ReturnCallMethod<unsigned short, 0x9DBBF0, cRand*>(this); }
+	unsigned int rollU32() { return ReturnCallMethod<unsigned int, 0x9DBC10, cRand*>(this); }
+	void initSeed() { CallMethod<0x9DE290, cRand*>(this); }
+	unsigned short getU16(unsigned short min, unsigned short max) { return ReturnCallMethod<unsigned short, 0x9DE2A0, cRand*, unsigned short, unsigned short>(this, min, max); }
+	short getS16(short min, short max) { return ReturnCallMethod<short, 0x9DE2D0, cRand*, short, short>(this, min, max); }
+	float getF32(float min, float max) { return ReturnCallMethod<float, 0x9DE300, cRand*, float, float>(this, min, max); }
 	float getF0_1() { return getF32(0.0f, 1.0f); }
 	float getF1_1() { return getF32(-1.0f, 1.0f); }
-};
+}; // class is complete(?, actually not sure)
 
 template <typename tC>
 class Hw::cSingleton
@@ -1496,7 +1534,7 @@ public:
 	float x, y, z, w;
 
 	cVec4() { x = 0.0f; y = 0.0f; z = 0.0f; w = 1.f; }
-	cVec4(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {}
+	cVec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {} // No default for w to avoid confusion
 	cVec4(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = lhs.w; }
 	cVec4(const Hw::cVec3& lhs);
 
@@ -1658,10 +1696,10 @@ public:
 	unsigned int m_Trig;
 	unsigned int m_Rel;
 	unsigned int m_Rep;
-	Hw::cVec2 m_fLeftStick;
-	Hw::cVec2 m_fRightStick;
-	float m_fLeftTrigger;
-	float m_fRightTrigger;
+	Hw::cVec2 m_LeftStick;
+	Hw::cVec2 m_RightStick;
+	float m_LeftTrigger;
+	float m_RightTrigger;
 	int m_bValidInput;
 	int m_RepCount;
 };
@@ -1673,9 +1711,9 @@ public:
 	{
 	public:
 		cJobManager* m_pManager;
-		int m_nThreadIndex;
-		HANDLE m_hSemaphore;
-		HANDLE m_hTask;
+		eThreadId m_ThreadId;
+		cSemaphore m_hTaskWaitSemaphore;
+		cSemaphore m_hTaskDoneSemaphore;
 		void(__cdecl *m_func)(LPVOID reserved, void *arg);
 		void* m_parameter;
 	};
@@ -1726,15 +1764,8 @@ public:
 	int field_AC;
 	int field_B0;
 
-	cJobManager()
-	{
-		((void(__thiscall*)(cJobManager*))(shared::base + 0x9D6F30))(this);
-	}
-
-	~cJobManager()
-	{
-		((void(__thiscall*)(cJobManager*))(shared::base + 0x9D8B60))(this);
-	}
+	cJobManager() { CallMethod<0x9D6F30, cJobManager*>(this); }
+	~cJobManager() { CallMethod<0x9D8B60, cJobManager*>(this); }
 
 	int shutdown()
 	{
@@ -1977,6 +2008,12 @@ public:
 	}
 };
 
+class Hw::cTimeUnit
+{
+public:
+	int m_Year, m_Month, m_Day, m_Hour, m_Minute, m_Second, m_MilliSecond;
+};
+
 class Hw::cTexture
 {
 public:
@@ -2046,32 +2083,35 @@ public:
 	int field_4C;
 };
 
-class __declspec(align(16)) Hw::CameraProj
+class Hw::CameraProj
 {
+private:
+	int _pad04[3];
 public:
-	__declspec(align(16)) Hw::cMtx m_ProjMatrix;
+	Hw::cMtx m_ProjMatrix;
 	Hw::cMtx m_InverseProjMatrix;
 	float m_Aspect;
 	float m_Fovy;
 	float m_NearZ;
 	float m_FarZ;
 	int m_bAspect; // do we want to update projection matrix after changing aspect ratio?
+private:
+	int _padA4[3];
+public:
 
-	CameraProj() { ((void(__thiscall *)(CameraProj *))(shared::base + 0x812610))(this); }
+	CameraProj() { CallMethod<0x812610, CameraProj *>(this); }
 	// non virtual destructor at 0x812450
 
 	virtual ~CameraProj() {};
 
-	void set(float nearZ, float farZ, float fovy) { ((void(__thiscall *)(CameraProj *, float, float, float))(shared::base + 0x9E4D60))(this, nearZ, farZ, fovy); }
-	void updateProjMatrixPers() { ((void(__thiscall *)(CameraProj *))(shared::base + 0x9E5AA0))(this); }
-	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { ((void(__thiscall *)(CameraProj *, const Hw::cMtx&, int))(shared::base + 0x9E5B30))(this, mat, __formal); }
+	void set(float nearZ, float farZ, float fovy) { CallMethod<0x9E4D60, CameraProj *, float, float, float>(this, nearZ, farZ, fovy); }
+	void updateProjMatrixPers() { CallMethod<0x9E5AA0, CameraProj *>(this); }
+	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { CallMethod<0x9E5B30, CameraProj *, const Hw::cMtx&, int>(this, mat, __formal); }
 };
 
 VALIDATE_SIZE(Hw::CameraProj, 0xB0);
 
-// using declspec alignment is better than creating padding manually
-
-class __declspec(align(16)) Hw::cCameraBase 
+class Hw::cCameraBase 
 {
 public:
 	Hw::cMtx m_ViewMatrix;
@@ -2085,37 +2125,40 @@ public:
 	Hw::ROT_ORDER m_RotOrder;
 	float m_Dist;
 	float m_Fovy;
+private:
+	int _pad14C;
+public:
 
-	void initialize() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E4EC0))(this); }
-	void movePos(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E4F20))(this, pos); }
+	void initialize() { CallMethod<0x9E4EC0, cCameraBase *>(this); }
+	void movePos(const Hw::cVec4& pos) { CallMethod<0x9E4F20, cCameraBase *, const Hw::cVec4&>(this, pos); }
 	// Move according to the rotation vector, Z would be forward
-	void movePosFront(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E4FA0))(this, pos); }
+	void movePosFront(const Hw::cVec4& pos) { CallMethod<0x9E4FA0, cCameraBase *, const Hw::cVec4&>(this, pos); }
 	// Move camera according to the Y rotation axis, Z is forward, it doesn't affect pitch at all
-	void movePosFrontY(const Hw::cVec4& pos) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5090))(this, pos); }
-	void updateViewInverseMatrix() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5170))(this); }
-	void setViewMatrix(const Hw::cMtx& mat) { ((void(__thiscall *)(cCameraBase *, const Hw::cMtx&))(shared::base + 0x9E5180))(this, mat); }
-	void updateTrans() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E51B0))(this); }
-	void updateTarget() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5260))(this); }
-	void updateUp() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5310))(this); }
-	void updateRot() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E5380))(this); }
-	void updateDist() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E54E0))(this); }
-	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x9E5D10))(this, trans, target, up); }
-	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9E5DA0))(this, trans, rot, dist); }
-	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9E5E60))(this, target, rot, dist); }
-	void setTrans(const Hw::cVec4& trans) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5F20))(this, trans); }
-	void addTrans(const Hw::cVec4& trans) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5F60))(this, trans); }
-	void setTarget(const Hw::cVec4& target) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E5FC0))(this, target); }
-	void addTarget(const Hw::cVec4& target) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6000))(this, target); }
-	void setUp(const Hw::cVec4& up) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6060))(this, up); }
-	void setTargetRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6090))(this, rot); }
-	void addTargetRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6120))(this, rot); }
-	void setTransRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E61B0))(this, rot); }
-	void addTransRot(const Hw::cVec4& rot) { ((void(__thiscall *)(cCameraBase *, const Hw::cVec4&))(shared::base + 0x9E6240))(this, rot); }
-	void setTargetDist(float dist) { ((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E62D0))(this, dist); }
-	void addTargetDist(float dist, float min, float max) { ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E62F0))(this, dist, min, max); }
-	void setTransDist(float dist) { ((void(__thiscall *)(cCameraBase *, float))(shared::base + 0x9E6370))(this, dist); }
-	void addTransDist(float dist, float min, float max) { ((void(__thiscall *)(cCameraBase *, float, float, float))(shared::base + 0x9E6390))(this, dist, min, max); }
-	void updateViewMatrix() { ((void(__thiscall *)(cCameraBase *))(shared::base + 0x9E6410))(this); }
+	void movePosFrontY(const Hw::cVec4& pos) { CallMethod<0x9E5090, cCameraBase *, const Hw::cVec4&>(this, pos); }
+	void updateViewInverseMatrix() { CallMethod<0x9E5170, cCameraBase *>(this); }
+	void setViewMatrix(const Hw::cMtx& mat) { CallMethod<0x9E5180, cCameraBase *, const Hw::cMtx&>(this, mat); }
+	void updateTrans() { CallMethod<0x9E51B0, cCameraBase *>(this); }
+	void updateTarget() { CallMethod<0x9E5260, cCameraBase *>(this); }
+	void updateUp() { CallMethod<0x9E5310, cCameraBase *>(this); }
+	void updateRot() { CallMethod<0x9E5380, cCameraBase *>(this); }
+	void updateDist() { CallMethod<0x9E54E0, cCameraBase *>(this); }
+	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { CallMethod<0x9E5D10, cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, trans, target, up); }
+	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5DA0, cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float>(this, trans, rot, dist); }
+	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5E60, cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float>(this, target, rot, dist); }
+	void setTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F20, cCameraBase *, const Hw::cVec4&>(this, trans); }
+	void addTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F60, cCameraBase *, const Hw::cVec4&>(this, trans); }
+	void setTarget(const Hw::cVec4& target) { CallMethod<0x9E5FC0, cCameraBase *, const Hw::cVec4&>(this, target); }
+	void addTarget(const Hw::cVec4& target) { CallMethod<0x9E6000, cCameraBase *, const Hw::cVec4&>(this, target); }
+	void setUp(const Hw::cVec4& up) { CallMethod<0x9E6060, cCameraBase *, const Hw::cVec4&>(this, up); }
+	void setTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6090, cCameraBase *, const Hw::cVec4&>(this, rot); }
+	void addTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6120, cCameraBase *, const Hw::cVec4&>(this, rot); }
+	void setTransRot(const Hw::cVec4& rot) { CallMethod<0x9E61B0, cCameraBase *, const Hw::cVec4&>(this, rot); }
+	void addTransRot(const Hw::cVec4& rot) { CallMethod<0x9E6240, cCameraBase *, const Hw::cVec4&>(this, rot); }
+	void setTargetDist(float dist) { CallMethod<0x9E62D0, cCameraBase *, float>(this, dist); }
+	void addTargetDist(float dist, float min, float max) { CallMethod<0x9E62F0, cCameraBase *, float, float, float>(this, dist, min, max); }
+	void setTransDist(float dist) { CallMethod<0x9E6370, cCameraBase *, float>(this, dist); }
+	void addTransDist(float dist, float min, float max) { CallMethod<0x9E6390, cCameraBase *, float, float, float>(this, dist, min, max); }
+	void updateViewMatrix() { CallMethod<0x9E6410, cCameraBase *>(this); }
 };
 
 VALIDATE_SIZE(Hw::cCameraBase, 0x150);
@@ -2212,10 +2255,7 @@ public:
 
 	virtual ~cOtWork() {};
 
-	void draw()
-	{
-		CallVMTFunc<1, Hw::cOtWork*>(this);
-	}
+	void draw() { CallVMTFunc<1, Hw::cOtWork*>(this); }
 };
 
 struct Hw::cVertexInfo
@@ -2267,6 +2307,22 @@ public:
 	int m_UsageFlags;
 
 	virtual void dummyVM() {};
+};
+
+class Hw::cUv
+{
+public:
+	float u, v;
+
+	cUv() : u(0.f), v(0.f) {}
+	cUv(float u, float v) : u(u), v(v) {}
+	~cUv() { u = v = 0.f; }
+
+	void setUV(float u, float v)
+	{ 
+		this->u = u; 
+		this->v = v; 
+	}
 };
 
 class Hw::cPrimF : public Hw::cOtWork
@@ -2415,7 +2471,7 @@ public:
 		}
 		else
 		{
-			ePrintf("cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", rHeap.m_pHeapName, sizeof(T) * capacity, rHeap.getAllocatableSize());
+			CdeclCall<0x9D5650, const char*, const char*, size_t, size_t>("cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", rHeap.m_pHeapName, sizeof(T) * capacity, rHeap.getAllocatableSize());
 			return 0;
 		}
 		return 0;
@@ -2662,12 +2718,14 @@ public:
 	};
 
 	const iterator npos;
+private:
 	cTag* m_pAllocated;
 	int m_Capacity;
 	int m_UsedNum;
 	iterator m_FreeBegin;
 	iterator m_UsedBegin;
 	iterator m_UsedEnd;
+public:
 
 	cFixedList() : npos(nullptr)
 	{
@@ -2687,7 +2745,7 @@ public:
 		if (m_pAllocated)
 			return FALSE;
 
-		m_pAllocated = (cTag*)allocator.alloc(sizeof(cTag) * capacity + sizeof(cTag), 32, 0, 0);
+		m_pAllocated = (cTag*)allocator.alloc(sizeof(cTag) * capacity + sizeof(cTag), 32, Hw::HW_ALLOC_VIRTUAL, 0);
 		if (m_pAllocated)
 		{
 			m_Capacity = capacity;
@@ -2724,7 +2782,7 @@ public:
 		cTag* free = m_FreeBegin;
 		if (m_FreeBegin == npos)
 		{
-			((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("cFixedList<tC>::insert  list max over!");
+			CdeclCall<0x9D5650, const char*>("cFixedList<tC>::insert  list max over!");
 			return npos;
 		}
 
@@ -2748,14 +2806,29 @@ public:
 		return free;
 	}
 
-	iterator pushBack(const tC& element)
+	iterator insert(const_iterator& it)
 	{
-		return insert(m_UsedEnd, element);
+		return insert(it, tC());
+	}
+
+	iterator pushFront()
+	{
+		return insert(m_UsedBegin);
 	}
 
 	iterator pushFront(const tC& element)
 	{
 		return insert(m_UsedBegin, element);
+	}
+
+	iterator pushBack()
+	{
+		return insert(m_UsedEnd);
+	}
+
+	iterator pushBack(const tC& element)
+	{
+		return insert(m_UsedEnd, element);
 	}
 
 	iterator erase(iterator &it)
@@ -2823,18 +2896,20 @@ public:
 
 	BOOL canAdd() const
 	{
-		return m_UsedNum < m_Capacity /* && m_freeBegin != npos // this one is  */;
+		return m_UsedNum < m_Capacity /* && m_freeBegin != npos // not confirmed, but it's a good practise */;
 	}
 
-	void chain(iterator &it)
+private:
+	void chain(const_iterator &what, iterator& it)
 	{
-		cTag* prev = it->m_prev;
-		cTag* next = it->m_next;
+		cTag* prev = what->m_pTag;
+		cTag* next = prev->m_next;
 
-		if (prev)
-			prev->m_next = next;
-		if (next)
-			next->m_prev = prev;
+		it->m_pTag->m_prev = prev;
+		it->m_pTag->m_next = next;
+
+		if (prev) prev->m_next = it->m_pTag;
+		if (next) next->m_prev = it->m_pTag;
 	}
 
 	iterator unchain(iterator &it)
@@ -2842,10 +2917,8 @@ public:
 		cTag* prev = it.m_pTag->m_prev;
 		cTag* next = it.m_pTag->m_next;
 
-		if (prev)
-			prev->m_next = next;
-		if (next)
-			next->m_prev = prev;
+		if (prev) prev->m_next = next;
+		if (next) next->m_prev = prev;
 
 		if (m_UsedBegin == it)
 			m_UsedBegin = next;
@@ -2886,7 +2959,7 @@ public:
 		if (free == npos)
 			return npos;
 
-		chain(free);
+		chain(m_UsedEnd, free);
 
 		m_FreeBegin = free->getNext();
 		++m_UsedNum;
@@ -2912,6 +2985,11 @@ public:
 
 		--m_UsedNum;
 	}
+
+	// void callCopyConstruction(iterator& it, const tC& elem);
+	// void callDefaultConstruction(iterator &it);
+	// void callDestruction(iterator& it);
+	// void destructAll();
 };
 
 template <typename tC, typename tHeapBinder = Hw::cHeap>
@@ -2968,7 +3046,7 @@ public:
 			return TRUE;
 		}
 
-		((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_pHeapName, sizeof(tC) * size, m_Allocator->getAllocatableSize());
+		CdeclCall<0x9D5650, const char*, const char*, size_t, size_t>("Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_pHeapName, sizeof(tC) * size, m_Allocator->getAllocatableSize());
 		return FALSE;
 	}
 
@@ -3140,7 +3218,7 @@ public:
 		}
 		else
 		{
-			((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+			CdeclCall<0x9D5650, const char*>("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
 			return FALSE;
 		}
 
@@ -3157,10 +3235,210 @@ public:
 		}
 		else
 		{
-			((void(__cdecl*)(const char*, ...))(shared::base + 0x9D5650))("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+			CdeclCall<0x9D5650, const char*>("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
 			return FALSE;
 		}
 		return FALSE;
+	}
+};
+
+template <typename tC>
+class Hw::cHwLFFreeListTemp
+{
+public:
+	class cTag
+	{
+	public:
+		tC m_value;
+		cTag* m_pPrev, *m_pNext;
+
+		cTag()
+		{
+			m_pPrev = m_pNext = nullptr;
+		}
+
+		~cTag()
+		{
+			m_pPrev = m_pNext = nullptr;
+		}
+	};
+
+	class const_iterator
+	{
+	protected:
+		cTag* m_pTag;
+	public:
+		const_iterator(cTag* pTag)
+		{
+			m_pTag = pTag;
+		}
+
+		const_iterator(const const_iterator& it)
+		{
+			m_pTag = it.m_pTag;
+		}
+
+		const_iterator()
+		{
+			m_pTag = nullptr;
+		}
+
+		const_iterator& operator++()
+		{
+			if (m_pTag)
+				m_pTag = m_pTag->m_pNext;
+
+			return *this;
+		}
+
+		const_iterator& operator--()
+		{
+			if (m_pTag)
+				m_pTag = m_pTag->m_pPrev;
+
+			return *this;
+		}
+
+		const_iterator& operator=(const const_iterator& it) const
+		{
+			m_pTag = it.m_pTag;
+
+			return *this;
+		}
+
+		bool operator==(const const_iterator& other)
+		{
+			return m_pTag == other.m_pTag;
+		}
+
+		bool operator!=(const const_iterator& other)
+		{
+			return !(*this == other);
+		}
+
+		tC& operator*() const
+		{
+			return m_pTag->m_value;
+		}
+
+		tC* operator->() const
+		{
+			return &m_pTag->m_value;
+		}
+
+		const_iterator getPrev() const
+		{
+			return m_pTag->m_pPrev;
+		}
+
+		const_iterator getNext() const
+		{
+			return m_pTag->m_pNext;
+		}
+	};
+
+	class iterator : public const_iterator
+	{
+	public:
+		iterator(const iterator& it)
+		{
+			this->m_pTag = it.m_pTag;
+		}
+
+		iterator(cTag* pTag)
+		{
+			this->m_pTag = pTag;
+		}
+
+		iterator(const const_iterator& it)
+		{
+			this->m_pTag = it.m_pTag;
+		}
+
+		iterator()
+		{
+			this->m_pTag = nullptr;
+		}
+
+		iterator& operator=(const iterator& it)
+		{
+			this->m_pTag = it.m_pTag;
+
+			return *this;
+		}
+
+		tC& operator*()
+		{
+			return this->m_pTag->m_value;
+		}
+
+		tC* operator->()
+		{
+			return &this->m_pTag->m_value;
+		}
+
+		iterator getPrev()
+		{
+			return this->m_pTag->m_pPrev;
+		}
+
+		iterator getNext()
+		{
+			return this->m_pTag->m_pNext;
+		}
+	};
+
+	class cList
+	{
+	public:
+		iterator m_pBegin;
+		int m_UsedNum;
+		int m_FreeNum;
+	};
+
+	int field_4;
+	cList m_UsedList;
+	int field_14;
+	cTag *m_pAllocated;
+	int m_Capacity;
+	Hw::cHeap *m_pHeap;
+	int field_24;
+	cList m_QueueUseList;
+	int field_34;
+	iterator m_pUsedBegin;
+
+	void resetChain()
+	{
+		m_UsedList.m_pBegin = iterator();
+		m_UsedList.m_UsedNum = 0;
+		m_UsedList.m_FreeNum = 0;
+
+		if (m_Capacity > 0)
+		{
+			char* base = (char*)m_pAllocated;
+			const size_t stride = sizeof(cTag);
+
+			for (int i = 0; i < m_Capacity; ++i)
+			{
+				cTag* node = (cTag*)(base + i * stride);
+				void* expected;
+				do
+				{
+					expected = (void*)&m_UsedList.m_pBegin;
+					node->m_pNext = (cTag*)expected;
+				} while (InterlockedCompareExchangePointer(
+					(void**)&m_UsedList.m_pBegin.m_pTag,
+					node,
+					expected) != expected); // this is such brainfuckery
+
+				InterlockedIncrement(&m_UsedList.m_FreeNum);
+			}
+		}
+	}
+
+	virtual ~cHwLFFreeListTemp()
+	{
+
 	}
 };
 

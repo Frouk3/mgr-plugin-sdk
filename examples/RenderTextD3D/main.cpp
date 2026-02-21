@@ -19,9 +19,10 @@ public:
             if (D3DXCreateFontA(Hw::GraphicDevice::m_pDevice, 17, 0, FW_BOLD, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &font) == S_OK)
                 canRender = true;
         };
+
         Events::OnEndScene += []()
         {
-            if (!canRender)
+            if (!canRender || !font)
                 return;
                 
             RECT rect;
@@ -35,12 +36,21 @@ public:
 
         Events::OnDeviceReset.before += []()
         {
-            font->OnLostDevice();
+            if (font) font->OnLostDevice();
         };
 
         Events::OnDeviceReset.after += []()
         {
-            font->OnResetDevice();
+            if (font) font->OnResetDevice();
+        };
+
+        Events::OnMainCleanupEvent.before += []() // Make sure to cleanup resources before it could cause issues
+        {
+            if (font)
+            {
+                font->Release();
+                font = nullptr;
+            }
         };
     }
 } example;

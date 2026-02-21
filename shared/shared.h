@@ -29,20 +29,9 @@ private:
 public:
 	static inline DWORD base = (DWORD)GetModuleHandleA(NULL);
 
-	static inline unsigned int random(unsigned int min, unsigned int max)
-	{
-		return min + (rand() % (max - min + 1));
-	}
-
-	static inline int random(int min, int max)
-	{
-		return min + (rand() % (max - min + 1));
-	}
-
-	static inline float random(float min, float max)
-	{
-		return min + (max - min) * (rand() / float(RAND_MAX + 1));
-	}
+	static inline unsigned int random(unsigned int min, unsigned int max) { return min + (rand() % (max - min + 1)); }
+	static inline int random(int min, int max) { return min + (rand() % (max - min + 1)); }
+	static inline float random(float min, float max) { return min + (max - min) * (rand() / float(RAND_MAX + 1)); }
 #ifdef SHARED_USE_EX_FUNCS
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{

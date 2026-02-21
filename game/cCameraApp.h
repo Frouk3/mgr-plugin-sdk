@@ -6,7 +6,7 @@
 class cCameraApp : public cCamera, public cCameraTypes
 {
 public:
-	class __declspec(align(16)) cCameraMatrix
+	class cCameraMatrix
 	{
 	public:
 		Hw::cVec4 m_Trans;
@@ -16,14 +16,17 @@ public:
 		float m_Roll;
 		float m_Dist;
 		float m_Fovy;
+	private:
+		int _pad4C;
+	public:
 
-		void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { ((void(__thiscall *)(cCameraMatrix *, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9A11A0))(this, target, rot, dist); }
-		cCameraMatrix &operator=(const cCameraMatrix &lvalue) { ((void(__thiscall *)(cCameraMatrix *, const cCameraMatrix &))(shared::base + 0x9A01F0))(this, lvalue); return *this; }
+		void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { CallMethod<0x9A11A0, cCameraMatrix *, const Hw::cVec4&, const Hw::cVec4&, float>(this, target, rot, dist); }
+		cCameraMatrix &operator=(const cCameraMatrix &lvalue) { CallMethod<0x9A01F0, cCameraMatrix *, const cCameraMatrix &>(this, lvalue); return *this; }
 
 		Hw::cVec4 calculateViewOffset()
 		{
 			Hw::cVec4 result;
-			result = *((Hw::cVec4*(__thiscall*)(cCameraMatrix*, Hw::cVec4*))(shared::base + 0x9B9090))(this, &result);
+			result = ReturnCallMethod<Hw::cVec4&, 0x9B9090, cCameraMatrix *, Hw::cVec4 *>(this, &result);
 			return result;
 		}
 	};
@@ -150,8 +153,8 @@ public:
 	float field_6D8;
 	int field_6DC;
 
-	cCameraApp() { ((void(__thiscall *)(cCameraApp *))(shared::base + 0x840760))(this); }
-	void updateCamAng() {((void(__thiscall *)(cCameraApp *))(shared::base + 0x9B7E00))(this); }
+	cCameraApp() { CallMethod<0x840760, cCameraApp *>(this); }
+	void updateCamAng() { CallMethod<0x9B7E00, cCameraApp *>(this); }
 
 	void startup() { CallVMTFunc<2, cCameraApp*>(this); }
 	void cleanup() { CallVMTFunc<3, cCameraApp*>(this); }

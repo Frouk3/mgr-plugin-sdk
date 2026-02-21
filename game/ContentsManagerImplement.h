@@ -8,9 +8,9 @@
 class ContentsManagerImplement : public ContentsManager
 {
 public:
-    Hw::cHeapVariable *m_Allocator;
-    Hw::cCriticalSection field_8;
+    Hw::cHeapVariable *m_pHeap;
+    Hw::cCriticalSection m_CriticalSection;
     int field_24;
-    int field_28;
-    lib::AllocatedArray<ContentsBase *> *m_Content;
+    int m_RotateContentsId;
+    lib::AllocatedArray<ContentsBase *> *m_pContent;
 };

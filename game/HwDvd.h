@@ -53,23 +53,22 @@ public:
 	Hw::cDvdReader *m_pPrevReader;
 	Hw::cDvdReader *m_pNextReader;
 
-	cDvdReader() { ((void(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E85E0))(this); }
-	~cDvdReader() { ((void(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9EA7B0))(this); }
+	cDvdReader() { CallMethod<0x9E85E0, Hw::cDvdReader *>(this); }
+	~cDvdReader() { CallMethod<0x9EA7B0, Hw::cDvdReader *>(this); }
 
-	int read(const char *pFilePath, void *pReadAddr, unsigned int Size, Hw::DVD_PRIO prio = DVD_PRIO_DEFAULT) { return ((int(__thiscall *)(Hw::cDvdReader*, const char*, void*, unsigned int, Hw::DVD_PRIO))(shared::base + 0x9EB160))(this, pFilePath, pReadAddr, Size, prio); }
-	void cancel() { ((void(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E9860))(this); }
-	void close() { ((void(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E98B0))(this); }
-	void update() { ((void(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9EA800))(this); }
-	void updateSync() { ((void(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9EA8B0))(this); }
-	int isError() { return ((int(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E8600))(this); }
-	int canClose() { return ((int(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E8610))(this); }
-	DVD_PRIO getPrio() { return ((DVD_PRIO(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E8650))(this); }
-
+	int read(const char *pFilePath, void *pReadAddr, unsigned int Size, Hw::DVD_PRIO prio = DVD_PRIO_DEFAULT) { return ReturnCallMethod<int, 0x9EB160, Hw::cDvdReader *, const char *, void *, unsigned int, Hw::DVD_PRIO>(this, pFilePath, pReadAddr, Size, prio); }
+	void cancel() { CallMethod<0x9E9860, Hw::cDvdReader *>(this); }
+	void close() { CallMethod<0x9E98B0, Hw::cDvdReader *>(this); }
+	void update() { CallMethod<0x9EA800, Hw::cDvdReader *>(this); }
+	void updateSync() { CallMethod<0x9EA8B0, Hw::cDvdReader *>(this); }
+	int isError() { return ReturnCallMethod<int, 0x9E8600, Hw::cDvdReader *>(this); }
+	int canClose() { return ReturnCallMethod<int, 0x9E8610, Hw::cDvdReader *>(this); }
+	DVD_PRIO getPrio() { return ReturnCallMethod<DVD_PRIO, 0x9E8650, Hw::cDvdReader *>(this); }
 //	private:
 
-    int updateOpened() { return ((int(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E9900))(this); }
-    int updateReading() { return ((int(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E9A50))(this); }
-    int updateCanceling() { return ((int(__thiscall *)(Hw::cDvdReader*))(shared::base + 0x9E9B30))(this); }
+    int updateOpened() { return ReturnCallMethod<int, 0x9E9900, Hw::cDvdReader *>(this); }
+    int updateReading() { return ReturnCallMethod<int, 0x9E9A50, Hw::cDvdReader *>(this); }
+    int updateCanceling() { return ReturnCallMethod<int, 0x9E9B30, Hw::cDvdReader *>(this); }
 };
 
 class Hw::cDvdCriFsBinder
@@ -83,10 +82,10 @@ public:
 	CriFsBinderStatus m_BindStatus;
 	int m_Prio;
 
-	int bindCpkFileAsync(const char *pFilePath, int __formal, int __unused, int prio) { return ((int(__thiscall *)(Hw::cDvdCriFsBinder*, const char*, int, int, int))(shared::base + 0x9EAFB0))(this, pFilePath, __formal, __unused, prio); }
-	int bindCpkFileAsync(const char *pFilePath, int prio) { return ((int(__thiscall *)(Hw::cDvdCriFsBinder*, const char*, int))(shared::base + 0x9EB0C0))(this, pFilePath, prio); }
-	int bindCpkFileSync(const char *pFilePath, int __formal, int __unused, int prio) { return ((int(__thiscall *)(Hw::cDvdCriFsBinder*, const char*, int, int, int))(shared::base + 0x9EB530))(this, pFilePath, __formal, __unused, prio); }
-	int bindCpkFileSync(const char *pFilePath, int prio) { return ((int(__thiscall *)(Hw::cDvdCriFsBinder*, const char*, int))(shared::base + 0x9EB5D0))(this, pFilePath, prio); }
+	int bindCpkFileAsync(const char *pFilePath, int __formal, int __unused, int prio) { return ReturnCallMethod<int, 0x9EAFB0, Hw::cDvdCriFsBinder *, const char *, int, int, int>(this, pFilePath, __formal, __unused, prio); }
+	int bindCpkFileAsync(const char *pFilePath, int prio) { return ReturnCallMethod<int, 0x9EB0C0, Hw::cDvdCriFsBinder *, const char *, int>(this, pFilePath, prio); }
+	int bindCpkFileSync(const char *pFilePath, int __formal, int __unused, int prio) { return ReturnCallMethod<int, 0x9EB530, Hw::cDvdCriFsBinder *, const char *, int, int, int>(this, pFilePath, __formal, __unused, prio); }
+	int bindCpkFileSync(const char *pFilePath, int prio) { return ReturnCallMethod<int, 0x9EB5D0, Hw::cDvdCriFsBinder *, const char *, int>(this, pFilePath, prio); }
 };
 
 class Hw::cDvdFstBuffer
@@ -102,12 +101,12 @@ public:
 	unsigned int m_NameBufferSize;
 	unsigned int m_NameBufferPos;
 
-	~cDvdFstBuffer() { ((void(__thiscall *)(Hw::cDvdFstBuffer*))(shared::base + 0x9E92D0))(this); }
+	~cDvdFstBuffer() { ReturnCallMethod<void, 0x9E92D0, Hw::cDvdFstBuffer *>(this); }
 
-	void cleanup() { ((void(__thiscall *)(Hw::cDvdFstBuffer*))(shared::base + 0x9E8100))(this); }
-	int startup(Hw::cHeap& rHeap) { return ((int(__thiscall *)(Hw::cDvdFstBuffer*, Hw::cHeap&))(shared::base + 0x9E9330))(this, rHeap); }
-	cDvdFstDir *createFstDir() { return ((cDvdFstDir*(__thiscall *)(Hw::cDvdFstBuffer*))(shared::base + 0x9E93D0))(this); }
-	cDvdFstFile *createFstFile() { return ((cDvdFstFile*(__thiscall *)(Hw::cDvdFstBuffer*))(shared::base + 0x9E9400))(this); }
+	void cleanup() { CallMethod<0x9E8100, Hw::cDvdFstBuffer *>(this); }
+	int startup(Hw::cHeap& rHeap) { return ReturnCallMethod<int, 0x9E9330, Hw::cDvdFstBuffer *, Hw::cHeap &>(this, rHeap); }
+	cDvdFstDir *createFstDir() { return ReturnCallMethod<cDvdFstDir*, 0x9E93D0, Hw::cDvdFstBuffer *>(this); }
+	cDvdFstFile *createFstFile() { return ReturnCallMethod<cDvdFstFile*, 0x9E9400, Hw::cDvdFstBuffer *>(this); }
 };
 
 class Hw::cDvdFileFind
@@ -118,23 +117,23 @@ public:
 	void *m_Handle;
 	int m_IsSucceed;
 
-	cDvdFileFind() { ((void(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E7E30))(this); }
-	~cDvdFileFind() { ((void(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E8FD0))(this); }
+	cDvdFileFind() { ReturnCallMethod<void, 0x9E7E30, Hw::cDvdFileFind *>(this); }
+	~cDvdFileFind() { ReturnCallMethod<void, 0x9E8FD0, Hw::cDvdFileFind *>(this); }
 
-	int startup(const char *pFindPath) { return ((int(__thiscall *)(Hw::cDvdFileFind*, const char*))(shared::base + 0x9E7E50))(this, pFindPath); }
-	int setNext() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E7F00))(this); }
-	void cleanup() { ((void(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E7F40))(this); }
+	int startup(const char *pFindPath) { return ReturnCallMethod<int, 0x9E7E50, Hw::cDvdFileFind *, const char *>(this, pFindPath); }
+	int setNext() { return ReturnCallMethod<int, 0x9E7F00, Hw::cDvdFileFind *>(this); }
+	void cleanup() { CallMethod<0x9E7F40, Hw::cDvdFileFind *>(this); }
 	// rewind to the first file
-	int rewind() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E7F70))(this); }
-	void getName(char *pOutName, unsigned int nameBufSize) { ((void(__thiscall *)(Hw::cDvdFileFind*, char*, unsigned int))(shared::base + 0x9E7FB0))(this, pOutName, nameBufSize); }
-	const char *refName() { return ((const char*(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E7FE0))(this); }
-	unsigned int getSize() { return ((unsigned int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E8000))(this); }
-	int isValid() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E8020))(this); }
-	int isFile() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E8030))(this); }
-	int isDirectory() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E8050))(this); }
-	int isName(const char *pName) { return ((int(__thiscall *)(Hw::cDvdFileFind*, const char*))(shared::base + 0x9E8070))(this, pName); }
-	int isSelf() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E9000))(this); }
-	int isParent() { return ((int(__thiscall *)(Hw::cDvdFileFind*))(shared::base + 0x9E9030))(this); }
+	int rewind() { return ReturnCallMethod<int, 0x9E7F70, Hw::cDvdFileFind *>(this); }
+	void getName(char *pOutName, unsigned int nameBufSize) { CallMethod<0x9E7FB0, Hw::cDvdFileFind *, char *, unsigned int>(this, pOutName, nameBufSize); }
+	const char *refName() { return ReturnCallMethod<const char *, 0x9E7FE0, Hw::cDvdFileFind *>(this); }
+	unsigned int getSize() { return ReturnCallMethod<unsigned int, 0x9E8000, Hw::cDvdFileFind *>(this); }
+	int isValid() { return ReturnCallMethod<int, 0x9E8020, Hw::cDvdFileFind *>(this); }
+	int isFile() { return ReturnCallMethod<int, 0x9E8030, Hw::cDvdFileFind *>(this); }
+	int isDirectory() { return ReturnCallMethod<int, 0x9E8050, Hw::cDvdFileFind *>(this); }
+	int isName(const char *pName) { return ReturnCallMethod<int, 0x9E8070, Hw::cDvdFileFind *, const char *>(this, pName); }
+	int isSelf() { return ReturnCallMethod<int, 0x9E9000, Hw::cDvdFileFind *>(this); }
+	int isParent() { return ReturnCallMethod<int, 0x9E9030, Hw::cDvdFileFind *>(this); }
 }; // class is complete here
 
 class Hw::cDvdFstFile
@@ -144,15 +143,15 @@ public:
 	cDvdFstFile *m_pNextFile;
 	unsigned int m_Size;
 
-	cDvdFstFile() { ((void(__thiscall *)(Hw::cDvdFstFile*))(shared::base + 0x9E8480))(this); }
-	~cDvdFstFile() { ((void(__thiscall *)(Hw::cDvdFstFile*))(shared::base + 0x9E8490))(this); } // empty implementation
+	cDvdFstFile() { ReturnCallMethod<void, 0x9E8480, Hw::cDvdFstFile *>(this); }
+	~cDvdFstFile() { ReturnCallMethod<void, 0x9E8490, Hw::cDvdFstFile *>(this); } // empty implementation
 	
-	int setName(const char *pName, cDvdFstBuffer &buffer) { ((void(__thiscall *)(Hw::cDvdFstFile*, const char*, cDvdFstBuffer&))(shared::base + 0x9E84A0))(this, pName, buffer); }
-	const char *getName() { return ((const char*(__thiscall *)(Hw::cDvdFstFile*))(shared::base + 0x9E8510))(this); }
-	void setNextFile(cDvdFstFile *pNextFile) { ((void(__thiscall *)(Hw::cDvdFstFile*, cDvdFstFile*))(shared::base + 0x9E8520))(this, pNextFile); }
-	cDvdFstFile *getNextFile() { return ((cDvdFstFile*(__thiscall *)(Hw::cDvdFstFile*))(shared::base + 0x9E8530))(this); }
-	void setSize(unsigned int size) { ((void(__thiscall *)(Hw::cDvdFstFile*, unsigned int))(shared::base + 0x9E8540))(this, size); }
-	unsigned int getSize() { return ((unsigned int(__thiscall *)(Hw::cDvdFstFile*))(shared::base + 0x9E8550))(this); }
+	int setName(const char *pName, cDvdFstBuffer &buffer) { ReturnCallMethod<int, 0x9E84A0, Hw::cDvdFstFile *, const char *, cDvdFstBuffer &>(this, pName, buffer); }
+	const char *getName() { return ReturnCallMethod<const char *, 0x9E8510, Hw::cDvdFstFile *>(this); }
+	void setNextFile(cDvdFstFile *pNextFile) { CallMethod<0x9E8520, Hw::cDvdFstFile *, cDvdFstFile *>(this, pNextFile); }
+	cDvdFstFile *getNextFile() { return ReturnCallMethod<cDvdFstFile*, 0x9E8530, Hw::cDvdFstFile *>(this); }
+	void setSize(unsigned int size) { CallMethod<0x9E8540, Hw::cDvdFstFile *, unsigned int>(this, size); }
+	unsigned int getSize() { return ReturnCallMethod<unsigned int, 0x9E8550, Hw::cDvdFstFile *>(this); }
 }; // class is complete here
 
 class Hw::cDvdFstDir
@@ -163,19 +162,19 @@ public:
 	cDvdFstDir *m_pFirstDir;
 	cDvdFstFile *m_pFirstFile;
 
-	cDvdFstDir() { ((void(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E8240))(this); }
-	~cDvdFstDir() { ((void(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E8250))(this); } // empty implementation
+	cDvdFstDir() { ReturnCallMethod<void, 0x9E8240, Hw::cDvdFstDir *>(this); }
+	~cDvdFstDir() { ReturnCallMethod<void, 0x9E8250, Hw::cDvdFstDir *>(this); } // empty implementation
 
-	int isPathMatch(const char *pCurrentPath, const char *pTargetPath, const char **ppDirExclude, int dirExcludeNum) { return ((int(__thiscall *)(Hw::cDvdFstDir*, const char*, const char*, const char**, int))(shared::base + 0x9E8260))(this, pCurrentPath, pTargetPath, ppDirExclude, dirExcludeNum); }
-	int setName(const char *pName, cDvdFstBuffer &buffer) { return ((int(__thiscall *)(Hw::cDvdFstDir*, const char*, cDvdFstBuffer&))(shared::base + 0x9E8360))(this, pName, buffer); }
-	const char *getName() { return ((const char*(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E8430))(this); }
-	void setNextDir(cDvdFstDir *pNextDir) { ((void(__thiscall *)(Hw::cDvdFstDir*, cDvdFstDir*))(shared::base + 0x9E8440))(this, pNextDir); }
-	cDvdFstDir *getNextDir() { return ((cDvdFstDir*(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E8450))(this); }
-	cDvdFstDir *getFirstDir() { return ((cDvdFstDir*(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E8460))(this); }
-	cDvdFstFile *getFirstFile() { return ((cDvdFstFile*(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E8470))(this); }
-	int createFst(const char *pFilePath, cDvdFstBuffer &buffer, const char **ppDirExclude, int dirExcludeNum) { return ((int(__thiscall *)(Hw::cDvdFstDir*, const char*, cDvdFstBuffer&, const char**, int))(shared::base + 0x9E9430))(this, pFilePath, buffer, ppDirExclude, dirExcludeNum); }
-	unsigned int getFileSize(const char *file) { return ((unsigned int(__thiscall *)(Hw::cDvdFstDir*, const char*))(shared::base + 0x9E9780))(this, file); }
-	unsigned long long getDirSize() { return ((unsigned long long(__thiscall *)(Hw::cDvdFstDir*))(shared::base + 0x9E9810))(this); }
+	int isPathMatch(const char *pCurrentPath, const char *pTargetPath, const char **ppDirExclude, int dirExcludeNum) { return ReturnCallMethod<int, 0x9E8260, Hw::cDvdFstDir *, const char *, const char *, const char **, int>(this, pCurrentPath, pTargetPath, ppDirExclude, dirExcludeNum); }
+	int setName(const char *pName, cDvdFstBuffer &buffer) { return ReturnCallMethod<int, 0x9E8360, Hw::cDvdFstDir *, const char *, cDvdFstBuffer &>(this, pName, buffer); }
+	const char *getName() { return ReturnCallMethod<const char *, 0x9E8430, Hw::cDvdFstDir *>(this); }
+	void setNextDir(cDvdFstDir *pNextDir) { CallMethod<0x9E8440, Hw::cDvdFstDir *, cDvdFstDir *>(this, pNextDir); }
+	cDvdFstDir *getNextDir() { return ReturnCallMethod<cDvdFstDir*, 0x9E8450, Hw::cDvdFstDir *>(this); }
+	cDvdFstDir *getFirstDir() { return ReturnCallMethod<cDvdFstDir*, 0x9E8460, Hw::cDvdFstDir *>(this); }
+	cDvdFstFile *getFirstFile() { return ReturnCallMethod<cDvdFstFile*, 0x9E8470, Hw::cDvdFstDir *>(this); }
+	int createFst(const char *pFilePath, cDvdFstBuffer &buffer, const char **ppDirExclude, int dirExcludeNum) { return ReturnCallMethod<int, 0x9E9430, Hw::cDvdFstDir *, const char *, cDvdFstBuffer &, const char **, int>(this, pFilePath, buffer, ppDirExclude, dirExcludeNum); }
+	unsigned int getFileSize(const char *file) { return ReturnCallMethod<unsigned int, 0x9E9780, Hw::cDvdFstDir *, const char *>(this, file); }
+	unsigned long long getDirSize() { return ReturnCallMethod<unsigned long long, 0x9E9810, Hw::cDvdFstDir *>(this); }		
 }; // class is complete here
 
 class Hw::cDvdReadWork
@@ -190,32 +189,32 @@ public:
 	int m_Flag;
 	DVD_PRIO m_Prio;
 
-	int read(const char *pFilePath, void *pReadAddr, unsigned int Size, DVD_PRIO prio = DVD_PRIO_DEFAULT) { return ((int(__thiscall *)(Hw::cDvdReadWork*, const char*, void*, unsigned int, DVD_PRIO))(shared::base + 0x9EB2F0))(this, pFilePath, pReadAddr, Size, prio); }
-	void cancel() { ((void(__thiscall *)(Hw::cDvdReadWork*))(shared::base + 0x9E9CE0))(this); }
-	void close() { ((void(__thiscall *)(Hw::cDvdReadWork*))(shared::base + 0x9E9D60))(this); }
-    void update() { ((void(__thiscall *)(Hw::cDvdReadWork*))(shared::base + 0x9EB7B0))(this); }
-	void updateReader() { ((void(__thiscall *)(Hw::cDvdReadWork*))(shared::base + 0x9EA970))(this); }
+	int read(const char *pFilePath, void *pReadAddr, unsigned int Size, DVD_PRIO prio = DVD_PRIO_DEFAULT) { return ReturnCallMethod<int, 0x9EB2F0, Hw::cDvdReadWork *, const char *, void *, unsigned int, DVD_PRIO>(this, pFilePath, pReadAddr, Size, prio); }
+	void cancel() { CallMethod<0x9E9CE0, Hw::cDvdReadWork *>(this); }
+	void close() { CallMethod<0x9E9D60, Hw::cDvdReadWork *>(this); }
+    void update() { CallMethod<0x9EB7B0, Hw::cDvdReadWork *>(this); }
+	void updateReader() { CallMethod<0x9EA970, Hw::cDvdReadWork *>(this); }
 };
 
 class Hw::cDvdFst
 {
 public:
 
-	cDvdFst() { ((void(__thiscall *)(Hw::cDvdFst*))(shared::base + 0x9E9F90))(this); }
-	~cDvdFst() { ((void(__thiscall *)(Hw::cDvdFst*))(shared::base + 0x9EA110))(this); }
+	cDvdFst() { CallMethod<0x9E9F90, Hw::cDvdFst *>(this); }
+	~cDvdFst() { CallMethod<0x9EA110, Hw::cDvdFst *>(this); }
 
-	int startup(const char *pRootFilePath, const char *pPatchFilePath, Hw::cHeap &rHeap, const char **ppDirExclude, int dirExcludeNum) { return ((int(__thiscall *)(Hw::cDvdFst*, const char*, const char*, Hw::cHeap&, const char**, int))(shared::base + 0x9EAB30))(this, pRootFilePath, pPatchFilePath, rHeap, ppDirExclude, dirExcludeNum); }
+	int startup(const char *pRootFilePath, const char *pPatchFilePath, Hw::cHeap &rHeap, const char **ppDirExclude, int dirExcludeNum) { return ReturnCallMethod<int, 0x9EAB30, Hw::cDvdFst *, const char *, const char *, Hw::cHeap &, const char **, int>(this, pRootFilePath, pPatchFilePath, rHeap, ppDirExclude, dirExcludeNum); }
 };
 
 class Hw::DvdEnv
 {
 public:
 
-	static inline int Startup() { return ((int(__cdecl *)())(shared::base + 0x9E8E40))(); }
-	static inline void DebugRegistReader(Hw::cDvdReader *pReader) { ((void(__cdecl *)(Hw::cDvdReader*))(shared::base + 0x9E8E90))(pReader); }
-    static inline void DebugUnregistReader(Hw::cDvdReader *pReader) { ((void(__cdecl *)(Hw::cDvdReader*))(shared::base + 0x9E8EE0))(pReader); }
-    static inline int DebugSetCurrentReader(Hw::cDvdReader *pReader) { return ((int(__cdecl *)(Hw::cDvdReader*))(shared::base + 0x9E8F70))(pReader); }
-    static inline void DebugEndCurrentReader(Hw::cDvdReader *pReader) { ((void(__cdecl *)(Hw::cDvdReader*))(shared::base + 0x9E7C00))(pReader); }
+	static inline int Startup() { return ReturnCdeclCall<int, 0x9E8E40>(); }
+	static inline void DebugRegistReader(Hw::cDvdReader *pReader) { CdeclCall<0x9E8E90, Hw::cDvdReader *>(pReader); }
+    static inline void DebugUnregistReader(Hw::cDvdReader *pReader) { CdeclCall<0x9E8EE0, Hw::cDvdReader *>(pReader); }
+    static inline int DebugSetCurrentReader(Hw::cDvdReader *pReader) { return ReturnCdeclCall<int, 0x9E8F70, Hw::cDvdReader *>(pReader); }
+    static inline void DebugEndCurrentReader(Hw::cDvdReader *pReader) { CdeclCall<0x9E7C00, Hw::cDvdReader *>(pReader); }
 };
 
 class Hw::DvdSystem

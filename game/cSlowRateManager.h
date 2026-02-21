@@ -8,9 +8,15 @@ public:
 	cSlowRateUnit *m_pUnit;
 
 	cSlowRate() { CallMethod<0xA03940, cSlowRate *>(this); }
+
+	BOOL isValid() { return ReturnCallMethod<BOOL, 0xA03950, cSlowRate*>(this); }
+	float get() { return ReturnCallMethod<float, 0xA049B0, cSlowRate*>(this); } // don't even ask about name, it's from the .pdb of Bayonetta
+
+	void cleanup() { CallMethod<0xA060F0, cSlowRate*>(this); }
 	~cSlowRate() { CallMethod<0xA085E0, cSlowRate *>(this); }
 	// Managed copy constructor with reference count
 	cSlowRate& operator=(const cSlowRate& other) { return ReturnCallMethod<cSlowRate&, 0xA08600, cSlowRate *, const cSlowRate&>(this, other); }
+	BOOL setSlowType(eSlowRate type) { return ReturnCallMethod<BOOL, 0xA08640, cSlowRate*, eSlowRate>(this, type); }
 };
 
 class cSlowRateManager
@@ -32,25 +38,22 @@ public:
 	cSlowRateUnit *m_LastUnit;
 	struct SlowRateUnit 
 	{
-		float m_fSlowRate;
-		float m_fRate;
-		float m_fSlowRateBefore;
-		float m_fDelta;
+		float m_SlowRate;
+		float m_Rate;
+		float m_SlowRateBefore;
+		float m_Delta;
 	} m_aSlowRateUnit[4];
-	float m_fTickRate;
-	float m_fTicks;
-	float field_84;
-	float m_fTickDelay;
-	float m_fTickDifference;
-	int field_90;
+	float m_TickRate;
+	float m_Ticks;
+	float m_AccumulatedDelta;
+	float m_TickDelay;
+	float m_TickDifference;
+	int m_SampleCount;
 
 	virtual ~cSlowRateManager() {};
 	// non virtual destructor at 0xA09010
 
-	cSlowRateManager()
-	{
-		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08FB0))(this);
-	}
+	cSlowRateManager() { CallMethod<0xA08FB0, cSlowRateManager*>(this); }
 
 	void setTickDelay(float framerate)
 	{

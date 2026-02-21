@@ -10,32 +10,13 @@ class sHandle
 public:
 	unsigned int m_Handle;
 public:
-	sHandle()
-	{
-		m_Handle = 0;
-	}
+	sHandle() { m_Handle = 0; }
+	~sHandle() { m_Handle = 0; }
 
-	~sHandle()
-	{
-		m_Handle = 0;
-	}
+	sHandle& operator=(unsigned int handle) { m_Handle = handle; return *this; }
+	sHandle& operator=(const sHandle &handle) { m_Handle = handle.m_Handle; return *this; }
 
-	sHandle& operator=(unsigned int handle)
-	{
-		m_Handle = handle;
-		return *this;
-	}
-
-	sHandle &operator=(const sHandle &handle)
-	{
-		*this = handle.m_Handle;
-		return *this;
-	}
-
-	void reset()
-	{
-		m_Handle = 0;
-	}
+	void reset() { m_Handle = 0; }
 
 	operator tC*(); // Make sure we assure the user to add the operator for the handle they're constructing 
 };
@@ -51,40 +32,18 @@ struct cString // incomplete class, needs further research
 	int field_18;
 	int field_1C;
 
-	cString(const char *str, Hw::cHeapVariable *allocator)
-	{
-		((void(__thiscall *)(cString*, const char*, Hw::cHeapVariable*))(shared::base + 0xA09060))(this, str, allocator);
-	}
+	cString(const char *str, Hw::cHeapVariable *allocator) { CallMethod<0xA09060, cString *, const char *, Hw::cHeapVariable *>(this, str, allocator); }
 
-	char *scanForChar(const char *str)
-	{
-		return ((char* (__thiscall *)(cString*, const char*))(shared::base + 0xA04370))(this, str);
-	}
+	char *scanForChar(const char *str) { return ReturnCallMethod<char*, 0xA04370, cString *, const char *>(this, str); }
 
-	char *findFistOfExcluding(const char *toFind, const char *toExclude)
-	{
-		return ((char* (__thiscall *)(cString*, const char*, const char*))(shared::base + 0xA043C0))(this, toFind, toExclude);
-	}
+	char *findFistOfExcluding(const char *toFind, const char *toExclude) { return ReturnCallMethod<char*, 0xA043C0, cString *, const char *, const char *>(this, toFind, toExclude); }
 
-	void trimLeadingWhitespaces()
-	{
-		((void(__thiscall *)(cString*))(shared::base + 0xA04440))(this);
-	}
+	void trimLeadingWhitespaces() { CallMethod<0xA04440, cString *>(this); }
+	bool startsWithN(const char *str, size_t length) { return ReturnCallMethod<bool, 0xA056F0, cString *, const char *, size_t>(this, str, length); }
 
-	bool startsWithN(const char *str, size_t length)
-	{
-		return ((bool(__thiscall *)(cString*, const char*, size_t))(shared::base + 0xA056F0))(this, str, length);
-	}
+	size_t length() { return ReturnCallMethod<size_t, 0xA13C00, cString *>(this); }
 
-	size_t length()
-	{
-		return ((size_t(__thiscall *)(cString*))(shared::base + 0xA13C00))(this);
-	}
-
-	~cString()
-	{
-		((void(__thiscall *)(cString*))(shared::base + 0xA18EA0))(this);
-	}
+	~cString() { CallMethod<0xA18EA0, cString *>(this); }
 };
 
 template <typename tC>
@@ -233,42 +192,25 @@ public:
 	}
 };
 
+// Most usable class in the game engine context system
+
 struct ContextInstance
 {
 	ContextInstance *m_inheritance;
 
-	BOOL hasInheritance(const ContextInstance &other)
-	{
-		return ((BOOL(__thiscall*)(ContextInstance*, const ContextInstance&))(shared::base + 0x9D6D80))(this, other);
-	}
+	BOOL hasInheritance(const ContextInstance &other) { return ReturnCallMethod<BOOL, 0x9D6D80, ContextInstance *, const ContextInstance &>(this, other); }
 
-	bool operator==(const ContextInstance& other)
-	{
-		return this == &other;
-	}
+	bool operator==(const ContextInstance& other) { return this == &other; }
 
-	ContextInstance(ContextInstance *inheritance)
-	{
-		((void(__thiscall *)(ContextInstance *, ContextInstance *))(shared::base + 0x9D6D50))(this, inheritance); // second parameter is actually a pointer??
-	}
+	ContextInstance(ContextInstance *inheritance) { CallMethod<0x9D6D50, ContextInstance *, ContextInstance *>(this, inheritance); }
+	ContextInstance() : ContextInstance(nullptr) {}
 
-	ContextInstance() : ContextInstance(nullptr)
-	{
-
-	}
-
-	~ContextInstance()
-	{
-		((void(__thiscall *)(ContextInstance *))(shared::base + 0x9D6D60))(this); // Empty destructor, still reference this destructor for SDK
-	}
+	~ContextInstance() { CallMethod<0x9D6D60, ContextInstance *>(this); }
 };
 
 // e prefix is indicated that it is used by the engine
 
-inline void Core_PlaySound(const char* se, int unused)
-{
-	((void(__cdecl*)(const char*, int))(shared::base + 0xA5E050))(se, unused);
-}
+inline void Core_PlaySound(const char* se, int unused) { CdeclCall<0xA5E050, const char *, int>(se, unused); }
 
 // inline void __declspec(naked) PrintfLog(const char* fmt, ...) -> Hw::cDebugLog::addMess
 // {
@@ -280,15 +222,8 @@ inline void Core_PlaySound(const char* se, int unused)
 // 	}
 // }
 
-inline unsigned int crc32lower(const char* str, size_t length) // then later used for function that doesn't uses length
-{
-	return ((unsigned int (__cdecl *)(const char *, size_t))(shared::base + 0xA03D20))(str, length);
-}
-
-inline unsigned int crc32lower(const char* str)
-{
-	return ((unsigned int (__cdecl *)(const char*))(shared::base + 0xA03EA0))(str);
-}
+inline unsigned int crc32lower(const char* str, size_t length) { return ReturnCdeclCall<unsigned int, 0xA03D20, const char *, size_t>(str, length); }
+inline unsigned int crc32lower(const char* str) { return ReturnCdeclCall<unsigned int, 0xA03EA0, const char *>(str); }
 
 // inline void * __cdecl eFree(void *block) -> Hw::cHeap::free
 // {
@@ -303,9 +238,6 @@ inline void *__cdecl AllocateMemory(size_t size)
 	return mem;
 }
 
-inline void __cdecl FreeMemory(void *block, int a2)
-{
-	((void(__cdecl*)(void*, int))(shared::base + 0x61D3D0))(block, a2); // most cases, deleted memory always has value of 0xEEEEEEEE
-}
+inline void __cdecl FreeMemory(void *block, int a2) { CdeclCall<0x61D3D0, void *, int>(block, a2); }
 
 inline bool &bIsForegroundWindow = *(bool*)(shared::base + 0x19D509C);

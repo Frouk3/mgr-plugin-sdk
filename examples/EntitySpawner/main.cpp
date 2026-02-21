@@ -1,7 +1,7 @@
 #define SHARED_USE_EX_FUNCS
 
 #include <Events.h>
-#include <cGameUIManager.h>
+#include <cScene.h>
 #include <EntitySystem.h>
 #include <shared.h>
 #include <cObjReadManager.h>
@@ -64,7 +64,7 @@ Entity* EntSpawnQueue::getLastEntity()
 		resultEntity = queue->m_Entity;
 
 	if (queue)
-		erase(*queue);
+		erase(queue);
 
 	return resultEntity;
 }
@@ -95,10 +95,10 @@ public:
 						EntSpawn& elem = m_EntQueue[i];
 
 						if (elem.bWorkFail)
-							m_EntQueue.erase(elem);
+							m_EntQueue.erase(&elem);
 
 						if (!elem.bWorkFail && elem.bDone && !elem.m_Entity)
-							elem.m_Entity = EntitySystem::ms_Instance.createEntity("SpawnedObject", elem.mObjId, nullptr);
+							elem.m_Entity = g_EntitySystem.createEntity("SpawnedObject", elem.mObjId, nullptr);
 					}
 				}
 
@@ -106,8 +106,11 @@ public:
 				{
 					Behavior* instance = entity->getBehavior();
 
-					Hw::cVec4 pos = g_GameUIManager.m_pPlayer ? g_GameUIManager.m_pPlayer->m_TransPos : Hw::cVec4();
-					Hw::cVec4 rot = g_GameUIManager.m_pPlayer ? g_GameUIManager.m_pPlayer->m_Rot : Hw::cVec4();
+					Hw::cVec4 pos = g_Scene.m_pPlayer ? g_Scene.m_pPlayer->m_TransPos : Hw::cVec4();
+					Hw::cVec4 rot = g_Scene.m_pPlayer ? g_Scene.m_pPlayer->m_Rot : Hw::cVec4();
+
+					if (g_Scene.m_pPlayer)
+						pos += Hw::cVec4(0.f, 0.f, 5.f, 1.f) * g_Scene.m_pPlayer->m_LocalMatrix;
 
 					instance->place(pos, rot);
 

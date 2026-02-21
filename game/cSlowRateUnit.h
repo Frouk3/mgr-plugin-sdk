@@ -22,8 +22,6 @@ public:
     int m_IsActive;
     int m_FadeOutTicks;
     int m_InitialFadeOut;
-    cSlowRateUnit *m_pPrev, *m_pNext;
-    int field_30;
 
     cSlowRateUnit() { CallMethod<0xA03B60, cSlowRateUnit *>(this); }
     void move() { CallMethod<0xA03B90, cSlowRateUnit *>(this); }
@@ -37,4 +35,4 @@ public:
     int getRefCount() { return ReturnCallMethod<int, 0xA03CF0, cSlowRateUnit *>(this); }
 };
 
-VALIDATE_SIZE(cSlowRateUnit, 0x34);
+VALIDATE_SIZE(cSlowRateUnit, 0x28);

@@ -132,6 +132,148 @@ public:
 				});
 		}
 	};
+	template <uintptr_t beforeInjectionPoint, uintptr_t afterInjectionPoint, CallingConvention C, typename... Args>
+	class IDualEvent;
+
+	template <uintptr_t beforeInjectionPoint, uintptr_t afterInjectionPoint, typename... Args>
+	class IDualEvent<beforeInjectionPoint, afterInjectionPoint, CallingConvention::Cdecl, Args...>
+	{
+	private:
+		using Key = typename IEventBase<FunctionAddPriority::AddBefore, beforeInjectionPoint, CallingConvention::Cdecl, Args...>::Key;
+		using before_hook = injector::function_hooker<beforeInjectionPoint, void* (Args...)>;
+		using after_hook = injector::function_hooker<afterInjectionPoint, void* (Args...)>;
+	public:
+		Key before;
+		Key after;
+
+		IDualEvent()
+		{
+			injector::make_static_hook<before_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					for (auto& hook : before.getVector())
+						hook(args...);
+
+					return orig(args...);
+				});
+
+			injector::make_static_hook<after_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					void* ret = orig(args...);
+
+					for (auto& hook : after.getVector())
+						hook(args...);
+
+					return ret;
+				});
+		}
+
+		// IDualEvent& operator+=(std::function<void(Args...)> cb) { before += std::move(cb); return *this; }
+	};
+
+	template <uintptr_t beforeInjectionPoint, uintptr_t afterInjectionPoint, typename... Args>
+	class IDualEvent<beforeInjectionPoint, afterInjectionPoint, CallingConvention::Thiscall, Args...>
+	{
+	private:
+		using Key = typename IEventBase<FunctionAddPriority::AddBefore, beforeInjectionPoint, CallingConvention::Thiscall, Args...>::Key;
+		using before_hook = injector::function_hooker_thiscall<beforeInjectionPoint, void* (Args...)>;
+		using after_hook = injector::function_hooker_thiscall<afterInjectionPoint, void* (Args...)>;
+	public:
+		Key before;
+		Key after;
+
+		IDualEvent()
+		{
+			injector::make_static_hook<before_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					for (auto& hook : before.getVector())
+						hook(args...);
+
+					return orig(args...);
+				});
+
+			injector::make_static_hook<after_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					void* ret = orig(args...);
+
+					for (auto& hook : after.getVector())
+						hook(args...);
+
+					return ret;
+				});
+		}
+
+		// IDualEvent& operator+=(std::function<void(Args...)> cb) { before += std::move(cb); return *this; }
+	};
+
+	template <uintptr_t beforeInjectionPoint, uintptr_t afterInjectionPoint, typename... Args>
+	class IDualEvent<beforeInjectionPoint, afterInjectionPoint, CallingConvention::Stdcall, Args...>
+	{
+	private:
+		using Key = typename IEventBase<FunctionAddPriority::AddBefore, beforeInjectionPoint, CallingConvention::Stdcall, Args...>::Key;
+		using before_hook = injector::function_hooker_stdcall<beforeInjectionPoint, void* (Args...)>;
+		using after_hook = injector::function_hooker_stdcall<afterInjectionPoint, void* (Args...)>;
+	public:
+		Key before;
+		Key after;
+
+		IDualEvent()
+		{
+			injector::make_static_hook<before_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					for (auto& hook : before.getVector())
+						hook(args...);
+
+					return orig(args...);
+				});
+
+			injector::make_static_hook<after_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					void* ret = orig(args...);
+
+					for (auto& hook : after.getVector())
+						hook(args...);
+
+					return ret;
+				});
+		}
+
+		// IDualEvent& operator+=(std::function<void(Args...)> cb) { before += std::move(cb); return *this; }
+	};
+
+	template <uintptr_t beforeInjectionPoint, uintptr_t afterInjectionPoint, typename... Args>
+	class IDualEvent<beforeInjectionPoint, afterInjectionPoint, CallingConvention::Fastcall, Args...>
+	{
+	private:
+		using Key = typename IEventBase<FunctionAddPriority::AddBefore, beforeInjectionPoint, CallingConvention::Fastcall, Args...>::Key;
+		using before_hook = injector::function_hooker_fastcall<beforeInjectionPoint, void* (Args...)>;
+		using after_hook = injector::function_hooker_fastcall<afterInjectionPoint, void* (Args...)>;
+	public:
+		Key before;
+		Key after;
+
+		IDualEvent()
+		{
+			injector::make_static_hook<before_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					for (auto& hook : before.getVector())
+						hook(args...);
+
+					return orig(args...);
+				});
+
+			injector::make_static_hook<after_hook>([this](std::function<void* (Args...)> orig, Args... args)
+				{
+					void* ret = orig(args...);
+
+					for (auto& hook : after.getVector())
+						hook(args...);
+
+					return ret;
+				});
+		}
+
+		// IDualEvent& operator+=(std::function<void(Args...)> cb) { before += std::move(cb); return *this; }
+	};
 public:
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x6526A2, CallingConvention::Cdecl> OnUpdateEvent; // Every non-game tick
 	static inline IEvent<FunctionAddPriority::AddAfter, 0x652CDF, CallingConvention::Thiscall, cGame *> OnGameStartupEvent; // Executed after logo sequence
@@ -146,5 +288,5 @@ public:
 	static inline IEvent<FunctionAddPriority::AddAfter, 0x65304D, CallingConvention::Cdecl> OnHeapStartup; // On heap starting up
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x6530B1, CallingConvention::Thiscall, void*> OnHavokStartupEvent; // Havok startup
 	static inline IEvent<FunctionAddPriority::AddBefore, 0x64F3CF, CallingConvention::Cdecl> OnGameCleanupEvent; // when game checks that it should be cleanup
-	static inline IEvent<FunctionAddPriority::AddAfter, 0x652AE3, CallingConvention::Cdecl> OnMainCleanupEvent; // If game cleanup was successful without any errors while closing the game, Main Cleanup is executed
+	static inline IDualEvent<0x652AE3, 0x652C16, CallingConvention::Cdecl> OnMainCleanupEvent; // If game cleanup was successful without any errors while closing the game, Main Cleanup is executed
 };

@@ -1,4 +1,4 @@
-#include <cGameUIManager.h>
+#include <cScene.h>
 #include <cSlowRateManager.h>
 #include <Events.h>
 #include <cGame.h>
@@ -10,7 +10,7 @@ class PlayerAdrenaline
         Events::OnTickEvent += []()
         {
             cSlowRateManager* SlowRateManager = &g_RateMan;
-            Pl0000 *player = g_GameUIManager.m_pPlayer;
+            Pl0000 *player = g_Scene.m_pPlayer;
             static bool once = false;
 
             if (player->m_Hp / player->getMaxHealth() <= 0.4f)

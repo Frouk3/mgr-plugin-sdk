@@ -1,4 +1,4 @@
-#include <cGameUIManager.h>
+#include <cScene.h>
 #include <Events.h>
 
 class OnBladeModeRipper
@@ -8,7 +8,7 @@ public:
     {
         Events::OnTickEvent += []()
         {
-            Pl0000* player = g_GameUIManager.m_pPlayer;
+            Pl0000* player = g_Scene.m_pPlayer;
 
             if (player)
             {

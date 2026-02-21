@@ -63,6 +63,8 @@ public:
     int field_D8;
     int field_DC;
     int field_E0;
+
+    void setPlayerPos(const Hw::cVec4& trans, const Hw::cVec4& rot, int bSetGrounded) { CallMethod<0x64D790, cScene *, const Hw::cVec4&, const Hw::cVec4&, int>(this, trans, rot, bSetGrounded); }
 };
 
 inline cScene& g_Scene = *(cScene*)(shared::base + 0x17E8E40);

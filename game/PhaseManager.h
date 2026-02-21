@@ -3,6 +3,26 @@
 #include <cXmlBinary.h>
 #include <shared.h>
 #include <Slot.h>
+#include <lib.h>
+
+class cPhaseAbstract
+{
+private:
+    int _pad04[2];
+public:
+    lib::StaticArray<int, 64> m_ContentsId;
+
+    cPhaseAbstract() { CallMethod<0x9664B0, cPhaseAbstract *>(this); }
+
+    void startup() { CallVMTFunc<2, cPhaseAbstract *>(this); }
+    void update() { CallVMTFunc<3, cPhaseAbstract *>(this); }
+    void cleanup() { CallVMTFunc<4, cPhaseAbstract *>(this); }
+    void onFlagPhase(int a2, const char *subPhase, int a4) { CallVMTFunc<5, cPhaseAbstract *, int, const char *, int>(this, a2, subPhase, a4); }
+    void onSave() { CallVMTFunc<6, cPhaseAbstract *>(this); }
+    void offFlagPhase(int a2, const char *subPhase) { CallVMTFunc<7, cPhaseAbstract *, int, const char *>(this, a2, subPhase); }
+
+    virtual ~cPhaseAbstract() {};
+};
 
 class SubPhaseSlot : public Slot
 {
@@ -25,9 +45,9 @@ struct PhaseManager
     int field_28;
     int field_2C;
     int field_30;
-    unsigned int m_CurrentPhase;
-    unsigned int m_PhaseHash;
-    char m_pCurrentSubPhase[16];
+    unsigned int m_NowPhase;
+    unsigned int m_NowSubPhaseHash;
+    char m_pNowSubPhase[16];
     int field_4C;
     int field_50;
     int field_54;

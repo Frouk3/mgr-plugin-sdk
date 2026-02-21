@@ -34,8 +34,8 @@ public:
         void initializeBoundsFromBone(cParts* rootBone, int boneIndex, cModelDataManager::EntryModelData *modelData) { ((void(__thiscall *)(RenderMatrix*, cParts*, int, cModelDataManager::EntryModelData*))(shared::base + 0x607AC0))(this, rootBone, boneIndex, modelData); }
     };
 
-    Hw::cMtx m_ViewModelMatrix;
-    Hw::cMtx m_ModelRotationMatrix;
+    Hw::cMtx m_WorldMatrix;
+	Hw::cMtx m_ImWorld; // Inverse world matrix
     cModelBase::RenderMatrix m_RenderMatrix;
     float m_DistRate0;
     float m_DistRate1;
