@@ -9,7 +9,7 @@
 
 namespace Hw
 {
-// Input
+	// Input
 
 	class KeyboardManagerBase;
 	class KeyboardManager;
@@ -100,10 +100,10 @@ namespace Hw
 	*/
 
 	class InputSystem;
-// user
+	// user
 
 	class UserReplace;
-	enum REAL_USER_NO { REAL_USER_NO_INVALID=-1, REAL_USER_NO_0=0, REAL_USER_NO_1=1, REAL_USER_NO_2=2, REAL_USER_NO_3=3 };
+	enum REAL_USER_NO { REAL_USER_NO_INVALID = -1, REAL_USER_NO_0 = 0, REAL_USER_NO_1 = 1, REAL_USER_NO_2 = 2, REAL_USER_NO_3 = 3 };
 
 	class cFmerge;
 	struct FmergeHeader;
@@ -122,58 +122,58 @@ namespace Hw
 
 	enum ANISOTROPY_LEVEL
 	{
-		ANISOTROPY_LEVEL1=1,
-		ANISOTROPY_LEVEL2=2,
-		ANISOTROPY_LEVEL4=4,
-		ANISOTROPY_LEVEL8=8,
-		ANISOTROPY_LEVEL16=16
+		ANISOTROPY_LEVEL1 = 1,
+		ANISOTROPY_LEVEL2 = 2,
+		ANISOTROPY_LEVEL4 = 4,
+		ANISOTROPY_LEVEL8 = 8,
+		ANISOTROPY_LEVEL16 = 16
 	};
 
 	enum BLENDOP_MODE
 	{
-		BLENDOP_ADD=0,
-		BLENDOP_SUB=1,
-		BLENDOP_REVSUB=4,
-		BLENDOP_MIN=2,
-		BLENDOP_MAX=3,
-		BLENDOP_DEFAULT=0,
-		BLENDALPHAOP_DEFAULT=0
+		BLENDOP_ADD = 0,
+		BLENDOP_SUB = 1,
+		BLENDOP_REVSUB = 4,
+		BLENDOP_MIN = 2,
+		BLENDOP_MAX = 3,
+		BLENDOP_DEFAULT = 0,
+		BLENDALPHAOP_DEFAULT = 0
 	};
 
 	enum BLEND_ELEM
 	{
-		BLEND_ZERO=0,
-		BLEND_ONE=1,
-		BLEND_SRCCOLOR=4,
-		BLEND_INVSRCCOLOR=5,
-		BLEND_SRCALPHA=6,
-		BLEND_INVSRCALPHA=7,
-		BLEND_DESTALPHA=10,
-		BLEND_INVDESTALPHA=11,
-		BLEND_DESTCOLOR=8,
-		BLEND_INVDESTCOLOR=9,
-		BLEND_SRCALPHASAT=16,
-		BLEND_BOTHINVSRCALPHA=0,
-		BLEND_BLENDFACTOR=12,
-		BLEND_INVBLENDFACTOR=13,
-		BLEND_SRC_DEFAULT=1,
-		BLEND_DST_DEFAULT=0,
-		BLEND_ALPHASRC_DEFAULT=1,
-		BLEND_ALPHADST_DEFAULT=0
+		BLEND_ZERO = 0,
+		BLEND_ONE = 1,
+		BLEND_SRCCOLOR = 4,
+		BLEND_INVSRCCOLOR = 5,
+		BLEND_SRCALPHA = 6,
+		BLEND_INVSRCALPHA = 7,
+		BLEND_DESTALPHA = 10,
+		BLEND_INVDESTALPHA = 11,
+		BLEND_DESTCOLOR = 8,
+		BLEND_INVDESTCOLOR = 9,
+		BLEND_SRCALPHASAT = 16,
+		BLEND_BOTHINVSRCALPHA = 0,
+		BLEND_BLENDFACTOR = 12,
+		BLEND_INVBLENDFACTOR = 13,
+		BLEND_SRC_DEFAULT = 1,
+		BLEND_DST_DEFAULT = 0,
+		BLEND_ALPHASRC_DEFAULT = 1,
+		BLEND_ALPHADST_DEFAULT = 0
 	};
 
 	enum COMP_MODE
 	{
-		COMP_NEVER=0,
-		COMP_LESS=1,
-		COMP_EQUAL=2,
-		COMP_LESSEQUAL=3,
-		COMP_GREATER=4,
-		COMP_NOTEQUAL=5,
-		COMP_GREATEREQUAL=6,
-		COMP_ALWAYS=7,
-		COMP_Z_DEFAULT=3,
-		COMP_ALPHATEST_DEFAULT=7
+		COMP_NEVER = 0,
+		COMP_LESS = 1,
+		COMP_EQUAL = 2,
+		COMP_LESSEQUAL = 3,
+		COMP_GREATER = 4,
+		COMP_NOTEQUAL = 5,
+		COMP_GREATEREQUAL = 6,
+		COMP_ALWAYS = 7,
+		COMP_Z_DEFAULT = 3,
+		COMP_ALPHATEST_DEFAULT = 7
 	};
 
 	enum HW_ALLOC_MODE : int
@@ -200,7 +200,7 @@ namespace Hw
 
 	enum eThreadId
 	{
-		THREAD_ID_INVALID=0
+		THREAD_ID_INVALID = 0
 	};
 
 	enum ROT_ORDER
@@ -209,7 +209,7 @@ namespace Hw
 		ROT_XZY,
 		ROT_YXZ,
 		ROT_YZX,
-		ROT_ZXY, 
+		ROT_ZXY,
 		ROT_ZYX,
 		ROT_DEFAULT = ROT_ZYX
 	};
@@ -227,19 +227,19 @@ namespace Hw
 
 	template <typename tC, unsigned const align, typename tHeapBinder>
 	class cFactory;
-	
+
 	template <typename tC, unsigned const align>
 	class cFactoryVariable;
 
 	template <typename tC, unsigned const align>
 	class cFactoryFixed;
 
-// Graphics
+	// Graphics
 	class cViewPort;
 
 	class CameraProj;
 	class cCameraBase;
-	
+
 	class cIndexBufferHeap;
 	class cRenderTargetInfo;
 
@@ -287,7 +287,7 @@ namespace Hw
 
 	class cUv;
 
-// etc.
+	// etc.
 
 	class cTimeUnit;
 
@@ -313,7 +313,7 @@ namespace Hw
 	class cVec4;
 	class cQuat;
 
-	inline BOOL createSubWindow(const char *classname, const char *windowname, unsigned int x, unsigned int y) { return ((BOOL(__cdecl *)(const char*, const char *, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y); }
+	inline BOOL createSubWindow(const char* classname, const char* windowname, unsigned int x, unsigned int y) { return ((BOOL(__cdecl*)(const char*, const char*, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y); }
 
 	class TextureManager
 	{
@@ -321,7 +321,7 @@ namespace Hw
 		struct Texture
 		{
 			LPDIRECT3DTEXTURE9 m_pTexture;
-			LPDIRECT3DTEXTURE9 *m_ppTexture;
+			LPDIRECT3DTEXTURE9* m_ppTexture;
 			int field_8;
 			int m_nWidth;
 			int m_nHeight;
@@ -332,10 +332,10 @@ namespace Hw
 			int field_24;
 		};
 
-		inline void removeTexture(Texture& texture) { ((void(__cdecl *)(Texture &))(shared::base + 0xBA16D0))(texture); }
+		inline void removeTexture(Texture& texture) { ((void(__cdecl*)(Texture&))(shared::base + 0xBA16D0))(texture); }
 
-		static inline cFixedList<Texture> &m_Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
-		static inline cCriticalSection &m_TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
+		static inline cFixedList<Texture>& m_Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
+		static inline cCriticalSection& m_TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
 	};
 
 	class ResourceManager;
@@ -348,41 +348,41 @@ namespace Hw
 			class Work
 			{
 			public:
-				
+
 				virtual ~Work() {};
 			};
 
-			class ListenerPositionWork : public Work{};
+			class ListenerPositionWork : public Work {};
 
-			class ListenerSpatializationWork : public Work{};
+			class ListenerSpatializationWork : public Work {};
 
-			class ObjectEnvironmentDryLevelWork : public Work{};
+			class ObjectEnvironmentDryLevelWork : public Work {};
 
-			class ObjectEnvironmentValuesWork : public Work{};
+			class ObjectEnvironmentValuesWork : public Work {};
 
-			class ObjectListenerMaskWork : public Work{};
+			class ObjectListenerMaskWork : public Work {};
 
-			class ObjectOutputMaskWork : public Work{};
+			class ObjectOutputMaskWork : public Work {};
 
-			class ObjectPositionWork : public Work{};
+			class ObjectPositionWork : public Work {};
 
-			class ObjectRTPCValueWork : public Work{};
+			class ObjectRTPCValueWork : public Work {};
 
-			class ObjectRegisterWork : public Work{};
+			class ObjectRegisterWork : public Work {};
 
-			class ObjectReleaseWork : public Work{};
+			class ObjectReleaseWork : public Work {};
 
-			class ObjectSwitchWork : public Work{};
+			class ObjectSwitchWork : public Work {};
 
-			class PostEventWork : public Work{};
+			class PostEventWork : public Work {};
 
-			class ReleaseEventWork : public Work{};
+			class ReleaseEventWork : public Work {};
 
-			class ScalingFactorWork : public Work{};
+			class ScalingFactorWork : public Work {};
 
-			class StateWork : public Work{};
+			class StateWork : public Work {};
 
-			class StopEventWork : public Work{};
+			class StopEventWork : public Work {};
 		};
 	};
 
@@ -395,12 +395,12 @@ namespace Hw
 			eThreadId m_ThreadId;
 			int field_4;
 			int m_nThreadIndex;
-			void (__cdecl *m_pfnThreadFunction)(void *);
-			void *m_pThreadParameter;
+			void(__cdecl* m_pfnThreadFunction)(void*);
+			void* m_pThreadParameter;
 		};
 
-		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char *threadName, int priority) { return ((BOOL(__cdecl *)(cWork*, unsigned int, int, const char *, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority); }
-		static inline BOOL createThread(void (__cdecl *pfnThreadFunction)(void *), void *pParameter, unsigned int stackSize, int a4, const char *threadName, int priority) { return ((BOOL(__cdecl *)(void (__cdecl *)(void *), void *, unsigned int, int, const char *, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority); }
+		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char* threadName, int priority) { return ((BOOL(__cdecl*)(cWork*, unsigned int, int, const char*, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority); }
+		static inline BOOL createThread(void(__cdecl* pfnThreadFunction)(void*), void* pParameter, unsigned int stackSize, int a4, const char* threadName, int priority) { return ((BOOL(__cdecl*)(void(__cdecl*)(void*), void*, unsigned int, int, const char*, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority); }
 		// Should be always called at the end of the thread function
 		static inline void Exit() { CdeclCall<0x9D7C70>(); }
 	};
@@ -409,19 +409,19 @@ namespace Hw
 	{
 	public:
 
-		static inline D3DPRESENT_PARAMETERS *&m_pD3DParams = *(D3DPRESENT_PARAMETERS**)(shared::base + 0x1B205E4);
-		static inline D3DPRESENT_PARAMETERS &m_D3DFullscreenParams = *(D3DPRESENT_PARAMETERS*)(shared::base + 0x1B205E8);
-		static inline D3DPRESENT_PARAMETERS &m_D3DWindowParams = *(D3DPRESENT_PARAMETERS*)(shared::base + 0x1B20620);
-		static inline LPDIRECT3D9 &m_pD3D = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
-		static inline LPDIRECT3DDEVICE9 &m_pDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
+		static inline D3DPRESENT_PARAMETERS*& m_pD3DParams = *(D3DPRESENT_PARAMETERS**)(shared::base + 0x1B205E4);
+		static inline D3DPRESENT_PARAMETERS& m_D3DFullscreenParams = *(D3DPRESENT_PARAMETERS*)(shared::base + 0x1B205E8);
+		static inline D3DPRESENT_PARAMETERS& m_D3DWindowParams = *(D3DPRESENT_PARAMETERS*)(shared::base + 0x1B20620);
+		static inline LPDIRECT3D9& m_pD3D = *(LPDIRECT3D9*)(shared::base + 0x1B206D8);
+		static inline LPDIRECT3DDEVICE9& m_pDevice = *(LPDIRECT3DDEVICE9*)(shared::base + 0x1B206D4);
 	};
 
 	class OsWindow
 	{
 	public:
 
-		static inline HWND &m_MainWindow = *(HWND*)(shared::base + 0x19D504C);
-		static inline HWND &m_SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
+		static inline HWND& m_MainWindow = *(HWND*)(shared::base + 0x19D504C);
+		static inline HWND& m_SecondWindow = *(HWND*)(shared::base + 0x1B205E0);
 	};
 
 	class OsTime
@@ -433,16 +433,16 @@ namespace Hw
 		static inline float GetSystemSecPerTick() { return ReturnCdeclCall<float, 0x9F8260>(); }
 		static inline int GetSystemTime() { return ReturnCdeclCall<int, 0xB98000>(); }
 
-		static inline float &m_SecondsPerTick = *(float*)(shared::base + 0x19D4F14);
-		static inline LARGE_INTEGER &m_SystemHiTime = *(LARGE_INTEGER*)(shared::base + 0x19D4F18);
-		static inline LARGE_INTEGER &m_SystemFreq = *(LARGE_INTEGER*)(shared::base + 0x19D4F20);
-		static inline int &m_bSystemTimeInit = *(int*)(shared::base + 0x19D4F40);
+		static inline float& m_SecondsPerTick = *(float*)(shared::base + 0x19D4F14);
+		static inline LARGE_INTEGER& m_SystemHiTime = *(LARGE_INTEGER*)(shared::base + 0x19D4F18);
+		static inline LARGE_INTEGER& m_SystemFreq = *(LARGE_INTEGER*)(shared::base + 0x19D4F20);
+		static inline int& m_bSystemTimeInit = *(int*)(shared::base + 0x19D4F40);
 	};
 
 	class OsSystem
 	{
 	public:
-		static inline float GetHiSystemTime() { return ReturnCdeclCall<float, 0x9F8C10>(); }	
+		static inline float GetHiSystemTime() { return ReturnCdeclCall<float, 0x9F8C10>(); }
 	};
 
 	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
@@ -472,11 +472,11 @@ private:
 public:
 
 	cCriticalSection() { m_IsStartuped = FALSE; }
-	BOOL startup() { return ReturnCallMethod<BOOL, 0x9D7240, cCriticalSection *>(this); }
+	BOOL startup() { return ReturnCallMethod<BOOL, 0x9D7240, cCriticalSection*>(this); }
 	void cleanup() { CallMethod<0x9D7270, cCriticalSection*>(this); }
-	void enter() { CallMethod<0xA6C0, cCriticalSection *>(this); }
-	void leave() { CallMethod<0xA6D0, cCriticalSection *>(this); }
-	int isValid() { return m_IsStartuped; }
+	void enter() { CallMethod<0xA6C0, cCriticalSection*>(this); }
+	void leave() { CallMethod<0xA6D0, cCriticalSection*>(this); }
+	int isValid() const { return m_IsStartuped; }
 };
 
 class Hw::cHeap
@@ -492,37 +492,37 @@ public:
 	const char* m_pHeapName;
 	unsigned int m_OutOfMemoryFlag;
 
-	cHeap() { CallMethod<0x9D3650, cHeap *>(this); }
+	cHeap() { CallMethod<0x9D3650, cHeap*>(this); }
 	virtual ~cHeap() {};
 
 	void cleanup() { CallVMTFunc<1, cHeap*>(this); }
 	void destroy() { CallVMTFunc<2, cHeap*>(this); }
-	BOOL isValid() { return ReturnCallVMTFunc<BOOL, 3, cHeap*>(this); }
-	size_t getSize() { return ReturnCallVMTFunc<size_t, 4, cHeap*>(this); }
-	size_t getUsedSize() { return ReturnCallVMTFunc<size_t, 5, cHeap*>(this); }
-	size_t getAllocatableSize() { return ReturnCallVMTFunc<size_t, 6, cHeap*>(this); }
+	BOOL isValid() const { return ReturnCallVMTFunc<BOOL, 3, const cHeap*>(this); }
+	size_t getSize() const { return ReturnCallVMTFunc<size_t, 4, const cHeap*>(this); }
+	size_t getUsedSize() const { return ReturnCallVMTFunc<size_t, 5, const cHeap*>(this); }
+	size_t getAllocatableSize() const { return ReturnCallVMTFunc<size_t, 6, const cHeap*>(this); }
 	// Pass nullptr to get the first allocation
-	void* getNextAlloc(void *block) { return ReturnCallVMTFunc<void*, 7, cHeap*, void *>(this, block); }
-	size_t getAllocSize(void* block) { return ReturnCallVMTFunc<size_t, 8, cHeap*, void*>(this, block); }
+	void* getNextAlloc(void* block) const { return ReturnCallVMTFunc<void*, 7, const cHeap*, void*>(this, block); }
+	size_t getAllocSize(void* block) const { return ReturnCallVMTFunc<size_t, 8, const cHeap*, void*>(this, block); }
 	// returns critical size at which it cannot allocate more memory
-	size_t getRestSizeLimit() { return ReturnCallVMTFunc<size_t, 9, cHeap*>(this); }
-	size_t getChildHeapSize() { return ReturnCallVMTFunc<size_t, 10, cHeap*>(this); }
-	void setDefragmentableFlag(void *a1) { CallVMTFunc<11, cHeap*, void*>(this, a1); }
+	size_t getRestSizeLimit() const { return ReturnCallVMTFunc<size_t, 9, const cHeap*>(this); }
+	size_t getChildHeapSize() const { return ReturnCallVMTFunc<size_t, 10, const cHeap*>(this); }
+	void setDefragmentableFlag(void* a1) { CallVMTFunc<11, cHeap*, void*>(this, a1); }
 	void* createChildHeap(HANDLE* pHandle, size_t Size) { return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
 	void destroyChildHeap(HANDLE* pHandle, size_t Size) { CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
 	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4) { return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, align, allocMode, a4); }
 	void dealloc(void* block, size_t size) { CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size); }
-	void *alloc(unsigned int size, int align, HW_ALLOC_MODE allocMode, int a3) { return ReturnCallMethod<void *, 0x9D29B0, cHeap *, unsigned int, int, HW_ALLOC_MODE, int>(this, size, align, allocMode, a3); }
-	void setSubHeap(Hw::cHeap &rHeap) { CallMethod<0x9D2930, cHeap *, cHeap&>(this, rHeap); }
-	void unsetSubHeap() { CallMethod<0x9D2940, cHeap *>(this); }
+	void* alloc(unsigned int size, int align = 32, HW_ALLOC_MODE allocMode = HW_ALLOC_MODE::HW_ALLOC_VIRTUAL, int a3 = 0) { return ReturnCallMethod<void*, 0x9D29B0, cHeap*, unsigned int, int, HW_ALLOC_MODE, int>(this, size, align, allocMode, a3); }
+	void setSubHeap(Hw::cHeap& rHeap) { CallMethod<0x9D2930, cHeap*, cHeap&>(this, rHeap); }
+	void unsetSubHeap() { CallMethod<0x9D2940, cHeap*>(this); }
 
-	static inline void free(void *block) { CdeclCall<0x9D4920, void *>(block); }
+	static inline void free(void* block) { CdeclCall<0x9D4920, void*>(block); }
 };
 
-inline void *__cdecl operator new(size_t s, Hw::cHeap &rHeap) { return ReturnCdeclCall<void *, 0x9D3500, size_t, Hw::cHeap&>(s, rHeap); }
-inline void __cdecl operator delete(void* block, Hw::cHeap *rHeap) { CdeclCall<0x9D48D0, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
-inline void *__cdecl operator new[](size_t s, Hw::cHeap& rHeap) { return ReturnCdeclCall<void *, 0x9D3580, size_t, Hw::cHeap&>(s, rHeap); }
-inline void __cdecl operator delete[](void *block, Hw::cHeap* rHeap) { CdeclCall<0x9D4940, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
+inline void* __cdecl operator new(size_t s, Hw::cHeap* rHeap) { return ReturnCdeclCall<void*, 0x9D3500, size_t, Hw::cHeap*>(s, rHeap); }
+inline void __cdecl operator delete(void* block, Hw::cHeap* rHeap) { CdeclCall<0x9D48D0, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
+inline void* __cdecl operator new[](size_t s, Hw::cHeap* rHeap) { return ReturnCdeclCall<void*, 0x9D3580, size_t, Hw::cHeap*>(s, rHeap); }
+inline void __cdecl operator delete[](void* block, Hw::cHeap* rHeap) { CdeclCall<0x9D4940, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
 // Usage after heap startup
 inline void* __cdecl memAlloc(size_t s) { return ReturnCdeclCall<void*, 0x61E180, size_t>(s); }
 // Usage after heap startup
@@ -534,28 +534,28 @@ public:
 	class cList
 	{
 	public:
-		cList *m_pPrev, *m_pNext;
+		cList* m_pPrev, * m_pNext;
 		void* m_pMemoryBlock;
 		size_t m_MemorySize;
 		cHeapVariableBase* m_pAllocator;
 	};
 
 	HANDLE m_hHeap;
-	Hw::cHeapVariableBase::cList *m_pFirstList, *m_pLastList;
+	Hw::cHeapVariableBase::cList* m_pFirstList, * m_pLastList;
 	size_t m_HeapSize;
 	size_t m_RestSize;
 	size_t m_ChildHeapSize;
 
-	cHeapVariableBase() { CallMethod<0x9D3AF0, cHeapVariableBase *>(this); } 		
+	cHeapVariableBase() { CallMethod<0x9D3AF0, cHeapVariableBase*>(this); }
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapVariable() { CallMethod<0x9D44F0, cHeapVariable *>(this); }
+	cHeapVariable() { CallMethod<0x9D44F0, cHeapVariable*>(this); }
 
-	int create(size_t size, Hw::cHeap& rHeap, const char *pName) { return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName); }
+	int create(size_t size, Hw::cHeap& rHeap, const char* pName) { return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName); }
 	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName) { return ReturnCallVMTFunc<int, 17, Hw::cHeapVariable*, size_t, size_t, Hw::cHeap&, const char*>(this, size, align, rHeap, pName); }
 };
 
@@ -565,7 +565,7 @@ public:
 	class cList
 	{
 	public:
-		cList *m_pPrevious, *m_pNext;
+		cList* m_pPrevious, * m_pNext;
 		size_t m_TotalSize;
 		size_t m_Size;
 		int field_10;
@@ -573,7 +573,7 @@ public:
 		cHeapPhysicalBase* m_pAllocator;
 	};
 public:
-	cList *m_pMainBlock, *m_pFirstBlock, *m_pLastBlock;
+	cList* m_pMainBlock, * m_pFirstBlock, * m_pLastBlock;
 	size_t m_MemoryLimit;
 	size_t m_FreeMemory;
 	int field_54;
@@ -585,33 +585,33 @@ public:
 	int field_6C;
 	cList* m_pBlocks[256];
 
-	cHeapPhysicalBase() { CallMethod<0x9D3860, cHeapPhysicalBase *>(this); }
+	cHeapPhysicalBase() { CallMethod<0x9D3860, cHeapPhysicalBase*>(this); }
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
 {
 public:
 
-	cHeapPhysical() { CallMethod<0x9D48F0, cHeapPhysical *>(this); }
+	cHeapPhysical() { CallMethod<0x9D48F0, cHeapPhysical*>(this); }
 
-	int create(size_t size, Hw::cHeap &rHeap, const char *name) { return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name); }
+	int create(size_t size, Hw::cHeap& rHeap, const char* name) { return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name); }
 };
 
 class Hw::cHeapHook
 {
 public:
 
-	cHeapHook() { CallMethod<0x9D32E0, cHeapHook *>(this); }
+	cHeapHook() { CallMethod<0x9D32E0, cHeapHook*>(this); }
 	virtual ~cHeapHook() {};
 };
 
 class Hw::cHeapFixed : public Hw::cHeap
 {
 public:
-	struct cList 
+	struct cList
 	{
-		cList *m_pPrevious, *m_pNext;
-		cHeapFixed *m_pHeap;
+		cList* m_pPrevious, * m_pNext;
+		cHeapFixed* m_pHeap;
 	};
 public:
 	void* m_pAlloc;
@@ -620,15 +620,15 @@ public:
 	size_t m_BlockNum;
 	size_t m_BlockAlign;
 	size_t m_RestNum;
-	Hw::cHeapFixed::cList *m_pFreeList, *m_pFirstList;
+	Hw::cHeapFixed::cList* m_pFreeList, * m_pFirstList;
 
-	cHeapFixed() { CallMethod<0x9D36F0, Hw::cHeapFixed *>(this); }
+	cHeapFixed() { CallMethod<0x9D36F0, Hw::cHeapFixed*>(this); }
 
-	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap &creator, const char *name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap &, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
-	void* alloc() { return ReturnCallMethod<void *, 0x9D2BC0, Hw::cHeapFixed *>(this); }
+	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap& creator, const char* name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap&, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
+	void* alloc() { return ReturnCallMethod<void*, 0x9D2BC0, Hw::cHeapFixed*>(this); }
 	int canAlloc(size_t size, size_t num) { return ReturnCallMethod<int, 0x9D2BA0, Hw::cHeapFixed*, size_t, size_t>(this, size, num); }
-	unsigned int getBlockMaxNum() { return ReturnCallMethod<unsigned int, 0x9D2C80, Hw::cHeapFixed *>(this); }
-	unsigned int getBlockUsedNum() { return ReturnCallMethod<unsigned int, 0x9D2C90, Hw::cHeapFixed *>(this); }
+	unsigned int getBlockMaxNum() { return ReturnCallMethod<unsigned int, 0x9D2C80, Hw::cHeapFixed*>(this); }
+	unsigned int getBlockUsedNum() { return ReturnCallMethod<unsigned int, 0x9D2C90, Hw::cHeapFixed*>(this); }
 };
 
 class Hw::cHeapOneTime : public Hw::cHeap
@@ -636,30 +636,30 @@ class Hw::cHeapOneTime : public Hw::cHeap
 public:
 	struct cList
 	{
-		cList *m_pNext, *m_pPrev;
-		void *m_pMemory;
-		cHeapOneTime *m_pHeap;
+		cList* m_pNext, * m_pPrev;
+		void* m_pMemory;
+		cHeapOneTime* m_pHeap;
 	};
 
-	void *m_pAlloc;
+	void* m_pAlloc;
 	int m_BlockSize;
 	size_t m_HeapSize;
 	int m_BlockRest;
-	Hw::cHeapOneTime::cList *m_pFirstList, *m_pLastList;
+	Hw::cHeapOneTime::cList* m_pFirstList, * m_pLastList;
 	int m_RestSize;
 
-	cHeapOneTime() { CallMethod<0x9D3800, cHeapOneTime *>(this); }
+	cHeapOneTime() { CallMethod<0x9D3800, cHeapOneTime*>(this); }
 };
 
 class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapGlobal() { CallMethod<0x9D3F20, cHeapGlobal *>(this); }
+	cHeapGlobal() { CallMethod<0x9D3F20, cHeapGlobal*>(this); }
 
-	static inline cHeapGlobal* GetInstance() { return ReturnCdeclCall<cHeapGlobal *, 0x61D830>(); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
+	static inline cHeapGlobal* GetInstance() { return ReturnCdeclCall<cHeapGlobal*, 0x61D830>(); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
 
-	BOOL create(size_t size, const char *target) // Got optimised away
+	BOOL create(size_t size, const char* target) // Got optimised away
 	{
 		if (isValid()) // already created
 			return FALSE;
@@ -682,16 +682,16 @@ public:
 
 	// non virtual ~cHeapGlobal() -> at 0x9D3F60
 
-	static inline cHeapGlobal &m_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
+	static inline cHeapGlobal& m_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
 };
 
 class Hw::cShareHeapPhysical : public Hw::cHeapPhysical
 {
 public:
-	cHeapPhysical *m_pShareHeap;
+	cHeapPhysical* m_pShareHeap;
 
-	cShareHeapPhysical() { CallMethod<0x9D4BD0, cShareHeapPhysical *>(this); }
-	int create(Hw::cHeapPhysical &shareHeap, const char *name) { return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name); }
+	cShareHeapPhysical() { CallMethod<0x9D4BD0, cShareHeapPhysical*>(this); }
+	int create(Hw::cHeapPhysical& shareHeap, const char* name) { return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name); }
 	int startupShareHeap() { return ReturnCallVMTFunc<int, 19, cShareHeapPhysical*>(this); }
 };
 
@@ -711,9 +711,9 @@ public:
 	class const_iterator
 	{
 	protected:
-		tC *m_Ptr;
+		tC* m_Ptr;
 
-		cHeap *getHeapPtr()
+		cHeap* getHeapPtr()
 		{
 			return ((cHeap**)m_Ptr)[-1]; // Tricky way to get heap pointer from allocation
 		}
@@ -724,8 +724,8 @@ public:
 		}
 
 	public:
-		const_iterator(void *pPtr) : m_Ptr((tC*)pPtr) {}
-		const_iterator(const const_iterator &other) : m_Ptr(other.m_Ptr) {}
+		const_iterator(void* pPtr) : m_Ptr((tC*)pPtr) {}
+		const_iterator(const const_iterator& other) : m_Ptr(other.m_Ptr) {}
 		const_iterator() : m_Ptr(nullptr) {}
 
 		const_iterator& operator++(int)
@@ -744,17 +744,17 @@ public:
 			return *this;
 		}
 
-		bool operator==(const const_iterator &other) const
+		bool operator==(const const_iterator& other) const
 		{
 			return m_Ptr == other.m_Ptr;
 		}
 
-		bool operator!=(const const_iterator &other) const
+		bool operator!=(const const_iterator& other) const
 		{
 			return m_Ptr != other.m_Ptr;
 		}
 
-		void operator=(const const_iterator &other)
+		void operator=(const const_iterator& other)
 		{
 			m_Ptr = other.m_Ptr;
 		}
@@ -773,11 +773,11 @@ public:
 	class iterator : public const_iterator
 	{
 	public:
-		iterator(void *pPtr) : const_iterator(pPtr) {}
-		iterator(const iterator &other) : const_iterator(other) {}
+		iterator(void* pPtr) : const_iterator(pPtr) {}
+		iterator(const iterator& other) : const_iterator(other) {}
 		iterator() : const_iterator() {}
 
-		void operator=(const iterator &other)
+		void operator=(const iterator& other)
 		{
 			this->m_Ptr = other.m_Ptr;
 		}
@@ -842,7 +842,7 @@ public:
 		m_Heap.destroy();
 	}
 
-	iterator erase(iterator &pos)
+	iterator erase(iterator& pos)
 	{
 		iterator next = pos;
 		++next;
@@ -850,22 +850,22 @@ public:
 		return next;
 	}
 
-	unsigned int getSize()
+	unsigned int getSize() const
 	{
 		return m_Heap.getSize();
 	}
 
-	unsigned int getUsedSize()
+	unsigned int getUsedSize() const
 	{
 		return m_Heap.getUsedSize();
 	}
 
-	unsigned int getAllocatableSize()
+	unsigned int getAllocatableSize() const
 	{
 		return m_Heap.getAllocatableSize();
 	}
 
-	tHeapBinder& getHeap()
+	tHeapBinder& getHeap() const
 	{
 		return m_Heap;
 	}
@@ -877,7 +877,7 @@ class Hw::cFactoryVariable : public Hw::cFactory<tC, align, Hw::cHeapVariable>
 public:
 	cFactoryVariable() : Hw::cFactory<tC, align, Hw::cHeapVariable>() {}
 
-	int create(size_t heapSize, Hw::cHeap &rHeap, const char *name = "FactoryVariable")
+	int create(size_t heapSize, Hw::cHeap& rHeap, const char* name = "FactoryVariable")
 	{
 		return this->m_Heap.create(heapSize, align, rHeap, name);
 	}
@@ -889,21 +889,21 @@ class Hw::cFactoryFixed : public Hw::cFactory<tC, align, Hw::cHeapFixed>
 public:
 	cFactoryFixed() : Hw::cFactory<tC, align, Hw::cHeapFixed>() {}
 
-	int create(unsigned int count, Hw::cHeap &rHeap, const char *name = "FactoryFixed")
+	int create(unsigned int count, Hw::cHeap& rHeap, const char* name = "FactoryFixed")
 	{
 		return this->m_Heap.create(sizeof(tC), count, align, rHeap, name);
 	}
 
-	int canAlloc(int num)
+	int canAlloc(int num) const
 	{
 		return this->m_Heap.canAlloc(sizeof(tC), num);
 	}
 
 	tC* newWork()
 	{
-		void *pAlloc = this->m_Heap.alloc();
+		void* pAlloc = this->m_Heap.alloc();
 		memset(pAlloc, 0, sizeof(tC));
-		
+
 		return new (pAlloc) tC();
 	}
 
@@ -912,12 +912,12 @@ public:
 		return cFactory<tC, align, Hw::cHeapFixed>::iterator(this->m_Heap.alloc());
 	}
 
-	unsigned int getUsedNum()
+	unsigned int getUsedNum() const
 	{
 		return this->m_Heap.getBlockUsedNum();
 	}
 
-	unsigned int getMaxNum()
+	unsigned int getMaxNum() const
 	{
 		return this->m_Heap.getBlockMaxNum();
 	}
@@ -938,151 +938,151 @@ class Hw::cFmerge
 {
 public:
 	FmergeHeader* m_data;
-	char *m_dtt;
+	char* m_dtt;
 
 	cFmerge(char* data) : m_data((FmergeHeader*)data), m_dtt(nullptr) {};
 	cFmerge() { ((void(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3530))(this); }
 
-	void *getDtt() { return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3550))(this); }
-	void *getData() { return ((void*(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3560))(this); }
-	void setData(void *data, int index) { ((void(__thiscall *)(Hw::cFmerge*, void*, int))(shared::base + 0x9E3570))(this, data, index); }
-	void *getDataAt(int index) { return ((void*(__thiscall *)(Hw::cFmerge*, int))(shared::base + 0x9E3580))(this, index); }
-	size_t getFileAmount() { return ((size_t(__thiscall *)(Hw::cFmerge*))(shared::base + 0x9E3590))(this); }
-	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex); }
-	const char *getFileIndexFileName(size_t fileIndex) { return ((const char*(__thiscall *)(Hw::cFmerge *, size_t))(shared::base + 0x9E38D0))(this, fileIndex); }
-	BOOL getFileIndexExtension(char *pExt, size_t fileIndex) { return ((BOOL(__thiscall *)(Hw::cFmerge*, char *, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex); }
-	void *getFileIndexData(size_t fileIndex) { return ((void*(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
-	size_t _getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall *)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
-	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E3F20))(this, ext, no); }
-	size_t getFileNameIndexI(const char *name) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char*))(shared::base + 0x9E3FD0))(this, name);}
-	size_t getSubStrFileIndex(const char *name, unsigned int matchLimit) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit);}
-	void* getExtensionFileData(const char *name, unsigned int matchLimit) { return ((void*(__thiscall *)(Hw::cFmerge*, const char *, unsigned int))(shared::base + 0x9E44B0))(this, name, matchLimit);}
-	void* getFileNameData(const char *name) { return ((void*(__thiscall *)(Hw::cFmerge *, const char *))(shared::base + 0x9E4500))(this, name); }
-	void *getFileNameData(const char *name, unsigned int no) { return ((void*(__thiscall *)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4550))(this, name, no); }
-	size_t getFileNameSize(const char *name, unsigned int no) { return ((size_t(__thiscall *)(Hw::cFmerge *, const char *, unsigned int))(shared::base + 0x9E46D0))(this, name, no); }
-	void setData(char *data, char *dds = nullptr) { ((void(__thiscall *)(Hw::cFmerge*, char*, char*))(shared::base + 0x9E3540))(this, data, dds); }
+	void* getDtt() { return ((void* (__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3550))(this); }
+	void* getData() { return ((void* (__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3560))(this); }
+	void setData(void* data, int index) { ((void(__thiscall*)(Hw::cFmerge*, void*, int))(shared::base + 0x9E3570))(this, data, index); }
+	void* getDataAt(int index) { return ((void* (__thiscall*)(Hw::cFmerge*, int))(shared::base + 0x9E3580))(this, index); }
+	size_t getFileAmount() { return ((size_t(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3590))(this); }
+	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex); }
+	const char* getFileIndexFileName(size_t fileIndex) { return ((const char* (__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E38D0))(this, fileIndex); }
+	BOOL getFileIndexExtension(char* pExt, size_t fileIndex) { return ((BOOL(__thiscall*)(Hw::cFmerge*, char*, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex); }
+	void* getFileIndexData(size_t fileIndex) { return ((void* (__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
+	size_t _getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
+	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E3F20))(this, ext, no); }
+	size_t getFileNameIndexI(const char* name) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*))(shared::base + 0x9E3FD0))(this, name); }
+	size_t getSubStrFileIndex(const char* name, unsigned int matchLimit) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit); }
+	void* getExtensionFileData(const char* name, unsigned int matchLimit) { return ((void* (__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E44B0))(this, name, matchLimit); }
+	void* getFileNameData(const char* name) { return ((void* (__thiscall*)(Hw::cFmerge*, const char*))(shared::base + 0x9E4500))(this, name); }
+	void* getFileNameData(const char* name, unsigned int no) { return ((void* (__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4550))(this, name, no); }
+	size_t getFileNameSize(const char* name, unsigned int no) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E46D0))(this, name, no); }
+	void setData(char* data, char* dds = nullptr) { ((void(__thiscall*)(Hw::cFmerge*, char*, char*))(shared::base + 0x9E3540))(this, data, dds); }
 
 	operator bool() { return m_data != nullptr; }
 };
 
 enum Hw::KEYBOARD_MAP
 {
-	KB_SPACE=32,
-	KB_A=65,
-	KB_B=66,
-	KB_C=67,
-	KB_D=68,
-	KB_E=69,
-	KB_F=70,
-	KB_G=71,
-	KB_H=72,
-	KB_I=73,
-	KB_J=74,
-	KB_K=75,
-	KB_L=76,
-	KB_M=77,
-	KB_N=78,
-	KB_O=79,
-	KB_P=80,
-	KB_Q=81,
-	KB_R=82,
-	KB_S=83,
-	KB_T=84,
-	KB_U=85,
-	KB_V=86,
-	KB_W=87,
-	KB_X=88,
-	KB_Y=89,
-	KB_Z=90,
-	KB_0=48,
-	KB_1=49,
-	KB_2=50,
-	KB_3=51,
-	KB_4=52,
-	KB_5=53,
-	KB_6=54,
-	KB_7=55,
-	KB_8=56,
-	KB_9=57,
-	KB_MINUS=45,
-	KB_EQ=61,
-	KB_BRAC_L=91,
-	KB_BRAC_R=93,
-	KB_PERIOD=46,
-	KB_APOS=39,
-	KB_SLASH=47,
-	KB_COMMA=44,
-	KB_SEMICOLON=59,
-	KB_GRAVE=96,
-	KB_COLON=58,
-	KB_AT=64,
-	KB_YEN=92,
-	KB_CIRCUMFLEX=94,
-	KB_RET=10,
-	KB_TAB=9,
-	KB_BS=8,
-	KB_F1=128,
-	KB_F2=129,
-	KB_F3=130,
-	KB_F4=131,
-	KB_F5=132,
-	KB_F6=133,
-	KB_F7=134,
-	KB_F8=135,
-	KB_F9=136,
-	KB_F10=137,
-	KB_F11=138,
-	KB_F12=139,
-	KB_DN=140,
-	KB_LT=141,
-	KB_RT=142,
-	KB_UP=143,
-	KB_CAP=144,
-	KB_ESC=145,
-	KB_INS=146,
-	KB_DEL=147,
-	KB_HOME=148,
-	KB_END=149,
-	KB_PAGE_UP=150,
-	KB_PAGE_DN=151,
-	KB_SYSRQ=152,
-	KB_SCRLOCK=153,
-	KB_PAUSE=154,
-	KB_CTRL_L=155,
-	KB_CTRL_R=156,
-	KB_ALT_L=157,
-	KB_ALT_R=158,
-	KB_SHIFT_L=159,
-	KB_SHIFT_R=160,
-	KB_WIN_L=161,
-	KB_WIN_R=162,
-	KB_APPS=163,
-	KB_BACKSLASH=164,
-	KB_NUMLOCK=165,
-	KB_NUM0=166,
-	KB_NUM1=167,
-	KB_NUM2=168,
-	KB_NUM3=169,
-	KB_NUM4=170,
-	KB_NUM5=171,
-	KB_NUM6=172,
-	KB_NUM7=173,
-	KB_NUM8=174,
-	KB_NUM9=175,
-	KB_NUM_ADD=176,
-	KB_NUM_SUB=177,
-	KB_NUM_DEC=178,
-	KB_NUM_DIV=179,
-	KB_NUM_MUL=180,
-	KB_NUM_ENT=181,
-	KB_MAP_MAX=182,
-	KB_MAP_INVALID=183
+	KB_SPACE = 32,
+	KB_A = 65,
+	KB_B = 66,
+	KB_C = 67,
+	KB_D = 68,
+	KB_E = 69,
+	KB_F = 70,
+	KB_G = 71,
+	KB_H = 72,
+	KB_I = 73,
+	KB_J = 74,
+	KB_K = 75,
+	KB_L = 76,
+	KB_M = 77,
+	KB_N = 78,
+	KB_O = 79,
+	KB_P = 80,
+	KB_Q = 81,
+	KB_R = 82,
+	KB_S = 83,
+	KB_T = 84,
+	KB_U = 85,
+	KB_V = 86,
+	KB_W = 87,
+	KB_X = 88,
+	KB_Y = 89,
+	KB_Z = 90,
+	KB_0 = 48,
+	KB_1 = 49,
+	KB_2 = 50,
+	KB_3 = 51,
+	KB_4 = 52,
+	KB_5 = 53,
+	KB_6 = 54,
+	KB_7 = 55,
+	KB_8 = 56,
+	KB_9 = 57,
+	KB_MINUS = 45,
+	KB_EQ = 61,
+	KB_BRAC_L = 91,
+	KB_BRAC_R = 93,
+	KB_PERIOD = 46,
+	KB_APOS = 39,
+	KB_SLASH = 47,
+	KB_COMMA = 44,
+	KB_SEMICOLON = 59,
+	KB_GRAVE = 96,
+	KB_COLON = 58,
+	KB_AT = 64,
+	KB_YEN = 92,
+	KB_CIRCUMFLEX = 94,
+	KB_RET = 10,
+	KB_TAB = 9,
+	KB_BS = 8,
+	KB_F1 = 128,
+	KB_F2 = 129,
+	KB_F3 = 130,
+	KB_F4 = 131,
+	KB_F5 = 132,
+	KB_F6 = 133,
+	KB_F7 = 134,
+	KB_F8 = 135,
+	KB_F9 = 136,
+	KB_F10 = 137,
+	KB_F11 = 138,
+	KB_F12 = 139,
+	KB_DN = 140,
+	KB_LT = 141,
+	KB_RT = 142,
+	KB_UP = 143,
+	KB_CAP = 144,
+	KB_ESC = 145,
+	KB_INS = 146,
+	KB_DEL = 147,
+	KB_HOME = 148,
+	KB_END = 149,
+	KB_PAGE_UP = 150,
+	KB_PAGE_DN = 151,
+	KB_SYSRQ = 152,
+	KB_SCRLOCK = 153,
+	KB_PAUSE = 154,
+	KB_CTRL_L = 155,
+	KB_CTRL_R = 156,
+	KB_ALT_L = 157,
+	KB_ALT_R = 158,
+	KB_SHIFT_L = 159,
+	KB_SHIFT_R = 160,
+	KB_WIN_L = 161,
+	KB_WIN_R = 162,
+	KB_APPS = 163,
+	KB_BACKSLASH = 164,
+	KB_NUMLOCK = 165,
+	KB_NUM0 = 166,
+	KB_NUM1 = 167,
+	KB_NUM2 = 168,
+	KB_NUM3 = 169,
+	KB_NUM4 = 170,
+	KB_NUM5 = 171,
+	KB_NUM6 = 172,
+	KB_NUM7 = 173,
+	KB_NUM8 = 174,
+	KB_NUM9 = 175,
+	KB_NUM_ADD = 176,
+	KB_NUM_SUB = 177,
+	KB_NUM_DEC = 178,
+	KB_NUM_DIV = 179,
+	KB_NUM_MUL = 180,
+	KB_NUM_ENT = 181,
+	KB_MAP_MAX = 182,
+	KB_MAP_INVALID = 183
 };
 
 class Hw::UserReplace
 {
 public:
-	static inline REAL_USER_NO &m_MainUserNo = *(REAL_USER_NO*)(shared::base + 0x14CEA10);
+	static inline REAL_USER_NO& m_MainUserNo = *(REAL_USER_NO*)(shared::base + 0x14CEA10);
 
 	static inline REAL_USER_NO GetRealUserNo(int userNo) { return ReturnCdeclCall<REAL_USER_NO, 0x9FD140, int>(userNo); }
 };
@@ -1090,7 +1090,7 @@ public:
 class Hw::cKeyboardState
 {
 public:
-	enum { KB_MAP_FLAG_SIZE=6 };
+	enum { KB_MAP_FLAG_SIZE = 6 };
 public:
 	unsigned int m_pOn[KB_MAP_FLAG_SIZE];
 	unsigned int m_pTrig[KB_MAP_FLAG_SIZE];
@@ -1136,8 +1136,8 @@ public:
 class Hw::KeyboardManagerBase
 {
 public:
-	static inline int &m_RepeatWait = *(int*)(shared::base + 0x14CD830);
-	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
+	static inline int& m_RepeatWait = *(int*)(shared::base + 0x14CD830);
+	static inline int& m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
 
 	static inline void InitState(cKeyboardState& rState) { CdeclCall<0x9DA4A0, cKeyboardState&>(rState); }
 	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA4C0, cKeyboardState&>(rState); }
@@ -1148,10 +1148,10 @@ class Hw::MouseManagerBase
 public:
 	static inline void UpdateState(cMouseState& rState) { CdeclCall<0x9D9800, cMouseState&>(rState); }
 
-	static inline int &m_RepeatWait = *(int*)(shared::base + 0x14CDDEC);
-	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x14CDDF0);
+	static inline int& m_RepeatWait = *(int*)(shared::base + 0x14CDDEC);
+	static inline int& m_RepeatCycle = *(int*)(shared::base + 0x14CDDF0);
 
-	static inline char *m_pStateHidFlag = (char*)(shared::base + 0x19D06D0); //char m_pStateHidFlag[20];
+	static inline char* m_pStateHidFlag = (char*)(shared::base + 0x19D06D0); //char m_pStateHidFlag[20];
 	static inline int& m_IsStrokeValid = *(int*)(shared::base + 0x19D07F8);
 };
 
@@ -1165,22 +1165,28 @@ public:
 class Hw::KeyboardManager : public Hw::KeyboardManagerBase
 {
 public:
-	enum{ MAX_KEY_MAP_FLAG=256 };
+	enum { MAX_KEY_MAP_FLAG = 256 };
 
 	static inline int UpdateKeyState(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA500, cKeyboardState&>(rState); }
 	static inline int UpdateState(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA710, cKeyboardState&>(rState); }
 
 	static inline int* m_pStrokeHidFlag = (int*)(shared::base + 0x14CD838); // int m_pStrokeHidFlag[KB_MAP_MAX][2];
-	static inline char *m_pStateHidFlag = (char*)(shared::base + 0x19D06F8); //char m_pStateHidFlag[MAX_KEY_MAP_FLAG];
-	static inline int &m_IsStateValid = *(int*)(shared::base + 0x14CDDE8);
+	static inline char* m_pStateHidFlag = (char*)(shared::base + 0x19D06F8); //char m_pStateHidFlag[MAX_KEY_MAP_FLAG];
+	static inline int& m_IsStateValid = *(int*)(shared::base + 0x14CDDE8);
 
-	static inline LPDIRECTINPUTDEVICE8W &m_pKeyboardDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
+	static inline LPDIRECTINPUTDEVICE8W& m_pKeyboardDevice = *(LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D06E8);
 };
 
 class Hw::PadManager
 {
 public:
-	class cVibState { public: float m_fCurrent; float m_fTarget; };
+	class cVibState
+	{
+	public:
+		float m_fCurrent;
+		float m_fTarget;
+	};
+
 	class cPadInfo
 	{
 	public:
@@ -1196,17 +1202,17 @@ public:
 	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { CdeclCall<0x9D99F0, float, float, float, Hw::INPUT_PAD_ANALOG>(range, thres, ambit, analog); }
 	static inline void UpdatePad(cPadInfo& rInfo, int controllerId) { CdeclCall<0x9DA900, cPadInfo&, int>(rInfo, controllerId); }
 	static inline void SetVib(int controllerId, float leftMotorSpeed, float rightMotorSpeed, int time) { CdeclCall<0x9DA360, int, float, float, int>(controllerId, leftMotorSpeed, rightMotorSpeed, time); }
-	static inline void SetTriggerState(Hw::cPadState &pad, unsigned int buttons) { CdeclCall<0x9DA210, Hw::cPadState&, unsigned int>(pad, buttons); }
+	static inline void SetTriggerState(Hw::cPadState& pad, unsigned int buttons) { CdeclCall<0x9DA210, Hw::cPadState&, unsigned int>(pad, buttons); }
 
-	static inline int &m_RepeatWait = *(int*)(shared::base + 0x19D05B8);
-	static inline int &m_RepeatCycle = *(int*)(shared::base + 0x19D05BC);
+	static inline int& m_RepeatWait = *(int*)(shared::base + 0x19D05B8);
+	static inline int& m_RepeatCycle = *(int*)(shared::base + 0x19D05BC);
 
-	static inline float *m_pAnalogAmbit = (float*)(shared::base + 0x19D05C0); // float m_pAnalogAmbit[4];
-	static inline float *m_pAnalogThres = (float*)(shared::base + 0x19D05D0); // float m_pAnalogThres[4];
-	static inline float *m_pAnalogRange = (float*)(shared::base + 0x19D05E0); // float m_pAnalogRange[4];
+	static inline float* m_pAnalogAmbit = (float*)(shared::base + 0x19D05C0); // float m_pAnalogAmbit[4];
+	static inline float* m_pAnalogThres = (float*)(shared::base + 0x19D05D0); // float m_pAnalogThres[4];
+	static inline float* m_pAnalogRange = (float*)(shared::base + 0x19D05E0); // float m_pAnalogRange[4];
 
-	static inline cPadInfo *m_pPadInfo = (cPadInfo*)(shared::base + 0x19D05F0); // Hw::PadManager::cPadInfo m_pPadInfo[4];
-	static inline LPDIRECTINPUTDEVICE8W *m_pControllerDevices = (LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D05A8); // LPDIRECTINPUTDEVICE8W m_pControllerDevices[4];
+	static inline cPadInfo* m_pPadInfo = (cPadInfo*)(shared::base + 0x19D05F0); // Hw::PadManager::cPadInfo m_pPadInfo[4];
+	static inline LPDIRECTINPUTDEVICE8W* m_pControllerDevices = (LPDIRECTINPUTDEVICE8W*)(shared::base + 0x19D05A8); // LPDIRECTINPUTDEVICE8W m_pControllerDevices[4];
 };
 
 class Hw::InputSystem
@@ -1221,7 +1227,7 @@ public:
 	static inline void UpdatePad(Hw::cPadState& rState, int controllerId) { CdeclCall<0x9DAFE0, Hw::cPadState&, int>(rState, controllerId); }
 	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { CdeclCall<0x9DA270, float, float, float, Hw::INPUT_PAD_ANALOG>(range, thres, ambit, analog); }
 
-	static inline LPDIRECTINPUT8W &m_pInputDevice = *(LPDIRECTINPUT8W*)(shared::base + 0x19D06E4);
+	static inline LPDIRECTINPUT8W& m_pInputDevice = *(LPDIRECTINPUT8W*)(shared::base + 0x19D06E4);
 };
 
 class Hw::cUcol
@@ -1247,7 +1253,7 @@ public:
 	bool operator!=(const cFcol& fcol) const;
 };
 
-class Hw::cFcol 
+class Hw::cFcol
 {
 public:
 	float r, g, b, a;
@@ -1273,9 +1279,9 @@ public:
 
 inline Hw::cUcol::cUcol(const cFcol& fcol) { r = (unsigned int)(int)(fcol.r * 255.0f); g = (unsigned int)(int)(fcol.g * 255.0f); b = (unsigned int)(int)(fcol.b * 255.0f); a = (unsigned int)(int)(fcol.a * 255.0f); }
 inline Hw::cFcol::cFcol(const cUcol& ucol) { r = ucol.r / 255.0f; g = ucol.g / 255.0f; b = ucol.b / 255.0f; a = ucol.a / 255.0f; }
-inline Hw::cFcol &Hw::cFcol::operator=(const cUcol& ucol) { setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a); return *this; }
-inline Hw::cUcol &Hw::cUcol::operator=(const cFcol &fcol) { setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a); return *this; }
-inline Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const 
+inline Hw::cFcol& Hw::cFcol::operator=(const cUcol& ucol) { setRGBAU(ucol.r, ucol.g, ucol.b, ucol.a); return *this; }
+inline Hw::cUcol& Hw::cUcol::operator=(const cFcol& fcol) { setRGBAF(fcol.r, fcol.g, fcol.b, fcol.a); return *this; }
+inline Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const
 {
 	return cUcol(
 		min(255, r + (unsigned int)(fcol.r * 255)),
@@ -1285,7 +1291,7 @@ inline Hw::cUcol Hw::cUcol::operator+(const cFcol& fcol) const
 	);
 }
 
-inline Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const 
+inline Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const
 {
 	return cUcol(
 		max(0, r - (unsigned int)(fcol.r * 255)),
@@ -1295,7 +1301,7 @@ inline Hw::cUcol Hw::cUcol::operator-(const cFcol& fcol) const
 	);
 }
 
-inline Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const 
+inline Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const
 {
 	return cUcol(
 		min(255, (int)(r * fcol.r)),
@@ -1305,7 +1311,7 @@ inline Hw::cUcol Hw::cUcol::operator*(const cFcol& fcol) const
 	);
 }
 
-inline Hw::cUcol Hw::cUcol::operator/(const cFcol& fcol) const 
+inline Hw::cUcol Hw::cUcol::operator/(const cFcol& fcol) const
 {
 	return cUcol(
 		min(255, (int)((float)r / max(fcol.r, 1e-6f))),
@@ -1315,7 +1321,7 @@ inline Hw::cUcol Hw::cUcol::operator/(const cFcol& fcol) const
 	);
 }
 
-inline bool Hw::cUcol::operator==(const cFcol& fcol) const 
+inline bool Hw::cUcol::operator==(const cFcol& fcol) const
 {
 	return r == (unsigned int)(fcol.r * 255) &&
 		g == (unsigned int)(fcol.g * 255) &&
@@ -1323,12 +1329,12 @@ inline bool Hw::cUcol::operator==(const cFcol& fcol) const
 		a == (unsigned int)(fcol.a * 255);
 }
 
-inline bool Hw::cUcol::operator!=(const cFcol& fcol) const 
+inline bool Hw::cUcol::operator!=(const cFcol& fcol) const
 {
 	return !(*this == fcol);
 }
 
-inline Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const
 {
 	return cFcol(
 		r + ucol.r / 255.0f,
@@ -1338,7 +1344,7 @@ inline Hw::cFcol Hw::cFcol::operator+(const cUcol& ucol) const
 	);
 }
 
-inline Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const
 {
 	return cFcol(
 		r - ucol.r / 255.0f,
@@ -1348,7 +1354,7 @@ inline Hw::cFcol Hw::cFcol::operator-(const cUcol& ucol) const
 	);
 }
 
-inline Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const
 {
 	return cFcol(
 		r * ucol.r / 255.0f,
@@ -1358,7 +1364,7 @@ inline Hw::cFcol Hw::cFcol::operator*(const cUcol& ucol) const
 	);
 }
 
-inline Hw::cFcol Hw::cFcol::operator/(const cUcol& ucol) const 
+inline Hw::cFcol Hw::cFcol::operator/(const cUcol& ucol) const
 {
 	return cFcol(
 		r / max(ucol.r, 1u) / 255.0f,
@@ -1413,9 +1419,9 @@ public:
 
 	// remove copy, move and assign copy operators
 
-	cSingleton(const cSingleton<tC> &) = delete;
-	cSingleton(cSingleton<tC> &&) = delete;
-	cSingleton<tC> &operator=(const cSingleton<tC> &) = delete;
+	cSingleton(const cSingleton<tC>&) = delete;
+	cSingleton(cSingleton<tC>&&) = delete;
+	cSingleton<tC>& operator=(const cSingleton<tC>&) = delete;
 
 	static tC& GetInstance()
 	{
@@ -1500,7 +1506,7 @@ public:
 	cVec3 operator*(Hw::cMtx& mat);
 	cVec3& operator*=(Hw::cMtx& mat);
 
-	cVec3& operator=(const cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this;}
+	cVec3& operator=(const cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this; }
 	cVec3 operator+(const cVec3& lhs) { return cVec3(x + lhs.x, y + lhs.y, z + lhs.z); }
 	cVec3 operator+(const cVec3& lhs) const { return cVec3(x + lhs.x, y + lhs.y, z + lhs.z); }
 	cVec3& operator+=(const cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
@@ -1525,7 +1531,7 @@ public:
 	float length2D() { return sqrtf(powf(x, 2) + powf(z, 2)); }
 	cVec3 normalize() { float length = this->length(); return cVec3(x / length, y / length, z / length); }
 	float dot(const cVec3& lhs) { return x * lhs.x + y * lhs.y + z * lhs.z; }
-	cVec3 cross(const cVec3& lhs) { return cVec3(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x ); }
+	cVec3 cross(const cVec3& lhs) { return cVec3(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x); }
 };
 
 class Hw::cVec4
@@ -1577,23 +1583,23 @@ public:
 	bool operator==(const cVec4& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w; }
 	bool operator!=(const cVec4& rhs) const { return !(*this == rhs); }
 
-	float length() { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2) + powf(w, 2)); }
-	float length2D() { return sqrtf(powf(x, 2) + powf(z, 2)); }
+	float length() const { return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2) + powf(w, 2)); }
+	float length2D() const { return sqrtf(powf(x, 2) + powf(z, 2)); }
 	cVec4 normalize() { float length = this->length(); return cVec4(x / length, y / length, z / length, w / length); }
-	float dot(const cVec4& lhs) { return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w; }
-	cVec4 cross(const cVec4& lhs) { return cVec4(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x, 1.0f ); }
+	float dot(const cVec4& lhs) const { return x * lhs.x + y * lhs.y + z * lhs.z + w * lhs.w; }
+	cVec4 cross(const cVec4& lhs) { return cVec4(y * lhs.z - z * lhs.y, z * lhs.x - x * lhs.z, x * lhs.y - y * lhs.x, 1.0f); }
 };
 
 inline Hw::cVec3::cVec3(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
 inline void Hw::cVec3::setVec4(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
 inline Hw::cVec3& Hw::cVec3::operator=(const Hw::cVec4& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; return *this; }
-inline Hw::cVec3 Hw::cVec3::operator+(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator+(const Hw::cVec4& lhs) { return cVec4(x + lhs.x, y + lhs.y, z + lhs.z, 1.0f); }
 inline Hw::cVec3& Hw::cVec3::operator+=(const Hw::cVec4& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
-inline Hw::cVec3 Hw::cVec3::operator-(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator-(const Hw::cVec4& lhs) { return cVec4(x - lhs.x, y - lhs.y, z - lhs.z, 1.0f); }
 inline Hw::cVec3& Hw::cVec3::operator-=(const Hw::cVec4& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-inline Hw::cVec3 Hw::cVec3::operator*(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator*(const Hw::cVec4& lhs) { return cVec4(x * lhs.x, y * lhs.y, z * lhs.z, 1.0f); }
 inline Hw::cVec3& Hw::cVec3::operator*=(const Hw::cVec4& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-inline Hw::cVec3 Hw::cVec3::operator/(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+inline Hw::cVec3 Hw::cVec3::operator/(const Hw::cVec4& lhs) { return cVec4(x / lhs.x, y / lhs.y, z / lhs.z, 1.0f); }
 inline Hw::cVec3& Hw::cVec3::operator/=(const Hw::cVec4& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
 inline bool Hw::cVec3::operator==(const Hw::cVec4& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
 inline bool Hw::cVec3::operator!=(const Hw::cVec4& lhs) const { return !(*this == lhs); }
@@ -1601,13 +1607,13 @@ inline bool Hw::cVec3::operator!=(const Hw::cVec4& lhs) const { return !(*this =
 inline Hw::cVec4::cVec4(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; }
 inline void Hw::cVec4::setVec3(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; }
 inline Hw::cVec4& Hw::cVec4::operator=(const Hw::cVec3& lhs) { x = lhs.x; y = lhs.y; z = lhs.z; w = 1.0f; return *this; }
-inline Hw::cVec4 Hw::cVec4::operator+(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator+(const Hw::cVec3& lhs) { return cVec4(x + lhs.x, y + lhs.y, z + lhs.z, 1.0f); }
 inline Hw::cVec4& Hw::cVec4::operator+=(const Hw::cVec3& lhs) { x += lhs.x; y += lhs.y; z += lhs.z; return *this; }
-inline Hw::cVec4 Hw::cVec4::operator-(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator-(const Hw::cVec3& lhs) { return cVec4(x - lhs.x, y - lhs.y, z - lhs.z, 1.0f); }
 inline Hw::cVec4& Hw::cVec4::operator-=(const Hw::cVec3& lhs) { x -= lhs.x; y -= lhs.y; z -= lhs.z; return *this; }
-inline Hw::cVec4 Hw::cVec4::operator*(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator*(const Hw::cVec3& lhs) { return cVec4(x * lhs.x, y * lhs.y, z * lhs.z, 1.0f); }
 inline Hw::cVec4& Hw::cVec4::operator*=(const Hw::cVec3& lhs) { x *= lhs.x; y *= lhs.y; z *= lhs.z; return *this; }
-inline Hw::cVec4 Hw::cVec4::operator/(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
+inline Hw::cVec4 Hw::cVec4::operator/(const Hw::cVec3& lhs) { return cVec4(x / lhs.x, y / lhs.y, z / lhs.z, 1.0f); }
 inline Hw::cVec4& Hw::cVec4::operator/=(const Hw::cVec3& lhs) { x /= lhs.x; y /= lhs.y; z /= lhs.z; return *this; }
 inline bool Hw::cVec4::operator==(const Hw::cVec3& lhs) const { return x == lhs.x && y == lhs.y && z == lhs.z; }
 inline bool Hw::cVec4::operator!=(const Hw::cVec3& lhs) const { return !(*this == lhs); }
@@ -1627,9 +1633,9 @@ public:
 	union
 	{
 		float _11, _12, _13, _14,
-			  _21, _22, _23, _24,
-			  _31, _32, _33, _34,
-			  _41, _42, _43, _44;
+			_21, _22, _23, _24,
+			_31, _32, _33, _34,
+			_41, _42, _43, _44;
 
 		float m[4][4];
 		Hw::cVec4 r[4];
@@ -1683,7 +1689,7 @@ inline Hw::cVec4 Hw::cVec4::operator*(Hw::cMtx& mat)
 		x * mat._11 + y * mat._21 + z * mat._31 + w * mat._41,
 		x * mat._12 + y * mat._22 + z * mat._32 + w * mat._42,
 		x * mat._13 + y * mat._23 + z * mat._33 + w * mat._43,
-		x * mat._14 + y * mat._24 + z * mat._34 + w * mat._44 );		
+		x * mat._14 + y * mat._24 + z * mat._34 + w * mat._44);
 }
 inline Hw::cVec4& Hw::cVec4::operator*=(Hw::cMtx& mat) { *this = *this * mat; return *this; }
 
@@ -1714,7 +1720,7 @@ public:
 		eThreadId m_ThreadId;
 		cSemaphore m_hTaskWaitSemaphore;
 		cSemaphore m_hTaskDoneSemaphore;
-		void(__cdecl *m_func)(LPVOID reserved, void *arg);
+		void(__cdecl* m_func)(LPVOID reserved, void* arg);
 		void* m_parameter;
 	};
 
@@ -1799,41 +1805,41 @@ public:
 	class cWork;
 
 	int m_nWorkNum;
-	cWork *m_pWorkBuff;
-	cWork *m_pActiveWorkList;
-	cWork *m_pUnusingWorkList;
-	cWork *m_pCurrentWork;
+	cWork* m_pWorkBuff;
+	cWork* m_pActiveWorkList;
+	cWork* m_pUnusingWorkList;
+	cWork* m_pCurrentWork;
 	int m_nRotateTaskId;
-	cTaskManager *m_pPrevTaskManager;
+	cTaskManager* m_pPrevTaskManager;
 
 	cTaskManager()
 	{
 		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D6DF0))(this);
 	}
 
-	cWork *newWork(int task_prio)
+	cWork* newWork(int task_prio)
 	{
-		return ((cWork*(__thiscall *)(cTaskManager*, int))(shared::base + 0x9D7420))(this, task_prio);
+		return ((cWork * (__thiscall*)(cTaskManager*, int))(shared::base + 0x9D7420))(this, task_prio);
 	}
 
-	void deleteWork(cWork *pWork)
+	void deleteWork(cWork* pWork)
 	{
-		((void(__thiscall *)(cTaskManager*, cWork *))(shared::base + 0x9D74A0))(this, pWork);
+		((void(__thiscall*)(cTaskManager*, cWork*))(shared::base + 0x9D74A0))(this, pWork);
 	}
 
 	eTaskId getCurrentId()
 	{
-		return ((eTaskId(__thiscall *)(cTaskManager*))(shared::base + 0x9D7500))(this);
-	}
-	
-	void execute(void(__cdecl *rFunc)(LPVOID parameter), LPVOID pParam, int task_prio, const char* task_name)
-	{
-		((void(__thiscall*)(cTaskManager*, void(__cdecl *)(LPVOID), LPVOID, int, const char*))(shared::base + 0x9D7870))(this, rFunc, pParam, task_prio, task_name);
+		return ((eTaskId(__thiscall*)(cTaskManager*))(shared::base + 0x9D7500))(this);
 	}
 
-	void killWork(cWork *pWork)
+	void execute(void(__cdecl* rFunc)(LPVOID parameter), LPVOID pParam, int task_prio, const char* task_name)
 	{
-		((void(__thiscall *)(cTaskManager *, cWork*))(shared::base + 0x9D7F40))(this, pWork);
+		((void(__thiscall*)(cTaskManager*, void(__cdecl*)(LPVOID), LPVOID, int, const char*))(shared::base + 0x9D7870))(this, rFunc, pParam, task_prio, task_name);
+	}
+
+	void killWork(cWork* pWork)
+	{
+		((void(__thiscall*)(cTaskManager*, cWork*))(shared::base + 0x9D7F40))(this, pWork);
 	}
 
 	void cleanup()
@@ -1861,22 +1867,22 @@ public:
 		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8DA0))(this);
 	}
 
-	static inline void chain(void(__cdecl *rFunc)(LPVOID), LPVOID pParam)
+	static inline void chain(void(__cdecl* rFunc)(LPVOID), LPVOID pParam)
 	{
-		((void(__cdecl *)(void(__cdecl* )(LPVOID), LPVOID))(shared::base + 0x9D8950))(rFunc, pParam);
+		((void(__cdecl*)(void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8950))(rFunc, pParam);
 	}
 
-	static inline cTaskManager *getCurrentManager()
+	static inline cTaskManager* getCurrentManager()
 	{
-		return ((cTaskManager*(__cdecl *)())(shared::base + 0x9D6E10))();
+		return ((cTaskManager * (__cdecl*)())(shared::base + 0x9D6E10))();
 	}
 
-	static inline void setCurrentManager(cTaskManager *pManager)
+	static inline void setCurrentManager(cTaskManager* pManager)
 	{
-		((void(__cdecl *)(cTaskManager *))(shared::base + 0x9D6E20))(pManager);
+		((void(__cdecl*)(cTaskManager*))(shared::base + 0x9D6E20))(pManager);
 	}
 
-	static inline cTaskManager *&m_pCurrentTaskManager = *(cTaskManager**)(shared::base + 0x19D0564); // private: static class
+	static inline cTaskManager*& m_pCurrentTaskManager = *(cTaskManager**)(shared::base + 0x19D0564); // private: static class
 };
 
 class Hw::cTaskManager::cWork
@@ -1892,104 +1898,104 @@ public:
 		STATUS_KILL = 0x5
 	};
 
-	Hw::cTaskManager *m_pManager;
-	void (__cdecl *m_pFunc)(void *);
-	void *m_pParam;
+	Hw::cTaskManager* m_pManager;
+	void(__cdecl* m_pFunc)(void*);
+	void* m_pParam;
 	eTaskId m_TaskId;
 	int m_nTaskPrio;
-	const char *m_TaskName;
+	const char* m_TaskName;
 	eStatus m_Status;
 	int m_nSleepCount;
 	int m_nTaskStackSize;
 	cSemaphore m_SyncTaskStart;
 	cSemaphore m_SyncTaskStop;
-	cWork *m_pPrev;
-	cWork *m_pNext;
-	void (__cdecl *m_pTaskReport)(eStatus);
+	cWork* m_pPrev;
+	cWork* m_pNext;
+	void(__cdecl* m_pTaskReport)(eStatus);
 
-	void execute(void(__cdecl *rFunc)(LPVOID), LPVOID pParam, const char* task_name, eTaskId task_id)
+	void execute(void(__cdecl* rFunc)(LPVOID), LPVOID pParam, const char* task_name, eTaskId task_id)
 	{
-		((void(__thiscall *)(cWork*, void(__cdecl *)(LPVOID), LPVOID, const char*, eTaskId))(shared::base + 0x9D6E30))(this, rFunc, pParam, task_name, task_id);
+		((void(__thiscall*)(cWork*, void(__cdecl*)(LPVOID), LPVOID, const char*, eTaskId))(shared::base + 0x9D6E30))(this, rFunc, pParam, task_name, task_id);
 	}
 
-	void setTaskReport(void(__cdecl *rFunc)(eStatus))
+	void setTaskReport(void(__cdecl* rFunc)(eStatus))
 	{
-		((void(__thiscall *)(cWork *, void(__cdecl*)(eStatus)))(shared::base + 0x9D6E70))(this, rFunc);
+		((void(__thiscall*)(cWork*, void(__cdecl*)(eStatus)))(shared::base + 0x9D6E70))(this, rFunc);
 	}
 
 	BOOL isExit()
 	{
-		return ((BOOL(__thiscall *)(cWork*))(shared::base + 0x9D6E80))(this);
+		return ((BOOL(__thiscall*)(cWork*))(shared::base + 0x9D6E80))(this);
 	}
 
 	eTaskId getTaskId()
 	{
-		return ((eTaskId(__thiscall *)(cWork*))(shared::base + 0x9D6E90))(this);
+		return ((eTaskId(__thiscall*)(cWork*))(shared::base + 0x9D6E90))(this);
 	}
 
-	const char *getTaskName()
+	const char* getTaskName()
 	{
-		return ((const char*(__thiscall *)(cWork*))(shared::base + 0x9D6EA0))(this);
+		return ((const char* (__thiscall*)(cWork*))(shared::base + 0x9D6EA0))(this);
 	}
 
 	int getTaskPrio()
 	{
-		return ((int(__thiscall *)(cWork*))(shared::base + 0x9D6EB0))(this);
+		return ((int(__thiscall*)(cWork*))(shared::base + 0x9D6EB0))(this);
 	}
 
 	void setTaskPrio(int task_prio)
 	{
-		((void(__thiscall *)(cWork*, int))(shared::base + 0x9D6EC0))(this, task_prio);
+		((void(__thiscall*)(cWork*, int))(shared::base + 0x9D6EC0))(this, task_prio);
 	}
 
-	void chainWork(cWork *pPrev, cWork *pNext)
+	void chainWork(cWork* pPrev, cWork* pNext)
 	{
-		((void(__thiscall *)(cWork*, cWork*, cWork*))(shared::base + 0x9D6ED0))(this, pPrev, pNext);
+		((void(__thiscall*)(cWork*, cWork*, cWork*))(shared::base + 0x9D6ED0))(this, pPrev, pNext);
 	}
 
 	void unchainWork()
 	{
-		((void(__thiscall *)(cWork*))(shared::base + 0x9D6EF0))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D6EF0))(this);
 	}
 
-	cWork *getNextWork()
+	cWork* getNextWork()
 	{
-		return ((cWork*(__thiscall *)(cWork*))(shared::base + 0x9D6F20))(this);
+		return ((cWork * (__thiscall*)(cWork*))(shared::base + 0x9D6F20))(this);
 	}
 
 	BOOL startup(unsigned int stack_size, /* unused */ int __formal, cTaskManager* pManager)
 	{
-		return ((BOOL(__thiscall *)(cWork *, unsigned int, int, cTaskManager*))(shared::base + 0x9D7540))(this, stack_size, __formal, pManager);
+		return ((BOOL(__thiscall*)(cWork*, unsigned int, int, cTaskManager*))(shared::base + 0x9D7540))(this, stack_size, __formal, pManager);
 	}
 
 	void waitTaskStart()
 	{
-		((void(__thiscall *)(cWork *))(shared::base + 0x9D7590))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D7590))(this);
 	}
 
 	void sendTaskStart()
 	{
-		((void(__thiscall *)(cWork *))(shared::base + 0x9D75A0))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D75A0))(this);
 	}
 
 	void waitTaskStop()
 	{
-		((void(__thiscall *)(cWork*))(shared::base + 0x9D75B0))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D75B0))(this);
 	}
 
 	void sendTaskStop()
 	{
-		((void(__thiscall *)(cWork*))(shared::base + 0x9D75C0))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D75C0))(this);
 	}
 
 	void updateSleep()
 	{
-		((void(__thiscall *)(cWork*))(shared::base + 0x9D7910))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D7910))(this);
 	}
 
 	void kill()
 	{
-		((void(__thiscall *)(cWork *))(shared::base + 0x9D7950))(this);
+		((void(__thiscall*)(cWork*))(shared::base + 0x9D7950))(this);
 	}
 
 	void cleanup()
@@ -1997,9 +2003,9 @@ public:
 		((void(__thiscall*)(cWork*))(shared::base + 0x9D8000))(this);
 	}
 
-	void chain(void(__cdecl *rFunc)(LPVOID), LPVOID pParam)
+	void chain(void(__cdecl* rFunc)(LPVOID), LPVOID pParam)
 	{
-		((void(__thiscall *)(cWork*, void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8090))(this, rFunc, pParam);
+		((void(__thiscall*)(cWork*, void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8090))(this, rFunc, pParam);
 	}
 
 	void sleep(int count)
@@ -2017,40 +2023,40 @@ public:
 class Hw::cTexture
 {
 public:
-	void *m_Texture;
-	cTextureInstance *m_pTextureInstance;
+	void* m_Texture;
+	cTextureInstance* m_pTextureInstance;
 	int m_nTextureAmount;
 	int field_10;
 	int field_14;
-	void *m_TextureAttributes;
+	void* m_TextureAttributes;
 
 	cTexture()
 	{
-		((void(__thiscall *)(cTexture *))(shared::base + 0xB972C0))(this);
+		((void(__thiscall*)(cTexture*))(shared::base + 0xB972C0))(this);
 	}
 
 	virtual ~cTexture() {};
 
-	BOOL create(void *wtb)
+	BOOL create(void* wtb)
 	{
-		return ((BOOL(__thiscall *)(cTexture *, void *))(shared::base + 0xBA25D0))(this, wtb);
+		return ((BOOL(__thiscall*)(cTexture*, void*))(shared::base + 0xBA25D0))(this, wtb);
 	}
 
-	BOOL create(void *wta, void *wtp)
+	BOOL create(void* wta, void* wtp)
 	{
-		return ((BOOL(__thiscall *)(cTexture *, void *, void*))(shared::base + 0xBA4D00))(this, wta, wtp);
+		return ((BOOL(__thiscall*)(cTexture*, void*, void*))(shared::base + 0xBA4D00))(this, wta, wtp);
 	}
 
 	void reset()
 	{
-		((void(__thiscall *)(cTexture *))(shared::base + 0xB972F0))(this);
+		((void(__thiscall*)(cTexture*))(shared::base + 0xB972F0))(this);
 	}
 };
 
 class Hw::cTextureInstance
 {
 public:
-	IDirect3DTexture9 *m_Texture;
+	IDirect3DTexture9* m_Texture;
 	int field_8;
 	int field_C;
 	int field_10;
@@ -2099,19 +2105,19 @@ private:
 	int _padA4[3];
 public:
 
-	CameraProj() { CallMethod<0x812610, CameraProj *>(this); }
+	CameraProj() { CallMethod<0x812610, CameraProj*>(this); }
 	// non virtual destructor at 0x812450
 
 	virtual ~CameraProj() {};
 
-	void set(float nearZ, float farZ, float fovy) { CallMethod<0x9E4D60, CameraProj *, float, float, float>(this, nearZ, farZ, fovy); }
-	void updateProjMatrixPers() { CallMethod<0x9E5AA0, CameraProj *>(this); }
-	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { CallMethod<0x9E5B30, CameraProj *, const Hw::cMtx&, int>(this, mat, __formal); }
+	void set(float nearZ, float farZ, float fovy) { CallMethod<0x9E4D60, CameraProj*, float, float, float>(this, nearZ, farZ, fovy); }
+	void updateProjMatrixPers() { CallMethod<0x9E5AA0, CameraProj*>(this); }
+	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { CallMethod<0x9E5B30, CameraProj*, const Hw::cMtx&, int>(this, mat, __formal); }
 };
 
 VALIDATE_SIZE(Hw::CameraProj, 0xB0);
 
-class Hw::cCameraBase 
+class Hw::cCameraBase
 {
 public:
 	Hw::cMtx m_ViewMatrix;
@@ -2129,36 +2135,36 @@ private:
 	int _pad14C;
 public:
 
-	void initialize() { CallMethod<0x9E4EC0, cCameraBase *>(this); }
-	void movePos(const Hw::cVec4& pos) { CallMethod<0x9E4F20, cCameraBase *, const Hw::cVec4&>(this, pos); }
+	void initialize() { CallMethod<0x9E4EC0, cCameraBase*>(this); }
+	void movePos(const Hw::cVec4& pos) { CallMethod<0x9E4F20, cCameraBase*, const Hw::cVec4&>(this, pos); }
 	// Move according to the rotation vector, Z would be forward
-	void movePosFront(const Hw::cVec4& pos) { CallMethod<0x9E4FA0, cCameraBase *, const Hw::cVec4&>(this, pos); }
+	void movePosFront(const Hw::cVec4& pos) { CallMethod<0x9E4FA0, cCameraBase*, const Hw::cVec4&>(this, pos); }
 	// Move camera according to the Y rotation axis, Z is forward, it doesn't affect pitch at all
-	void movePosFrontY(const Hw::cVec4& pos) { CallMethod<0x9E5090, cCameraBase *, const Hw::cVec4&>(this, pos); }
-	void updateViewInverseMatrix() { CallMethod<0x9E5170, cCameraBase *>(this); }
-	void setViewMatrix(const Hw::cMtx& mat) { CallMethod<0x9E5180, cCameraBase *, const Hw::cMtx&>(this, mat); }
-	void updateTrans() { CallMethod<0x9E51B0, cCameraBase *>(this); }
-	void updateTarget() { CallMethod<0x9E5260, cCameraBase *>(this); }
-	void updateUp() { CallMethod<0x9E5310, cCameraBase *>(this); }
-	void updateRot() { CallMethod<0x9E5380, cCameraBase *>(this); }
-	void updateDist() { CallMethod<0x9E54E0, cCameraBase *>(this); }
-	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { CallMethod<0x9E5D10, cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, trans, target, up); }
-	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5DA0, cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float>(this, trans, rot, dist); }
-	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5E60, cCameraBase *, const Hw::cVec4&, const Hw::cVec4&, float>(this, target, rot, dist); }
-	void setTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F20, cCameraBase *, const Hw::cVec4&>(this, trans); }
-	void addTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F60, cCameraBase *, const Hw::cVec4&>(this, trans); }
-	void setTarget(const Hw::cVec4& target) { CallMethod<0x9E5FC0, cCameraBase *, const Hw::cVec4&>(this, target); }
-	void addTarget(const Hw::cVec4& target) { CallMethod<0x9E6000, cCameraBase *, const Hw::cVec4&>(this, target); }
-	void setUp(const Hw::cVec4& up) { CallMethod<0x9E6060, cCameraBase *, const Hw::cVec4&>(this, up); }
-	void setTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6090, cCameraBase *, const Hw::cVec4&>(this, rot); }
-	void addTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6120, cCameraBase *, const Hw::cVec4&>(this, rot); }
-	void setTransRot(const Hw::cVec4& rot) { CallMethod<0x9E61B0, cCameraBase *, const Hw::cVec4&>(this, rot); }
-	void addTransRot(const Hw::cVec4& rot) { CallMethod<0x9E6240, cCameraBase *, const Hw::cVec4&>(this, rot); }
-	void setTargetDist(float dist) { CallMethod<0x9E62D0, cCameraBase *, float>(this, dist); }
-	void addTargetDist(float dist, float min, float max) { CallMethod<0x9E62F0, cCameraBase *, float, float, float>(this, dist, min, max); }
-	void setTransDist(float dist) { CallMethod<0x9E6370, cCameraBase *, float>(this, dist); }
-	void addTransDist(float dist, float min, float max) { CallMethod<0x9E6390, cCameraBase *, float, float, float>(this, dist, min, max); }
-	void updateViewMatrix() { CallMethod<0x9E6410, cCameraBase *>(this); }
+	void movePosFrontY(const Hw::cVec4& pos) { CallMethod<0x9E5090, cCameraBase*, const Hw::cVec4&>(this, pos); }
+	void updateViewInverseMatrix() { CallMethod<0x9E5170, cCameraBase*>(this); }
+	void setViewMatrix(const Hw::cMtx& mat) { CallMethod<0x9E5180, cCameraBase*, const Hw::cMtx&>(this, mat); }
+	void updateTrans() { CallMethod<0x9E51B0, cCameraBase*>(this); }
+	void updateTarget() { CallMethod<0x9E5260, cCameraBase*>(this); }
+	void updateUp() { CallMethod<0x9E5310, cCameraBase*>(this); }
+	void updateRot() { CallMethod<0x9E5380, cCameraBase*>(this); }
+	void updateDist() { CallMethod<0x9E54E0, cCameraBase*>(this); }
+	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { CallMethod<0x9E5D10, cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, trans, target, up); }
+	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5DA0, cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, float>(this, trans, rot, dist); }
+	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5E60, cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, float>(this, target, rot, dist); }
+	void setTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F20, cCameraBase*, const Hw::cVec4&>(this, trans); }
+	void addTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F60, cCameraBase*, const Hw::cVec4&>(this, trans); }
+	void setTarget(const Hw::cVec4& target) { CallMethod<0x9E5FC0, cCameraBase*, const Hw::cVec4&>(this, target); }
+	void addTarget(const Hw::cVec4& target) { CallMethod<0x9E6000, cCameraBase*, const Hw::cVec4&>(this, target); }
+	void setUp(const Hw::cVec4& up) { CallMethod<0x9E6060, cCameraBase*, const Hw::cVec4&>(this, up); }
+	void setTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6090, cCameraBase*, const Hw::cVec4&>(this, rot); }
+	void addTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6120, cCameraBase*, const Hw::cVec4&>(this, rot); }
+	void setTransRot(const Hw::cVec4& rot) { CallMethod<0x9E61B0, cCameraBase*, const Hw::cVec4&>(this, rot); }
+	void addTransRot(const Hw::cVec4& rot) { CallMethod<0x9E6240, cCameraBase*, const Hw::cVec4&>(this, rot); }
+	void setTargetDist(float dist) { CallMethod<0x9E62D0, cCameraBase*, float>(this, dist); }
+	void addTargetDist(float dist, float min, float max) { CallMethod<0x9E62F0, cCameraBase*, float, float, float>(this, dist, min, max); }
+	void setTransDist(float dist) { CallMethod<0x9E6370, cCameraBase*, float>(this, dist); }
+	void addTransDist(float dist, float min, float max) { CallMethod<0x9E6390, cCameraBase*, float, float, float>(this, dist, min, max); }
+	void updateViewMatrix() { CallMethod<0x9E6410, cCameraBase*>(this); }
 };
 
 VALIDATE_SIZE(Hw::cCameraBase, 0x150);
@@ -2204,7 +2210,7 @@ public:
 
 struct Hw::RenderBufferHeapManager
 {
-	cPrimHeap *field_0;
+	cPrimHeap* field_0;
 	int field_4;
 	int field_8;
 	int field_C;
@@ -2303,7 +2309,7 @@ VALIDATE_SIZE(Hw::cShader, 0x28);
 class Hw::cVertexFormat
 {
 public:
-	IDirect3DVertexDeclaration9 *m_VertexDeclaration;
+	IDirect3DVertexDeclaration9* m_VertexDeclaration;
 	int m_UsageFlags;
 
 	virtual void dummyVM() {};
@@ -2319,9 +2325,9 @@ public:
 	~cUv() { u = v = 0.f; }
 
 	void setUV(float u, float v)
-	{ 
-		this->u = u; 
-		this->v = v; 
+	{
+		this->u = u;
+		this->v = v;
 	}
 };
 
@@ -2365,17 +2371,17 @@ public:
 	int field_8C;
 };
 
-class Hw::cPrimFT : public Hw::cOtWork{};
+class Hw::cPrimFT : public Hw::cOtWork {};
 
-class Hw::cPrimFTyuv : public Hw::cOtWork{};
+class Hw::cPrimFTyuv : public Hw::cOtWork {};
 
-class Hw::cPrimFV : public Hw::cOtWork{};
+class Hw::cPrimFV : public Hw::cOtWork {};
 
-class Hw::cPrimG : public Hw::cOtWork{};
+class Hw::cPrimG : public Hw::cOtWork {};
 
-class Hw::cPrimIF : public Hw::cOtWork{};
+class Hw::cPrimIF : public Hw::cOtWork {};
 
-class Hw::cPrimIFT : public Hw::cOtWork{};
+class Hw::cPrimIFT : public Hw::cOtWork {};
 
 class Hw::cRenderPredicate
 {
@@ -2384,31 +2390,31 @@ public:
 	virtual ~cRenderPredicate() {};
 };
 
-class Hw::cShaderPreset : public Hw::cShader{};
+class Hw::cShaderPreset : public Hw::cShader {};
 
-class Hw::cShaderCharacter : public Hw::cShaderPreset{};
+class Hw::cShaderCharacter : public Hw::cShaderPreset {};
 
-class Hw::cShaderPF : public Hw::cShaderPreset{};
+class Hw::cShaderPF : public Hw::cShaderPreset {};
 
-class Hw::cShaderPFT : public Hw::cShaderPreset{};
+class Hw::cShaderPFT : public Hw::cShaderPreset {};
 
-class Hw::cShaderPFTyuv : public Hw::cShaderPreset{};
+class Hw::cShaderPFTyuv : public Hw::cShaderPreset {};
 
-class Hw::cShaderPFTyuva : public Hw::cShaderPreset{};
+class Hw::cShaderPFTyuva : public Hw::cShaderPreset {};
 
-class Hw::cShaderPFV : public Hw::cShaderPreset{};
+class Hw::cShaderPFV : public Hw::cShaderPreset {};
 
-class Hw::cShaderPG : public Hw::cShaderPreset{};
+class Hw::cShaderPG : public Hw::cShaderPreset {};
 
-class Hw::cVertexFormatP : public Hw::cVertexFormat{};
+class Hw::cVertexFormatP : public Hw::cVertexFormat {};
 
-class Hw::cVertexFormatPG : public Hw::cVertexFormat{};
+class Hw::cVertexFormatPG : public Hw::cVertexFormat {};
 
-class Hw::cVertexFormatPT : public Hw::cVertexFormat{};
+class Hw::cVertexFormatPT : public Hw::cVertexFormat {};
 
-class Hw::cVertexFormatPV : public Hw::cVertexFormat{};
+class Hw::cVertexFormatPV : public Hw::cVertexFormat {};
 
-class Hw::cZTexture : public Hw::cTargetTexture{};
+class Hw::cZTexture : public Hw::cTargetTexture {};
 
 class cFilterShaderCopyTex : public Hw::cShader
 {
@@ -2425,7 +2431,7 @@ public:
 	int field_4C;
 };
 
-class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex{};
+class cFilterShaderCopyTexAlp : public cFilterShaderCopyTex {};
 
 template <typename T>
 class Hw::cFixedVector
@@ -2594,15 +2600,15 @@ public:
 	class const_iterator
 	{
 	protected:
-		cTag *m_pTag;
+		cTag* m_pTag;
 	public:
 
-		const_iterator(cTag *pTag)
+		const_iterator(cTag* pTag)
 		{
 			m_pTag = pTag;
 		}
 
-		const_iterator(const const_iterator &it)
+		const_iterator(const const_iterator& it)
 		{
 			m_pTag = it.m_pTag;
 		}
@@ -2635,7 +2641,7 @@ public:
 			return *this;
 		}
 
-		bool operator==(const const_iterator &other)
+		bool operator==(const const_iterator& other)
 		{
 			return m_pTag == other.m_pTag;
 		}
@@ -2645,7 +2651,7 @@ public:
 			return !(*this == other);
 		}
 
-		tC &operator*() const
+		tC& operator*() const
 		{
 			return m_pTag->m_value;
 		}
@@ -2674,12 +2680,12 @@ public:
 			this->m_pTag = it.m_pTag;
 		}
 
-		iterator(cTag *pTag)
+		iterator(cTag* pTag)
 		{
 			this->m_pTag = pTag;
 		}
 
-		iterator(const const_iterator &it)
+		iterator(const const_iterator& it)
 		{
 			this->m_pTag = it.m_pTag;
 		}
@@ -2689,7 +2695,7 @@ public:
 			this->m_pTag = nullptr;
 		}
 
-		iterator &operator=(const iterator& it)
+		iterator& operator=(const iterator& it)
 		{
 			this->m_pTag = it.m_pTag;
 
@@ -2701,7 +2707,7 @@ public:
 			return this->m_pTag->m_value;
 		}
 
-		tC *operator->()
+		tC* operator->()
 		{
 			return &this->m_pTag->m_value;
 		}
@@ -2740,12 +2746,12 @@ public:
 		destroy();
 	}
 
-	BOOL create(int capacity, Hw::cHeap &allocator)
+	BOOL create(int capacity, Hw::cHeap& allocator)
 	{
 		if (m_pAllocated)
 			return FALSE;
 
-		m_pAllocated = (cTag*)allocator.alloc(sizeof(cTag) * capacity + sizeof(cTag), 32, Hw::HW_ALLOC_VIRTUAL, 0);
+		m_pAllocated = (cTag*)allocator.alloc(sizeof(cTag) * capacity + sizeof(cTag));
 		if (m_pAllocated)
 		{
 			m_Capacity = capacity;
@@ -2777,7 +2783,7 @@ public:
 		}
 	}
 
-	iterator insert(const_iterator &where, const tC& element)
+	iterator insert(const_iterator& where, const tC& element)
 	{
 		cTag* free = m_FreeBegin;
 		if (m_FreeBegin == npos)
@@ -2831,7 +2837,7 @@ public:
 		return insert(m_UsedEnd, element);
 	}
 
-	iterator erase(iterator &it)
+	iterator erase(iterator& it)
 	{
 		cTag* prev = it.m_pTag->m_prev;
 		cTag* next = it.m_pTag->m_next;
@@ -2900,7 +2906,7 @@ public:
 	}
 
 private:
-	void chain(const_iterator &what, iterator& it)
+	void chain(const_iterator& what, iterator& it)
 	{
 		cTag* prev = what->m_pTag;
 		cTag* next = prev->m_next;
@@ -2912,7 +2918,7 @@ private:
 		if (next) next->m_prev = it->m_pTag;
 	}
 
-	iterator unchain(iterator &it)
+	iterator unchain(iterator& it)
 	{
 		cTag* prev = it.m_pTag->m_prev;
 		cTag* next = it.m_pTag->m_next;
@@ -2955,7 +2961,7 @@ private:
 
 	iterator createIterator()
 	{
-		iterator &free = m_FreeBegin;
+		iterator& free = m_FreeBegin;
 		if (free == npos)
 			return npos;
 
@@ -2967,7 +2973,7 @@ private:
 		return free;
 	}
 
-	void releaseIterator(iterator &it)
+	void releaseIterator(iterator& it)
 	{
 		if (it == npos)
 			return;
@@ -2976,8 +2982,8 @@ private:
 
 		unchain(it);
 
-		tag->m_next = m_FreeBegin.m_pTag; 
-		tag->m_prev = nullptr;         
+		tag->m_next = m_FreeBegin.m_pTag;
+		tag->m_prev = nullptr;
 		if (m_FreeBegin != npos)
 			m_FreeBegin.m_pTag->m_prev = tag;
 
@@ -2997,7 +3003,7 @@ class Hw::cExpandableVector
 {
 public:
 	int field_0;
-	tC *m_vector;
+	tC* m_vector;
 	size_t m_capacity;
 	size_t m_size;
 	BOOL m_ArrayInitialized;
@@ -3012,7 +3018,7 @@ public:
 		m_ArrayInitialized = FALSE;
 	};
 
-	cExpandableVector(tHeapBinder* allocator) : m_Allocator(allocator) 
+	cExpandableVector(tHeapBinder* allocator) : m_Allocator(allocator)
 	{
 		field_0 = 0;
 		m_vector = nullptr;
@@ -3107,7 +3113,7 @@ public:
 		size_t index = &element - m_vector;
 
 		if (index >= m_capacity) //< Invalid element for vector
-			return; 
+			return;
 
 		for (tC* elem = m_vector + index; elem != m_vector + m_size - 1; elem++)
 			*elem = elem[1];
@@ -3250,7 +3256,7 @@ public:
 	{
 	public:
 		tC m_value;
-		cTag* m_pPrev, *m_pNext;
+		cTag* m_pPrev, * m_pNext;
 
 		cTag()
 		{
@@ -3399,9 +3405,9 @@ public:
 	int field_4;
 	cList m_UsedList;
 	int field_14;
-	cTag *m_pAllocated;
+	cTag* m_pAllocated;
 	int m_Capacity;
-	Hw::cHeap *m_pHeap;
+	Hw::cHeap* m_pHeap;
 	int field_24;
 	cList m_QueueUseList;
 	int field_34;
@@ -3445,6 +3451,6 @@ public:
 inline Hw::cTaskManager& g_MainTaskManager = *(Hw::cTaskManager*)(shared::base + 0x17E9164);
 inline Hw::cKeyboardState& g_Keyboard = *(Hw::cKeyboardState*)(shared::base + 0x177B7C0);
 inline Hw::cMouseState& g_Mouse = *(Hw::cMouseState*)(shared::base + 0x177B798);
-inline Hw::cPadState &g_dbPad = *(Hw::cPadState*)(shared::base + 0x177BA90);
+inline Hw::cPadState& g_dbPad = *(Hw::cPadState*)(shared::base + 0x177BA90);
 
 VALIDATE_SIZE(Hw::cHeap, 0x40);

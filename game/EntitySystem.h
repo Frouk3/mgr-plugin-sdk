@@ -65,15 +65,8 @@ struct EntitySystem
 
 	Entity* createEntity(const char* name, eObjID objID, ObjectInfo* pObjInfo) { return ReturnCallMethod<Entity*, 0x682090, EntitySystem*, const char*, eObjID, ObjectInfo*>(this, name, objID, pObjInfo); }
 
-	EntitySystem(void* a2)
-	{
-		((void(__thiscall*)(EntitySystem*, void*))(shared::base + 0x682230))(this, a2);
-	}
-
-	~EntitySystem()
-	{
-		((void(__thiscall*)(EntitySystem*))(shared::base + 0x6821A0))(this);
-	}
+	EntitySystem(void* a2) { CallMethod<0x682230, EntitySystem*, void*>(this, a2); }
+	~EntitySystem() { CallMethod<0x6821A0, EntitySystem*>(this); }
 
 	// we don't have default construction
 	EntitySystem() = delete;
@@ -156,10 +149,7 @@ struct EntitySystem::SetInfo
 	float m_ScoutViewDist;
 	int field_114;
 
-	SetInfo()
-	{
-		((void(__thiscall*)(EntitySystem::SetInfo*))(shared::base + 0xEC5C0))(this);
-	};
+	SetInfo() { CallMethod<0xEC5C0, EntitySystem::SetInfo*>(this); }
 };
 
 struct EntitySystem::EntityInfo
@@ -177,10 +167,7 @@ struct EntitySystem::EntityInfo
 	void *m_pWtbFile;
 	void *m_pParam;
 
-	EntityInfo()
-	{
-		((void(__thiscall*)(EntitySystem::EntityInfo*))(shared::base + 0x67CA40))(this);
-	}
+	EntityInfo() { CallMethod<0x67CA40, EntitySystem::EntityInfo*>(this); }
 };
 
 struct EntitySystem::ObjectInfo
@@ -197,10 +184,7 @@ struct EntitySystem::ObjectInfo
 	void *m_pModel;
 	int field_7C;
 
-	ObjectInfo()
-	{
-		((void(__thiscall*)(EntitySystem::ObjectInfo*))(shared::base + 0xB190))(this);
-	}
+	ObjectInfo() { CallMethod<0xB190, EntitySystem::ObjectInfo*>(this); }
 };
 
 struct Entity::ConstructInfo

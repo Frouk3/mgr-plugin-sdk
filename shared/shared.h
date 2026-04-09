@@ -35,6 +35,9 @@ public:
 #ifdef SHARED_USE_EX_FUNCS
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
+		if (!*(bool*)(shared::base + 0x19D509C)) // if not foreground
+			return false;
+
 		if (!vKey) // Might get true if controller is connected
 			return false;
 
@@ -63,10 +66,13 @@ public:
 #else
 	static inline bool IsKeyPressed(int vKey, bool bRepeat = true)
 	{
+		if (!*(bool*)(shared::base + 0x19D509C)) // if not foreground
+			return false;
+
 		if (!vKey)
 			return false;
 
-		bool isKeyDown = GetAsyncKeyState(vKey) & 0x8000;
+		bool isKeyDown = GetKeyState(vKey) & 0x80;
 
 		bool condition = isKeyDown && !(aPressedKeys[vKey >> 5] & (1 << (vKey & 0x1F)));
 
