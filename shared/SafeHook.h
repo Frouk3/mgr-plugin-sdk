@@ -460,7 +460,7 @@ namespace SafeHook
 
 			scoped_unprotect unprotect(_address, orig_bytes_coverup);
 
-			trampoline = (unsigned char*)g_pageController.allocate(orig_bytes_coverup + 5, 0x100); // the trampoline will contain the original bytes and a jmp back to the original function, so we need orig_bytes_coverup + 5 bytes of space
+			trampoline = (unsigned char*)g_pageController.allocate(orig_bytes_coverup + 10, 0x100); // the trampoline will contain the original bytes and a jmp back to the original function, so we need orig_bytes_coverup + 10 bytes of space
 
 			if (trampoline)
 			{
@@ -472,20 +472,20 @@ namespace SafeHook
 					case 0xE8: // sizeof - 5, already satisfies copy and fix for call instruction
 					{
 						size_t dest = GET_BRANCH_DESTINATION(opcode);
-						trampoline[i] = 0xE8;
-						*(DWORD*)(trampoline + i + 1) = MAKE_RELATIVE_OFFSET((size_t)(trampoline + i), dest);
+						trampoline[i + 5] = 0xE8;
+						*(DWORD*)(trampoline + i + 6) = MAKE_RELATIVE_OFFSET((size_t)(trampoline + i + 5), dest);
 						return;
 					}
 					case 0xE9: // sizeof - 5, already satisfies copy and fix for jmp instruction
 					{
 						size_t dest = GET_BRANCH_DESTINATION(opcode);
 
-						trampoline[i] = 0xE9;
-						*(DWORD*)(trampoline + i + 1) = MAKE_RELATIVE_OFFSET((size_t)(trampoline + i), dest);
+						trampoline[i + 5] = 0xE9;
+						*(DWORD*)(trampoline + i + 6) = MAKE_RELATIVE_OFFSET((size_t)(trampoline + i + 5), dest);
 						return; // Not even sure if our mid hook gonna execute from here, leads to a dead end
 					}
 					default:
-						trampoline[i] = *opcode;
+						trampoline[i + 5] = *opcode; // skip the first 5 bytes, we would need to make a call for the hook
 						break;
 					}
 				}
@@ -519,7 +519,7 @@ namespace SafeHook
 				*(DWORD*)(ptr + 1) = MAKE_RELATIVE_OFFSET(_address, (size_t)trampoline);
 			}
 
-			new(&unsafe_hook) MidAsmHookUnsafe((size_t)(trampoline + orig_bytes_coverup), hook_func); // the cave is right after the original bytes
+			new(&unsafe_hook) MidAsmHookUnsafe((size_t)(trampoline), hook_func); // the cave is right after the original bytes
 
 			{
 				unsigned char* ptr = (unsigned char*)trampoline + orig_bytes_coverup + 5;
@@ -529,8 +529,8 @@ namespace SafeHook
 			}
 
 			// basically
-			// [original instructions]
 			// call hook_wrapper
+			// [original instructions]
 			// jmp original_func + original_instructions_size
 #endif
 		}
