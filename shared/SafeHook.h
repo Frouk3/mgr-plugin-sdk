@@ -301,7 +301,7 @@ namespace SafeHook
 		}
 	}
 #endif
-	// @brief Can be used in cave or in mid-function hooking. The address template parameter is used to ensure that each hook has its own unique hook function, which is necessary for mid-function hooking.
+	// @brief Can be used in cave or in mid-function hooking.
 	class MidAsmHookUnsafe
 	{
 	private:
@@ -407,35 +407,49 @@ namespace SafeHook
 		MidAsmHookUnsafe unsafe_hook;
 		unsigned char* trampoline = nullptr;
 
+		#define CHECK_ERROR(disasm) if (disasm.flags & F_ERROR) { if (disasm.flags & F_ERROR_LENGTH) throw "Length error occurred!"; else if (disasm.flags & F_ERROR_OPCODE) throw "Invalid opcode error occurred!"; else if (disasm.flags & F_ERROR_LOCK) throw "Lock error occurred!"; else if (disasm.flags & F_ERROR_OPERAND) throw "Operand error occurred!"; else throw "Unknown disassembly error occurred!"; }
+
+		size_t getBranchDestinationForJmp(size_t address) // all types of jmps
+		{
+			do 
+			{
+				hde32s disasm = { 0 };
+				unsigned char *opcode = (unsigned char*)address;
+				bool isJmpOpcode = *opcode == 0xEB || *opcode == 0xE9 || /* (*opcode == 0xFF && (opcode[1] & 0x38) == 0x20) ||*/ (*opcode >= 0x70 && *opcode <= 0x7F) ||
+								(*opcode == 0x0F && opcode[1] >= 0x80 && opcode[1] <= 0x8F) ||  // jcc near
+								*opcode == 0xE8 || (*opcode == 0x0F && opcode[1] >= 0x80 && opcode[1] <= 0x8F); // call near and jcc
+
+				if (!isJmpOpcode)
+					throw "Not a jump instruction!";
+
+				size_t instr_size = hde32_disasm((void*)address, &disasm);
+				
+				CHECK_ERROR(disasm);
+				switch (instr_size - 1) 
+				{
+				case 1: // short jump instructions
+					return address + instr_size + (char)disasm.imm.imm8;
+				case 2:
+					if (*opcode == 0xEB) // jmp short
+						return address + instr_size + (char)disasm.imm.imm8;
+					else // jcc short
+						return address + instr_size;
+				case 4:
+					if (*opcode == 0xE9) // jmp near
+						return address + instr_size + disasm.imm.imm32;
+					else if (*opcode == 0xE8) // call near, we should return the address after the call instruction, so that the hook can call the original function properly
+						return address + instr_size;
+					else // jcc near
+						return address + instr_size;
+				}
+
+			} while(0);
+		}
+
 		// Try to find a place to inject the trampoline
 		// You cannot just put a trampoline in the middle of instruction and expect it to work
 		void handleTrampoline(size_t _address, size_t &orig_size)
 		{
-			do
-			{
-				unsigned char* opcode = (unsigned char*)_address;
-				switch (*opcode)
-				{
-				case 0xEB: // short jmp
-				case 0x74: // jz
-				case 0x75: // jnz
-				case 0x70: // jo
-				case 0x71: // jno
-				case 0x72: // jc
-				case 0x73: // jnc
-				case 0x7C: // jl
-				case 0x7D: // jge
-				case 0x7E: // jle
-				case 0x7F: // jg
-				case 0xE9: // near jmp
-					throw "Jump opcodes with rel32, rel16 and rel8 are not supported by a default. Find a proper place to make injection."; 
-					// not supported because we can't actually do shit here, the time we create a trampoline, the time it will literally ignore the trampoline itself
-					// Or unless we just put it after our trampoline, then maybe it'll be something good
-					// TODO: Add support for JMP instructions
-				default:
-					break;
-				}
-			} while (0);
 			size_t orig_bytes_coverup = 0;
 
 			hde32s disasm = { 0 };
@@ -443,19 +457,7 @@ namespace SafeHook
 			while (orig_bytes_coverup < 5) // we need at least 5 bytes to place a jmp instruction, so if the first instruction is smaller than 5 bytes, we need to cover the next instruction(s) until we have enough bytes
 			{
 				orig_bytes_coverup += hde32_disasm((void*)(_address + orig_bytes_coverup), &disasm);
-				if (disasm.flags & F_ERROR) // just make sure to inform
-				{
-					if (disasm.flags & F_ERROR_OPCODE)
-						throw "Opcode error occured!";
-					else if (disasm.flags & F_ERROR_LENGTH)
-						throw "Length error occured!";
-					else if (disasm.flags & F_ERROR_LOCK)
-						throw "Lock error occured!";
-					else if (disasm.flags & F_ERROR_OPERAND)
-						throw "Operand error occured!";
-					else
-						throw "Unknown error occured during disassembly!";
-				}
+				CHECK_ERROR(disasm);
 			}
 
 			scoped_unprotect unprotect(_address, orig_bytes_coverup);
@@ -467,22 +469,26 @@ namespace SafeHook
 				for (int i = 0; i < orig_bytes_coverup; i++)
 				{
 					unsigned char* opcode = (unsigned char*)_address + i;
+					size_t dest = 0;
+					bool isJmpOpcode = *opcode == 0xEB || *opcode == 0xE9 || /*(*opcode == 0xFF && (opcode[1] & 0x38) == 0x20) // reg jmp cannot be handled, unless just to copy ||*/ (*opcode >= 0x70 && *opcode <= 0x7F) ||
+								(*opcode == 0x0F && opcode[1] >= 0x80 && opcode[1] <= 0x8F) ||  // jcc near
+								*opcode == 0xE8 || (*opcode == 0x0F && opcode[1] >= 0x80 && opcode[1] <= 0x8F); // call near and jcc
+					if (isJmpOpcode)
+						dest = getBranchDestinationForJmp((size_t)opcode);
 					switch (*opcode)
 					{
 					case 0xE8: // sizeof - 5, already satisfies copy and fix for call instruction
 					{
-						size_t dest = GET_BRANCH_DESTINATION(opcode);
+						size_t dest = GET_BRANCH_DESTINATION((size_t)opcode);
 						trampoline[i + 5] = 0xE8;
 						*(DWORD*)(trampoline + i + 6) = MAKE_RELATIVE_OFFSET((size_t)(trampoline + i + 5), dest);
 						return;
 					}
 					case 0xE9: // sizeof - 5, already satisfies copy and fix for jmp instruction
 					{
-						size_t dest = GET_BRANCH_DESTINATION(opcode);
-
 						trampoline[i + 5] = 0xE9;
 						*(DWORD*)(trampoline + i + 6) = MAKE_RELATIVE_OFFSET((size_t)(trampoline + i + 5), dest);
-						return; // Not even sure if our mid hook gonna execute from here, leads to a dead end
+						return;
 					}
 					default:
 						trampoline[i + 5] = *opcode; // skip the first 5 bytes, we would need to make a call for the hook
@@ -546,6 +552,7 @@ namespace SafeHook
 			// unsafe_hook will automatically destruct itself
 		}
 	};
+	#undef CHECK_ERROR
 }
 
 #undef MAX_BYTES
