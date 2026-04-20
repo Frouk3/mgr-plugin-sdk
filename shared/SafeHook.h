@@ -628,96 +628,34 @@ do { \
 			this->trampoline = trampoline;
 			if (trampoline)
 			{
+				trampoline += 5;
 				scoped_unprotect unprotect(_address, orignal_size);
 
-				for (size_t i = 0; i < orignal_size; i++)
+				disasm = { 0 };
+				size_t offset = 0;
+				while (offset < orignal_size)
 				{
-					unsigned char* opcode = (unsigned char*)(_address + i);
-					unsigned char* pTrampBuffer = trampoline + i + 5; // +5 just to give space for the call
-					if (*opcode == 0xE8 || *opcode == 0xE9) // if it's a relative jmp or call, we need to fix the offset in the trampoline
+					size_t instr_size = HDE_DISASM((void*)(_address + offset), &disasm);
+					CHECK_ERROR(disasm);
+					memcpy(trampoline + offset, (void*)(_address + offset), instr_size);
+					if (disasm.flags & F_RELATIVE) // if the instruction has a relative offset, we need to fix it in the trampoline
 					{
 						size_t dest = 0;
-						dest = getBranchDestinationForJmp((size_t)opcode);
-						if (dest != 0)
-						{
-							size_t offset_in_original = opcode - (unsigned char*)_address;
-							size_t offset_in_trampoline = pTrampBuffer - (unsigned char*)_address + offset_in_original;
-							if (dest >= _address && dest < _address + orignal_size) // if the destination is inside the original instructions, we need to fix it to point to the trampoline
-								dest = (size_t)pTrampBuffer + (dest - _address);
-							else
-								dest = dest;
+						if (disasm.flags & F_IMM8)
+							dest = _address + offset + instr_size + (char)disasm.imm.imm8;
+						else if (disasm.flags & F_IMM16)
+							dest = _address + offset + instr_size + (short)disasm.imm.imm16;
+						else if (disasm.flags & F_IMM32)
+							dest = _address + offset + instr_size + disasm.imm.imm32;
+						else
+							throw "Relative instruction without immediate value!";
 
-							if (*opcode == 0xE8) // call
-							{
-								MAKE_CALL(pTrampBuffer, dest);
-							}
-							else // jmp
-							{
-								MAKE_JMP(pTrampBuffer, dest);
-							}
-							i += 4; // skip the rest of the instruction since we already wrote it in the trampoline
-						}
+						size_t offset_in_trampoline = ((size_t)trampoline - _address) + offset;
+						size_t new_offset = dest - (size_t)(trampoline + offset);
+						
+						*(DWORD*)(trampoline + offset + 1) = (DWORD)new_offset;
 					}
-					else if ((*opcode >= 0x74 && *opcode <= 0x7F) || *opcode == 0xEB || (*opcode == 0xFF && (opcode[1] == 0x15 || opcode[1] == 0x25)) || (*opcode == 0x0F && (opcode[1] >= 0x80 || opcode[1] <= 0x8F)))
-					{
-						// let's handle that too
-						size_t dest = 0;
-						dest = getBranchDestinationForJmp((size_t)opcode);
-						if (dest != 0)
-						{
-							size_t offset_in_original = opcode - (unsigned char*)_address;
-							size_t offset_in_trampoline = pTrampBuffer - (unsigned char*)_address + offset_in_original;
-
-							if (dest >= _address && dest < _address + orignal_size) // if the destination is inside the original instructions, we need to fix it to point to the trampoline
-								dest = (size_t)pTrampBuffer + (dest - _address);
-							else
-								dest = dest;
-
-							if (*opcode == 0xEB || (*opcode >= 0x74 && *opcode <= 0x7F)) // short jmp
-							{
-								if (*opcode == 0xEB)
-								{
-									MAKE_JMP(pTrampBuffer, dest);
-									trampoline += 5;
-								}
-								else // jcc
-								{
-									// we need to convert short jcc to near jcc, since the trampoline may be far from the original instructions
-									*pTrampBuffer = 0x0F; // escape opcode for near jcc
-									*(pTrampBuffer + 1) = (*opcode & 0x0F) + 0x80; // convert short jcc to near jcc
-									*(size_t*)(pTrampBuffer + 2) = MAKE_RELATIVE_OFFSET(pTrampBuffer, dest); // write the relative offset to the destination
-									trampoline += 6; // move the trampoline pointer to account for the new instruction size
-								}
-								i += 1;
-							}
-							else if (*opcode == 0xFF && (opcode[1] == 0x15 || opcode[1] == 0x25)) // jmp/call dword ptr [addr]
-							{
-								unsigned char* ptr = pTrampBuffer;
-								if (*opcode == 0xFF && opcode[1] == 0x15) // call
-									*(ptr++) = 0xFF, * (ptr++) = 0x15;
-								else // jmp
-									*(ptr++) = 0xFF, * (ptr++) = 0x25;
-								*(DWORD*)ptr = (DWORD)dest;
-								i += 5; // skip the rest of the instruction since we already wrote it in the trampoline
-							}
-							else if (*opcode == 0x0F && (opcode[1] >= 0x80 || opcode[1] <= 0x8F)) // jcc near
-							{
-								unsigned char* ptr = pTrampBuffer;
-								*(ptr++) = 0x0F;
-								*(ptr++) = opcode[1];
-								MAKE_RELATIVE_OFFSET(ptr, dest);
-								i += 6; // skip the rest of the instruction since we already wrote it in the trampoline
-							}
-							else
-							{
-								*pTrampBuffer = *opcode; // copy the original instruction to the trampoline without any changes
-							}
-						}
-					}
-					else
-					{
-						*pTrampBuffer = *opcode; // copy the original instruction to the trampoline without any changes
-					}
+					offset += instr_size;
 				}
 			}
 			orig_size = orignal_size;
