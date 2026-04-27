@@ -66,7 +66,7 @@ namespace SafeHook
 		0x9D,											// popfq
 		0xC3,											// ret
 	};
-	
+
 #else
 	static inline unsigned char asm_data[] =
 	{
@@ -292,10 +292,72 @@ do { \
 		float f32;
 	} REG;
 
-	typedef struct
+	typedef struct FPUREG
 	{
-		double f;
-		short tag;
+	private: // we shouldn't be really exposed to "internals" so let's just hide it and provide a way to convert to/from double, which is what most people would want to use
+		unsigned long long Mantissa;
+		unsigned short ExponentSign;
+		char Reserved[6];
+
+	private:
+		double toDouble() const
+		{
+			unsigned short exp = ExponentSign & 0x7FFF;
+			int sign = ExponentSign & 0x8000 ? -1 : 1;
+			unsigned long long mantissa = Mantissa;
+
+			if (exp == 0 && mantissa == 0)
+				return 0.0 * sign;
+
+			int realExp = exp - 16383; // 16383 is the bias for 80-bit extended precision
+
+			double fraction = (double)mantissa / (double)(1ULL << 63); // The mantissa is effectively a fixed-point number with an implicit leading 1, so we divide by 2^63 to get the fractional part
+
+			return sign * ldexp(fraction, realExp); // ldexp is used to compute fraction * 2^realExp efficiently and accurately
+		}
+
+		void setDouble(double x)
+		{
+			memset(this, 0, sizeof(FPUREG));
+
+			if (x == 0.0)
+			{
+				if (signbit(x))
+					ExponentSign = 0x8000;
+
+				return;
+			}
+
+			int exp;
+
+			double frac = frexp(abs(x), &exp); // breaks x into its binary significand (frac) and an integral exponent for 2 (exp), such that x = frac * 2^exp
+
+			frac *= 2.0;
+			exp -= 1;
+
+			uint16_t sign = signbit(x) ? 0x8000 : 0;
+			uint16_t biasedExp = (uint16_t)(exp + 16383); // add the bias for 80-bit extended precision
+			ExponentSign = sign | biasedExp;
+
+			Mantissa = (unsigned long long)(frac * (double)(1ULL << 63)); // convert the fractional part to the fixed-point representation used in the mantissa
+		}
+	public:
+		operator double() const { return toDouble(); }
+		// operator float() const { return (float)toDouble(); } // let's prefer it double for better precision, but you can add this if you want
+		
+		FPUREG() : Mantissa(0), ExponentSign(0) {}
+		FPUREG(double x) { setDouble(x); }
+
+		FPUREG& operator=(double x) { setDouble(x); return *this; }
+		FPUREG& operator*=(double x) { setDouble(toDouble() * x); return *this; }
+		FPUREG& operator/=(double x) { setDouble(toDouble() / x); return *this; }
+		FPUREG& operator+=(double x) { setDouble(toDouble() + x); return *this; }
+		FPUREG& operator-=(double x) { setDouble(toDouble() - x); return *this; }
+
+		FPUREG operator*(double x) const { FPUREG result; result.setDouble(toDouble() * x); return result; }
+		FPUREG operator/(double x) const { FPUREG result; result.setDouble(toDouble() / x); return result; }
+		FPUREG operator+(double x) const { FPUREG result; result.setDouble(toDouble() + x); return result; }
+		FPUREG operator-(double x) const { FPUREG result; result.setDouble(toDouble() - x); return result; }
 	} FPUREG;
 
 	typedef union
@@ -309,9 +371,37 @@ do { \
 		double f64[2];
 	} XMMREG;
 
+	typedef struct FPUx87SSE
+	{
+		struct FPUUnit
+		{
+			unsigned short FCW;
+			unsigned short FSW;
+			unsigned char FTW;
+			unsigned char Reserved1;
+			unsigned short FOP;
+			unsigned int FIP;
+			unsigned int FCS;
+			unsigned int FDP;
+			unsigned int FDS;
+			unsigned int MXSCR;
+			unsigned int MXSCR_MASK;
+
+			FPUREG st[8];
+		} FPU;
+
+		XMMREG xmm[16];
+
+		static_assert(sizeof(FPUUnit) == 0xA0, "FPUUnit size mismatch!");
+
+		char _padding[512 - 0xA0 - 16 * 16];
+	};
+
+	static_assert(sizeof(FPUx87SSE) == 512, "FPUx87SSE size mismatch!");
+
 	typedef struct CTX
 	{
-		char FPUandSSE[512];
+		FPUx87SSE FPUandSSE;
 
 		REG ebx;
 		REG ecx;
@@ -324,8 +414,8 @@ do { \
 		REG& eax() { return *(REG*)(saved_esp.i32); }
 		REG& eflags() { return *(REG*)(saved_esp.i32 + 4); }
 
-		XMMREG& xmm(int i _In_range_(0, 7)) { return *(XMMREG*)(FPUandSSE + 0xA0 + i * 16); }
-		FPUREG& st(int i _In_range_(0, 7)) { return *(FPUREG*)(FPUandSSE + i * 16); }
+		XMMREG& xmm(int i _In_range_(0, 7)) { return FPUandSSE.xmm[i]; }
+		FPUREG& st(int i _In_range_(0, 7)) { return FPUandSSE.FPU.st[i]; }
 	} CTX;
 #endif
 	// @brief Can be used in cave or in mid-function hooking.
@@ -652,7 +742,7 @@ do { \
 
 						size_t offset_in_trampoline = ((size_t)trampoline - _address) + offset;
 						size_t new_offset = dest - (size_t)(trampoline + offset);
-						
+
 						*(DWORD*)(trampoline + offset + 1) = (DWORD)new_offset;
 					}
 					offset += instr_size;
@@ -678,6 +768,9 @@ do { \
 
 			scoped_unprotect unprotect(_address, orig_size);
 			{
+				for (size_t i = 0; i < orig_size; i++)
+					((unsigned char*)_address)[i] = 0x90; // disassembler alignment, better to read if it's this way
+
 				unsigned char* ptr = (unsigned char*)_address;
 				*ptr = 0xE9; // jmp
 				*(DWORD*)(ptr + 1) = MAKE_RELATIVE_OFFSET(ptr, trampoline); // relative offset to the trampoline
