@@ -7,6 +7,7 @@
 #endif
 #include <assert.h>
 #include <new>
+#include <stdio.h>
 
 // All credits for function hooks goes to DarkByte
 
@@ -17,6 +18,8 @@ typedef hde64s hde_s;
 typedef hde32s hde_s;
 #define HDE_DISASM(ptr, disasm) hde32_disasm(ptr, disasm)
 #endif
+
+#define CHECK_ERROR(disasm) if (disasm.flags & F_ERROR) { if (disasm.flags & F_ERROR_LENGTH) throw "Length error occurred!"; else if (disasm.flags & F_ERROR_OPCODE) throw "Invalid opcode error occurred!"; else if (disasm.flags & F_ERROR_LOCK) throw "Lock error occurred!"; else if (disasm.flags & F_ERROR_OPERAND) throw "Operand error occurred!"; else throw "Unknown disassembly error occurred!"; }
 
 namespace SafeHook
 {
@@ -205,30 +208,212 @@ namespace SafeHook
 		}
 	};
 
-#define MAKE_RELATIVE_OFFSET(src, dst) ((unsigned int)(dst) - (unsigned int)(src) - 5)
-#define GET_BRANCH_DESTINATION(src) ((size_t)(src) + 5 + *(DWORD*)((size_t)(src) + 1))
+#if defined(_M_X64) || defined(__x86_64__)
+#else
+	template <typename T>
+	inline void WriteObject(uintptr_t address, const T& object)
+	{
+		scoped_unprotect unprotect(address, sizeof(T));
 
-#define MAKE_JMP(src, dst) \
-do { \
-	scoped_unprotect unprotect(size_t(src), 5); \
-	*(BYTE*)(src) = 0xE9; \
-	*(DWORD*)((src) + 1) = MAKE_RELATIVE_OFFSET(src, dst); \
-} while(0)
+		*(T*)address = object;
+	}
 
-#define MAKE_CALL(src, dst) \
-do { \
-	scoped_unprotect unprotect(size_t(src), 5); \
-	*(BYTE*)(src) = 0xE8; \
-	*(DWORD*)((src) + 1) = MAKE_RELATIVE_OFFSET(src, dst); \
-} while(0)
+	inline void WriteMemoryRaw(uintptr_t address, const void* data, size_t size)
+	{
+		scoped_unprotect unprotect(address, size);
 
-#define MAKE_NOP(src, size) \
-do { \
-	scoped_unprotect unprotect(size_t(src), size); \
-	memset((void*)src, 0x90, size); \
-} while(0)
+		memcpy((void*)address, data, size);
+	}
 
-#define MAKE_RANGED_NOP(src, dst) MAKE_NOP(src, dst - src)
+	inline uintptr_t GetBranchDestination(uintptr_t address)
+	{
+		hde_s disasm = { 0 };
+		HDE_DISASM((unsigned char*)address, &disasm);
+		CHECK_ERROR(disasm);
+
+		if (disasm.flags & F_RELATIVE)
+		{
+			if (disasm.flags & F_IMM8)
+				return (uintptr_t)(address + disasm.len + (char)disasm.imm.imm8);
+			else if (disasm.flags & F_IMM16)
+				return (uintptr_t)(address + disasm.len + disasm.imm.imm16);
+			else if (disasm.flags & F_IMM32)
+				return (uintptr_t)(address + disasm.len + disasm.imm.imm32);
+			else
+				return 0;
+		}
+		else
+		{
+			if (disasm.flags & F_IMM8)
+				return (uintptr_t)(disasm.imm.imm8);
+			else if (disasm.flags & F_IMM16)
+				return (uintptr_t)(disasm.imm.imm16);
+			else if (disasm.flags & F_IMM32)
+				return (uintptr_t)(disasm.imm.imm32);
+			else
+				return 0;
+		}
+
+		return 0;
+	}
+
+	inline uintptr_t MakeRelativeOffsetIMM32(uintptr_t src, uintptr_t dst)
+	{
+		return dst - src - 5; // 5 bytes for the jmp instruction
+	}
+
+	inline uintptr_t MakeRelativeOffsetIMM8(uintptr_t src, uintptr_t dst)
+	{
+		return dst - src - 2; 
+	}
+
+	inline void MakeJMP(uintptr_t src, uintptr_t dst)
+	{
+		WriteObject(src, (unsigned char)0xE9); // jmp rel32
+
+		WriteObject(src + 1, MakeRelativeOffsetIMM32(src, dst));
+	}
+
+	inline void MakeCALL(uintptr_t src, uintptr_t dst)
+	{
+		WriteObject(src, (unsigned char)0xE8); // call rel32
+
+		WriteObject(src + 1, MakeRelativeOffsetIMM32(src, dst));
+	}
+
+	inline void MakeNOP(uintptr_t address, size_t size)
+	{
+		scoped_unprotect unprotect(address, size);
+
+		memset((void*)address, 0x90, size);
+	}
+
+	inline void MakeRangedNOP(uintptr_t src, uintptr_t dst)
+	{
+		MakeNOP(src, dst - src);
+	}
+
+	// Used to make a trampoline in dst, if the dst is null it will calculate how much bytes is the src
+	inline size_t CreateTrampoline(unsigned char* src, unsigned char* dst = nullptr, size_t *tramp_size = nullptr)
+	{
+		hde_s disasm = { 0 };
+		size_t offset = 0;
+		size_t writeOffset = 0;
+
+		scoped_unprotect x((size_t)src, 64);
+		scoped_unprotect d((size_t)dst, 64); // i guess 0x20 bytes should be enough
+
+		if (!dst)
+		{
+			while (offset < 5)
+			{
+				HDE_DISASM(src + offset, &disasm);
+				CHECK_ERROR(disasm);
+
+				offset += disasm.len;
+			}
+			return offset; // size of the trampoline
+		}
+		else
+		{
+			while (offset < 5)
+			{
+				HDE_DISASM(src + offset, &disasm);
+				CHECK_ERROR(disasm);
+
+				switch (disasm.opcode)
+				{
+				case 0x70:
+				case 0x71:
+				case 0x72:
+				case 0x73:
+				case 0x74:
+				case 0x75:
+				case 0x76:
+				case 0x77:
+				case 0x78:
+				case 0x79:
+				case 0x7A:
+				case 0x7B:
+				case 0x7C:
+				case 0x7D:
+				case 0x7E:
+				case 0x7F: // all rel8
+				{
+					size_t rel = GetBranchDestination((size_t)(src + offset));
+
+					*(dst + writeOffset++) = 0x0F;
+					*(dst + writeOffset++) = disasm.opcode + 0x10;
+					*(unsigned int*)(dst + writeOffset) = rel;
+
+					writeOffset += 6; // 2 bytes for the new opcode and 4 bytes for the new imm32
+					break;
+				}
+				case 0xE9:
+				{
+					size_t rel = GetBranchDestination((size_t)(src + offset));
+
+					MakeJMP((size_t)(dst + writeOffset), rel);
+
+					writeOffset += 5;
+					break;
+				}
+				case 0xEB:
+				{
+					size_t rel = GetBranchDestination((size_t)(src + offset));
+
+					MakeJMP((size_t)(dst + writeOffset), rel);
+
+					writeOffset += 5;
+					break;
+				}
+				case 0xE8:
+				{
+					size_t rel = GetBranchDestination((size_t)(src + offset));
+
+					MakeCALL((size_t)(dst + writeOffset), rel);
+
+					writeOffset += 5;
+					break;
+				}
+				case 0x0F:
+				{
+					if (disasm.opcode2 >= 0x80 && disasm.opcode2 <= 0x8F)
+					{
+						size_t rel = GetBranchDestination((size_t)(src + offset));
+
+						*(unsigned short*)(dst + writeOffset) = *(unsigned short*)(src + offset);
+						writeOffset += 2;
+
+						// just retarget imm32
+						*(unsigned int*)(dst + writeOffset) = rel;
+						writeOffset += 4;
+					}
+					else
+					{
+						memcpy(dst + writeOffset, src + offset, disasm.len);
+						writeOffset += disasm.len;
+					}
+					break;
+				}
+				default:
+					memcpy(dst + offset, src + offset, disasm.len);
+					writeOffset += disasm.len;
+					break;
+				}
+
+				offset += disasm.len;
+			}
+		}
+
+		MakeJMP((size_t)(dst + writeOffset), (size_t)(src + offset));
+
+		writeOffset += 5;
+
+		if (tramp_size)
+			*tramp_size = writeOffset;
+	}
+#endif
 
 #if defined(_M_X64) || defined(__x86_64__)
 	typedef union
@@ -292,6 +477,30 @@ do { \
 		float f32;
 	} REG;
 
+	typedef union
+	{
+		struct
+		{
+			unsigned short CF : 1;
+			unsigned short BRKI : 1;
+			unsigned short PF : 1;
+			unsigned short Reserved1 : 1;
+			unsigned short AF : 1;
+			unsigned short Reserved2 : 1;
+			unsigned short ZF : 1;
+			unsigned short SF : 1;
+
+			unsigned short TF : 1;
+			unsigned short IF : 1;
+			unsigned short DF : 1;
+			unsigned short OF : 1;
+			unsigned short IOPL : 2;
+			unsigned short NT : 1;
+			unsigned short MD : 1;
+		}; // no more flags since pushfd only stores the lower 16 bits of EFLAGS
+		unsigned short i16;
+	} EFLAGS;
+
 	typedef struct FPUREG
 	{
 	private: // we shouldn't be really exposed to "internals" so let's just hide it and provide a way to convert to/from double, which is what most people would want to use
@@ -344,7 +553,7 @@ do { \
 	public:
 		operator double() const { return toDouble(); }
 		// operator float() const { return (float)toDouble(); } // let's prefer it double for better precision, but you can add this if you want
-		
+
 		FPUREG() : Mantissa(0), ExponentSign(0) {}
 		FPUREG(double x) { setDouble(x); }
 
@@ -412,13 +621,14 @@ do { \
 		REG ebp;
 
 		REG& eax() { return *(REG*)(saved_esp.i32); }
-		REG& eflags() { return *(REG*)(saved_esp.i32 + 4); }
+		EFLAGS& eflags() { return *(EFLAGS*)(saved_esp.i32 + 4); }
 
 		XMMREG& xmm(int i _In_range_(0, 7)) { return FPUandSSE.xmm[i]; }
 		FPUREG& st(int i _In_range_(0, 7)) { return FPUandSSE.FPU.st[i]; }
 	} CTX;
 #endif
-	// @brief Can be used in cave or in mid-function hooking.
+	// @brief Can be used in cave or in mid-function hooking
+	// @brief If you can place it in instead of the opcode with 5 bytes length you won't need to use MidAsmHook(which uses trampoline for safety)
 	class MidAsmHookUnsafe
 	{
 	private:
@@ -472,20 +682,21 @@ do { \
 				MAKE_CALL(cave_address, (size_t)hook_bytes);
 			}
 #else
-			size_t fncsize = sizeof(asm_data) + 8;
+			size_t fncsize = sizeof(asm_data) + 6;
 			hook_bytes = (unsigned char*)g_pageController.allocate(fncsize, 0x100);
 			if (!hook_bytes)
 				throw "Failed to allocate memory for hook bytes!";
 
 			memcpy(hook_bytes, (void*)asm_data, fncsize);
-			MAKE_JMP((size_t)hook_bytes + sizeof(asm_data), address_of_hook);
+			MakeJMP((size_t)(hook_bytes + sizeof(asm_data)), address_of_hook);
 
 			{
 				scoped_unprotect unprotect(cave_address, sizeof(original_cave_bytes)); // just so we could read it
 
 				memcpy(original_cave_bytes, (void*)cave_address, sizeof(original_cave_bytes)); // address_of_cave may act as a ptr to in a function
 			}
-			MAKE_CALL(cave_address, (size_t)hook_bytes);
+
+			MakeCALL(cave_address, (size_t)hook_bytes);
 #endif
 		}
 
@@ -512,145 +723,6 @@ do { \
 	private:
 		MidAsmHookUnsafe unsafe_hook;
 		unsigned char* trampoline = nullptr;
-
-#define CHECK_ERROR(disasm) if (disasm.flags & F_ERROR) { if (disasm.flags & F_ERROR_LENGTH) throw "Length error occurred!"; else if (disasm.flags & F_ERROR_OPCODE) throw "Invalid opcode error occurred!"; else if (disasm.flags & F_ERROR_LOCK) throw "Lock error occurred!"; else if (disasm.flags & F_ERROR_OPERAND) throw "Operand error occurred!"; else throw "Unknown disassembly error occurred!"; }
-
-		size_t getBranchDestinationForJmp(size_t address) // all types of jmps
-		{
-			unsigned char* opcode = (unsigned char*)address;
-			bool isJmpIndeed = false;
-			switch (*opcode)
-			{
-#if defined(_M_X64) || defined(__x86_64__)
-			case 0xFF:
-			{
-				switch (opcode[1])
-				{
-				case 0x15:  // call dword ptr [addr]
-				case 0x25: // jmp dword ptr [addr]
-					isJmpIndeed = true;
-					break;
-				default:
-					break;
-				}
-			}
-			case 0xE9: // jmp
-			case 0xE8: // call
-				isJmpIndeed = true;
-				break;
-			case 0x0F:
-				if (opcode[1] >= 0x80 && opcode[1] <= 0x8F) // jcc near
-					isJmpIndeed = true;
-				break;
-			case 0xEB: // short jmp
-			case 0x74: // jz
-			case 0x75: // jnz
-			case 0x76: // jbe
-			case 0x77: // ja
-			case 0x78: // js
-			case 0x79: // jns
-			case 0x7A: // jp
-			case 0x7B: // jnp
-			case 0x7C: // jl
-			case 0x7D: // jge
-			case 0x7E: // jle
-			case 0x7F: // jg
-				isJmpIndeed = true;
-				break;
-			default:
-				break;
-#else
-			case 0xE8: // jmp
-			case 0xE9: // call
-				isJmpIndeed = true;
-				break;
-			case 0xFF:
-				if (opcode[1] == 0x25 || opcode[1] == 0x15)
-					isJmpIndeed = true;
-				break;
-			case 0xEB: // short jmp
-			case 0x74: // jz
-			case 0x75: // jnz
-			case 0x76: // jbe
-			case 0x77: // ja
-			case 0x78: // js
-			case 0x79: // jns
-			case 0x7A: // jp
-			case 0x7B: // jnp
-			case 0x7C: // jl
-			case 0x7D: // jge
-			case 0x7E: // jle
-			case 0x7F: // jg
-				isJmpIndeed = true;
-				break;
-			case 0x0F:
-				if (opcode[1] >= 0x80 && opcode[1] <= 0x8F) // jcc near
-					isJmpIndeed = true;
-				break;
-			default:
-				break;
-#endif
-			}
-			if (!isJmpIndeed)
-				throw "Not a jmp instruction!";
-
-			hde_s disasm = { 0 };
-			HDE_DISASM((void*)address, &disasm);
-			CHECK_ERROR(disasm);
-#if defined(_M_X64) || defined(__x86_64__)
-			if (disasm.flags & F_RELATIVE)
-			{
-				if (disasm.flags & F_IMM8)
-					return address + disasm.len + (char)disasm.imm.imm8;
-				else if (disasm.flags & F_IMM16)
-					return address + disasm.len + (short)disasm.imm.imm16;
-				else if (disasm.flags & F_IMM32)
-					return address + disasm.len + disasm.imm.imm32;
-				else if (disasm.flags & F_IMM64)
-					return address + disasm.len + disasm.imm.imm64;
-				else
-					throw "Relative instruction without immediate value!";
-			}
-			else
-			{
-				if (disasm.flags & F_IMM8)
-					return disasm.imm.imm8;
-				else if (disasm.flags & F_IMM16)
-					return disasm.imm.imm16;
-				else if (disasm.flags & F_IMM32)
-					return disasm.imm.imm32;
-				else if (disasm.flags & F_IMM64)
-					return disasm.imm.imm64;
-				else
-					throw "Non-relative instruction without immediate value!";
-			}
-#else
-			if (disasm.flags & F_RELATIVE)
-			{
-				if (disasm.flags & F_IMM8)
-					return address + disasm.len + (char)disasm.imm.imm8;
-				else if (disasm.flags & F_IMM16)
-					return address + disasm.len + (short)disasm.imm.imm16;
-				else if (disasm.flags & F_IMM32)
-					return address + disasm.len + disasm.imm.imm32;
-				else
-					throw "Relative instruction without immediate value!";
-			}
-			else
-			{
-				if (disasm.flags & F_IMM8)
-					return disasm.imm.imm8;
-				else if (disasm.flags & F_IMM16)
-					return disasm.imm.imm16;
-				else if (disasm.flags & F_IMM32)
-					return disasm.imm.imm32;
-				else
-					throw "Non-relative instruction without immediate value!";
-			}
-#endif
-
-			return 0;
-		}
 
 		// Try to find a place to inject the trampoline
 		// You cannot just put a trampoline in the middle of instruction and expect it to work
@@ -706,49 +778,26 @@ do { \
 #else
 			size_t needed_size = 5; // for a relative jmp
 
-			hde_s disasm = { 0 };
-			while (orignal_size < needed_size)
+			size_t original_size = CreateTrampoline((unsigned char*)_address, nullptr);
+
+			this->trampoline = (unsigned char*)g_pageController.allocate(original_size + 10, 0x100); // +5 for jmp and call each
+			
+			if (!this->trampoline)
 			{
-				size_t instr_size = HDE_DISASM((void*)(_address + orignal_size), &disasm);
-				CHECK_ERROR(disasm);
-				orignal_size += instr_size;
+				static char buffer[128] = { 0 };
+				
+				sprintf_s(buffer, "Could not create a trampoline for %X address", _address);
+
+				throw buffer;
 			}
 
-			unsigned char* trampoline = (unsigned char*)g_pageController.allocate(orignal_size + 10, 0x100); // we need some space for the original instructions and a jmp back to the original function, so we allocate a bit more than the original instructions size
-			this->trampoline = trampoline;
-			if (trampoline)
-			{
-				trampoline += 5;
-				scoped_unprotect unprotect(_address, orignal_size);
+			size_t sizeof_tramp = 0;
 
-				disasm = { 0 };
-				size_t offset = 0;
-				while (offset < orignal_size)
-				{
-					size_t instr_size = HDE_DISASM((void*)(_address + offset), &disasm);
-					CHECK_ERROR(disasm);
-					memcpy(trampoline + offset, (void*)(_address + offset), instr_size);
-					if (disasm.flags & F_RELATIVE) // if the instruction has a relative offset, we need to fix it in the trampoline
-					{
-						size_t dest = 0;
-						if (disasm.flags & F_IMM8)
-							dest = _address + offset + instr_size + (char)disasm.imm.imm8;
-						else if (disasm.flags & F_IMM16)
-							dest = _address + offset + instr_size + (short)disasm.imm.imm16;
-						else if (disasm.flags & F_IMM32)
-							dest = _address + offset + instr_size + disasm.imm.imm32;
-						else
-							throw "Relative instruction without immediate value!";
+			CreateTrampoline((unsigned char*)_address, this->trampoline + 5, &sizeof_tramp);
 
-						size_t offset_in_trampoline = ((size_t)trampoline - _address) + offset;
-						size_t new_offset = dest - (size_t)(trampoline + offset);
+			// MakeJMP((size_t)(this->trampoline + 5 + sizeof_tramp), _address + original_size); // jump back to the original function after the overwritten bytes // handled by `CreateTrampoline`
 
-						*(DWORD*)(trampoline + offset + 1) = (DWORD)new_offset;
-					}
-					offset += instr_size;
-				}
-			}
-			orig_size = orignal_size;
+			orig_size = original_size;
 #endif
 		}
 	public:
@@ -768,22 +817,12 @@ do { \
 
 			scoped_unprotect unprotect(_address, orig_size);
 			{
-				for (size_t i = 0; i < orig_size; i++)
-					((unsigned char*)_address)[i] = 0x90; // disassembler alignment, better to read if it's this way
+				memset((void*)_address, 0x90, orig_size);
 
-				unsigned char* ptr = (unsigned char*)_address;
-				*ptr = 0xE9; // jmp
-				*(DWORD*)(ptr + 1) = MAKE_RELATIVE_OFFSET(ptr, trampoline); // relative offset to the trampoline
+				MakeJMP(_address, (size_t)trampoline);
 			}
 
 			new (&unsafe_hook) MidAsmHookUnsafe((size_t)trampoline, hook_func);
-
-			{
-				unsigned char* ptr = (unsigned char*)trampoline + orig_size + 5;
-
-				*ptr = 0xE9;
-				*(DWORD*)(ptr + 1) = MAKE_RELATIVE_OFFSET((size_t)ptr, _address + orig_size);
-			}
 
 			// basically
 			// call hook_wrapper
