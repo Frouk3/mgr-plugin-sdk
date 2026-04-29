@@ -125,6 +125,8 @@ namespace SafeHook
 				if (m_pPage)
 					VirtualFree(m_pPage, 0, MEM_RELEASE);
 
+				m_pPage = nullptr;
+
 				m_pNextFree = nullptr;
 				m_size = 0;
 				m_alignment = 0;
@@ -141,6 +143,16 @@ namespace SafeHook
 				void* p = m_pNextFree;
 				m_pNextFree = (void*)(~(m_alignment - 1) & (((unsigned int)m_pNextFree + size) + m_alignment - 1)); // make sure to align the next free address
 				return p;
+			}
+
+			void free(void* ptr)
+			{
+				if ((char*)ptr >= (char*)m_pPage && (char*)ptr < (char*)m_pPage + m_size)
+				{
+					memset(ptr, 0, m_alignment); // clean the memory, if it's gonna be reused it should prevent any potential crashes or leaks
+
+					m_pNextFree = ptr;
+				}
 			}
 		};
 		int m_pageCount;
@@ -185,6 +197,39 @@ namespace SafeHook
 		}
 
 		// No deallocation function, so bear in mind to use this wisely
+		// nah
+
+		void free(void* ptr)
+		{
+			for (int i = 0; i < m_pageCount; i++)
+			{
+				Page& page = m_pages[i];
+				if ((char*)ptr >= (char*)page.m_pPage && (char*)ptr < (char*)page.m_pPage + page.m_size)
+					page.free(ptr);
+			}
+		}
+
+		void freeAll()
+		{
+			for (int i = 0; i < m_pageCount; i++)
+			{
+				Page& page = m_pages[i];
+
+				if (page.m_pPage)
+				{
+					memset(page.m_pPage, 0, page.m_size);
+
+					VirtualFree(page.m_pPage, 0, MEM_RELEASE);
+				}
+
+				page.m_alignment = 0;
+				page.m_pNextFree = nullptr;
+				page.m_pPage = nullptr;
+				page.m_size = 0;
+			}
+
+			m_pageCount = 0;
+		}
 	};
 
 	static inline PageController<16> g_pageController; // 16 pages should be enough for most use cases, you can increase this if you need more
@@ -412,7 +457,137 @@ namespace SafeHook
 
 		if (tramp_size)
 			*tramp_size = writeOffset;
+
+		return offset; // annoying "function must return value"
 	}
+
+	class Hook
+	{
+		unsigned char* m_target;
+		unsigned char* m_hook;
+		size_t m_trampolineSize;
+
+		struct
+		{
+			union
+			{
+				struct
+				{
+					unsigned int bEnabled : 1;
+					unsigned int bTrampolineCreated : 1;
+					unsigned int bTrampolineLinked : 1;
+				};
+				unsigned int i32;
+			};
+		} m_state;
+		unsigned char* m_trampoline;
+		unsigned char* m_originalBytes;
+		size_t m_originalSize;
+
+		void CreateTrampoline()
+		{
+			if (!m_state.bTrampolineCreated)
+			{
+				size_t size = SafeHook::CreateTrampoline(m_target, nullptr);
+				m_originalSize = size;
+
+				void* pPage = g_pageController.allocate(size, 0x80);
+				m_originalBytes = (unsigned char*)g_pageController.allocate(size, 0x80);
+
+				if (m_originalBytes) memcpy(m_originalBytes, m_target, size);
+
+				if (pPage)
+				{
+					m_trampoline = (unsigned char*)pPage;
+					SafeHook::CreateTrampoline(m_target, m_trampoline, &m_trampolineSize);
+					m_state.bTrampolineCreated = true;
+				}
+				else
+				{
+					throw "Could not allocate page for trampoline!";
+				}
+			}
+		}
+	public:
+		Hook()
+		{
+			m_target = m_hook = m_trampoline = m_originalBytes = nullptr;
+			m_trampolineSize = m_originalSize = m_state.i32 = 0;
+		}
+
+		Hook(void* pTarget, void* pHook, bool bEnable = true, void** pOriginal = nullptr)
+		{
+			if (!pTarget || !pHook)
+				throw "Target and hook addresses cannot be null!";
+
+			m_target = (unsigned char*)pTarget;
+			m_hook = (unsigned char*)pHook;
+			CreateTrampoline();
+
+			if (pOriginal)
+				*pOriginal = m_trampoline;
+
+			if (bEnable)
+				Enable();
+		}
+
+		Hook(void* pTarget, void* pHook, void** pOriginal)
+		{
+			if (!pTarget || !pHook)
+				throw "Target and hook addresses cannot be null!";
+
+			m_target = (unsigned char*)pTarget;
+			m_hook = (unsigned char*)pHook;
+			CreateTrampoline();
+			if (pOriginal)
+				*pOriginal = m_trampoline;
+
+			Enable();
+		}
+
+		void Enable()
+		{
+			m_state.bEnabled = true;
+			if (m_state.bTrampolineCreated && !m_state.bTrampolineLinked)
+			{
+				scoped_unprotect unprotect((size_t)m_target, m_originalSize);
+
+				memset(m_target, 0x90, m_originalSize);
+
+				MakeJMP((size_t)m_target, (size_t)m_hook);
+
+				m_state.bTrampolineLinked = true;
+			}
+		}
+
+		void Disable()
+		{
+			m_state.bEnabled = false;
+			if (m_state.bTrampolineCreated && m_state.bTrampolineLinked)
+			{
+				scoped_unprotect unprotect((size_t)m_target, m_originalSize);
+
+				if (m_originalBytes) memcpy((void*)m_target, m_originalBytes, m_originalSize);
+
+				m_state.bTrampolineLinked = false;
+			}
+		}
+
+		~Hook()
+		{
+			Disable(); // just to be safe, make sure to restore the original bytes before freeing the trampoline and original bytes memory
+
+			if (m_trampoline)
+				g_pageController.free(m_trampoline);
+			if (m_originalBytes)
+				g_pageController.free(m_originalBytes);
+
+			m_trampoline = m_originalBytes = nullptr;
+			m_target = m_hook = nullptr;
+			m_trampolineSize = m_originalSize = 0;
+			m_state.i32 = 0;
+		}
+	};
 #endif
 
 #if defined(_M_X64) || defined(__x86_64__)
