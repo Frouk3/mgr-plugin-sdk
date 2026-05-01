@@ -232,7 +232,7 @@ namespace SafeHook
 		}
 	};
 
-	static inline PageController<16> g_pageController; // 16 pages should be enough for most use cases, you can increase this if you need more
+	inline PageController<16> g_pageController; // 16 pages should be enough for most use cases, you can increase this if you need more
 
 	class scoped_unprotect
 	{
@@ -755,7 +755,7 @@ namespace SafeHook
 		double f64[2];
 	} XMMREG;
 
-	typedef struct FPUx87SSE
+	typedef struct
 	{
 		struct FPUUnit
 		{
@@ -779,7 +779,7 @@ namespace SafeHook
 		static_assert(sizeof(FPUUnit) == 0xA0, "FPUUnit size mismatch!");
 
 		char _padding[512 - 0xA0 - 16 * 16];
-	};
+	} FPUx87SSE;
 
 	static_assert(sizeof(FPUx87SSE) == 512, "FPUx87SSE size mismatch!");
 
