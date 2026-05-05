@@ -103,132 +103,172 @@ namespace SafeHook
 		0xC3										// ret
 	};
 #endif
+	inline size_t align(size_t length, size_t alignment)
+	{
+		return (length + alignment - 1) & ~(alignment - 1);
+	}
+
 	template <int num>
 	class PageController
 	{
-		struct Page
+		class PageBlock
 		{
-			void* m_pPage;
-			int m_size;
-			int m_alignment;
+			void* m_base;
+			size_t m_size;
+			size_t m_alignment;
 
-			void* m_pNextFree;
+			PageBlock* m_pNext, * m_pPrev;
 
-			void* getNextFree() const
+			void unchain()
 			{
-				return m_pNextFree;
+				if (m_pPrev)
+					m_pPrev->m_pNext = m_pNext;
+
+				if (m_pNext)
+					m_pNext->m_pPrev = m_pPrev;
+
+				m_pNext = nullptr;
+				m_pPrev = nullptr;
 			}
 
-			Page() : m_pPage(nullptr), m_size(0), m_alignment(0) {}
-			~Page()
+			void init(void* base, size_t size, size_t alignment)
 			{
-				if (m_pPage)
-					VirtualFree(m_pPage, 0, MEM_RELEASE);
-
-				m_pPage = nullptr;
-
-				m_pNextFree = nullptr;
-				m_size = 0;
-				m_alignment = 0;
+				m_base = base;
+				m_size = size;
+				m_alignment = alignment;
 			}
 
-			void* allocate(int size)
+			void deinit()
 			{
-				if (!m_pPage || (char*)m_pNextFree + size > (char*)m_pPage + m_size)
+				if (m_base)
+				{
+					memset(m_base, 0, align(m_size, m_alignment));
+
+					m_base = nullptr;
+					m_size = 0;
+					m_alignment = 0;
+				}
+
+				unchain();
+			}
+		public:
+			PageBlock() : m_base(nullptr), m_size(0), m_alignment(0) {}
+			PageBlock(void* base, size_t size, size_t align) : m_base(base), m_size(size), m_alignment(align) {}
+			~PageBlock() { deinit(); }
+
+			friend class Page;
+			friend class PageController;
+		};
+
+		class Page
+		{
+			void* m_baseptr;
+			size_t m_size;
+
+			PageBlock* m_block;
+			PageBlock* m_pLast;
+
+			void* m_pFreeSpace;
+
+			void init(size_t size)
+			{
+				m_baseptr = VirtualAlloc(nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+				if (!m_baseptr)
+					throw "Failed to allocate memory for page!";
+
+				m_pFreeSpace = m_baseptr;
+				m_pLast = nullptr;
+
+				m_size = size;
+			}
+
+			void* alloc(size_t size, size_t align)
+			{
+				if (!m_baseptr)
+					throw "Page is not initialized!";
+
+				if ((size_t)m_pFreeSpace - (size_t)m_baseptr > m_size) // out of bounds check
 					return nullptr;
 
-				if (!m_pNextFree)
-					m_pNextFree = m_pPage;
+				PageBlock* block = new PageBlock(m_pFreeSpace, size, align);
+				if (!m_block)
+					m_block = block;
 
-				void* p = m_pNextFree;
-				m_pNextFree = (void*)(~(m_alignment - 1) & (((unsigned int)m_pNextFree + size) + m_alignment - 1)); // make sure to align the next free address
-				return p;
+				if (m_pLast)
+					chain(m_pLast, block);
+
+				m_pLast = block;
+
+				m_pFreeSpace = (void*)((uintptr_t)SafeHook::align((size_t)m_pFreeSpace + size, align));
+
+				return block->m_base;
 			}
 
-			void free(void* ptr)
+			void chain(PageBlock* what, PageBlock* it)
 			{
-				if ((char*)ptr >= (char*)m_pPage && (char*)ptr < (char*)m_pPage + m_size)
-				{
-					memset(ptr, 0, m_alignment); // clean the memory, if it's gonna be reused it should prevent any potential crashes or leaks
+				PageBlock* prev = what;
+				PageBlock* next = prev->m_pNext;
 
-					m_pNextFree = ptr;
-				}
+				it->m_pPrev = prev;
+				it->m_pNext = next;
+
+				if (prev)
+					prev->m_pNext = it;
+
+				if (next)
+					next->m_pPrev = it;
 			}
+		public:
+			Page() : m_baseptr(nullptr), m_block(nullptr), m_size(0) {}
+
+			~Page()
+			{
+				if (m_block)
+				{
+					PageBlock* curr = m_block;
+					while (curr)
+					{
+						PageBlock* next = curr->m_pNext;
+						delete curr;
+						curr = next;
+					}
+				}
+
+				if (m_baseptr)
+				{
+					VirtualFree(m_baseptr, 0, MEM_RELEASE);
+					m_baseptr = nullptr;
+				}
+
+				m_pLast = nullptr;
+				m_pFreeSpace = nullptr;
+
+				m_size = 0;
+			}
+
+			friend class PageController;
 		};
-		int m_pageCount;
+
+		size_t m_pageCount;
 		Page m_pages[num] = {};
-
-		Page* allocatePage(int size, int alignment = 0x1000)
-		{
-			if (m_pageCount >= num)
-				return nullptr;
-
-			Page& page = m_pages[m_pageCount++];
-			page.m_size = size;
-			page.m_alignment = alignment;
-			page.m_pPage = VirtualAlloc(nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-
-			return &page;
-		}
 	public:
-		PageController()
-		{
-			m_pageCount = 0;
-		}
-
+		PageController() : m_pageCount(0) {}
 		~PageController()
 		{
-			// Pages will automatically free their memory in their destructor
-		}
-
-		void* allocate(int size, int alignment = 0x1000)
-		{
-			for (int i = 0; i < m_pageCount; i++)
-			{
-				if (void* p = m_pages[i].allocate(size); p)
-					return p;
-			}
-
-			Page* newPage = allocatePage(0x10000, alignment); // MEM_COMMIT | MEM_RESERVE, 64KB page size, you can adjust this if you need more or less space per page, less size would hardly matter due to page granularity, but more size would reduce the chance of running out of pages, so it depends on your use case
-			if (!newPage)
-				return nullptr;
-
-			return newPage->allocate(size);
-		}
-
-		// No deallocation function, so bear in mind to use this wisely
-		// nah
-
-		void free(void* ptr)
-		{
-			for (int i = 0; i < m_pageCount; i++)
-			{
-				Page& page = m_pages[i];
-				if ((char*)ptr >= (char*)page.m_pPage && (char*)ptr < (char*)page.m_pPage + page.m_size)
-					page.free(ptr);
-			}
-		}
-
-		void freeAll()
-		{
-			for (int i = 0; i < m_pageCount; i++)
-			{
-				Page& page = m_pages[i];
-
-				if (page.m_pPage)
-				{
-					memset(page.m_pPage, 0, page.m_size);
-
-					VirtualFree(page.m_pPage, 0, MEM_RELEASE);
-				}
-
-				page.m_alignment = 0;
-				page.m_pNextFree = nullptr;
-				page.m_pPage = nullptr;
-				page.m_size = 0;
-			}
-
 			m_pageCount = 0;
+		}
+
+		void* allocate(size_t size, size_t align = 32)
+		{
+			for (size_t i = 0; i < m_pageCount; i++)
+			{
+				void* ptr = m_pages[i].alloc(size, align);
+				if (ptr)
+					return ptr;
+			}
+			m_pages[m_pageCount].init(0x10000);
+
+			return m_pages[m_pageCount++].alloc(size, align);
 		}
 	};
 
@@ -491,8 +531,8 @@ namespace SafeHook
 				size_t size = SafeHook::CreateTrampoline(m_target, nullptr);
 				m_originalSize = size;
 
-				void* pPage = g_pageController.allocate(size, 0x80);
-				m_originalBytes = (unsigned char*)g_pageController.allocate(size, 0x80);
+				void* pPage = g_pageController.allocate(size + 5, 32); // +5 for the jmp back to original routine
+				m_originalBytes = (unsigned char*)g_pageController.allocate(size, 32);
 
 				if (m_originalBytes) memcpy(m_originalBytes, m_target, size);
 
@@ -576,11 +616,6 @@ namespace SafeHook
 		~Hook()
 		{
 			Disable(); // just to be safe, make sure to restore the original bytes before freeing the trampoline and original bytes memory
-
-			if (m_trampoline)
-				g_pageController.free(m_trampoline);
-			if (m_originalBytes)
-				g_pageController.free(m_originalBytes);
 
 			m_trampoline = m_originalBytes = nullptr;
 			m_target = m_hook = nullptr;
@@ -858,7 +893,7 @@ namespace SafeHook
 			}
 #else
 			size_t fncsize = sizeof(asm_data) + 6;
-			hook_bytes = (unsigned char*)g_pageController.allocate(fncsize, 0x100);
+			hook_bytes = (unsigned char*)g_pageController.allocate(fncsize, 64);
 			if (!hook_bytes)
 				throw "Failed to allocate memory for hook bytes!";
 
@@ -955,7 +990,7 @@ namespace SafeHook
 
 			size_t original_size = CreateTrampoline((unsigned char*)_address, nullptr);
 
-			this->trampoline = (unsigned char*)g_pageController.allocate(original_size + 10, 0x100); // +5 for jmp and call each
+			this->trampoline = (unsigned char*)g_pageController.allocate(original_size + 10, 0x20); // +5 for jmp and call each
 			
 			if (!this->trampoline)
 			{
