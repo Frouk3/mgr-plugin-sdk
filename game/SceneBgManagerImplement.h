@@ -384,8 +384,8 @@ public:
     {
 
     } *field_115D4;
-
-    static inline SceneBgManagerImplement *& ms_Instance = *(SceneBgManagerImplement**)(shared::base + 0x17EA180);
 };
+
+inline SceneBgManagerImplement *& g_SceneBgManager = *(SceneBgManagerImplement**)(shared::base + 0x17EA180);
 
 VALIDATE_SIZE(SceneBgManagerImplement, 0x115D8);

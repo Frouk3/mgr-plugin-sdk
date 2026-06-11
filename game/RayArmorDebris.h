@@ -12,10 +12,10 @@ public:
 
     RayArmorDebris()
     {
-        ((void(__thiscall *)(RayArmorDebris*))(shared::base + 0x6EF830))(this);
+        MAKE_CALL(shared::base + 0x6EF830, void (__thiscall *)(RayArmorDebris *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9CDC);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9CDC);
 };
 
 VALIDATE_SIZE(RayArmorDebris, 0x980);

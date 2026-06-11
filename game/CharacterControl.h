@@ -103,21 +103,21 @@ struct CharacterControl
 
     bool isOnGround()
     {
-        return ((bool(__thiscall*)(CharacterControl*))(shared::base + 0x4E2740))(this);
+        return MAKE_CALL(shared::base + 0x4E2740, bool(__thiscall*)(CharacterControl*), this);
     }
 
     void switchCollisionDetection(BOOL bEnabled)
     {
-        ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E6C60))(this, bEnabled);
+        MAKE_CALL(shared::base + 0x4E6C60, void(__thiscall*)(CharacterControl*, BOOL), this, bEnabled);
     }
 
     void setPosition(const Hw::cVec4& position, BOOL bResetVelocity)
     {
-        ((void(__thiscall*)(CharacterControl*, const Hw::cVec4&, BOOL))(shared::base + 0x4E4580))(this, position, bResetVelocity);
+        MAKE_CALL(shared::base + 0x4E4580, void(__thiscall*)(CharacterControl*, const Hw::cVec4&, BOOL), this, position, bResetVelocity);
     }
 
     void toggleFalling(BOOL bEnable)
     {
-        ((void(__thiscall*)(CharacterControl*, BOOL))(shared::base + 0x4E0AF0))(this, bEnable);
+        MAKE_CALL(shared::base + 0x4E0AF0, void(__thiscall*)(CharacterControl*, BOOL), this, bEnable);
     }
 };

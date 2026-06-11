@@ -4112,10 +4112,10 @@ public:
     
     EmAfterImage()
     {
-        ((void(__thiscall *)(EmAfterImage *))(shared::base + 0x6ABDC0))(this);
+        MAKE_CALL(shared::base + 0x6ABDC0, void(__thiscall *)(EmAfterImage *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C7C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C7C);
 };
 
 VALIDATE_SIZE(EmAfterImage, 0x4A20);

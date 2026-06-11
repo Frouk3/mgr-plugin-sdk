@@ -125,8 +125,8 @@ namespace UICollision
         virtual ~cUIHit() {};
     };
 
-    inline cUIHitManager *&ms_UIHitManager = *(cUIHitManager**)(shared::base + 0x19C0730);
-    inline Hw::cHeapVariable *&ms_Allocator = *(Hw::cHeapVariable**)(shared::base + 0x19C0734);
-    inline cUIHitDataManager *& ms_UIHitDataManager = *(cUIHitDataManager**)(shared::base + 0x19C0738);
-    inline cUIHit *& ms_UIHit = *(cUIHit**)(shared::base + 0x19C073C);
+    inline cUIHitManager *&g_UIHitManager = *(cUIHitManager**)(shared::base + 0x19C0730);
+    inline Hw::cHeapVariable *&g_Allocator = *(Hw::cHeapVariable**)(shared::base + 0x19C0734);
+    inline cUIHitDataManager *&g_UIHitDataManager = *(cUIHitDataManager**)(shared::base + 0x19C0738);
+    inline cUIHit *&g_UIHit = *(cUIHit**)(shared::base + 0x19C073C);
 };

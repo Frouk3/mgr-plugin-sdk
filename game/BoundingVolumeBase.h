@@ -71,17 +71,17 @@ public:
 
     BoundingVolumeBase()
     {
-        ((void(__thiscall *)(BoundingVolumeBase *))(shared::base + 0x666D50))(this);
+        MAKE_CALL(shared::base + 0x666D50, void(__thiscall *)(BoundingVolumeBase *), this);
     }
 
     BoundingVolumeBase(int type)
     {
-        ((void(__thiscall *)(BoundingVolumeBase *, int))(shared::base + 0x666C40))(this, type);
+        MAKE_CALL(shared::base + 0x666C40, void(__thiscall *)(BoundingVolumeBase *, int), this, type);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E99D0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E99D0);
 
-    virtual ContextInstance& getContext() { return ms_Context; };
+    virtual ContextInstance& getContext() { return m_Context; };
 };
 
 class BoundingSphere : public BoundingVolumeBase
@@ -94,10 +94,10 @@ public:
 
     BoundingSphere()
     {
-        ((void(__thiscall *)(BoundingSphere *))(shared::base + 0x666F90))(this);
+        MAKE_CALL(shared::base + 0x666F90, void(__thiscall *)(BoundingSphere *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E99D4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E99D4);
 };
 
 class BoundingBox : public BoundingVolumeBase
@@ -126,10 +126,10 @@ public:
 
     BoundingBox()
     {
-        ((void(__thiscall *)(BoundingBox *))(shared::base + 0x667B60))(this);
+        MAKE_CALL(shared::base + 0x667B60, void(__thiscall *)(BoundingBox *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E99D8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E99D8);
 };
 
 class BoundingCylinder : public BoundingVolumeBase
@@ -142,10 +142,10 @@ public:
 
     BoundingCylinder()
     {
-        ((void(__thiscall *)(BoundingCylinder *))(shared::base + 0x6681F0))(this);
+        MAKE_CALL(shared::base + 0x6681F0, void(__thiscall *)(BoundingCylinder *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E99DC);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E99DC);
 };
 
 class BoundingCapsule : public BoundingVolumeBase
@@ -286,10 +286,10 @@ public:
 
     BoundingCapsule()
     {
-        ((void(__thiscall *)(BoundingCapsule *))(shared::base + 0x6685C0))(this);
+        MAKE_CALL(shared::base + 0x6685C0, void(__thiscall *)(BoundingCapsule *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E99E0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E99E0);
 };
 
 VALIDATE_SIZE(BoundingVolumeBase, 0x100);

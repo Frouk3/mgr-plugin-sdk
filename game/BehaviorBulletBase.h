@@ -482,7 +482,7 @@ public:
 
     BehaviorBulletBase()
     {
-        ((void (__thiscall *)(BehaviorBulletBase *))(shared::base + 0x6CCE00))(this);
+        MAKE_CALL(shared::base + 0x6CCE00, void(__thiscall *)(BehaviorBulletBase *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C94);

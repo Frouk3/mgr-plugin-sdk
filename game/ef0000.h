@@ -8,7 +8,7 @@ public:
 
     ef0000()
     {
-        ((void(__thiscall *)(ef0000 *))(shared::base + 0x6A6930))(this);
+        MAKE_CALL(shared::base + 0x6A6930, void(__thiscall *)(ef0000 *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x177B378);

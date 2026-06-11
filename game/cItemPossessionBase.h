@@ -10,87 +10,87 @@ public:
 
     const char* getParent()
     {
-        return ReturnCallVMTFunc<const char*, 4, cItemPossessionBase*>(this);
+        return MAKE_VCALL(4, const char*(__thiscall *)(cItemPossessionBase*), this);
     }
 
     int getMaxPossession()
     {
-        return ReturnCallVMTFunc<int, 5, cItemPossessionBase*>(this);
+        return MAKE_VCALL(5, int(__thiscall *)(cItemPossessionBase*), this);
     }
 
     void receive(int Count)
     {
-        CallVMTFunc<6, cItemPossessionBase*, int>(this, Count);
+        MAKE_VCALL(6, void(__thiscall *)(cItemPossessionBase*, int), this, Count);
     }
 
     void receive()
     {
-        CallVMTFunc<7, cItemPossessionBase*>(this);
+        MAKE_VCALL(7, void(__thiscall *)(cItemPossessionBase*), this);
     }
 
     void spend(int amount)
     {
-        CallVMTFunc<8, cItemPossessionBase*, int>(this, amount);
+        MAKE_VCALL(8, void(__thiscall *)(cItemPossessionBase*, int), this, amount);
     }
 
     void spend()
     {
-        CallVMTFunc<9, cItemPossessionBase*>(this);
+        MAKE_VCALL(9, void(__thiscall *)(cItemPossessionBase*), this);
     }
 
     void set(int amount)
     {
-        CallVMTFunc<10, cItemPossessionBase*, int>(this, amount);
+        MAKE_VCALL(10, void(__thiscall *)(cItemPossessionBase*, int), this, amount);
     }
 
     BOOL hasFullPossession()
     {
-        return ReturnCallVMTFunc<BOOL, 11, cItemPossessionBase*>(this);
+        return MAKE_VCALL(11, BOOL(__thiscall *)(cItemPossessionBase*), this);
     }
     // duplicates at 13 & 14
     BOOL use()
     {
-        return ReturnCallVMTFunc<BOOL, 12, cItemPossessionBase*>(this);
+        return MAKE_VCALL(12, BOOL(__thiscall *)(cItemPossessionBase*), this);
     }
 
     BOOL _use()
     {
-        return ReturnCallVMTFunc<BOOL, 13, cItemPossessionBase*>(this);
+        return MAKE_VCALL(13, BOOL(__thiscall *)(cItemPossessionBase*), this);
     }
 
     BOOL __use()
     {
-        return ReturnCallVMTFunc<BOOL, 14, cItemPossessionBase*>(this);
+        return MAKE_VCALL(14, BOOL(__thiscall *)(cItemPossessionBase*), this);
     }
 
     BOOL hasPossession()
     {
-        return ReturnCallVMTFunc<BOOL, 15, cItemPossessionBase*>(this);
+        return MAKE_VCALL(15, BOOL(__thiscall *)(cItemPossessionBase*), this);
     }
 
     BOOL noUse()
     {
-        return ReturnCallVMTFunc<BOOL, 17, cItemPossessionBase*>(this);
+        return MAKE_VCALL(17, BOOL(__thiscall *)(cItemPossessionBase*), this);
     }
 
     int getEssentialPossession()
     {
-        return ReturnCallVMTFunc<int, 18, cItemPossessionBase*>(this);
+        return MAKE_VCALL(18, int(__thiscall *)(cItemPossessionBase*), this);
     }
 
     int getPossession()
     {
-        return ReturnCallVMTFunc<int, 19, cItemPossessionBase*>(this);
+        return MAKE_VCALL(19, int(__thiscall *)(cItemPossessionBase*), this);
     }
 
     int getMaxGunPossession()
     {
-        return ReturnCallVMTFunc<int, 20, cItemPossessionBase*>(this);
+        return MAKE_VCALL(20, int(__thiscall *)(cItemPossessionBase*), this);
     }
 
     void receiveSilent(int amount)
     {
-        CallVMTFunc<21, cItemPossessionBase*, int>(this, amount);
+        MAKE_VCALL(21, void(__thiscall *)(cItemPossessionBase*, int), this, amount);
     }
 };
 

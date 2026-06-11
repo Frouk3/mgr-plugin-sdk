@@ -1,7 +1,5 @@
 #pragma once
 
-#include <RGBA32.h>
-#include <RGB32.h>
 #include <cFilter.h>
 
 struct cRoomResourceManager
@@ -358,7 +356,7 @@ struct cRoomResourceManager
     float field_574;
     float field_578;
     float field_57C;
-    RGBA32 field_580;
+    Hw::cFcol field_580;
     Hw::cCriticalSection field_590;
     int field_5AC;
     int field_5B0;
@@ -3725,10 +3723,10 @@ struct cRoomResourceManager
     int field_3A34;
     int field_3A38;
     int field_3A3C;
-    RGBA32 m_Color;
-    RGBA32 m_BackgroundColor;
-    RGBA32 m_GlareColor;
-    RGB32 m_BorderColor;
+    Hw::cFcol m_Color;
+    Hw::cFcol m_BackgroundColor;
+    Hw::cFcol m_GlareColor;
+    float m_BorderColor[3];
     float m_fBorderGradientDistance;
     int field_3A80;
     int field_3A84;
@@ -3738,7 +3736,7 @@ struct cRoomResourceManager
     int field_3A94;
     int field_3A98;
     int field_3A9C;
-    RGBA32 m_FogColor;
+    Hw::cFcol m_FogColor;
     int field_3AB0;
     int field_3AB4;
     int field_3AB8;

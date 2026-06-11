@@ -12,10 +12,10 @@ public:
 
     Em8030Wire()
     {
-        ((void(__thiscall *)(Em8030Wire *))(shared::base + 0x6B4A10))(this);
+        MAKE_CALL(shared::base + 0x6B4A10, void(__thiscall *)(Em8030Wire *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735574);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735574);
 };
 
 class Em8030 : public EmBaseDLC
@@ -423,10 +423,10 @@ public:
 
     Em8030()
     {
-        ((void(__thiscall *)(Em8030 *))(shared::base + 0x6B4800))(this);
+        MAKE_CALL(shared::base + 0x6B4800, void(__thiscall *)(Em8030 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735570);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735570);
 };
 
 VALIDATE_SIZE(Em8030Wire, 0xA10);

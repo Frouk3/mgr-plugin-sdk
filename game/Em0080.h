@@ -13,10 +13,10 @@ public:
 
     Em0080Debris()
     {
-        ((void(__thiscall *)(Em0080Debris*))(shared::base + 0x6AFA50))(this);
+        MAKE_CALL(shared::base + 0x6AFA50, void(__thiscall *)(Em0080Debris*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D80);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D80);
 };
 
 class Em0080 : public BehaviorEmBase
@@ -964,10 +964,10 @@ public:
     
     Em0080()
     {
-        ((void(__thiscall *)(Em0080 *))(shared::base + 0x6ACCB0))(this);
+        MAKE_CALL(shared::base + 0x6ACCB0, void(__thiscall *)(Em0080 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D70);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D70);
 };
 
 VALIDATE_SIZE(Em0080Debris, 0x990);

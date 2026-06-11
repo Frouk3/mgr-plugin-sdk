@@ -20,17 +20,17 @@ public:
         BE_MOVE = 0x10,
     };
 
-    cCameraShake() { ((void(__thiscall *)(cCameraShake *))(shared::base + 0x9A3EC0))(this); }
+    cCameraShake() { MAKE_CALL(shared::base + 0x9A3EC0, void(__thiscall *)(cCameraShake*), this); }
     virtual ~cCameraShake() {}
     // non virtual destructor at 0x99FBF0
 
-    void init() { CallVMTFunc<1, cCameraShake*>(this); }
-    void move() { CallVMTFunc<2, cCameraShake*>(this); }
-    void getAddShake(Hw::cVec4& addPos, Hw::cVec4& addRot, Hw::cVec4& nowPos, const Hw::cVec4& nowView, const Hw::cVec4& up) { CallVMTFunc<3, cCameraShake*, Hw::cVec4&, Hw::cVec4&, Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, addPos, addRot, nowPos, nowView, up); }
+    void init() { MAKE_VCALL(1, void(__thiscall *)(cCameraShake*), this); }
+    void move() { MAKE_VCALL(2, void(__thiscall *)(cCameraShake*), this); }
+    void getAddShake(Hw::cVec4& addPos, Hw::cVec4& addRot, Hw::cVec4& nowPos, const Hw::cVec4& nowView, const Hw::cVec4& up) { MAKE_VCALL(3, void(__thiscall *)(cCameraShake*, Hw::cVec4&, Hw::cVec4&, Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&), this, addPos, addRot, nowPos, nowView, up); }
 
-    void onBeFlag(eBeFlag flag) { ((void(__thiscall *)(cCameraShake*, eBeFlag))(shared::base + 0x9A3AE0))(this, flag); }
-    void offBeFlag(eBeFlag flag) { ((void(__thiscall *)(cCameraShake*, eBeFlag))(shared::base + 0x9A3AF0))(this, flag); }
-    int isBeFlag(eBeFlag flag) { return ((int(__thiscall *)(cCameraShake*, eBeFlag))(shared::base + 0x9A3B00))(this, flag); }
+    void onBeFlag(eBeFlag flag) { MAKE_CALL(shared::base + 0x9A3AE0, void(__thiscall *)(cCameraShake*, eBeFlag), this, flag); }
+    void offBeFlag(eBeFlag flag) { MAKE_CALL(shared::base + 0x9A3AF0, void(__thiscall *)(cCameraShake*, eBeFlag), this, flag); }
+    int isBeFlag(eBeFlag flag) { return MAKE_CALL(shared::base + 0x9A3B00, int(__thiscall *)(cCameraShake*, eBeFlag), this, flag); }
 };
 
 class cCameraShakeOld : public cCameraShake
@@ -45,7 +45,7 @@ public:
     float m_power;
     float m_power_y;
 
-    cCameraShakeOld() { ((void(__thiscall *)(cCameraShakeOld *))(shared::base + 0x9B2260))(this); }
+    cCameraShakeOld() { MAKE_CALL(shared::base + 0x9B2260, void(__thiscall *)(cCameraShakeOld*), this); }
     // non virtual destructor at 0x9B1DA0
 };
 
@@ -59,7 +59,7 @@ public:
     float m_AxisRotY;
     float m_AxisRotZ;
 
-    cCameraShakeAxis() { ((void(__thiscall *)(cCameraShakeAxis *))(shared::base + 0x9BB7C0))(this); }
+    cCameraShakeAxis() { MAKE_CALL(shared::base + 0x9BB7C0, void(__thiscall *)(cCameraShakeAxis*), this); }
     // non virtual destructor at 0x9A39B0
 };
 
@@ -70,17 +70,15 @@ public:
     int m_bShakeMove;
     Hw::cCriticalSection m_CriticalSection;
 
-    void startup() { ((void(__thiscall *)(cCameraShakeManager *))(shared::base + 0x9B1DB0))(this); }
-    void cleanup() { ((void(__thiscall *)(cCameraShakeManager *))(shared::base + 0x9B1DD0))(this); }
-    void move() { ((void(__thiscall *)(cCameraShakeManager *))(shared::base + 0x9B1DE0))(this); }
-    void allKill() { ((void(__thiscall *)(cCameraShakeManager *))(shared::base + 0x9B21E0))(this); }
-    cCameraShakeAxis *set(float power, float speed, float time, float speedDec, int priority) { return ((cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, float, int))(shared::base + 0x9B1FC0))(this, power, speed, time, speedDec, priority); }
-    cCameraShakeAxis *setShakeFrame(float power, float speed, float time, float speedDec, int priority) { return ((cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, float, int))(shared::base + 0x9BB640))(this, power, speed, time, speedDec, priority); }
-    cCameraShakeAxis *setShakeAxis(const Hw::cVec4& pow, const Hw::cVec4& rot, int priority) { return ((cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, const Hw::cVec4&, const Hw::cVec4&, int))(shared::base + 0x9A39C0))(this, pow, rot, priority); }
-    cCameraShakeAxis *setShakeAxis(float powX, float powY, float powZ, int priority) { return ((cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, int))(shared::base + 0x9B2140))(this, powX, powY, powZ, priority); }
-    cCameraShakeAxis *setShakeAxis(float powX, float powY, float powZ, float rotX, float rotY, float rotZ, int priority) { return ((cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, float, float, float, int))(shared::base + 0x9B2190))(this, powX, powY, powZ, rotX, rotY, rotZ, priority); }
-    cCameraShakeAxis *getMaxPow(Hw::cVec4& addPos, Hw::cVec4& addRot, Hw::cVec4& nowPos, const Hw::cVec4& nowView, const Hw::cVec4& up) { return ((cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, Hw::cVec4&, Hw::cVec4&, Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x9B1E20))(this, addPos, addRot, nowPos, nowView, up); }
-    unsigned int numAliveWork() { return ((unsigned int(__thiscall *)(cCameraShakeManager *))(shared::base + 0x9B1F20))(this); }
+    void startup() { MAKE_CALL(shared::base + 0x9B1DB0, void(__thiscall *)(cCameraShakeManager*), this); }
+    void cleanup() { MAKE_CALL(shared::base + 0x9B1DD0, void(__thiscall *)(cCameraShakeManager*), this); }
+    void move() { MAKE_CALL(shared::base + 0x9B1DE0, void(__thiscall *)(cCameraShakeManager*), this); }
+    void allKill() { MAKE_CALL(shared::base + 0x9B21E0, void(__thiscall *)(cCameraShakeManager*), this); }
+    cCameraShakeAxis *set(float power, float speed, float time, float speedDec, int priority) { return MAKE_CALL(shared::base + 0x9B1FC0, cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, float, int), this, power, speed, time, speedDec, priority); }
+    cCameraShakeAxis *setShakeFrame(float power, float speed, float time, float speedDec, int priority) { return MAKE_CALL(shared::base + 0x9BB640, cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, float, int), this, power, speed, time, speedDec, priority); }
+    cCameraShakeAxis *setShakeAxis(const Hw::cVec4& pow, const Hw::cVec4& rot, int priority) { return MAKE_CALL(shared::base + 0x9A39C0, cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, const Hw::cVec4&, const Hw::cVec4&, int), this, pow, rot, priority); }
+    cCameraShakeAxis *setShakeAxis(float powX, float powY, float powZ, int priority) { return MAKE_CALL(shared::base + 0x9B2140, cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, int), this, powX, powY, powZ, priority); }
+    cCameraShakeAxis *setShakeAxis(float powX, float powY, float powZ, float rotX, float rotY, float rotZ, int priority) { return MAKE_CALL(shared::base + 0x9B2190, cCameraShakeAxis *(__thiscall *)(cCameraShakeManager *, float, float, float, float, float, float, int), this, powX, powY, powZ, rotX, rotY, rotZ, priority); }
 };
 
 class cCameraShakeAllocator
@@ -89,8 +87,8 @@ public:
     cCameraShakeAxis m_UnitList[16];
     cCameraShakeAxis m_DummyUnit;
 
-    cCameraShakeAllocator() { ((void(__thiscall *)(cCameraShakeAllocator *))(shared::base + 0x9C2F10))(this); }
-    ~cCameraShakeAllocator() { ((void(__thiscall *)(cCameraShakeAllocator *))(shared::base + 0x9BB620))(this); } // More like of destructor than a cleanup
+    cCameraShakeAllocator() { MAKE_CALL(shared::base + 0x9C2F10, void(__thiscall *)(cCameraShakeAllocator *), this); }
+    ~cCameraShakeAllocator() { MAKE_CALL(shared::base + 0x9BB620, void(__thiscall *)(cCameraShakeAllocator *), this); } // More like of destructor than a cleanup
 };
 
 inline cCameraShakeManager& g_CamShakeMan = *(cCameraShakeManager *)(shared::base + 0x17EB8E0);

@@ -61,6 +61,6 @@ public:
     int field_540;
 
     virtual ~SceneBehaviorSystem() {}
-
-    static inline SceneBehaviorSystem& ms_Instance = *(SceneBehaviorSystem*)(shared::base + 0x14A4F90);
 };
+
+inline SceneBehaviorSystem& g_SceneBehaviorSystem = *(SceneBehaviorSystem*)(shared::base + 0x14A4F90);

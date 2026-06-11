@@ -154,8 +154,8 @@ public:
     int field_334;
     int field_338;
     int field_33C;
-
-    static inline cRadarMapManager* &ms_Instance = *(cRadarMapManager**)(shared::base + 0x17EA190);
 };
+
+inline cRadarMapManager* &g_RadarMapManager = *(cRadarMapManager**)(shared::base + 0x17EA190);
 
 VALIDATE_SIZE(cRadarMapManager, 0x340);

@@ -28,10 +28,10 @@ public:
 
     Et9200()
     {
-        ((void(__thiscall *)(Et9200 *))(shared::base + 0x6A6DF0))(this);
+        MAKE_CALL(shared::base + 0x6A6DF0, void(__thiscall *)(Et9200 *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17352E0);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17352E0);
 };
 
 VALIDATE_SIZE(Et9200, 0x8C0);

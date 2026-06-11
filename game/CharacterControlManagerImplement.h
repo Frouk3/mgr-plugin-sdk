@@ -19,8 +19,7 @@ public:
     int field_24;
     int field_28;
     int field_2C;
-
-    static inline CharacterControlManagerImplement *&ms_Instance = *(CharacterControlManagerImplement**)(shared::base + 0x1735D9C);
 };
+inline CharacterControlManagerImplement *&g_CharacterControlManager = *(CharacterControlManagerImplement**)(shared::base + 0x1735D9C);
 
 VALIDATE_SIZE(CharacterControlManagerImplement, 0x30);

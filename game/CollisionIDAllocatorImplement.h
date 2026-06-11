@@ -12,8 +12,8 @@ public:
     int field_24;
     int field_28;
     lib::StaticArray<unsigned int, 1024> *m_IDs;
-
-    static inline CollisionIDAllocatorImplement * &ms_Instance = *(CollisionIDAllocatorImplement**)(shared::base + 0x19C52E4);
 };
+
+inline CollisionIDAllocatorImplement * &g_CollisionIDAllocator = *(CollisionIDAllocatorImplement**)(shared::base + 0x19C52E4);
 
 VALIDATE_SIZE(CollisionIDAllocatorImplement, 0x30);

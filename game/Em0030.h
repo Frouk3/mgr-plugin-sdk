@@ -12,10 +12,10 @@ public:
 
     Em0030Wire()
     {
-        ((void(__thiscall *)(Em0030Wire *))(shared::base + 0x6AEFA0))(this);
+        MAKE_CALL(shared::base + 0x6AEFA0, void(__thiscall *)(Em0030Wire *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D54);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D54);
 };
 
 class Em0030 : public BehaviorEmBase
@@ -423,10 +423,10 @@ public:
 
     Em0030()
     {
-        ((void(__thiscall *)(Em0030*))(shared::base + 0x6AC5A0))(this);
+        MAKE_CALL(shared::base + 0x6AC5A0, void(__thiscall *)(Em0030*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D50);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D50);
 };
 
 VALIDATE_SIZE(Em0030Wire, 0xA10);

@@ -37,10 +37,10 @@ public:
 
     ExcelPartsObj()
     {
-        ((void(__thiscall *)(ExcelPartsObj*))(shared::base + 0x6AEB10))(this);
+        MAKE_CALL(shared::base + 0x6AEB10, void(__thiscall *)(ExcelPartsObj*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17351D0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17351D0);
 };
 
 class ExcelObj : public BehaviorAppBase
@@ -74,10 +74,10 @@ public:
 
     ExcelObj()
     {
-        ((void(__thiscall *)(ExcelObj *))(shared::base + 0x6AEA30))(this);
+        MAKE_CALL(shared::base + 0x6AEA30, void(__thiscall *)(ExcelObj *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17351CC);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17351CC);
 };
 
 VALIDATE_SIZE(ExcelObj, 0xB20);

@@ -128,10 +128,10 @@ public:
 
     ArmThrowObj()
     {
-        ((void(__thiscall *)(ArmThrowObj*))(shared::base + 0x6B3F20))(this);
+        MAKE_CALL(shared::base + 0x6B3F20, void(__thiscall *)(ArmThrowObj*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735AD8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735AD8);
 };
 
 VALIDATE_SIZE(ArmThrowObj, 0x1550);

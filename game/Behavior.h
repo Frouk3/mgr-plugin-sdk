@@ -150,7 +150,7 @@ struct ClothSimulation
 
         void reset()
         {
-            ((void(__thiscall *)(ClothSimulation::Physics *))(shared::base + 0x5FAC50))(this);
+            MAKE_CALL(shared::base + 0x5FAC50, void(__thiscall *)(ClothSimulation::Physics *), this);
         }
     };
 
@@ -909,12 +909,12 @@ struct ClothSimulation
 
     ClothSimulation()
     {
-        ((void(__thiscall *)(ClothSimulation*))(shared::base + 0x5FAD80))(this);
+        MAKE_CALL(shared::base + 0x5FAD80, void(__thiscall *)(ClothSimulation*), this);
     }
 
     void reset(BOOL bUseStretch)
     {
-        ((void(__thiscall *)(ClothSimulation *, BOOL))(shared::base + 0x5F79C0))(this, bUseStretch);
+        MAKE_CALL(shared::base + 0x5F79C0, void(__thiscall *)(ClothSimulation *, BOOL), this, bUseStretch);
     }
 };
 
@@ -1175,371 +1175,375 @@ public:
 
     Behavior()
     {
-        ((void(__thiscall *)(Behavior *))(shared::base + 0x6A3540))(this);
+        MAKE_CALL(shared::base + 0x6A3540, void(__thiscall *)(Behavior *), this);
     }
 
 // vft
 
     BOOL startup()
     {
-        return ReturnCallVMTFunc<BOOL, 16, Behavior *>(this);
+        return MAKE_VCALL(16, BOOL(__thiscall *)(Behavior *), this);
     }
 
     BOOL shutdown()
     {
-        return ReturnCallVMTFunc<BOOL, 17, Behavior *>(this);
+        return MAKE_VCALL(17, BOOL(__thiscall *)(Behavior *), this);
     }
 
     void updateLogic()
     {
-        CallVMTFunc<18, Behavior*>(this);
+        MAKE_VCALL(18, void(__thiscall *)(Behavior *), this);
     }
 
     void tick()
     {
-        CallVMTFunc<19, Behavior *>(this);
+        MAKE_VCALL(19, void(__thiscall *)(Behavior *), this);
     }
 
     void updateModel()
     {
-        CallVMTFunc<20, Behavior *>(this);
+        MAKE_VCALL(20, void(__thiscall *)(Behavior *), this);
     }
     
     void updateAttachments()
     {
-        CallVMTFunc<21, Behavior*>(this);
+        MAKE_VCALL(21, void(__thiscall *)(Behavior*), this);
     }
 
     void updateAnimation()
     {
-        CallVMTFunc<25, Behavior*>(this);
+        MAKE_VCALL(25, void(__thiscall *)(Behavior*), this);
     }
 
     const Hw::cVec4 &getTransPos()
     {
-        return ReturnCallVMTFunc<const Hw::cVec4 &, 26, Behavior *>(this);
+        return MAKE_VCALL(26, const Hw::cVec4&(__thiscall *)(Behavior *), this);
     }
 
     void setTransPos(const Hw::cVec4& transPos)
     {
-        CallVMTFunc<27, Behavior *, const Hw::cVec4&>(this, transPos);
+        MAKE_VCALL(27, void(__thiscall *)(Behavior *, const Hw::cVec4&), this, transPos);
     }
 
     void offsetTransPos(const Hw::cVec4& offset)
     {
-        CallVMTFunc<28, Behavior *, const Hw::cVec4&>(this, offset);
+        MAKE_VCALL(28, void(__thiscall *)(Behavior *, const Hw::cVec4&), this, offset);
     }
 
     void changeHeight(float height)
     {
-        CallVMTFunc<29, Behavior *, float>(this, height);
+        MAKE_VCALL(29, void(__thiscall *)(Behavior *, float), this, height);
     }
 
     void place(const Hw::cVec4 &pos, const Hw::cVec4& rotation, const Hw::cVec4& size)
     {
-        CallVMTFunc<30, Behavior *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation, size);
+        MAKE_VCALL(30, void(__thiscall *)(Behavior *, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&), this, pos, rotation, size);
     }
 
     void place(const Hw::cVec4 &pos, const Hw::cVec4 &rotation)
     {
-        CallVMTFunc<31, Behavior *, const Hw::cVec4&, const Hw::cVec4&>(this, pos, rotation);
+        MAKE_VCALL(31, void(__thiscall *)(Behavior *, const Hw::cVec4&, const Hw::cVec4&), this, pos, rotation);
     }
 
     const Hw::cVec4& getRotation()
     {
-        return ReturnCallVMTFunc<const Hw::cVec4&, 33, Behavior *>(this);
+        return MAKE_VCALL(33, const Hw::cVec4&(__thiscall *)(Behavior*), this);
     }
 
     void setRotation(const Hw::cVec4& rotation)
     {
-        CallVMTFunc<34, Behavior *, const Hw::cVec4&>(this, rotation);
+        MAKE_VCALL(34, void(__thiscall *)(Behavior *, const Hw::cVec4&), this, rotation);
     }
 
     const Hw::cVec4& getSize()
     {
-        return ReturnCallVMTFunc<const Hw::cVec4&, 35, Behavior *>(this);
+        return MAKE_VCALL(35, const Hw::cVec4 & (__thiscall*)(Behavior*), this);
     }
 
     void setSize(const Hw::cVec4& size)
     {
-        CallVMTFunc<36, Behavior *, const Hw::cVec4&>(this, size);
+        MAKE_VCALL(36, void(__thiscall *)(Behavior *, const Hw::cVec4&), this, size);
     }
 
     int getSequence()
     {
-        return ReturnCallVMTFunc<int, 37, Behavior *>(this);
+        return MAKE_VCALL(37, int(__thiscall *)(Behavior *), this);
     }
 
     eObjID getObjectId()
     {
-        return ReturnCallVMTFunc<eObjID, 38, Behavior *>(this);
+        return MAKE_VCALL(38, eObjID(__thiscall *)(Behavior *), this);
     }
 
     void* getSequenceFile(const char *name)
     {
-        return ReturnCallVMTFunc<void*, 39, Behavior *, const char*>(this, name);
+        return MAKE_VCALL(39, void*(__thiscall *)(Behavior *, const char*), this, name);
     }
 
     BOOL isLogicEnabled()
     {
-        return ReturnCallVMTFunc<BOOL, 42, Behavior*>(this);
+        return MAKE_VCALL(42, BOOL(__thiscall *)(Behavior *), this);
     }
 
     BOOL isTickEnabled()
     {
-        return ReturnCallVMTFunc<BOOL, 43, Behavior*>(this);
+        return MAKE_VCALL(43, BOOL(__thiscall *)(Behavior *), this);
     }
 
     BOOL isUpdateModelEnabled()
     {
-        return ReturnCallVMTFunc<BOOL, 44, Behavior*>(this);
+        return MAKE_VCALL(44, BOOL(__thiscall *)(Behavior *), this);
     }
 
     void getTransformMatrix(D3DXMATRIX *matrix)
     {
-        CallVMTFunc<45, Behavior *, D3DXMATRIX *>(this, matrix);
+        MAKE_VCALL(45, void(__thiscall *)(Behavior *, D3DXMATRIX *), this, matrix);
     }
 
     void multiplyLocalViewMatrix(D3DXMATRIX *matrix)
     {
-        CallVMTFunc<46, Behavior *, D3DXMATRIX *>(this, matrix);
+        MAKE_VCALL(46, void(__thiscall *)(Behavior *, D3DXMATRIX *), this, matrix);
     }
 
     void toggleCollision(BOOL bState)
     {
-        CallVMTFunc<50, Behavior *, BOOL>(this, bState);
+        MAKE_VCALL(50, void(__thiscall *)(Behavior *, BOOL), this, bState);
     }
 
     void attachConstraints(BOOL bState)
     {
-        CallVMTFunc<62, Behavior *, BOOL>(this, bState);
+        MAKE_VCALL(62, void(__thiscall *)(Behavior *, BOOL), this, bState);
     }
 
     void setStealthCamoEnabled(bool bEnable)
     {
-        CallVMTFunc<68, Behavior *, bool>(this, bEnable);
+        MAKE_VCALL(68, void(__thiscall *)(Behavior *, bool), this, bEnable);
     }
 
     void setSeqAtk()
     {
-        CallVMTFunc<74, Behavior *>(this);
+        MAKE_VCALL(74, void(__thiscall *)(Behavior *), this);
     }
 
     [[nodiscard]] CollisionAttackData *getAttackInfo(int a1)
     {
-        return ReturnCallVMTFunc<CollisionAttackData*, 76, Behavior*, int>(this, a1);
+        return MAKE_VCALL(76, CollisionAttackData*(__thiscall *)(Behavior*, int), this, a1);
     }
 
     void setCutCreateInfo(void *a1, int a2, int a3)
     {
-        CallVMTFunc<110, Behavior *, void *, int, int>(this, a1, a2, a3);
+        MAKE_VCALL(110, void(__thiscall *)(Behavior *, void *, int, int), this, a1, a2, a3);
     }
 
     BOOL isAlive()
     {
-        return ReturnCallVMTFunc<BOOL, 128, Behavior *>(this);
+        return MAKE_VCALL(128, BOOL(__thiscall *)(Behavior *), this);
     }
 
-    void setMutekiTime(float time) { CallVMTFunc<136, Behavior *, float>(this, time); }
+    void setMutekiTime(float time) 
+    { 
+        MAKE_VCALL(136, void(__thiscall *)(Behavior *, float), this, time); 
+    }
 
     Hw::cVec4 getOffsetPosition()
     {
         Hw::cVec4 result;
-        result = ReturnCallVMTFunc<Hw::cVec4&, 159, Behavior *, Hw::cVec4&>(this, result);
+        result = MAKE_VCALL(159, const Hw::cVec4&(__thiscall*)(Behavior*, Hw::cVec4&),this, result);
         return result;
     }
 
     void forceDeath()
     {
-        CallVMTFunc<190, Behavior*>(this);
+        MAKE_VCALL(190, void(__thiscall *)(Behavior *), this);
     }
 
     // vft end
 
     BOOL initializeEffects(int *which) // array of 3, which[0] = esp, which[1] = effect containers, which[2] = esp custom ctrl
     {
-        return ((BOOL (__thiscall *)(Behavior *, int *))(shared::base + 0x6A4980))(this, which);
+        return MAKE_CALL(shared::base + 0x6A4980, BOOL(__thiscall *)(Behavior *, int *), this, which);
     }
 
     void initCombatCollisions(int a2, int a3)
     {
-        ((void (__thiscall *)(Behavior *, int, int))(shared::base + 0x6A9080))(this, a2, a3);
+        MAKE_CALL(shared::base + 0x6A9080, void(__thiscall *)(Behavior *, int, int), this, a2, a3);
     }
 
     void getAttackCollisions(lib::Array<Collision*> *pOutArray)
     {
-        ((void (__thiscall *)(Behavior *, lib::Array<Collision*> *))(shared::base + 0x69D9A0))(this, pOutArray);
+        MAKE_CALL(shared::base + 0x69D9A0, void(__thiscall *)(Behavior *, lib::Array<Collision*> *), this, pOutArray);
     }
 
     void removeAttackCollisions()
     {
-        ((void (__thiscall *)(Behavior *))(shared::base + 0x6933E0))(this);
+        MAKE_CALL(shared::base + 0x6933E0, void(__thiscall *)(Behavior *), this);
     }
 
     void removeDefenseCollisions()
     {
-        ((void (__thiscall *)(Behavior *))(shared::base + 0x6934C0))(this);
+        MAKE_CALL(shared::base + 0x6934C0, void(__thiscall *)(Behavior *), this);
     }
 
     void initAttackCollisions(int a2)
     {
-        ((void (__thiscall *)(Behavior *, int))(shared::base + 0x6A3920))(this, a2);
+        MAKE_CALL(shared::base + 0x6A3920, void(__thiscall *)(Behavior *, int), this, a2);
     }
 
     BOOL addDefenseCollision(Collision *pCollision)
     {
-        return ((BOOL (__thiscall *)(Behavior *, Collision *))(shared::base + 0x693A00))(this, pCollision);
+        return MAKE_CALL(shared::base + 0x693A00, BOOL(__thiscall *)(Behavior *, Collision *), this, pCollision);
     }
 
     void shutdownEffects()
     {
-        ((void(__thiscall *)(Behavior *))(shared::base + 0x68C820))(this);
+        MAKE_CALL(shared::base + 0x68C820, void(__thiscall *)(Behavior *), this);
     }
 
     unsigned int getRno0()
     {
-        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAB0))(this);
+        return MAKE_CALL(shared::base + 0x68CAB0, unsigned int(__thiscall *)(Behavior *), this);
     }
 
     unsigned int getRno1()
     {
-        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAC0))(this);
+        return MAKE_CALL(shared::base + 0x68CAC0, unsigned int(__thiscall *)(Behavior *), this);
     }
 
     unsigned int getRno2()
     {
-        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAD0))(this);
+        return MAKE_CALL(shared::base + 0x68CAD0, unsigned int(__thiscall *)(Behavior *), this);
     }
 
     unsigned int getRno3()
     {
-        return ((unsigned int (__thiscall *)(Behavior *))(shared::base + 0x68CAE0))(this); }
+        return MAKE_CALL(shared::base + 0x68CAE0, unsigned int(__thiscall *)(Behavior *), this);
+    }
 
-    void setRno(unsigned int rno0, unsigned int rno1, unsigned int rno2, unsigned int rno3) { CallMethod<0x68CAF0, Behavior *, unsigned int, unsigned int, unsigned int, unsigned int>(this, rno0, rno1, rno2, rno3); }
-    void setRno0(unsigned int rno0) { CallMethod<0x68CB50, Behavior *, unsigned int>(this, rno0); }
-    void setRno1(unsigned int rno1) { CallMethod<0x68CB60, Behavior *, unsigned int>(this, rno1); }
-    void setRno2(unsigned int rno2) { CallMethod<0x68CB70, Behavior *, unsigned int>(this, rno2); }
-    void setRno3(unsigned int rno3) { CallMethod<0x68CB80, Behavior *, unsigned int>(this, rno3); }
+    void setRno(unsigned int rno0, unsigned int rno1, unsigned int rno2, unsigned int rno3) { MAKE_CALL(shared::base + 0x68CAF0, void(__thiscall *)(Behavior *, unsigned int, unsigned int, unsigned int, unsigned int), this, rno0, rno1, rno2, rno3); }
+    void setRno0(unsigned int rno0) { MAKE_CALL(shared::base + 0x68CB50, void(__thiscall *)(Behavior *, unsigned int), this, rno0); }
+    void setRno1(unsigned int rno1) { MAKE_CALL(shared::base + 0x68CB60, void(__thiscall *)(Behavior *, unsigned int), this, rno1); }
+    void setRno2(unsigned int rno2) { MAKE_CALL(shared::base + 0x68CB70, void(__thiscall *)(Behavior *, unsigned int), this, rno2); }
+    void setRno3(unsigned int rno3) { MAKE_CALL(shared::base + 0x68CB80, void(__thiscall *)(Behavior *, unsigned int), this, rno3); }
 
     BOOL setupCloth(Hw::cFmerge *clothStorage) // initializes first cloth bxm(0)
     {
-        return ((BOOL (__thiscall *)(Behavior *, Hw::cFmerge *))(shared::base + 0x692380))(this, clothStorage);
+        return MAKE_CALL(shared::base + 0x692380, BOOL (__thiscall *)(Behavior *, Hw::cFmerge *), this, clothStorage);
     }
 
     // return value is animation slot id
     int setAnimationFrom(Behavior *from, const char *animName, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((BOOL (__thiscall *)(Behavior *, Behavior *, const char *, int, float, float, unsigned int, float, float))(shared::base + 0x69E440))(this, from, animName, node, interpolation, weight, flags, startFrame, playbackSpeed);
+        return MAKE_CALL(shared::base + 0x69E440, int(__thiscall *)(Behavior *, Behavior *, const char *, int, float, float, unsigned int, float, float), this, from, animName, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     // return value is animation slot id
     int requestAnimationByMap(int animId, Entity* from, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int (__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float))(shared::base + 0x6A4520))(this, animId, from, node, interpolation, weight, flags, startFrame, playbackSpeed);
+        return MAKE_CALL(shared::base + 0x6A4520, int(__thiscall *)(Behavior *, int, Entity *, int, float, float, unsigned int, float, float), this, animId, from, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     // return value is animation slot id
     int requestAnimationByMap(Entity *pAnimEntity, int a2, int a3, int a4, int a5, int a6, const char* motId, float interpolation, unsigned int flags)
     {
-        return ((int (__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int))(shared::base + 0x694850))(this, pAnimEntity, a2, a3, a4, a5, a6, motId, interpolation, flags);
+        return MAKE_CALL(shared::base + 0x694850, int(__thiscall *)(Behavior *, Entity *, int, int, int, int, int, const char*, float, unsigned int), this, pAnimEntity, a2, a3, a4, a5, a6, motId, interpolation, flags);
     }
 
     AnimationSlot *getAnimationSlotById(int slotId)
     {
-        return ((AnimationSlot * (__thiscall *)(Behavior *, int))(shared::base + 0x6945C0))(this, slotId);
+        return MAKE_CALL(shared::base + 0x6945C0, AnimationSlot *(__thiscall *)(Behavior *, int), this, slotId);
     }
 
     void removeConstraint(int constraintId)
     {
-        ((void (__thiscall *)(Behavior*, int))(shared::base + 0x69E060))(this, constraintId);
+        MAKE_CALL(shared::base + 0x69E060, void(__thiscall *)(Behavior*, int), this, constraintId);
     }
 
     void attachObject(int constrId, Entity* entityAttachTo, Entity* attachedEntity, int bone, int rotationBone)
     {
-        ((void(__thiscall*)(Behavior*, int, Entity*, Entity*, int, int))(shared::base + 0x68C5F0))(this, constrId, entityAttachTo, attachedEntity, bone, rotationBone);
+        MAKE_CALL(shared::base + 0x68C5F0, void(__thiscall *)(Behavior*, int, Entity*, Entity*, int, int), this, constrId, entityAttachTo, attachedEntity, bone, rotationBone);
     }
 
     void shutdownBattleParameter()
     {
-        ((void(__thiscall*)(Behavior*))(shared::base + 0x692A00))(this);
+        MAKE_CALL(shared::base + 0x692A00, void(__thiscall *)(Behavior*), this);
     }
 
     Animation* getAnimation()
     {
-        return ((Animation * (__thiscall*)(Behavior*))(shared::base + 0x692F90))(this);
+        return MAKE_CALL(shared::base + 0x692F90, Animation *(__thiscall *)(Behavior*), this);
     }
 
     float getSpeedRate()
     {
-        return ((float(__thiscall*)(Behavior*))(shared::base + 0x692FF0))(this);
+        return MAKE_CALL(shared::base + 0x692FF0, float(__thiscall *)(Behavior*), this);
     }
 
     float getDelta()
     {
-        return ((float(__thiscall*)(Behavior*))(shared::base + 0x693060))(this);
+        return MAKE_CALL(shared::base + 0x693060, float(__thiscall *)(Behavior*), this);
     }
 
     Constraints* getConstraintById(int id)
     {
-        return ((Constraints * (__thiscall*)(Behavior*, int))(shared::base + 0x6943E0))(this, id);
+        return MAKE_CALL(shared::base + 0x6943E0, Constraints *(__thiscall *)(Behavior*, int), this, id);
     }
 
     Constraints *getConstraint(int index)
     {
-        return ((Constraints * (__thiscall*)(Behavior*, int))(shared::base + 0x694380))(this, index);
+        return MAKE_CALL(shared::base + 0x694380, Constraints *(__thiscall *)(Behavior*, int), this, index);
     }
 
     Entity* getConstraintsEntity(int id)
     {
-        return ((Entity * (__thiscall*)(Behavior*, int))(shared::base + 0x694480))(this, id);
+        return MAKE_CALL(shared::base + 0x694480, Entity *(__thiscall *)(Behavior*, int), this, id);
     }
 
     void shutdownConstraints()
     {
-        ((void(__thiscall*)(Behavior*))(shared::base + 0x6944D0))(this);
+        MAKE_CALL(shared::base + 0x6944D0, void(__thiscall *)(Behavior*), this);
     }
 
     void setConstraintsBone(int id, unsigned int bone, unsigned int rotationBone)
     {
-        ((void(__thiscall*)(Behavior*, int, unsigned int, unsigned int))(shared::base + 0x69E120))(this, id, bone, rotationBone);
+        MAKE_CALL(shared::base + 0x69E120, void(__thiscall *)(Behavior*, int, unsigned int, unsigned int), this, id, bone, rotationBone);
     }
 
     int setDirectAnimation(void* mot, void* seq, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-       return ((int(__thiscall*)(Behavior*, void*, void*, int, float, float, unsigned int, float, float))(shared::base + 0x69EFB0))(this, mot, seq, node, interpolation, weight, flags, startFrame, playbackSpeed);
+       return MAKE_CALL(shared::base + 0x69EFB0, int(__thiscall *)(Behavior*, void*, void*, int, float, float, unsigned int, float, float), this, mot, seq, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     int setAnimationByData(Hw::cFmerge *data, unsigned int index, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int(__thiscall*)(Behavior*, Hw::cFmerge*, unsigned int, int, float, float, unsigned int, float, float))(shared::base + 0x69F3C0))(this, data, index, node, interpolation, weight, flags, startFrame, playbackSpeed);
+        return MAKE_CALL(shared::base + 0x69F3C0, int(__thiscall *)(Behavior*, Hw::cFmerge*, unsigned int, int, float, float, unsigned int, float, float), this, data, index, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     // Takes all values from the animation map and plays the animation
     int requestAnimationByMap(int id)
     {
-        return ((int(__thiscall*)(Behavior*, int))(shared::base + 0x6A3F60))(this, id);
+        return MAKE_CALL(shared::base + 0x6A3F60, int(__thiscall *)(Behavior*, int), this, id);
     }
     
     // Unlike others, motion file is taken from the data file of this object
     int requestAnimationByName(const char* anim, int node, float interpolation, float weight, unsigned int flags, float startFrame, float playbackSpeed)
     {
-        return ((int(__thiscall*)(Behavior*, const char*, int, float, float, unsigned int, float, float))(shared::base + 0x69E290))(this, anim, node, interpolation, weight, flags, startFrame, playbackSpeed);
+        return MAKE_CALL(shared::base + 0x69E290, int(__thiscall *)(Behavior*, const char*, int, float, float, unsigned int, float, float), this, anim, node, interpolation, weight, flags, startFrame, playbackSpeed);
     }
 
     int getCollisionFilter()
     {
-        return ((int(__thiscall*)(Behavior*))(shared::base + 0x5F8B40))(this);
+        return MAKE_CALL(shared::base + 0x5F8B40, int(__thiscall *)(Behavior*), this);
     }
 
     BOOL ckSeqFlag(_In_range_(0, 63) int flagBit)
     {
-        return ((BOOL(__thiscall*)(Behavior*, int))(shared::base + 0x68C760))(this, flagBit);
+        return MAKE_CALL(shared::base + 0x68C760, BOOL(__thiscall *)(Behavior*, int), this, flagBit);
     }
 
     // node can be passed as handle or index
     void setNodePlaybackSpeed(int node, float playbackSpeed)
     {
-        ((void(__thiscall *)(Behavior *, int, float))(shared::base + 0x696030))(this, node, playbackSpeed);
+        MAKE_CALL(shared::base + 0x696030, void(__thiscall *)(Behavior*, int, float), this, node, playbackSpeed);
     }
 
     static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9C20);

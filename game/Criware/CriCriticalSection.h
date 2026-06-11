@@ -12,10 +12,10 @@ struct CriCriticalSection
 
 inline void CRIAPI CriCriticalSection_enter(CriCriticalSection* section)
 {
-    ((void(CRIAPI*)(CriCriticalSection*))(shared::base + 0xE941D9))(section);
+    MAKE_CALL(shared::base + 0xE941D9, void(CRIAPI *)(CriCriticalSection *), section);
 }
 
 inline void CRIAPI CriCriticalSection_leave(CriCriticalSection *section)
 {
-    ((void(CRIAPI *)(CriCriticalSection *))(shared::base + 0xE9420C))(section);
+    MAKE_CALL(shared::base + 0xE9420C, void(CRIAPI *)(CriCriticalSection*), section);
 }

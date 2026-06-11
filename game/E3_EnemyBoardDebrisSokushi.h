@@ -8,10 +8,10 @@ public:
 
     E3_EnemyBoardDebrisSokushi()
     {
-        ((void(__thiscall *)(E3_EnemyBoardDebrisSokushi *))(shared::base + 0x6A6C40))(this);
+        MAKE_CALL(shared::base + 0x6A6C40, void(__thiscall *)(E3_EnemyBoardDebrisSokushi *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1734B54);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x1734B54);
 };
 
 VALIDATE_SIZE(E3_EnemyBoardDebrisSokushi, 0x870);

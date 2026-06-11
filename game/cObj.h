@@ -46,17 +46,17 @@ public:
     int field_528;
     int field_52C;
 
-    cObj() { CallMethod<0x5FD150, cObj*>(this); }
+    cObj() { MAKE_CALL(shared::base + 0x5FD150, void(__thiscall *)(cObj*), this); }
 
     // vft
 
-    ContextInstance& getContext() { return ReturnCallVMTFunc<ContextInstance&, 1, cObj*>(this); }
-    BOOL createDummy() { return ReturnCallVMTFunc<BOOL, 2, cObj*>(this); }
-    void fadeOut() { CallVMTFunc<3, cObj*>(this); }
-    void updateBoneTransform() { CallVMTFunc<6, cObj*>(this); }
-    void onDisp() { CallVMTFunc<7, cObj*>(this); }
-    void offDisp() { CallVMTFunc<8, cObj*>(this); }
-    void setCollisionFilter(int* pCollisionFilter) { CallVMTFunc<15, cObj*, int*>(this, pCollisionFilter); }
+    ContextInstance& getContext() { return MAKE_VCALL(1, ContextInstance&(__thiscall*)(cObj *), this); }
+    BOOL createDummy() { return MAKE_VCALL(2, BOOL(__thiscall*)(cObj*), this); }
+    void fadeOut() { MAKE_VCALL(3, void(__thiscall*)(cObj*), this); }
+    void updateBoneTransform() { MAKE_VCALL(6, void(__thiscall*)(cObj*), this); }
+    void onDisp() { MAKE_VCALL(7, void(__thiscall*)(cObj*), this); }
+    void offDisp() { MAKE_VCALL(8, void(__thiscall*)(cObj*), this); }
+    void setCollisionFilter(int* pCollisionFilter) { MAKE_VCALL(15, void(__thiscall*)(cObj*, int*), this, pCollisionFilter); }
 
     // vft end 
 

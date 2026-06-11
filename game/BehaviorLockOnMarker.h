@@ -14,10 +14,10 @@ public:
 
     BehaviorLockOnMarker()
     {
-        ((void(__thiscall *)(BehaviorLockOnMarker *))(shared::base + 0x6A6670))(this);
+        MAKE_CALL(shared::base + 0x6A6670, void(__thiscall *)(BehaviorLockOnMarker *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9CA4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9CA4);
 };
 
 VALIDATE_SIZE(BehaviorLockOnMarker, 0x9E0);

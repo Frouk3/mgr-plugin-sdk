@@ -115,10 +115,10 @@ public:
 
     MonThrowObj()
     {
-        ((void(__thiscall *)(MonThrowObj*))(shared::base + 0x6B10B0))(this);
+        MAKE_CALL(shared::base + 0x6B10B0, void(__thiscall *)(MonThrowObj*), this);
     }
-    
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F58);
+
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F58);
 };
 
 VALIDATE_SIZE(MonThrowObj, 0x1500);

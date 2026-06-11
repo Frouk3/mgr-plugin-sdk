@@ -448,10 +448,10 @@ public:
 
     EmC010()
     {
-        ((void(__thiscall *)(EmC010*))(shared::base + 0x6B1C50))(this);
+        MAKE_CALL(shared::base + 0x6B1C50, void(__thiscall *)(EmC010*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357A0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17357A0);
 };
 
 class EmC010Magazine : public BehaviorPartsModel
@@ -468,10 +468,10 @@ public:
 
     EmC010Magazine()
     {
-        ((void(__thiscall *)(EmC010Magazine*))(shared::base + 0x6B40F0))(this);
+        MAKE_CALL(shared::base + 0x6B40F0, void(__thiscall *)(EmC010Magazine*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357A4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17357A4);
 };
 
 class EmC010WeaponShield : public EmC010Weapon
@@ -484,10 +484,10 @@ public:
     
     EmC010WeaponShield()
     {
-        ((void(__thiscall *)(EmC010WeaponShield *))(shared::base + 0x6B4260))(this);
+        MAKE_CALL(shared::base + 0x6B4260, void(__thiscall *)(EmC010WeaponShield *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357AC);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17357AC);
 };
 
 class EmC010RPGBullet : public Em0010RPGBullet
@@ -496,10 +496,10 @@ public:
 
     EmC010RPGBullet()
     {
-        ((void(__thiscall *)(EmC010RPGBullet*))(shared::base + 0x6B41A0))(this);
+        MAKE_CALL(shared::base + 0x6B41A0, void(__thiscall *)(EmC010RPGBullet*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357B0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17357B0);
 };
 
 VALIDATE_SIZE(EmC010WeaponShield, 0x8E0);

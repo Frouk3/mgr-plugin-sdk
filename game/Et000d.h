@@ -20,10 +20,10 @@ public:
 
     Et000d()
     {
-        ((void(__thiscall *)(Et000d *))(shared::base + 0x6A6990))(this);
+        MAKE_CALL(shared::base + 0x6A6990, void(__thiscall *)(Et000d *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17352A0);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17352A0);
 };
 
 VALIDATE_SIZE(Et000d, 0x8A0);

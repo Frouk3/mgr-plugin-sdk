@@ -20,10 +20,10 @@ public:
 
     DlcCatBehavior()
     {
-        ((void(__thiscall *)(DlcCatBehavior*))(shared::base + 0x6B19C0))(this);
+        MAKE_CALL(shared::base + 0x6B19C0, void(__thiscall *)(DlcCatBehavior*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17354D4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17354D4);
 };
 
 VALIDATE_SIZE(DlcCatBehavior, 0xA30);

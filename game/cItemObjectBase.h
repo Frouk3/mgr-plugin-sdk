@@ -46,10 +46,10 @@ public:
 
     cItemObjectBase()
     {
-        ((void(__thiscall *)(cItemObjectBase*))(shared::base + 0x6A7300))(this);
+        MAKE_CALL(shared::base + 0x6A7300, void(__thiscall *)(cItemObjectBase*), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1735390);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x1735390);
 };
 
 VALIDATE_SIZE(cItemObjectBase, 0x920);

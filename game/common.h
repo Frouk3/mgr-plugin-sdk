@@ -32,18 +32,18 @@ struct cString // incomplete class, needs further research
 	int field_18;
 	int field_1C;
 
-	cString(const char *str, Hw::cHeapVariable *allocator) { CallMethod<0xA09060, cString *, const char *, Hw::cHeapVariable *>(this, str, allocator); }
+	cString(const char *str, Hw::cHeapVariable *allocator) { MAKE_CALL(shared::base + 0xA09060, void(__thiscall *)(cString *, const char *, Hw::cHeapVariable *), this, str, allocator); }
 
-	char *scanForChar(const char *str) { return ReturnCallMethod<char*, 0xA04370, cString *, const char *>(this, str); }
+	char *scanForChar(const char *str) { return MAKE_CALL(shared::base + 0xA04370, char*(__thiscall *)(cString *, const char *), this, str); }
 
-	char *findFistOfExcluding(const char *toFind, const char *toExclude) { return ReturnCallMethod<char*, 0xA043C0, cString *, const char *, const char *>(this, toFind, toExclude); }
+	char *findFistOfExcluding(const char *toFind, const char *toExclude) { return MAKE_CALL(shared::base + 0xA043C0, char*(__thiscall *)(cString *, const char *, const char *), this, toFind, toExclude); }
 
-	void trimLeadingWhitespaces() { CallMethod<0xA04440, cString *>(this); }
-	bool startsWithN(const char *str, size_t length) { return ReturnCallMethod<bool, 0xA056F0, cString *, const char *, size_t>(this, str, length); }
+	void trimLeadingWhitespaces() { MAKE_CALL(shared::base + 0xA04440, void(__thiscall *)(cString *), this); }
+	bool startsWithN(const char *str, size_t length) { return MAKE_CALL(shared::base + 0xA056F0, bool(__thiscall *)(cString *, const char *, size_t), this, str, length); }
 
-	size_t length() { return ReturnCallMethod<size_t, 0xA13C00, cString *>(this); }
+	size_t length() { return MAKE_CALL(shared::base + 0xA13C00, size_t(__thiscall *)(cString *), this); }
 
-	~cString() { CallMethod<0xA18EA0, cString *>(this); }
+	~cString() { MAKE_CALL(shared::base + 0xA18EA0, void(__thiscall *)(cString *), this); }
 };
 
 template <typename tC>
@@ -143,7 +143,7 @@ public:
 			unsigned int index = (unsigned short)(handle >> 8);
 			if (index >= m_Capacity)
 			{
-				Hw::cDebugLog::addMess("[HandleManage] Handle release error: Invalid handle");
+				Hw::DebugSystem::Report("[HandleManage] Handle release error: Invalid handle");
 				m_CriticalSection.leave();
 				return;
 			}
@@ -160,14 +160,14 @@ public:
 				}
 				else
 				{
-					Hw::cDebugLog::addMess("[HandleManage] Handle release error: Handle mismatch");
+					Hw::DebugSystem::Report("[HandleManage] Handle release error: Handle mismatch");
 					m_CriticalSection.leave();
 					return;
 				}
 			}
 			else
 			{
-				Hw::cDebugLog::addMess("[HandleManage] Handle release error: Invalid work");
+				Hw::DebugSystem::Report("[HandleManage] Handle release error: Invalid work");
 				m_CriticalSection.leave();
 				return;
 			}
@@ -181,7 +181,7 @@ public:
 
 		if (index >= m_Capacity)
 		{
-			Hw::cDebugLog::addMess("[HandleManage] Handle error: Invalid handle");
+			Hw::DebugSystem::Report("[HandleManage] Handle error: Invalid handle");
 			return nullptr;
 		}
 
@@ -198,19 +198,19 @@ struct ContextInstance
 {
 	ContextInstance *m_inheritance;
 
-	BOOL hasInheritance(const ContextInstance &other) { return ReturnCallMethod<BOOL, 0x9D6D80, ContextInstance *, const ContextInstance &>(this, other); }
+	BOOL hasInheritance(const ContextInstance &other) { return MAKE_CALL(shared::base + 0x9D6D80, BOOL(__thiscall*)(ContextInstance *, const ContextInstance&), this, other); }
 
 	bool operator==(const ContextInstance& other) { return this == &other; }
 
-	ContextInstance(ContextInstance *inheritance) { CallMethod<0x9D6D50, ContextInstance *, ContextInstance *>(this, inheritance); }
+	ContextInstance(ContextInstance *inheritance) { MAKE_CALL(shared::base + 0x9D6D50, void(__thiscall*)(ContextInstance *, ContextInstance *), this, inheritance); }
 	ContextInstance() : ContextInstance(nullptr) {}
 
-	~ContextInstance() { CallMethod<0x9D6D60, ContextInstance *>(this); }
+	~ContextInstance() { MAKE_CALL(shared::base + 0x9D6D60, void(__thiscall*)(ContextInstance *), this); }
 };
 
 // e prefix is indicated that it is used by the engine
 
-inline void Core_PlaySound(const char* se, int unused) { CdeclCall<0xA5E050, const char *, int>(se, unused); }
+inline void Core_PlaySound(const char* se, int unused) { MAKE_CALL(shared::base + 0xA5E050, void(__cdecl*)(const char*, int), se, unused); }
 
 // inline void __declspec(naked) PrintfLog(const char* fmt, ...) -> Hw::cDebugLog::addMess
 // {
@@ -222,8 +222,8 @@ inline void Core_PlaySound(const char* se, int unused) { CdeclCall<0xA5E050, con
 // 	}
 // }
 
-inline unsigned int crc32lower(const char* str, size_t length) { return ReturnCdeclCall<unsigned int, 0xA03D20, const char *, size_t>(str, length); }
-inline unsigned int crc32lower(const char* str) { return ReturnCdeclCall<unsigned int, 0xA03EA0, const char *>(str); }
+inline unsigned int crc32lower(const char* str, size_t length) { return MAKE_CALL(shared::base + 0xA03D20, unsigned int(__cdecl*)(const char *, size_t), str, length); }
+inline unsigned int crc32lower(const char* str) { return MAKE_CALL(shared::base + 0xA03EA0, unsigned int(__cdecl*)(const char *), str); }
 
 // inline void * __cdecl eFree(void *block) -> Hw::cHeap::free
 // {
@@ -238,6 +238,6 @@ inline void *__cdecl AllocateMemory(size_t size)
 	return mem;
 }
 
-inline void __cdecl FreeMemory(void *block, int a2) { CdeclCall<0x61D3D0, void *, int>(block, a2); }
+inline void __cdecl FreeMemory(void *block, int a2) { MAKE_CALL(shared::base + 0x61D3D0, void(__cdecl*)(void *, int), block, a2); }
 
 inline bool &bIsForegroundWindow = *(bool*)(shared::base + 0x19D509C);

@@ -403,14 +403,14 @@ enum STP_FLAG : unsigned __int32
     STP_EM_BRAIN=48 
 };
 
-inline BOOL __cdecl ckStaFlag(STA_FLAG flag) { return ((BOOL(__cdecl *)(STA_FLAG))(shared::base + 0x16910))(flag); }
-inline void __cdecl onStaFlag(STA_FLAG flag) { ((void(__cdecl *)(STA_FLAG))(shared::base + 0x168D0))(flag); }
-inline void __cdecl offStaFlag(STA_FLAG flag) { ((void(__cdecl *)(STA_FLAG))(shared::base + 0x168F0))(flag); }
+inline BOOL __cdecl ckStaFlag(STA_FLAG flag) { return MAKE_CALL(shared::base + 0x16910, BOOL(__cdecl *)(STA_FLAG), flag); }
+inline void __cdecl onStaFlag(STA_FLAG flag) { MAKE_CALL(shared::base + 0x168D0, void(__cdecl *)(STA_FLAG), flag); }
+inline void __cdecl offStaFlag(STA_FLAG flag) { MAKE_CALL(shared::base + 0x168F0, void(__cdecl *)(STA_FLAG), flag); }
 
-inline BOOL __cdecl ckStpFlag(STP_FLAG flag) { return ((BOOL(__cdecl *)(STP_FLAG))(shared::base + 0x3FF60))(flag); }
-inline void __cdecl onStpFlag(STP_FLAG flag) { ((void(__cdecl *)(STP_FLAG))(shared::base + 0x9CCE0))(flag); }
-inline void __cdecl offStpFlag(STP_FLAG flag) { ((void(__cdecl *)(STP_FLAG))(shared::base + 0x9CD00))(flag); }
+inline BOOL __cdecl ckStpFlag(STP_FLAG flag) { return MAKE_CALL(shared::base + 0x3FF60, BOOL(__cdecl *)(STP_FLAG), flag); }
+inline void __cdecl onStpFlag(STP_FLAG flag) { MAKE_CALL(shared::base + 0x9CCE0, void(__cdecl *)(STP_FLAG), flag); }
+inline void __cdecl offStpFlag(STP_FLAG flag) { MAKE_CALL(shared::base + 0x9CD00, void(__cdecl *)(STP_FLAG), flag); }
 
-inline BOOL __cdecl ckGameFlag(GAME_FLAG flag) { return ((BOOL(__cdecl *)(GAME_FLAG))(shared::base + 0x16D50))(flag); }
-inline void __cdecl onGameFlag(GAME_FLAG flag) { ((void(__cdecl *)(GAME_FLAG))(shared::base + 0x9CC70))(flag); }
-inline void __cdecl offGameFlag(GAME_FLAG flag) { ((void(__cdecl *)(GAME_FLAG))(shared::base + 0x9CC90))(flag); }
+inline BOOL __cdecl ckGameFlag(GAME_FLAG flag) { return MAKE_CALL(shared::base + 0x16D50, BOOL(__cdecl *)(GAME_FLAG), flag); }
+inline void __cdecl onGameFlag(GAME_FLAG flag) { MAKE_CALL(shared::base + 0x9CC70, void(__cdecl *)(GAME_FLAG), flag); }
+inline void __cdecl offGameFlag(GAME_FLAG flag) { MAKE_CALL(shared::base + 0x9CC90, void(__cdecl *)(GAME_FLAG), flag); }

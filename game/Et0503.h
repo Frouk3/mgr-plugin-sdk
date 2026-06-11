@@ -12,10 +12,10 @@ public:
 
     Et0503()
     {
-        ((void(__thiscall *)(Et0503 *))(shared::base + 0x6A6D30))(this);
+        MAKE_CALL(shared::base + 0x6A6D30, void(__thiscall *)(Et0503 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17352B8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17352B8);
 };
 
 VALIDATE_SIZE(Et0503, 0x880);

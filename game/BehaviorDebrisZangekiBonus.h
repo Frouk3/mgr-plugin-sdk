@@ -12,10 +12,10 @@ public:
 
     BehaviorDebrisZangekiBonus()
     {
-        ((void(__thiscall *)(BehaviorDebrisZangekiBonus *))(shared::base + 0x6C10E0))(this);
+        MAKE_CALL(shared::base + 0x6C10E0, void(__thiscall *)(BehaviorDebrisZangekiBonus *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173531C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173531C);
 };
 
 VALIDATE_SIZE(BehaviorDebrisZangekiBonus, 0x9B0);

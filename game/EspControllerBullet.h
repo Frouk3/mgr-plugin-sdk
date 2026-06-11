@@ -8,7 +8,7 @@ public:
 
     EspControllerBullet()
     {
-        ((void (__thiscall *)(EspControllerBullet*))(shared::base + 0x5CF2E0))(this);
+        MAKE_CALL(shared::base + 0x5CF2E0, void(__thiscall *)(EspControllerBullet*), this);
     }
 };
 

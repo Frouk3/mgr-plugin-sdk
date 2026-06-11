@@ -11,7 +11,7 @@ public:
 
     Pl1500KnifeSet()
     {
-        ((void(__thiscall *)(Pl1500KnifeSet *))(shared::base + 0x6A6F00))(this);
+        MAKE_CALL(shared::base + 0x6A6F00, void (__thiscall *)(Pl1500KnifeSet *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735B98);

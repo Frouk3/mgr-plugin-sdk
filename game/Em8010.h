@@ -449,10 +449,10 @@ public:
 
     Em8010()
     {
-        ((void(__thiscall *)(Em8010*))(shared::base + 0x6B4360))(this);
+        MAKE_CALL(shared::base + 0x6B4360, void(__thiscall *)(Em8010*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735540);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735540);
 };
 
 class Em8010Magazine : public BehaviorPartsModel
@@ -469,10 +469,10 @@ public:
 
     Em8010Magazine()
     {
-        ((void(__thiscall *)(Em8010Magazine *))(shared::base + 0x6B5F00))(this);
+        MAKE_CALL(shared::base + 0x6B5F00, void(__thiscall *)(Em8010Magazine *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735544);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735544);
 };
 
 class Em8010Weapon : public cEm0010Weapon
@@ -481,10 +481,10 @@ public:
 
     Em8010Weapon()
     {
-        ((void(__thiscall *)(Em8010Weapon*))(shared::base + 0x6B5EA0))(this);
+        MAKE_CALL(shared::base + 0x6B5EA0, void(__thiscall *)(Em8010Weapon*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735548);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735548);
 };
 
 class Em8010WeaponShield : public Em8010Weapon
@@ -497,10 +497,10 @@ public:
 
     Em8010WeaponShield()
     {
-        ((void(__thiscall *)(Em8010WeaponShield*))(shared::base + 0x6B6070))(this);
+        MAKE_CALL(shared::base + 0x6B6070, void(__thiscall *)(Em8010WeaponShield*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173554C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173554C);
 };
 
 class Em8010RPGBullet : public Em0010RPGBullet
@@ -509,10 +509,10 @@ public:
 
     Em8010RPGBullet()
     {
-        ((void(__thiscall *)(Em8010RPGBullet*))(shared::base + 0x6B5FB0))(this);
+        MAKE_CALL(shared::base + 0x6B5FB0, void(__thiscall *)(Em8010RPGBullet*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735550);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735550);
 };
 
 VALIDATE_SIZE(Em8010WeaponShield, 0x8E0);

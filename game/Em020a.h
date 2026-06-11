@@ -908,10 +908,10 @@ public:
 
     Em020a()
     {
-        ((void(__thiscall *)(Em020a*))(shared::base + 0x6AE420))(this);
+        MAKE_CALL(shared::base + 0x6AE420, void(__thiscall *)(Em020a*), this);
     }
-    
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F80);
+
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F80);
 };
 
 VALIDATE_SIZE(Em020a, 0x2530);

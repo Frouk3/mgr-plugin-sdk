@@ -26,10 +26,10 @@ public:
 
     Em0220Weapon()
     {
-        ((void(__thiscall *)(Em0220Weapon *))(shared::base + 0x6A6310))(this);
+        MAKE_CALL(shared::base + 0x6A6310, void(__thiscall *)(Em0220Weapon *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735008);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735008);
 };
 
 class Em0220_Debris : public BehaviorDebrisBase
@@ -42,10 +42,10 @@ public:
 
     Em0220_Debris()
     {
-        ((void(__thiscall *)(Em0220_Debris*))(shared::base + 0x6AF930))(this);
+        MAKE_CALL(shared::base + 0x6AF930, void(__thiscall *)(Em0220_Debris*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173500C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173500C);
 };
 
 class Em0220 : public BehaviorEmBase
@@ -662,10 +662,10 @@ public:
 
     Em0220()
     {
-        ((void(__thiscall *)(Em0220*))(shared::base + 0x6AD190))(this);
+        MAKE_CALL(shared::base + 0x6AD190, void(__thiscall *)(Em0220*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735000);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735000);
 };
 
 VALIDATE_SIZE(Em0220Weapon, 0x900);

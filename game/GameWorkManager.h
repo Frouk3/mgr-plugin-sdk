@@ -10,96 +10,96 @@ public:
 
     BOOL startup()
     {
-        return ReturnCallVMTFunc<BOOL, 1, GameWorkManager *>(this);
+        return MAKE_VCALL(1, BOOL(__thiscall*)(GameWorkManager*), this);
     }
 
     void shutdown()
     {
-        CallVMTFunc<2, GameWorkManager *>(this);
+        MAKE_VCALL(2, void(__thiscall*)(GameWorkManager*), this);
     }
 
     void tick(float deltaTime)
     {
-        CallVMTFunc<3, GameWorkManager *>(this);
+        MAKE_VCALL(3, void(__thiscall*)(GameWorkManager*, float), this, deltaTime);
     }
 
     int startBattle(char* a2, int a3)
     {
-        return ReturnCallVMTFunc<int, 4, GameWorkManager*, char*, int>(this, a2, a3);
+        return MAKE_VCALL(4, int(__thiscall*)(GameWorkManager*, char*, int), this, a2, a3);
     }
 
     void gameOverEvent()
     {
-        CallVMTFunc<7, GameWorkManager *>(this);
+        MAKE_VCALL(7, void(__thiscall*)(GameWorkManager*), this);
     }
 
     BOOL isInBattle()
     {
-        return ReturnCallVMTFunc<BOOL, 9, GameWorkManager *>(this);
+        return MAKE_VCALL(9, BOOL(__thiscall*)(GameWorkManager*), this);
     }
 
     void processTakeDamage()
     {
-        CallVMTFunc<10, GameWorkManager *>(this);
+        MAKE_VCALL(10, void(__thiscall*)(GameWorkManager*), this);
     }
 
     void takeDamage()
     {
-        CallVMTFunc<11, GameWorkManager*>(this);
+        MAKE_VCALL(11, void(__thiscall*)(GameWorkManager*), this);
     }
 
     void increaseCombo()
     {
-        CallVMTFunc<13, GameWorkManager*>(this);
+        MAKE_VCALL(13, void(__thiscall*)(GameWorkManager*), this);
     }
 
     void increasePartsCut()
     {
-        CallVMTFunc<14, GameWorkManager *>(this);
+        MAKE_VCALL(14, void(__thiscall*)(GameWorkManager*), this);
     }
 
     void receiveBP(int bp)
     {
-        CallVMTFunc<15, GameWorkManager*>(this);
+        MAKE_VCALL(15, void(__thiscall*)(GameWorkManager*, int), this, bp);
     }
 
     void increaseAlerts()
     {
-        CallVMTFunc<20, GameWorkManager*>(this);
+        MAKE_VCALL(20, void(__thiscall*)(GameWorkManager*), this);
     }
 
     void increaseTauntCount()
     {
-        CallVMTFunc<21, GameWorkManager *>(this);
+        MAKE_VCALL(21, void(__thiscall*)(GameWorkManager *), this);
     }
 
     int getCombo()
     {
-        return ReturnCallVMTFunc<int, 29, GameWorkManager*>(this);
+        return MAKE_VCALL(29, int(__thiscall*)(GameWorkManager*), this);
     }
 
     int getPartsCut()
     {
-        return ReturnCallVMTFunc<int, 30, GameWorkManager *>(this);
+        return MAKE_VCALL(30, int(__thiscall*)(GameWorkManager *), this);
     }
 
     int getKills()
     {
-        return ReturnCallVMTFunc<int, 31, GameWorkManager *>(this);
-    } 
+        return MAKE_VCALL(31, int(__thiscall*)(GameWorkManager *), this);
+    }
 
     BOOL shouldShowComboDisp()
     {
-        return ReturnCallVMTFunc<BOOL, 32, GameWorkManager *>(this);
+        return MAKE_VCALL(32, BOOL(__thiscall*)(GameWorkManager *), this);
     }
 
     int getAlerts()
     {
-        return ReturnCallVMTFunc<int, 36, GameWorkManager *>(this);
+        return MAKE_VCALL(36, int(__thiscall*)(GameWorkManager *), this);
     }
 
     void clearDisp()
     {
-        CallVMTFunc<44, GameWorkManager *>(this);
+        MAKE_VCALL(44, void(__thiscall*)(GameWorkManager *), this);
     }
 };

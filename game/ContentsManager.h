@@ -15,7 +15,7 @@ public:
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735D64);
 
-    ContentsBase(Hw::cHeap &rHeap, int id) { CallMethod<0x4DC280, ContentsBase *, Hw::cHeap &, int>(this, rHeap, id); }
+    ContentsBase(Hw::cHeap &rHeap, int id) { MAKE_CALL(shared::base + 0x4DC280, void(__thiscall *)(ContentsBase *, Hw::cHeap &, int), this, rHeap, id); }
 
     virtual ContextInstance& getContext() { return *(ContextInstance*)(shared::base + 0x1735D64); }
     virtual ~ContentsBase() {}
@@ -37,9 +37,9 @@ class ContentsManager
 public:
 
     virtual ~ContentsManager() {}
-    void update() { CallVMTFunc<1, ContentsManager *>(this); }
-    void addContents(ContentsBase *pContent) { CallVMTFunc<2, ContentsManager *, ContentsBase *>(this, pContent); }
-    void removeContentsId(int contentId) { CallVMTFunc<3, ContentsManager *, int>(this, contentId); }
+    void update() { MAKE_VCALL(1, void(__thiscall *)(ContentsManager *), this); }
+    void addContents(ContentsBase *pContent) { MAKE_VCALL(2, void(__thiscall *)(ContentsManager *, ContentsBase *), this, pContent); }
+    void removeContentsId(int contentId) { MAKE_VCALL(3, void(__thiscall *)(ContentsManager *, int), this, contentId); }
     // returns current id for ContentsBase indexing
-    int cycleId() { return ReturnCallVMTFunc<int, 4, ContentsManager *>(this); }
+    int cycleId() { return MAKE_VCALL(4, int(__thiscall *)(ContentsManager *), this); }
 };

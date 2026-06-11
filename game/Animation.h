@@ -22,7 +22,7 @@ public:
             int field_8;
             int field_C;
 
-            NodeListener() { CallMethod<0xA27050, NodeListener *>(this); }
+            NodeListener() { MAKE_CALL(shared::base + 0xA27050, void(__thiscall *)(NodeListener*), this); }
 
             virtual ~NodeListener() {};
         };
@@ -38,7 +38,7 @@ public:
             int field_18;
             int field_1C;
 
-            Node() { CallMethod<0xA30770, Node *>(this); }
+            Node() { MAKE_CALL(shared::base + 0xA30770, void(__thiscall *)(Node*), this); }
 
             virtual ~Node() {};
         };
@@ -49,7 +49,7 @@ public:
 
             Animation::Control::NodeSlot::NodeHandler m_aControlNodes[8];
 
-            NodeSlot() { CallMethod<0xA308C0, Animation::Control::NodeSlot *>(this); }
+            NodeSlot() { MAKE_CALL(shared::base + 0xA308C0, void(__thiscall *)(NodeSlot *), this); }
         };
 
         struct Unit
@@ -58,7 +58,7 @@ public:
             Animation::Control::Node *field_4;
             Animation::Control::NodeSlot field_8;
 
-            Unit() { CallMethod<0xA30930, Animation::Control::Unit *>(this); }
+            Unit() { MAKE_CALL(shared::base + 0xA30930, void(__thiscall *)(Unit*), this); }
         };
 
         struct NodeFactory
@@ -88,9 +88,9 @@ public:
         float m_TargetEase;
         float m_CurrentEase;
 
-        void increaseSmooth(float delta) { CallMethod<0xA22F60, EaseControl *, float>(this, delta); }
-        void decreaseSmooth(float delta) { CallMethod<0xA22FD0, EaseControl *, float>(this, delta); }
-        void update(float delta) { CallMethod<0xA26F40, EaseControl *, float>(this, delta); }
+        void increaseSmooth(float delta) { MAKE_CALL(shared::base + 0xA22F60, void(__thiscall *)(EaseControl *, float), this, delta); }
+        void decreaseSmooth(float delta) { MAKE_CALL(shared::base + 0xA22FD0, void(__thiscall *)(EaseControl *, float), this, delta); }
+        void update(float delta) { MAKE_CALL(shared::base + 0xA26F40, void(__thiscall *)(EaseControl *, float), this, delta); }
     };
 
     class Motion
@@ -126,26 +126,26 @@ public:
 
             virtual ContextInstance& getContext() {return *(ContextInstance*)(shared::base + 0x19D9438); }
 
-            Node() { CallMethod<0xA2E330, Node *>(this); }
+            Node() { MAKE_CALL(shared::base + 0xA2E330, void(__thiscall *)(Node*), this); }
 
             virtual ~Node() {};
 
             // vft start
 
-            void setCurrentTime(float time, _In_opt_ Node *from) { CallVMTFunc<11, Node *, float, Node *>(this, time, from); }
-            void setCurrentTimeSlide(float timeSlide, _In_opt_ Node *from) { CallVMTFunc<12, Node *, float, Node *>(this, timeSlide, from); }
-            float getCurrentTime() { return ReturnCallVMTFunc<float, 13, Node*>(this); }
-            float getElapsedTime() { return ReturnCallVMTFunc<float, 14, Node*>(this); }
-            float getMaxTime() { return ReturnCallVMTFunc<float, 15, Node*>(this); }
-            void applyPlaybackSpeed() { CallVMTFunc<24, Node*>(this); }
-            void applyLocalWeight() { CallVMTFunc<25, Node*>(this); }
+            void setCurrentTime(float time, _In_opt_ Node *from) { MAKE_VCALL(11, void(__thiscall*)(Node *, float, Node *), this, time, from); }
+            void setCurrentTimeSlide(float timeSlide, _In_opt_ Node *from) { MAKE_VCALL(12, void(__thiscall*)(Node *, float, Node *), this, timeSlide, from); }
+            float getCurrentTime() { return MAKE_VCALL(13, float(__thiscall*)(Node *), this); }
+            float getElapsedTime() { return MAKE_VCALL(14, float(__thiscall*)(Node *), this); }
+            float getMaxTime() { return MAKE_VCALL(15, float(__thiscall*)(Node *), this); }
+            void applyPlaybackSpeed() { MAKE_VCALL(24, void(__thiscall*)(Node *), this); }
+            void applyLocalWeight() { MAKE_VCALL(25, void(__thiscall*)(Node *), this); }
             // vft end
 
-            BOOL setup(int nodeId, const char *name, int flags, int a5) { return ReturnCallMethod<BOOL, 0xA339B0, Node *, int, const char *, int, int>(this, nodeId, name, flags, a5); }
-            BOOL setLocalPlaybackSpeed(float speed) { return ReturnCallMethod<BOOL, 0xA26480, Node *, float>(this, speed); }
-            BOOL setLocalPlaybackRate(float rate) { return ReturnCallMethod<BOOL, 0xA264C0, Node *, float>(this, rate); }
-            BOOL setLocalWeight(float weight) { return ReturnCallMethod<BOOL, 0xA26500, Node *, float>(this, weight); }
-            BOOL applyAttributes() { return ReturnCallMethod<BOOL, 0xA26430, Node *>(this); } // applies local playback speed/rate/weight
+            BOOL setup(int nodeId, const char *name, int flags, int a5) { return MAKE_CALL(shared::base + 0xA339B0, BOOL(__thiscall*)(Node *, int, const char *, int, int), this, nodeId, name, flags, a5); }
+            BOOL setLocalPlaybackSpeed(float speed) { return MAKE_CALL(shared::base + 0xA26480, BOOL(__thiscall*)(Node *, float), this, speed); }
+            BOOL setLocalPlaybackRate(float rate) { return MAKE_CALL(shared::base + 0xA264C0, BOOL(__thiscall*)(Node *, float), this, rate); }
+            BOOL setLocalWeight(float weight) { return MAKE_CALL(shared::base + 0xA26500, BOOL(__thiscall*)(Node *, float), this, weight); }
+            BOOL applyAttributes() { return MAKE_CALL(shared::base + 0xA26430, BOOL(__thiscall*)(Node *), this); } // applies local playback speed/rate/weight
         };
 
         class NodeHandle : public sHandle<Node> // might not be confirmed
@@ -161,7 +161,7 @@ public:
             int field_98;
             float field_9C;
             int field_A0;
-            float fiedl_A4;
+            float field_A4;
             float field_A8;
             int field_AC;
         };
@@ -170,13 +170,13 @@ public:
         {
         public:
 
-            NodeGridBlend() { CallMethod<0xA44640, NodeGridBlend *>(this); }
+            NodeGridBlend() { MAKE_CALL(shared::base + 0xA44640, void(__thiscall *)(NodeGridBlend *), this); }
         };
 
         class NodeRingBlend : public NodeBlend
         {
         public:
-            NodeRingBlend() { CallMethod<0xA44680, NodeRingBlend *>(this); }
+            NodeRingBlend() { MAKE_CALL(shared::base + 0xA44680, void(__thiscall *)(NodeRingBlend *), this); }
         };
 
         class NodeListener
@@ -186,13 +186,13 @@ public:
             NodeListener *field_8;
             Node* m_pNode;
 
-            NodeListener() { CallMethod<0xA41B40, NodeListener *>(this); }
+            NodeListener() { MAKE_CALL(shared::base + 0xA41B40, void(__thiscall *)(NodeListener *), this); }
 
             /*
-            ~NodeListener() { CallMethod<0xA41B60, NodeListener *>(this); }
+            ~NodeListener() { MAKE_CALL(shared::base + 0xA41B60, void(__thiscall *)(NodeListener *), this); }
             */
 
-            void remove() { CallMethod<0xA44210, NodeListener *>(this); }
+            void remove() { MAKE_CALL(shared::base + 0xA44210, void(__thiscall *)(NodeListener *), this); }
 
             virtual ~NodeListener() {};
         };
@@ -218,14 +218,14 @@ public:
             {
             public:
 
-                NodeHandler() { CallMethod<0xA41B70, NodeHandler *>(this); }
+                NodeHandler() { MAKE_CALL(shared::base + 0xA41B70, void(__thiscall *)(NodeHandler *), this); }
             };
 
             NodeHandler m_aMotionNodes[16];
 
             // index can also be served as a handle of the node
-            Animation::Motion::Node *getNode(int index) { return ReturnCallMethod<Animation::Motion::Node *, 0xA33DF0, Animation::Motion::NodeSlot *, int>(this, index); }
-            BOOL setNode(int index, Animation::Motion::Node *pNode) { return ReturnCallMethod<BOOL, 0xA33DB0, Animation::Motion::NodeSlot *, int, Animation::Motion::Node *>(this, index, pNode); }
+            Animation::Motion::Node *getNode(int index) { return MAKE_CALL(shared::base + 0xA33DF0, Animation::Motion::Node *(__thiscall *)(Animation::Motion::NodeSlot *, int), this, index); }
+            BOOL setNode(int index, Animation::Motion::Node *pNode) { return MAKE_CALL(shared::base + 0xA33DB0, BOOL(__thiscall *)(Animation::Motion::NodeSlot *, int, Animation::Motion::Node *), this, index, pNode); }
         };
 
         class NodePlay : public NodeSequence
@@ -291,8 +291,8 @@ public:
             int field_124;
             int field_128;
 
-            void setCurrentTime(int index, float time) { CallMethod<0xA368B0, Animation::Motion::Unit *, int, float>(this, index, time); }
-            void setCurrentTimeSlide(int index, float timeSlide) { CallMethod<0xA36910, Animation::Motion::Unit *, int, float>(this, index, timeSlide); }
+            void setCurrentTime(int index, float time) { MAKE_CALL(shared::base + 0xA368B0, void(__thiscall *)(Animation::Motion::Unit *, int, float), this, index, time); }
+            void setCurrentTimeSlide(int index, float timeSlide) { MAKE_CALL(shared::base + 0xA36910, void(__thiscall *)(Animation::Motion::Unit *, int, float), this, index, timeSlide); }
         };
     };
 
@@ -400,15 +400,15 @@ public:
     {
     public:
 
-        EspCtrlCustom() { CallMethod<0x5312E0, EspCtrlCustom *>(this); }
+        EspCtrlCustom() { MAKE_CALL(shared::base + 0x5312E0, void(__thiscall *)(EspCtrlCustom *), this); }
 
         virtual ~EspCtrlCustom() {};
     };
     class FootIk2;
     class HandIk;
 
-    Animation() { CallMethod<0xA35080, Animation *>(this); }
-    ~Animation() { CallMethod<0xA35190, Animation *>(this); }
+    Animation() { MAKE_CALL(shared::base + 0xA35080, void(__thiscall *)(Animation *), this); }
+    ~Animation() { MAKE_CALL(shared::base + 0xA35190, void(__thiscall *)(Animation *), this); }
 
     // scalar deleting at 0x67C870
 };
@@ -421,8 +421,8 @@ public:
 
     virtual ~Work() {};
     
-    BOOL startup(void *a2, void* a3) { return ReturnCallVMTFunc<BOOL, 1, Work *, void *, void *>(this, a2, a3); }
-    void updateSmoothing(float delta) { CallVMTFunc<2, Work*, float>(this, delta); }
+    BOOL startup(void *a2, void* a3) { return MAKE_VCALL(1, BOOL(__thiscall *)(Work *, void*, void*), this, a2, a3); }
+    void updateSmoothing(float delta) { MAKE_VCALL(2, void(__thiscall *)(Work *, float), this, delta); }
 };
 
 class Animation::FootIk2 : public Animation::PostControl::Work
@@ -530,7 +530,7 @@ public:
     float field_198;
     Animation::EaseControl m_EaseController;
 
-    FootIk2() { CallMethod<0xA30E60, FootIk2 *>(this); }
+    FootIk2() { MAKE_CALL(shared::base + 0xA30E60, void(__thiscall *)(FootIk2 *), this); }
 };
 
 VALIDATE_SIZE(Animation::FootIk2, 0x1AC);
@@ -593,7 +593,7 @@ public:
     int field_E8;
     int field_EC;
 
-    HandIk() { CallMethod<0xA2CD70, HandIk *>(this); }
+    HandIk() { MAKE_CALL(shared::base + 0xA2CD70, void(__thiscall *)(HandIk *), this); }
 };
 
 inline HandleManager<Animation::Motion::Node> &g_MotionNodeHandleManager = *(HandleManager<Animation::Motion::Node>*)(shared::base + 0x19D9488);

@@ -20,13 +20,13 @@ public:
 		int _pad4C;
 	public:
 
-		void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { CallMethod<0x9A11A0, cCameraMatrix *, const Hw::cVec4&, const Hw::cVec4&, float>(this, target, rot, dist); }
-		cCameraMatrix &operator=(const cCameraMatrix &lvalue) { CallMethod<0x9A01F0, cCameraMatrix *, const cCameraMatrix &>(this, lvalue); return *this; }
+		void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { MAKE_CALL(shared::base + 0x9A11A0, void(__thiscall *)(cCameraMatrix*, const Hw::cVec4&, const Hw::cVec4&, float), this, target, rot, dist); }
+		cCameraMatrix &operator=(const cCameraMatrix &lvalue) { MAKE_CALL(shared::base + 0x9A01F0, cCameraMatrix&(__thiscall *)(cCameraMatrix*, const cCameraMatrix&), this, lvalue); return *this; }
 
 		Hw::cVec4 calculateViewOffset()
 		{
 			Hw::cVec4 result;
-			result = ReturnCallMethod<Hw::cVec4&, 0x9B9090, cCameraMatrix *, Hw::cVec4 *>(this, &result);
+			result = MAKE_CALL(shared::base + 0x9B9090, Hw::cVec4&(__thiscall *)(cCameraMatrix*, Hw::cVec4*), this, &result);
 			return result;
 		}
 	};
@@ -153,12 +153,12 @@ public:
 	float field_6D8;
 	int field_6DC;
 
-	cCameraApp() { CallMethod<0x840760, cCameraApp *>(this); }
-	void updateCamAng() { CallMethod<0x9B7E00, cCameraApp *>(this); }
+	cCameraApp() { MAKE_CALL(shared::base + 0x840760, void(__thiscall *)(cCameraApp*), this); }
+	void updateCamAng() { MAKE_CALL(shared::base + 0x9B7E00, void(__thiscall *)(cCameraApp*), this); }
 
-	void startup() { CallVMTFunc<2, cCameraApp*>(this); }
-	void cleanup() { CallVMTFunc<3, cCameraApp*>(this); }
-	void update() { CallVMTFunc<4, cCameraApp*>(this); }
+	void startup() { MAKE_VCALL(2, void(__thiscall*)(cCamera*), this); }
+	void cleanup() { MAKE_VCALL(3, void(__thiscall*)(cCamera*), this); }
+	void update() { MAKE_VCALL(4, void(__thiscall*)(cCamera*), this); }
 };
 
 VALIDATE_SIZE(cCameraApp, 0x6E0);

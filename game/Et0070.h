@@ -72,10 +72,10 @@ public:
 
     Et0070()
     {
-        ((void(__thiscall *)(Et0070*))(shared::base + 0x6AF7B0))(this);
+        MAKE_CALL(shared::base + 0x6AF7B0, void(__thiscall *)(Et0070*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17352B0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17352B0);
 };
 
 VALIDATE_SIZE(Et0070, 0xEC0);

@@ -12,10 +12,10 @@ public:
 
     cItemBox()
     {
-        ((void(__thiscall *)(cItemBox *))(shared::base + 0x6B1360))(this);
+        MAKE_CALL(shared::base + 0x6B1360, void(__thiscall *)(cItemBox *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735398);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735398);
 };
 
 VALIDATE_SIZE(cItemBox, 0x930);

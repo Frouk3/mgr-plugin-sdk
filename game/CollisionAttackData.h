@@ -75,7 +75,7 @@ public:
 
         HitData()
         {
-            ((void(__thiscall *)(HitData*))(shared::base + 0x105D0))(this);
+            MAKE_CALL(shared::base + 0x105D0, void(__thiscall *)(HitData*), this);
         }
     };
 public:
@@ -84,7 +84,7 @@ public:
 
     CollisionAttackData()
     {
-        ((void (__thiscall *)(CollisionAttackData *))(shared::base + 0x973030))(this);
+        MAKE_CALL(shared::base + 0x973030, void(__thiscall *)(CollisionAttackData *), this);
     }
 };
 

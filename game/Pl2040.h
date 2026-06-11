@@ -227,15 +227,10 @@ public:
 
     Pl2040()
     {
-        ((void(__thiscall *)(Pl2040 *))(shared::base + 0x6AB650))(this);
+        MAKE_CALL(shared::base + 0x6AB650, void (__thiscall *)(Pl2040 *), this);
     }
 
-    static inline Pl2040 *__cdecl allocate(Hw::cHeapVariable *allocator)
-    {
-        return ((Pl2040 * (__cdecl *)(Hw::cHeapVariable *))(shared::base + 0x6BCC10))(allocator);
-    }
-
-    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x1735420);
+    static inline ContextInstance& m_Context = *(ContextInstance *)(shared::base + 0x1735420);
 };
 
 VALIDATE_SIZE(Pl2040, 0x13F0);

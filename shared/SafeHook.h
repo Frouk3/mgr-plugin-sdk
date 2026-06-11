@@ -1,6 +1,15 @@
 #pragma once
 #include <Windows.h>
-#if defined(_M_X64) || defined(__x86_64__)
+
+#if defined(_M_X64) || defined(__x86_64__) || defined(__amd64__)
+#define SAFEHOOK_X64 1
+#define SAFEHOOK_X86 0
+#else
+#define SAFEHOOK_X86 1
+#define SAFEHOOK_X64 0
+#endif
+
+#if SAFEHOOK_X64
 #include "hde/hde64.h"
 #else
 #include "hde/hde32.h"
@@ -8,10 +17,14 @@
 #include <assert.h>
 #include <new>
 #include <stdio.h>
+#include <Psapi.h>
+#include <ProcessSnapshot.h>
+#include <processthreadsapi.h>
+#include <TlHelp32.h>
 
 // All credits for function hooks goes to DarkByte
 
-#if defined(_M_X64) || defined(__x86_64__)
+#if SAFEHOOK_X64
 typedef hde64s hde_s;
 #define HDE_DISASM(ptr, disasm) hde64_disasm(ptr, disasm)
 #else
@@ -19,11 +32,9 @@ typedef hde32s hde_s;
 #define HDE_DISASM(ptr, disasm) hde32_disasm(ptr, disasm)
 #endif
 
-#define CHECK_ERROR(disasm) if (disasm.flags & F_ERROR) { if (disasm.flags & F_ERROR_LENGTH) throw "Length error occurred!"; else if (disasm.flags & F_ERROR_OPCODE) throw "Invalid opcode error occurred!"; else if (disasm.flags & F_ERROR_LOCK) throw "Lock error occurred!"; else if (disasm.flags & F_ERROR_OPERAND) throw "Operand error occurred!"; else throw "Unknown disassembly error occurred!"; }
-
 namespace SafeHook
 {
-#if defined(_M_X64) || defined(__x86_64__)
+#if SAFEHOOK_X64
 	static inline unsigned char asm_data[] =
 	{
 		0x9C,											// pushfq
@@ -103,9 +114,240 @@ namespace SafeHook
 		0xC3										// ret
 	};
 #endif
+	class Exception
+	{
+		char* m_msg;
+		const char* m_file;
+		unsigned int m_line;
+
+		void AllocateString(const char* msg)
+		{
+			size_t len = strlen(msg) + 1;
+			m_msg = new char[len];
+			strcpy_s(m_msg, len, msg);
+		}
+
+		void FreeString()
+		{
+			if (m_msg)
+			{
+				delete[] m_msg;
+				m_msg = nullptr;
+			}
+		}
+
+		void CopyFrom(const Exception& other)
+		{
+			m_line = other.m_line;
+			AllocateString(other.m_msg);
+		}
+
+		void MoveFrom(Exception&& other) noexcept
+		{
+			m_line = other.m_line;
+			m_msg = other.m_msg;
+			other.m_msg = nullptr;
+		}
+
+		void MoveFrom(Exception& other) noexcept
+		{
+			m_line = other.m_line;
+			m_msg = other.m_msg;
+			other.m_msg = nullptr;
+		}
+
+		void FormatMsg(const char* fmt, va_list va)
+		{
+			int length = _vscprintf(fmt, va) + 1;
+			m_msg = new char[length];
+
+			vsnprintf_s(m_msg, length, length - 1, fmt, va);
+		}
+	public:
+		Exception(const char* msg, const char* file, unsigned int line) : m_line(line), m_file(file)
+		{
+			if (msg)
+				AllocateString(msg);
+		}
+
+		Exception(const Exception& other)
+		{
+			CopyFrom(other);
+		}
+
+		Exception(Exception&& other) noexcept
+		{
+			MoveFrom(std::move(other));
+		}
+
+		~Exception()
+		{
+			FreeString();
+		}
+
+		Exception& operator=(const Exception& other)
+		{
+			if (this != &other)
+			{
+				FreeString();
+				CopyFrom(other);
+			}
+			return *this;
+		}
+
+		Exception& operator=(Exception&& other) noexcept
+		{
+			if (this != &other)
+			{
+				FreeString();
+				MoveFrom(std::move(other));
+			}
+			return *this;
+		}
+
+		const char* what() const { return m_msg; }
+		int line() const { return m_line; }
+		const char* file() const { return m_file; }
+
+		static inline char ExceptionBuffer[512];
+
+		void DoFormat(const char* format, ...)
+		{
+			va_list va;
+			va_start(va, format);
+
+			FormatMsg(format, va);
+
+			va_end(va);
+		}
+	};
+
+	inline void ReportException(const Exception& e)
+	{
+		Exception::ExceptionBuffer[0] = 0;
+		sprintf_s(Exception::ExceptionBuffer, "SafeHook Exception in %s: %s (line %d)", e.file(), e.what(), e.line());
+		MessageBoxA(nullptr, Exception::ExceptionBuffer, "SafeHook", MB_ICONERROR | MB_OK);
+
+		OutputDebugStringA(Exception::ExceptionBuffer);
+	}
+
+#define SAFEHOOK_THROW(msg) throw SafeHook::Exception(msg, __FILE__, __LINE__)
+#define SAFEHOOK_THROW_FORMAT(msg, ...) do { SafeHook::Exception except(nullptr, __FILE__, __LINE__); except.DoFormat(msg, __VA_ARGS__); throw except; } while(0)
+
+#define CHECK_ERROR(disasm) if (disasm.flags & F_ERROR) \
+	{													\
+		if (disasm.flags & F_ERROR_LENGTH) SAFEHOOK_THROW("Disasm: Length Error!");	\
+		else if (disasm.flags & F_ERROR_OPCODE) SAFEHOOK_THROW("Disasm: Opcode Error!");	\
+		else if (disasm.flags & F_ERROR_OPERAND) SAFEHOOK_THROW("Disasm: Operand Error!");	\
+		else if (disasm.flags & F_ERROR_LOCK) SAFEHOOK_THROW("Disasm: Lock Error!");	\
+		else SAFEHOOK_THROW("Disasm: Unknown Error!");	\
+	}													
+
 	inline size_t align(size_t length, size_t alignment)
 	{
 		return (length + alignment - 1) & ~(alignment - 1);
+	}
+
+	inline size_t getAllocationGranularity()
+	{
+		SYSTEM_INFO sysInfo;
+		GetSystemInfo(&sysInfo);
+
+		return sysInfo.dwAllocationGranularity;
+	}
+
+#if SAFEHOOK_X86
+	inline constexpr size_t g_JmpInstructionSize = 5;
+#else
+	inline constexpr size_t g_JmpInstructionSize = 14; // 14 bytes for the mov rax, imm64 + jmp rax instructions
+#endif
+	inline constexpr size_t g_RelativeJmpInstructionSize = 5;
+
+	class SafeAddress
+	{
+		uintptr_t m_address;
+	public:
+		constexpr SafeAddress() : m_address(0) {}
+		constexpr SafeAddress(uintptr_t address) : m_address(address) {}
+		constexpr SafeAddress(const void* address) : m_address((uintptr_t)address) {}
+
+		const uintptr_t get() const { return m_address; }
+		void add(size_t offset) { m_address += offset; }
+
+		void set(uintptr_t address) { m_address = address; }
+		void set(const void* address) { m_address = (uintptr_t)address; }
+
+		uintptr_t operator+(size_t offset) const { return m_address + offset; }
+		uintptr_t operator-(size_t offset) const { return m_address - offset; }
+		uintptr_t operator-(const SafeAddress& other) const { return m_address - other.m_address; }
+		uintptr_t operator+(const SafeAddress& other) const { return m_address + other.m_address; }
+
+		SafeAddress& operator+=(size_t offset) { m_address += offset; return *this; }
+		SafeAddress& operator-=(size_t offset) { m_address -= offset; return *this; }
+		SafeAddress& operator+=(const SafeAddress& other) { m_address += other.m_address; return *this; }
+		SafeAddress& operator-=(const SafeAddress& other) { m_address -= other.m_address; return *this; }
+
+		SafeAddress& operator=(const uintptr_t& address) { m_address = address; return *this; }
+		SafeAddress& operator=(const void* address) { m_address = (uintptr_t)address; return *this; }
+		SafeAddress& operator=(const SafeAddress& other) { m_address = other.m_address; return *this; }
+	};
+
+	inline bool CheckValidAddress(SafeAddress address)
+	{
+		MEMORY_BASIC_INFORMATION mbi;
+		if (VirtualQuery((LPCVOID)address.get(), &mbi, sizeof(mbi)) == 0)
+			return false;
+
+		return (mbi.State == MEM_COMMIT) && ((mbi.Protect & PAGE_NOACCESS) == 0);
+	}
+
+	inline void ThreadRedirect(SafeAddress target, size_t size, SafeAddress trampoline)
+	{
+		DWORD curThreadId = GetCurrentThreadId();
+		DWORD curProcessId = GetCurrentProcessId();
+
+		HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+		if (hSnapshot == INVALID_HANDLE_VALUE)
+			SAFEHOOK_THROW("Failed to create thread snapshot!");
+
+		THREADENTRY32 te;
+		te.dwSize = sizeof(THREADENTRY32);
+
+		if (Thread32First(hSnapshot, &te))
+		{
+			do
+			{
+				if (te.th32OwnerProcessID == curProcessId && te.th32ThreadID != curThreadId)
+				{
+					HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_SET_CONTEXT, FALSE, te.th32ThreadID);
+					if (hThread)
+					{
+						SuspendThread(hThread);
+
+						CONTEXT ctx;
+						ctx.ContextFlags = CONTEXT_CONTROL;
+						if (GetThreadContext(hThread, &ctx))
+						{
+#if SAFEHOOK_X64
+							uintptr_t& ip = ctx.Rip;
+#else
+							DWORD& ip = ctx.Eip;
+#endif
+							// If a thread is suspended mid-prologue, recalculate its instruction pointer offset inside the trampoline
+							if (ip >= target.get() && ip < (target + size))
+							{
+								uintptr_t offset = ip - target.get();
+								ip = trampoline + offset;
+								SetThreadContext(hThread, &ctx);
+							}
+						}
+						ResumeThread(hThread);
+						CloseHandle(hThread);
+					}
+				}
+			} while (Thread32Next(hSnapshot, &te));
+		}
+		CloseHandle(hSnapshot);
 	}
 
 	template <int num>
@@ -174,7 +416,7 @@ namespace SafeHook
 			{
 				m_baseptr = VirtualAlloc(nullptr, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 				if (!m_baseptr)
-					throw "Failed to allocate memory for page!";
+					SAFEHOOK_THROW("Failed to allocate page!");
 
 				m_pFreeSpace = m_baseptr;
 				m_pLast = nullptr;
@@ -182,10 +424,47 @@ namespace SafeHook
 				m_size = size;
 			}
 
+			void init(void* base, size_t size)
+			{
+				m_baseptr = base;
+				m_pFreeSpace = m_baseptr;
+				m_pLast = nullptr;
+
+				m_size = size;
+			}
+
+			bool initNear(void* base, size_t size)
+			{
+				size_t granularity = SafeHook::getAllocationGranularity();
+
+				uintptr_t start = (uintptr_t)base > 0x7FFFFFFF ? (uintptr_t)base - 0x7FFFFFFF : 0;
+				uintptr_t end = (uintptr_t)base + 0x7FFFFFFF;
+
+				while (start < end)
+				{
+					MEMORY_BASIC_INFORMATION mbi;
+					if (VirtualQuery((LPCVOID)start, &mbi, sizeof(mbi)) == 0)
+						break;
+
+					if (mbi.State == MEM_FREE && mbi.RegionSize >= size)
+					{
+						void* ptr = VirtualAlloc((LPVOID)start, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+						if (ptr)
+						{
+							init(ptr, size);
+							return true;
+						}
+					}
+
+					start = align(start + mbi.RegionSize, granularity);
+				}
+				return false;
+			}
+
 			void* alloc(size_t size, size_t align)
 			{
 				if (!m_baseptr)
-					throw "Page is not initialized!";
+					SAFEHOOK_THROW("Page is not initialized!");
 
 				if ((size_t)m_pFreeSpace - (size_t)m_baseptr > m_size) // out of bounds check
 					return nullptr;
@@ -250,7 +529,21 @@ namespace SafeHook
 		};
 
 		size_t m_pageCount;
+		size_t m_pageNearCount;
 		Page m_pages[num] = {};
+		Page m_nearPages[num] = {};
+
+		void CheckOutOfSlotNearPage()
+		{
+			if (m_pageNearCount >= num)
+				SAFEHOOK_THROW("Out of near page slots!");
+		}
+
+		void CheckOutOfSlotPage()
+		{
+			if (m_pageCount >= num)
+				SAFEHOOK_THROW("Out of page slots!");
+		}
 	public:
 		PageController() : m_pageCount(0) {}
 		~PageController()
@@ -260,6 +553,7 @@ namespace SafeHook
 
 		void* allocate(size_t size, size_t align = 32)
 		{
+			CheckOutOfSlotPage();
 			for (size_t i = 0; i < m_pageCount; i++)
 			{
 				void* ptr = m_pages[i].alloc(size, align);
@@ -269,6 +563,23 @@ namespace SafeHook
 			m_pages[m_pageCount].init(0x10000);
 
 			return m_pages[m_pageCount++].alloc(size, align);
+		}
+
+		void* allocateNear(void* base, size_t size, size_t align = 32)
+		{
+			CheckOutOfSlotNearPage();
+			for (size_t i = 0; i < m_pageNearCount; i++)
+			{
+				void* ptr = m_nearPages[i].alloc(size, align);
+				if (ptr)
+					return ptr;
+			}
+			if (m_nearPages[m_pageNearCount].initNear(base, 0x10000))
+				return m_nearPages[m_pageNearCount++].alloc(size, align);
+			else
+				SAFEHOOK_THROW("Failed to allocate near page!");
+
+			return nullptr;
 		}
 	};
 
@@ -280,40 +591,92 @@ namespace SafeHook
 		size_t address;
 		size_t size;
 	public:
-		scoped_unprotect(size_t address, size_t size)
+		scoped_unprotect() : old_protect(0), address(0), size(0) {}
+
+		void protect(size_t address, size_t size)
 		{
+			if (!address || !size)
+			{
+				if (!address) SAFEHOOK_THROW("Cannot operate on null address!");
+				else if (!size) SAFEHOOK_THROW("Cannot operate on zero size!");
+			}
+
+			if (this->address && this->size)
+				VirtualProtect((LPVOID)this->address, this->size, old_protect, &old_protect);
+
 			this->address = address;
 			this->size = size;
 			VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &old_protect);
 		}
 
+		void unprotect()
+		{
+			if (this->address && this->size)
+				VirtualProtect((LPVOID)this->address, this->size, old_protect, &old_protect);
+
+			this->address = 0;
+			this->size = 0;
+		}
+
+		scoped_unprotect(size_t address, size_t size)
+		{
+			protect(address, size);
+		}
+
 		~scoped_unprotect()
 		{
-			VirtualProtect((LPVOID)address, size, old_protect, &old_protect);
+			unprotect();
 		}
 	};
 
-#if defined(_M_X64) || defined(__x86_64__)
-#else
+	inline unsigned int GetDistanceTypeSize(SafeAddress from, SafeAddress to)
+	{
+		size_t distance = to.get() > from.get() ? to.get() - from.get() : from.get() - to.get(); // absolute distance
+		if (distance <= 0x7F)
+			return sizeof(uint8_t);
+		else if (distance <= 0x7FFFFFFF)
+			return sizeof(uint32_t);
+		else
+			return sizeof(uint64_t);
+	}
+
+	inline void MemoryFill(SafeAddress address, unsigned char value, size_t size)
+	{
+		scoped_unprotect unprotect(address.get(), size);
+
+		memset((void*)address.get(), value, size);
+	}
+
 	template <typename T>
-	inline void WriteObject(uintptr_t address, const T& object)
+	inline void WriteObject(SafeAddress address, const T& object)
 	{
-		scoped_unprotect unprotect(address, sizeof(T));
+		scoped_unprotect unprotect(address.get(), sizeof(T));
 
-		*(T*)address = object;
+		*(T*)address.get() = object;
 	}
 
-	inline void WriteMemoryRaw(uintptr_t address, const void* data, size_t size)
+	template <typename T>
+	inline void WriteMemory(SafeAddress address, T value, bool vp = true)
 	{
-		scoped_unprotect unprotect(address, size);
+		scoped_unprotect x;
 
-		memcpy((void*)address, data, size);
+		if (vp)
+			x.protect(address.get(), sizeof(T));
+
+		*(T*)address.get() = value;
 	}
 
-	inline uintptr_t GetBranchDestination(uintptr_t address)
+	inline void WriteMemoryRaw(SafeAddress address, const void* data, size_t size)
+	{
+		scoped_unprotect unprotect(address.get(), size);
+
+		memcpy((void*)address.get(), data, size);
+	}
+
+	inline uintptr_t GetBranchDestination(SafeAddress address)
 	{
 		hde_s disasm = { 0 };
-		HDE_DISASM((unsigned char*)address, &disasm);
+		HDE_DISASM((unsigned char*)(address.get()), &disasm);
 		CHECK_ERROR(disasm);
 
 		if (disasm.flags & F_RELATIVE)
@@ -324,6 +687,10 @@ namespace SafeHook
 				return (uintptr_t)(address + disasm.len + disasm.imm.imm16);
 			else if (disasm.flags & F_IMM32)
 				return (uintptr_t)(address + disasm.len + disasm.imm.imm32);
+#if SAFEHOOK_X64
+			else if (disasm.flags & F_IMM64)
+				return (uintptr_t)(address + disasm.len + disasm.imm.imm64);
+#endif
 			else
 				return 0;
 		}
@@ -335,6 +702,10 @@ namespace SafeHook
 				return (uintptr_t)(disasm.imm.imm16);
 			else if (disasm.flags & F_IMM32)
 				return (uintptr_t)(disasm.imm.imm32);
+#if SAFEHOOK_X64
+			else if (disasm.flags & F_IMM64)
+				return (uintptr_t)(disasm.imm.imm64);
+#endif
 			else
 				return 0;
 		}
@@ -342,163 +713,284 @@ namespace SafeHook
 		return 0;
 	}
 
-	inline uintptr_t MakeRelativeOffsetIMM32(uintptr_t src, uintptr_t dst)
+#if SAFEHOOK_X64
+	inline unsigned long long MakeRelativeOffsetIMM64(SafeAddress src, SafeAddress dst)
+	{
+		return dst - src - 14; // 14 bytes for the mov rax, imm64 + jmp rax instructions
+	}
+#endif
+
+	inline unsigned int MakeRelativeOffsetIMM32(SafeAddress src, SafeAddress dst)
 	{
 		return dst - src - 5; // 5 bytes for the jmp instruction
 	}
 
-	inline uintptr_t MakeRelativeOffsetIMM8(uintptr_t src, uintptr_t dst)
+	inline unsigned char MakeRelativeOffsetIMM8(SafeAddress src, SafeAddress dst)
 	{
-		return dst - src - 2; 
+		return dst - src - 2;
 	}
 
-	inline void MakeJMP(uintptr_t src, uintptr_t dst)
+	inline uintptr_t MakeRelativeOffset(SafeAddress src, SafeAddress dst)
 	{
-		WriteObject(src, (unsigned char)0xE9); // jmp rel32
+		size_t size = GetDistanceTypeSize(src, dst);
 
-		WriteObject(src + 1, MakeRelativeOffsetIMM32(src, dst));
+		if (size == sizeof(uint8_t))
+			return MakeRelativeOffsetIMM8(src, dst);
+		else if (size == sizeof(uint32_t))
+			return MakeRelativeOffsetIMM32(src, dst);
+#if SAFEHOOK_X64
+		else
+			return MakeRelativeOffsetIMM64(src, dst);
+#endif
+		return 0;
 	}
 
-	inline void MakeCALL(uintptr_t src, uintptr_t dst)
+	inline uintptr_t MakeJMP(SafeAddress src, SafeAddress dst)
 	{
-		WriteObject(src, (unsigned char)0xE8); // call rel32
+		uintptr_t prev = GetBranchDestination(src);
+		size_t typeSize = GetDistanceTypeSize(src, dst);
 
-		WriteObject(src + 1, MakeRelativeOffsetIMM32(src, dst));
+		switch (typeSize)
+		{
+			case sizeof(uint8_t) :
+			{
+				WriteMemory<unsigned char>(src, 0xEB);
+				WriteMemory<unsigned char>(src + 1, MakeRelativeOffsetIMM8(src, dst));
+				break;
+			}
+			case sizeof(uint32_t) :
+			{
+				WriteMemory<unsigned char>(src, 0xE9);
+				WriteMemory<unsigned int>(src + 1, MakeRelativeOffsetIMM32(src, dst));
+				break;
+			}
+#if SAFEHOOK_X64
+			case sizeof(uint64_t) :
+			{
+				WriteMemory<unsigned char>(src, 0xFF);
+				WriteMemory<unsigned char>(src + 1, 0x25);
+				WriteMemory<unsigned int>(src + 2, 0);
+
+				WriteMemory<uint64_t>(src + 6, MakeRelativeOffsetIMM64(src, dst));
+				break;
+			}
+#endif
+			default:
+				SAFEHOOK_THROW("Invalid distance for JMP instruction!"); // this should never happen since we check the distance type size beforehand
+				break;
+		}
+
+		return prev;
 	}
 
-	inline void MakeNOP(uintptr_t address, size_t size)
+	inline uintptr_t MakeCALL(SafeAddress src, SafeAddress dst)
 	{
-		scoped_unprotect unprotect(address, size);
+		uintptr_t prev = GetBranchDestination(src);
+		size_t typeSize = GetDistanceTypeSize(src, dst);
 
-		memset((void*)address, 0x90, size);
+		switch (typeSize)
+		{
+			case sizeof(uint8_t) :
+				case sizeof(uint32_t) :
+			{
+				WriteMemory<unsigned char>(src, 0xE8);
+				WriteMemory<unsigned int>(src + 1, MakeRelativeOffsetIMM32(src, dst));
+				break;
+			}
+#if SAFEHOOK_X64
+			case sizeof(uint64_t) :
+			{
+				WriteMemory<unsigned char>(src, 0xFF);
+				WriteMemory<unsigned char>(src + 1, 0x15);
+				WriteMemory<unsigned int>(src + 2, 0); // CALL [RIP+0]
+
+				WriteMemory<uint64_t>(src + 6, MakeRelativeOffsetIMM64(src, dst));
+
+				break;
+			}
+#endif
+			default:
+				SAFEHOOK_THROW("Invalid distance for CALL instruction!");
+				break;
+		}
+
+		return prev;
 	}
 
-	inline void MakeRangedNOP(uintptr_t src, uintptr_t dst)
+	inline void MakeNOP(SafeAddress address, size_t size)
+	{
+		MemoryFill(address, 0x90, size);
+	}
+
+	inline void MakeRangedNOP(SafeAddress src, SafeAddress dst)
 	{
 		MakeNOP(src, dst - src);
 	}
 
-	// Used to make a trampoline in dst, if the dst is null it will calculate how much bytes is the src
-	inline size_t CreateTrampoline(unsigned char* src, unsigned char* dst = nullptr, size_t *tramp_size = nullptr)
+	inline void MakeRET(SafeAddress address, int pop = 0)
 	{
-		hde_s disasm = { 0 };
-		size_t offset = 0;
-		size_t writeOffset = 0;
-
-		scoped_unprotect x((size_t)src, 64);
-		scoped_unprotect d((size_t)dst, 64); // i guess 0x20 bytes should be enough
-
-		if (!dst)
+		scoped_unprotect unprotect(address.get(), 1 + (pop ? 2 : 0));
+		if (pop)
 		{
-			while (offset < 5)
-			{
-				HDE_DISASM(src + offset, &disasm);
-				CHECK_ERROR(disasm);
-
-				offset += disasm.len;
-			}
-			return offset; // size of the trampoline
+			WriteMemory<unsigned char>(address, 0xC2, false);
+			WriteMemory<unsigned short>(address + 1, pop, false);
 		}
 		else
 		{
-			while (offset < 5)
+			WriteMemory<unsigned char>(address, 0xC3, false);
+		}
+	}
+
+	// Used to make a trampoline in dst, if the dst is null it will calculate how much bytes is the src
+	inline size_t CreateTrampoline(unsigned char* src, unsigned char* dst = nullptr, size_t* tramp_size = nullptr)
+	{
+		hde_s disasm = { 0 };
+		size_t writeOffs = 0;
+		size_t readOffs = 0;
+
+		scoped_unprotect unprotect((size_t)src, 32); // unprotect the source memory so we can read and write to it safely
+
+		size_t jmpInstruction = 0;
+		switch (GetDistanceTypeSize(src, dst))
+		{
+			case sizeof(uint8_t) :
 			{
-				HDE_DISASM(src + offset, &disasm);
+				jmpInstruction = 2; // 1 byte for opcode + 1 byte for offset
+				break;
+			}
+			case sizeof(uint32_t) :
+			{
+				jmpInstruction = 5; // 1 byte for opcode + 4 bytes for offset
+				break;
+			}
+			case sizeof(uint64_t) :
+			{
+				jmpInstruction = 14; // 2 bytes for opcode + 4 bytes for offset + 8 bytes for absolute address
+				break;
+			}
+			default:
+				SAFEHOOK_THROW("Invalid distance for trampoline!");
+				break;
+		};
+
+		if (!dst)
+		{
+			while (writeOffs < jmpInstruction)
+			{
+				HDE_DISASM(src + readOffs, &disasm);
 				CHECK_ERROR(disasm);
 
-				switch (disasm.opcode)
+				writeOffs += disasm.len;
+				readOffs += disasm.len;
+			}
+			return writeOffs;
+		}
+		else
+		{
+			while (readOffs < jmpInstruction)
+			{
+				HDE_DISASM(src + readOffs, &disasm);
+				CHECK_ERROR(disasm);
+
+				unsigned char* p = src + readOffs;
+				unsigned char* q = dst + writeOffs;
+#if SAFEHOOK_X64
+				size_t typeSize = GetDistanceTypeSize(p, dst + writeOffs);
+				if ((*p >= 0x70 && *p <= 0x7F) || (*p == 0x0F && (*(p + 1) >= 0x80 && *(p + 1) <= 0x8F)))
 				{
-				case 0x70:
-				case 0x71:
-				case 0x72:
-				case 0x73:
-				case 0x74:
-				case 0x75:
-				case 0x76:
-				case 0x77:
-				case 0x78:
-				case 0x79:
-				case 0x7A:
-				case 0x7B:
-				case 0x7C:
-				case 0x7D:
-				case 0x7E:
-				case 0x7F: // all rel8
-				{
-					size_t rel = GetBranchDestination((size_t)(src + offset));
+					uintptr_t dest = GetBranchDestination(p);
+					if (typeSize == sizeof(uint64_t))
+						SAFEHOOK_THROW("Jcc does not support 64-bit relative offsets!");
 
-					*(dst + writeOffset++) = 0x0F;
-					*(dst + writeOffset++) = disasm.opcode + 0x10;
-					*(unsigned int*)(dst + writeOffset) = rel;
-
-					writeOffset += 6; // 2 bytes for the new opcode and 4 bytes for the new imm32
-					break;
-				}
-				case 0xE9:
-				{
-					size_t rel = GetBranchDestination((size_t)(src + offset));
-
-					MakeJMP((size_t)(dst + writeOffset), rel);
-
-					writeOffset += 5;
-					break;
-				}
-				case 0xEB:
-				{
-					size_t rel = GetBranchDestination((size_t)(src + offset));
-
-					MakeJMP((size_t)(dst + writeOffset), rel);
-
-					writeOffset += 5;
-					break;
-				}
-				case 0xE8:
-				{
-					size_t rel = GetBranchDestination((size_t)(src + offset));
-
-					MakeCALL((size_t)(dst + writeOffset), rel);
-
-					writeOffset += 5;
-					break;
-				}
-				case 0x0F:
-				{
-					if (disasm.opcode2 >= 0x80 && disasm.opcode2 <= 0x8F)
+					if (*p == 0x0F)
 					{
-						size_t rel = GetBranchDestination((size_t)(src + offset));
+						WriteMemory<unsigned char>(q, 0x0F);
+						WriteMemory<unsigned char>(q + 1, p[1]);
+						WriteMemory<unsigned int>(q + 2, MakeRelativeOffsetIMM32(dst + writeOffs, dest));
 
-						*(unsigned short*)(dst + writeOffset) = *(unsigned short*)(src + offset);
-						writeOffset += 2;
-
-						// just retarget imm32
-						*(unsigned int*)(dst + writeOffset) = rel;
-						writeOffset += 4;
+						writeOffs += 6;
 					}
 					else
 					{
-						memcpy(dst + writeOffset, src + offset, disasm.len);
-						writeOffset += disasm.len;
-					}
-					break;
-				}
-				default:
-					memcpy(dst + offset, src + offset, disasm.len);
-					writeOffset += disasm.len;
-					break;
-				}
+						WriteMemory<unsigned char>(q, 0x0F);
+						WriteMemory<unsigned char>(q + 1, *p + 0x10);
+						WriteMemory<unsigned int>(q + 2, MakeRelativeOffsetIMM32(dst + writeOffs, dest));
 
-				offset += disasm.len;
+						writeOffs += 6;
+					}
+				}
+				else if (*p == 0xE9 || *p == 0xE8) // jmp or call
+				{
+					uintptr_t dest = GetBranchDestination(p);
+
+					if (*p == 0xE9)
+						MakeJMP(q, dest);
+					else
+						MakeCALL(q, dest);
+
+					if (typeSize == sizeof(uint64_t))
+						writeOffs += 14;
+					else
+						writeOffs += 5;
+				}
+				else if (*p == 0xEB)
+				{
+					uintptr_t branchDest = GetBranchDestination(p);
+
+					MakeJMP(q, branchDest);
+					if (typeSize == sizeof(uint64_t))
+						writeOffs += 14;
+					else
+						writeOffs += 5;
+				}
+				else
+				{
+					memcpy(dst + writeOffs, src + readOffs, disasm.len);
+					writeOffs += disasm.len;
+				}
+#else
+				if ((*p >= 0x70 && *p <= 0x7F) || (*p == 0x0F && (*(p + 1) >= 0x80 && *(p + 1) <= 0x8F)))
+				{
+					WriteMemory<unsigned char>(dst + writeOffs, (unsigned char)0x0F);
+					WriteMemory<unsigned char>(dst + writeOffs + 1, *p != 0x0F ? *p + 0x10 : *(p + 1));
+
+					uintptr_t branchDest = GetBranchDestination(p);
+					WriteMemory<uintptr_t>(dst + writeOffs + 2, MakeRelativeOffsetIMM32(dst + writeOffs, branchDest));
+
+					writeOffs += 6;
+				}
+				else if (*p == 0xE9 || *p == 0xE8) // jmp or call
+				{
+					uintptr_t branchDest = GetBranchDestination(p);
+
+					WriteMemory<unsigned char>(dst + writeOffs, *p); // copy the jmp/call opcode
+					WriteMemory<unsigned int>(dst + writeOffs + 1, MakeRelativeOffsetIMM32(dst + writeOffs, branchDest));
+
+					writeOffs += 5;
+				}
+				else if (*p == 0xEB) // since it's a trampoline, we will upgrade it into imm32
+				{
+					uintptr_t branchDest = GetBranchDestination(p);
+
+					MakeJMP(dst + writeOffs, branchDest);
+					writeOffs += 5;
+				}
+				else
+				{
+					memcpy(dst + writeOffs, src + readOffs, disasm.len);
+					writeOffs += disasm.len;
+				}
+#endif
+				readOffs += disasm.len;
 			}
 		}
 
-		MakeJMP((size_t)(dst + writeOffset), (size_t)(src + offset));
-
-		writeOffset += 5;
+		MakeJMP(dst + writeOffs, src + readOffs); // jmp back to the original routine after the overwritten bytes
 
 		if (tramp_size)
-			*tramp_size = writeOffset;
+			*tramp_size = writeOffs;
 
-		return offset; // annoying "function must return value"
+		return readOffs;
 	}
 
 	class Hook
@@ -531,20 +1023,21 @@ namespace SafeHook
 				size_t size = SafeHook::CreateTrampoline(m_target, nullptr);
 				m_originalSize = size;
 
-				void* pPage = g_pageController.allocate(size + 5, 32); // +5 for the jmp back to original routine
+				void* pPage = g_pageController.allocate(size + g_JmpInstructionSize, 32);
 				m_originalBytes = (unsigned char*)g_pageController.allocate(size, 32);
 
 				if (m_originalBytes) memcpy(m_originalBytes, m_target, size);
 
-				if (pPage)
+				if (pPage && m_originalBytes)
 				{
 					m_trampoline = (unsigned char*)pPage;
 					SafeHook::CreateTrampoline(m_target, m_trampoline, &m_trampolineSize);
+
 					m_state.bTrampolineCreated = true;
 				}
 				else
 				{
-					throw "Could not allocate page for trampoline!";
+					SAFEHOOK_THROW("Failed to allocate memory for trampoline!");
 				}
 			}
 		}
@@ -557,32 +1050,46 @@ namespace SafeHook
 
 		Hook(void* pTarget, void* pHook, bool bEnable = true, void** pOriginal = nullptr)
 		{
-			if (!pTarget || !pHook)
-				throw "Target and hook addresses cannot be null!";
+			try
+			{
+				if (!pTarget || !pHook)
+					SAFEHOOK_THROW("Target and hook addresses cannot be null!");
 
-			m_target = (unsigned char*)pTarget;
-			m_hook = (unsigned char*)pHook;
-			CreateTrampoline();
+				m_target = (unsigned char*)pTarget;
+				m_hook = (unsigned char*)pHook;
+				CreateTrampoline();
 
-			if (pOriginal)
-				*pOriginal = m_trampoline;
+				if (pOriginal)
+					*pOriginal = m_trampoline;
 
-			if (bEnable)
-				Enable();
+				if (bEnable)
+					Enable();
+			}
+			catch (const Exception& e)
+			{
+				ReportException(e);
+			}
 		}
 
 		Hook(void* pTarget, void* pHook, void** pOriginal)
 		{
-			if (!pTarget || !pHook)
-				throw "Target and hook addresses cannot be null!";
+			try
+			{
+				if (!pTarget || !pHook)
+					SAFEHOOK_THROW("Target and hook addresses cannot be null!");
 
-			m_target = (unsigned char*)pTarget;
-			m_hook = (unsigned char*)pHook;
-			CreateTrampoline();
-			if (pOriginal)
-				*pOriginal = m_trampoline;
+				m_target = (unsigned char*)pTarget;
+				m_hook = (unsigned char*)pHook;
+				CreateTrampoline();
+				if (pOriginal)
+					*pOriginal = m_trampoline;
 
-			Enable();
+				Enable();
+			}
+			catch (const Exception& e)
+			{
+				ReportException(e);
+			}
 		}
 
 		void Enable()
@@ -590,6 +1097,7 @@ namespace SafeHook
 			m_state.bEnabled = true;
 			if (m_state.bTrampolineCreated && !m_state.bTrampolineLinked)
 			{
+				ThreadRedirect(m_target, m_originalSize, m_hook);
 				scoped_unprotect unprotect((size_t)m_target, m_originalSize);
 
 				memset(m_target, 0x90, m_originalSize);
@@ -615,7 +1123,8 @@ namespace SafeHook
 
 		~Hook()
 		{
-			Disable(); // just to be safe, make sure to restore the original bytes before freeing the trampoline and original bytes memory
+			if (CheckValidAddress(m_target)) // Sometimes the target might be already unloaded by the time the destructor is called, so we check if it's a valid address before trying to restore it
+				Disable(); // just to be safe, make sure to restore the original bytes before freeing the trampoline and original bytes memory
 
 			m_trampoline = m_originalBytes = nullptr;
 			m_target = m_hook = nullptr;
@@ -623,9 +1132,8 @@ namespace SafeHook
 			m_state.i32 = 0;
 		}
 	};
-#endif
 
-#if defined(_M_X64) || defined(__x86_64__)
+#if SAFEHOOK_X64
 	typedef union
 	{
 		unsigned __int64 i64;
@@ -635,48 +1143,6 @@ namespace SafeHook
 		float f32;
 		double f64;
 	} REG;
-
-	typedef struct
-	{
-		double f;
-		short tag;
-	} FPUREG;
-
-	typedef union
-	{
-		unsigned __int64 i64[2];
-		unsigned int i32[4];
-		unsigned short i16[8];
-		unsigned char i8[16];
-
-		float f32[4];
-		double f64[2];
-	} XMMREG;
-
-	typedef struct CTX
-	{
-		char FPUandSSE[512];
-		REG rbx;
-		REG rcx;
-		REG rdx;
-		REG rsi;
-		REG rdi;
-		REG saved_rsp;
-		REG rbp;
-		REG r8;
-		REG r9;
-		REG r10;
-		REG r11;
-		REG r12;
-		REG r13;
-		REG r14;
-		REG r15;
-
-		REG& rax() { return *(REG*)(saved_rsp.i32); }
-		REG& rflags() { return *(REG*)(saved_rsp.i32 + 4); }
-		XMMREG& xmm(int i _In_range_(0, 15)) { return *(XMMREG*)(FPUandSSE + 0xA0 + i * 16); }
-		FPUREG& st(int i _In_range_(0, 7)) { return *(FPUREG*)(FPUandSSE + i * 16); }
-	} CTX;
 #else
 	typedef union
 	{
@@ -686,30 +1152,57 @@ namespace SafeHook
 
 		float f32;
 	} REG;
+#endif
 
 	typedef union
 	{
 		struct
 		{
-			unsigned short CF : 1;
-			unsigned short BRKI : 1;
-			unsigned short PF : 1;
-			unsigned short Reserved1 : 1;
-			unsigned short AF : 1;
-			unsigned short Reserved2 : 1;
-			unsigned short ZF : 1;
-			unsigned short SF : 1;
+			unsigned int CF : 1;
+			unsigned int BRKI : 1;
+			unsigned int PF : 1;
+			unsigned int Reserved1 : 1;
+			unsigned int AF : 1;
+			unsigned int Reserved2 : 1;
+			unsigned int ZF : 1;
+			unsigned int SF : 1;
 
-			unsigned short TF : 1;
-			unsigned short IF : 1;
-			unsigned short DF : 1;
-			unsigned short OF : 1;
-			unsigned short IOPL : 2;
-			unsigned short NT : 1;
-			unsigned short MD : 1;
+			unsigned int TF : 1;
+			unsigned int IF : 1;
+			unsigned int DF : 1;
+			unsigned int OF : 1;
+			unsigned int IOPL : 2;
+			unsigned int NT : 1;
+			unsigned int MD : 1;
 		}; // no more flags since pushfd only stores the lower 16 bits of EFLAGS
-		unsigned short i16;
+		unsigned int i32;
 	} EFLAGS;
+
+#if SAFEHOOK_X64
+	typedef union
+	{
+		struct
+		{
+			unsigned __int64 CF : 1;
+			unsigned __int64 BRKI : 1;
+			unsigned __int64 PF : 1;
+			unsigned __int64 Reserved1 : 1;
+			unsigned __int64 AF : 1;
+			unsigned __int64 Reserved2 : 1;
+			unsigned __int64 ZF : 1;
+			unsigned __int64 SF : 1;
+
+			unsigned __int64 TF : 1;
+			unsigned __int64 IF : 1;
+			unsigned __int64 DF : 1;
+			unsigned __int64 OF : 1;
+			unsigned __int64 IOPL : 2;
+			unsigned __int64 NT : 1;
+			unsigned __int64 MD : 1;
+		};
+		unsigned __int64 i64;
+	} RFLAGS;
+#endif
 
 	typedef struct FPUREG
 	{
@@ -818,6 +1311,7 @@ namespace SafeHook
 
 	static_assert(sizeof(FPUx87SSE) == 512, "FPUx87SSE size mismatch!");
 
+#if SAFEHOOK_X86
 	typedef struct CTX
 	{
 		FPUx87SSE FPUandSSE;
@@ -832,87 +1326,74 @@ namespace SafeHook
 
 		REG& eax() { return *(REG*)(saved_esp.i32); }
 		EFLAGS& eflags() { return *(EFLAGS*)(saved_esp.i32 + 4); }
+		const REG& esp() const { return (REG)(saved_esp.i32 + 0xC); } // you are not allowed to modify stack pointer
 
 		XMMREG& xmm(int i _In_range_(0, 7)) { return FPUandSSE.xmm[i]; }
 		FPUREG& st(int i _In_range_(0, 7)) { return FPUandSSE.FPU.st[i]; }
 	} CTX;
+#else
+	typedef struct CTX
+	{
+		FPUx87SSE FPUandSSE;
+
+		REG rbx;
+		REG rcx;
+		REG rdx;
+		REG rsi;
+		REG rdi;
+		REG saved_rsp;
+		REG rbp;
+		REG r8;
+		REG r9;
+		REG r10;
+		REG r11;
+		REG r12;
+		REG r13;
+		REG r14;
+		REG r15;
+
+		REG& rax() { return *(REG*)(saved_rsp.i64); }
+		RFLAGS& rflags() { return *(RFLAGS*)(saved_rsp.i64 + 8); }
+
+		XMMREG& xmm(int i _In_range_(0, 15)) { return FPUandSSE.xmm[i]; }
+		FPUREG& st(int i _In_range_(0, 7)) { return FPUandSSE.FPU.st[i]; }
+	};
 #endif
 	// @brief Can be used in cave or in mid-function hooking
 	// @brief If you can place it in instead of the opcode with 5 bytes length you won't need to use MidAsmHook(which uses trampoline for safety)
 	class MidAsmHookUnsafe
 	{
 	private:
-		size_t address_of_hook = 0;
+		uintptr_t address_of_hook = 0;
 
 		unsigned char* hook_bytes = nullptr;
-		size_t cave_address = 0;
-#if defined(_M_X64) || defined(__x86_64__)
-		unsigned char original_cave_bytes[14] = { 0 }; // we need 14 bytes for an absolute jmp, so we need to store that much for restoration
-#else
-		unsigned char original_cave_bytes[5] = { 0 };
-#endif
+		uintptr_t cave_address = 0;
+		unsigned char original_cave_bytes[g_JmpInstructionSize + 8] = { 0 }; // to store the original bytes of the cave, we will restore them in the destructor. 16 bytes should be enough for most hooks, you can increase this if you need more
 	public:
 		MidAsmHookUnsafe() = default;
 
-		MidAsmHookUnsafe(size_t address_of_cave, void(*hook_func)(CTX&))
+		MidAsmHookUnsafe(SafeAddress address_of_cave, void(__cdecl* hook_func)(CTX&))
 		{
-			address_of_hook = (size_t)hook_func;
-			cave_address = address_of_cave;
-#if defined(_M_X64) || defined(__x86_64__)
-			hook_bytes = (unsigned char*)g_pageController.allocate(sizeof(asm_data) + 14, 0x100); // 14 bytes for the absolute indirect jmp
+			address_of_hook = (uintptr_t)hook_func;
+			cave_address = address_of_cave.get();
+			hook_bytes = (unsigned char*)g_pageController.allocate(sizeof(asm_data) + g_JmpInstructionSize, 32); // allocate memory for the hook code and the jump back to the original function
 			if (!hook_bytes)
-				throw "Failed to allocate memory for hook bytes!";
-
-			memcpy(hook_bytes, (void*)asm_data, sizeof(asm_data));
-			{
-				unsigned char* ptr = hook_bytes + sizeof(asm_data); // the trampoline will be right after the original function, so we can just place it at the end of the hook bytes
-
-				*(ptr++) = 0xFF;
-				*(ptr++) = 0x2C;
-				*(ptr++) = 0x25;
-				*(DWORD*)ptr = (DWORD)(address_of_hook);
-			}
-			{
-				scoped_unprotect unprotect(cave_address, sizeof(original_cave_bytes)); // just so we could read it
-
-				memcpy(original_cave_bytes, (void*)cave_address, sizeof(original_cave_bytes)); // address_of_cave may act as a ptr to in a function
-			}
-			if ((size_t)hook_bytes - cave_address >= 0x7FFFFFFF) // >= 2GB distance
-			{
-				scoped_unprotect unprotect(cave_address, 14); // we need 14 bytes for an absolute indirect call, so we need to unprotect that much
-				unsigned char* ptr = (unsigned char*)cave_address; // the trampoline will be right after the original function, so we can just place it at the end of the hook bytes
-
-				*(ptr++) = 0xFF;
-				*(ptr++) = 0x1C;
-				*(ptr++) = 0x25; // make a call
-				*(DWORD*)ptr = (DWORD)(address_of_hook);
-			}
-			else
-			{
-				MAKE_CALL(cave_address, (size_t)hook_bytes);
-			}
-#else
-			size_t fncsize = sizeof(asm_data) + 6;
-			hook_bytes = (unsigned char*)g_pageController.allocate(fncsize, 64);
-			if (!hook_bytes)
-				throw "Failed to allocate memory for hook bytes!";
-
-			memcpy(hook_bytes, (void*)asm_data, fncsize);
-			MakeJMP((size_t)(hook_bytes + sizeof(asm_data)), address_of_hook);
+				SAFEHOOK_THROW("Failed to allocate memory for hook bytes!");
 
 			{
-				scoped_unprotect unprotect(cave_address, sizeof(original_cave_bytes)); // just so we could read it
-
-				memcpy(original_cave_bytes, (void*)cave_address, sizeof(original_cave_bytes)); // address_of_cave may act as a ptr to in a function
+				scoped_unprotect unprotect(cave_address, sizeof(original_cave_bytes));
+				memcpy(original_cave_bytes, (void*)cave_address, sizeof(original_cave_bytes)); // save the original bytes of the cave so we can restore them later
 			}
 
-			MakeCALL(cave_address, (size_t)hook_bytes);
-#endif
+			memcpy(hook_bytes, asm_data, sizeof(asm_data));
+			MakeJMP(hook_bytes + sizeof(asm_data), address_of_hook);
+
+			MakeCALL(cave_address, hook_bytes);
 		}
 
 		~MidAsmHookUnsafe()
 		{
-			if (cave_address && hook_bytes)
+			if (cave_address && CheckValidAddress(cave_address) && hook_bytes)
 			{
 				scoped_unprotect unprotect(cave_address, sizeof(original_cave_bytes));
 				memcpy((void*)cave_address, original_cave_bytes, sizeof(original_cave_bytes));
@@ -936,103 +1417,87 @@ namespace SafeHook
 
 		// Try to find a place to inject the trampoline
 		// You cannot just put a trampoline in the middle of instruction and expect it to work
-		void handleTrampoline(size_t _address, size_t& orig_size)
+		void handleTrampoline(uintptr_t _address, size_t& orig_size, bool bTryAllocNear = false)
 		{
-			size_t orignal_size = 0;
-#if defined(_M_X64) || defined(__x86_64__)
-			size_t needed_size = 14; // for an absolute jmp
+			size_t orignal_size = CreateTrampoline((unsigned char*)_address, nullptr);
 
-			hde_s disasm = { 0 };
-			while (orignal_size < needed_size)
+			if (SAFEHOOK_X86)
+				bTryAllocNear = false; // for x86 there's no need for allocating near, since the relative jump can reach anywhere in the 4GB address space
+
+			if (bTryAllocNear)
 			{
-				size_t instr_size = HDE_DISASM((void*)(_address + orignal_size), &disasm);
-				CHECK_ERROR(disasm);
-				orignal_size += instr_size;
+				trampoline = (unsigned char*)g_pageController.allocateNear((void*)_address, orignal_size + g_JmpInstructionSize * 2, 32);
+				if (!trampoline)
+					trampoline = (unsigned char*)g_pageController.allocate(orignal_size + g_JmpInstructionSize * 2, 32);
 			}
-
-			unsigned char* trampoline = (unsigned char*)g_pageController.allocate(orignal_size + 28, 0x100); // call + jmp
-			unsigned char* trampCopy = trampoline;
-			if (trampoline)
+			else
 			{
-				scoped_unprotect unprotect(_address, orignal_size);
-				for (int i = 0; i < orignal_size; i++)
-				{
-					unsigned char* opcode = (unsigned char*)(_address + i);
-					unsigned char* pTrampBuffer = trampoline + i + 14; // +14 just to give space for the call
-					if (*opcode == 0xE8 || *opcode == 0xE9) // if it's a relative jmp or call, we need to fix the offset in the trampoline
-					{
-						size_t dest = 0;
-						dest = getBranchDestinationForJmp((size_t)opcode);
-						if (dest != 0)
-						{
-							size_t offset_in_original = opcode - (unsigned char*)_address;
-							size_t offset_in_trampoline = pTrampBuffer - (unsigned char*)_address + offset_in_original;
-							if (dest >= _address && dest < _address + orignal_size) // if the destination is inside the original instructions, we need to fix it to point to the trampoline
-								dest = (size_t)pTrampBuffer + (dest - _address);
-							else
-								dest = dest;
-							if (*opcode == 0xE8) // call
-							{
-								MAKE_CALL(pTrampBuffer, dest);
-							}
-							else // jmp
-							{
-								MAKE_JMP(pTrampBuffer, dest);
-							}
-							i += 4; // skip the rest of the instruction since we already wrote it in the trampoline
-						}
-					}
-				}
-				MAKE_JMP(trampoline, _address + orignal_size); // jump back to the original function after the overwritten bytes
+				trampoline = (unsigned char*)g_pageController.allocate(orignal_size + g_JmpInstructionSize * 2, 32);
 			}
-#else
-			size_t needed_size = 5; // for a relative jmp
-
-			size_t original_size = CreateTrampoline((unsigned char*)_address, nullptr);
-
-			this->trampoline = (unsigned char*)g_pageController.allocate(original_size + 10, 0x20); // +5 for jmp and call each
-			
 			if (!this->trampoline)
 			{
-				static char buffer[128] = { 0 };
-				
-				sprintf_s(buffer, "Could not create a trampoline for %X address", _address);
-
-				throw buffer;
+				SAFEHOOK_THROW_FORMAT("Failed to allocate memory for %p!", (void*)_address);
+			}
+			size_t typeSize = GetDistanceTypeSize(trampoline, _address + orignal_size);
+			size_t jmpSize = 0;
+			switch (typeSize)
+			{
+			case 1:
+				jmpSize = 2;
+				break;
+			case 4:
+				jmpSize = 5;
+				break;
+			case 8:
+				jmpSize = 14;
+				break;
+			default:
+				break;
 			}
 
-			size_t sizeof_tramp = 0;
+			MakeNOP(trampoline, jmpSize);
 
-			CreateTrampoline((unsigned char*)_address, this->trampoline + 5, &sizeof_tramp);
-
-			// MakeJMP((size_t)(this->trampoline + 5 + sizeof_tramp), _address + original_size); // jump back to the original function after the overwritten bytes // handled by `CreateTrampoline`
-
-			orig_size = original_size;
-#endif
+			orig_size = CreateTrampoline((unsigned char*)_address, this->trampoline + jmpSize, nullptr);
 		}
 	public:
-		MidAsmHook(size_t _address, void(__cdecl* hook_func)(CTX&))
+		MidAsmHook() = default;
+
+		MidAsmHook(SafeAddress _address, void(__cdecl* hook_func)(CTX&))
 		{
 			size_t orig_size = 0;
 			try
 			{
-				handleTrampoline(_address, orig_size);
+				handleTrampoline(_address.get(), orig_size);
 			}
-			catch (const char* err)
+			catch (const SafeHook::Exception& e)
 			{
-				MessageBoxA(nullptr, err, "SafeHook Error", MB_ICONERROR | MB_OK);
+				ReportException(e);
+				return;
 			}
+
 			if (!trampoline)
 				return;
 
-			scoped_unprotect unprotect(_address, orig_size);
+			try
 			{
-				memset((void*)_address, 0x90, orig_size);
-
-				MakeJMP(_address, (size_t)trampoline);
+				new (&unsafe_hook) MidAsmHookUnsafe(trampoline, hook_func);
 			}
+			catch (const SafeHook::Exception& e)
+			{
+				ReportException(e);
+				return;
+			}
+			// we need to proceed with the "MidAsmHookUnsafe" before it is connected to the main routine, if we do it after, we might run into unhandled exception
 
-			new (&unsafe_hook) MidAsmHookUnsafe((size_t)trampoline, hook_func);
+			scoped_unprotect unprotect(_address.get(), orig_size);
+			{
+				ThreadRedirect(_address, orig_size, trampoline); // make sure no other thread is executing the original code while we are modifying it, this will prevent crashes and undefined behavior
+				// we got the trampoline ready for executing hook_func along with original instructions, so redirection logically must continue executing in the trampoline along with calling our hook immediately
+
+				memset((void*)_address.get(), 0x90, orig_size);
+
+				MakeJMP(_address, trampoline);
+			}
 
 			// basically
 			// call hook_wrapper

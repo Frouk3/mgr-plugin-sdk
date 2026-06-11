@@ -70,10 +70,10 @@ public:
 
     BehaviorBgBase()
     {
-        ((void (__thiscall *)(BehaviorBgBase *))(shared::base + 0x6A4D50))(this);
+        MAKE_CALL(shared::base + 0x6A4D50, void(__thiscall *)(BehaviorBgBase *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C28);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9C28);
 };
 
 VALIDATE_SIZE(BehaviorBgBase, 0xA70);

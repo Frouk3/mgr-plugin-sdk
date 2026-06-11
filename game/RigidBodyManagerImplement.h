@@ -22,8 +22,8 @@ public:
     int field_6C;
     Hw::cCriticalSection field_70;
     int field_94;
-
-    static inline RigidBodyManagerImplement *& ms_Instance = *(RigidBodyManagerImplement**)(shared::base + 0x1735F9C);
 };
+
+inline RigidBodyManagerImplement *& g_RigidBodyManager = *(RigidBodyManagerImplement**)(shared::base + 0x1735F9C);
 
 VALIDATE_SIZE(RigidBodyManagerImplement, 0x98);

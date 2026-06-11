@@ -37,10 +37,10 @@ public:
 
     KamaitatiObj()
     {
-        ((void(__thiscall *)(KamaitatiObj*))(shared::base + 0x6B1B60))(this);
+        MAKE_CALL(shared::base + 0x6B1B60, void(__thiscall *)(KamaitatiObj*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735B24);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735B24);
 };
 
 VALIDATE_SIZE(KamaitatiObj, 0xB20);

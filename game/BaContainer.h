@@ -13,10 +13,10 @@ public:
 
     BaContainer()
     {
-        ((void(__thiscall *)(BaContainer*))(shared::base + 0x6B0F40))(this);
+        MAKE_CALL(shared::base + 0x6B0F40, void(__thiscall *)(BaContainer*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D74);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D74);
 };
 
 class BaContainerParts : public BehaviorAppBase
@@ -104,10 +104,10 @@ public:
 
     BaContainerParts()
     {
-        ((void(__thiscall *)(BaContainerParts *))(shared::base + 0x6B0F90))(this);
+        MAKE_CALL(shared::base + 0x6B0F90, void(__thiscall *)(BaContainerParts *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D78);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D78);
 };
 
 VALIDATE_SIZE(BaContainerParts, 0x1490);

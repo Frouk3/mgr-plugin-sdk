@@ -146,7 +146,7 @@ class RayCastFactory : public Hw::cFactoryVariable<RayCastWork, 16>
 public:
     RayCastFactory() : Hw::cFactoryVariable<RayCastWork, 16>() {}
 
-    RayCastMultiHitWork *newWork() { return ReturnCallMethod<RayCastMultiHitWork*, 0x50EF80, RayCastFactory *>(this); } // don't blame me for not writing code
+    RayCastMultiHitWork *newWork() { return MAKE_CALL(shared::base + 0x50EF80, RayCastMultiHitWork*(__thiscall*)(RayCastFactory*), this); } // don't blame me for not writing code
 };
 
 class RayCastManager
@@ -171,7 +171,7 @@ public:
 
     BOOL setLinearCast(hkpAllCdPointCollector* cd, Hw::cVec4* out, const Hw::cVec4& origin, float radius, const Hw::cVec4& rayDir, int collisionFilter, const char* debugPurpose = "")
     {
-        return ((BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, Hw::cVec4*, const Hw::cVec4&, float, const Hw::cVec4&, int, const char*))(shared::base + 0x50EEA0))(this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
+        return MAKE_CALL(shared::base + 0x50EEA0, BOOL(__thiscall*)(RayCastManager*, hkpAllCdPointCollector*, Hw::cVec4*, const Hw::cVec4&, float, const Hw::cVec4&, int, const char*), this, cd, out, origin, radius, rayDir, collisionFilter, debugPurpose);
     }
 };
 

@@ -39,34 +39,34 @@ struct EntitySystem
 	struct EntityInfo;
 	struct ObjectInfo;
 
-	Hw::cFixedList<Entity*>& getEntityList() const { return ReturnCallMethod<Hw::cFixedList<Entity*>&, 0x67CA20, const EntitySystem*>(this); }
+	Hw::cFixedList<Entity*>& getEntityList() const { return MAKE_CALL(shared::base + 0x67CA20, Hw::cFixedList<Entity*>&(__thiscall *)(const EntitySystem*), this); }
 
-	void getEntities(eObjID id, lib::Array<Entity*>& pArray) { CallMethod<0x67F440, EntitySystem*, lib::Array<Entity*>&>(this, pArray); }
-	void getEntities(eObjID id, lib::Array<EntityHandle>& pArray) { CallMethod<0x67F4A0, EntitySystem*, lib::Array<EntityHandle>&>(this, pArray); }
-	void getEntities(eObjID id, unsigned int hashNo, lib::Array<EntityHandle>& pArray) { CallMethod<0x67F520, EntitySystem*, eObjID, unsigned int, lib::Array<EntityHandle>&>(this, id, hashNo, pArray); }
-	int getEntityCount(eObjID objID) { return ReturnCallMethod<int, 0x67F5B0, EntitySystem*, eObjID>(this, objID); }
+	void getEntities(eObjID id, lib::Array<Entity*>& pArray) { MAKE_CALL(shared::base + 0x67F440, void(__thiscall *)(EntitySystem*, lib::Array<Entity*>&), this, pArray); }
+	void getEntities(eObjID id, lib::Array<EntityHandle>& pArray) { MAKE_CALL(shared::base + 0x67F4A0, void(__thiscall *)(EntitySystem*, lib::Array<EntityHandle>&), this, pArray); }
+	void getEntities(eObjID id, unsigned int hashNo, lib::Array<EntityHandle>& pArray) { MAKE_CALL(shared::base + 0x67F520, void(__thiscall *)(EntitySystem*, eObjID, unsigned int, lib::Array<EntityHandle>&), this, id, hashNo, pArray); }
+	int getEntityCount(eObjID objID) { return MAKE_CALL(shared::base + 0x67F5B0, int(__thiscall *)(EntitySystem*, eObjID), this, objID); }
 	// usually finds only first entity with given objID
-	Entity* getUniqueEntity(eObjID objID) { return ReturnCallMethod<Entity*, 0x67F600, EntitySystem*, eObjID>(this, objID); }
-	Entity* getEntityAtTrans(eObjID objID, const Hw::cVec4& position, float maxDistance) { return ReturnCallMethod<Entity*, 0x67F660, EntitySystem*, eObjID, const Hw::cVec4&, float>(this, objID, position, maxDistance); }
-	Entity* getUniqueEntity(const char* name, eObjID objID) { return ReturnCallMethod<Entity*, 0x67F710, EntitySystem*, const char*, eObjID>(this, name, objID); }
-	Entity* getEntityAtTrans(eObjID objID, const Hw::cVec4& position) { return ReturnCallMethod<Entity*, 0x67F7B0, EntitySystem*, eObjID, const Hw::cVec4&>(this, objID, position); }
-	int getEntityNum() { return ReturnCallMethod<int, 0x67F860, EntitySystem*>(this); }
-	Entity* getEntityAtNum(int at) { return ReturnCallMethod<Entity*, 0x67F870, EntitySystem*, int>(this, at); }
-	void releaseEntities(eObjID objID) { CallMethod<0x680AD0, EntitySystem*, eObjID>(this, objID); }
+	Entity* getUniqueEntity(eObjID objID) { return MAKE_CALL(shared::base + 0x67F600, Entity*(__thiscall *)(EntitySystem*, eObjID), this, objID); }
+	Entity* getEntityAtTrans(eObjID objID, const Hw::cVec4& position, float maxDistance) { return MAKE_CALL(shared::base + 0x67F660, Entity*(__thiscall *)(EntitySystem*, eObjID, const Hw::cVec4&, float), this, objID, position, maxDistance); }
+	Entity* getUniqueEntity(const char* name, eObjID objID) { return MAKE_CALL(shared::base + 0x67F710, Entity*(__thiscall *)(EntitySystem*, const char*, eObjID), this, name, objID); }
+	Entity* getEntityAtTrans(eObjID objID, const Hw::cVec4& position) { return MAKE_CALL(shared::base + 0x67F7B0, Entity*(__thiscall *)(EntitySystem*, eObjID, const Hw::cVec4&), this, objID, position); }
+	int getEntityNum() { return MAKE_CALL(shared::base + 0x67F860, int(__thiscall *)(EntitySystem*), this); }
+	Entity* getEntityAtNum(int at) { return MAKE_CALL(shared::base + 0x67F870, Entity*(__thiscall *)(EntitySystem*, int), this, at); }
+	void releaseEntities(eObjID objID) { MAKE_CALL(shared::base + 0x680AD0, void(__thiscall *)(EntitySystem*, eObjID), this, objID); }
 
-	void update() { CallMethod<0x6817F0, EntitySystem*>(this); }
-	void inurnForce() { CallMethod<0x6819A0, EntitySystem*>(this); }
-	Entity* createEntity(EntityInfo& pInfo) { return ReturnCallMethod<Entity*, 0x681B80, EntitySystem*, EntityInfo&>(this, pInfo); }
+	void update() { MAKE_CALL(shared::base + 0x6817F0, void(__thiscall *)(EntitySystem*), this); }
+	void inurnForce() { MAKE_CALL(shared::base + 0x6819A0, void(__thiscall *)(EntitySystem*), this); }
+	Entity* createEntity(EntityInfo& pInfo) { return MAKE_CALL(shared::base + 0x681B80, Entity*(__thiscall *)(EntitySystem*, EntityInfo&), this, pInfo); }
 
-	BOOL addDatsuEntity(Entity* pDatsuEntity) { return ReturnCallMethod<BOOL, 0x67F3B0, EntitySystem*, Entity*>(this, pDatsuEntity); }
+	BOOL addDatsuEntity(Entity* pDatsuEntity) { return MAKE_CALL(shared::base + 0x67F3B0, BOOL(__thiscall *)(EntitySystem*, Entity*), this, pDatsuEntity); }
 
-	void startup() { CallMethod<0x681F50, EntitySystem*>(this); }
-	void cleanup() { CallMethod<0x681FF0, EntitySystem*>(this); }
+	void startup() { MAKE_CALL(shared::base + 0x681F50, void(__thiscall *)(EntitySystem*), this); }
+	void cleanup() { MAKE_CALL(shared::base + 0x681FF0, void(__thiscall *)(EntitySystem*), this); }
 
-	Entity* createEntity(const char* name, eObjID objID, ObjectInfo* pObjInfo) { return ReturnCallMethod<Entity*, 0x682090, EntitySystem*, const char*, eObjID, ObjectInfo*>(this, name, objID, pObjInfo); }
+	Entity* createEntity(const char* name, eObjID objID, ObjectInfo* pObjInfo) { return MAKE_CALL(shared::base + 0x682090, Entity*(__thiscall *)(EntitySystem*, const char*, eObjID, ObjectInfo*), this, name, objID, pObjInfo); }
 
-	EntitySystem(void* a2) { CallMethod<0x682230, EntitySystem*, void*>(this, a2); }
-	~EntitySystem() { CallMethod<0x6821A0, EntitySystem*>(this); }
+	EntitySystem(void* a2) { MAKE_CALL(shared::base + 0x682230, void(__thiscall *)(EntitySystem*, void*), this, a2); }
+	~EntitySystem() { MAKE_CALL(shared::base + 0x6821A0, void(__thiscall *)(EntitySystem*), this); }
 
 	// we don't have default construction
 	EntitySystem() = delete;
@@ -149,7 +149,7 @@ struct EntitySystem::SetInfo
 	float m_ScoutViewDist;
 	int field_114;
 
-	SetInfo() { CallMethod<0xEC5C0, EntitySystem::SetInfo*>(this); }
+	SetInfo() { MAKE_CALL(shared::base + 0xEC5C0, void(__thiscall *)(EntitySystem::SetInfo*), this); }
 };
 
 struct EntitySystem::EntityInfo
@@ -167,7 +167,7 @@ struct EntitySystem::EntityInfo
 	void *m_pWtbFile;
 	void *m_pParam;
 
-	EntityInfo() { CallMethod<0x67CA40, EntitySystem::EntityInfo*>(this); }
+	EntityInfo() { MAKE_CALL(shared::base + 0x67CA40, void(__thiscall *)(EntitySystem::EntityInfo*), this); }
 };
 
 struct EntitySystem::ObjectInfo
@@ -184,7 +184,7 @@ struct EntitySystem::ObjectInfo
 	void *m_pModel;
 	int field_7C;
 
-	ObjectInfo() { CallMethod<0xB190, EntitySystem::ObjectInfo*>(this); }
+	ObjectInfo() { MAKE_CALL(shared::base + 0xB190, void(__thiscall *)(EntitySystem::ObjectInfo*), this); }
 };
 
 struct Entity::ConstructInfo

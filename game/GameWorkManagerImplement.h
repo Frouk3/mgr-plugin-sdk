@@ -124,7 +124,6 @@ public:
     int field_104;
     int field_108;
     int field_10C;
-
-    static inline GameWorkManagerImplement *&ms_Instance = *(GameWorkManagerImplement**)(shared::base + 0x17EA184);
 };
 
+inline GameWorkManagerImplement *&g_GameWorkManager = *(GameWorkManagerImplement**)(shared::base + 0x17EA184);

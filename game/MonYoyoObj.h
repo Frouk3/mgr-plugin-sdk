@@ -123,10 +123,10 @@ public:
 
     MonYoyoObj()
     {
-        ((void(__thiscall *)(MonYoyoObj*))(shared::base + 0x6B11E0))(this);
+        MAKE_CALL(shared::base + 0x6B11E0, void(__thiscall *)(MonYoyoObj*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F68);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F68);
 };
 
 VALIDATE_SIZE(MonYoyoObj, 0x18E0);

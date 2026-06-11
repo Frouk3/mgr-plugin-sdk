@@ -5,5 +5,5 @@
 
 inline int CRIAPI criAtomic_TestAndSet(LONG* target, LONG value)
 {
-    return ((int(CRIAPI*)(LONG*, LONG))(shared::base + 0x10998F9))(target, value);
+    return MAKE_CALL(shared::base + 0x10998F9, int(CRIAPI *)(LONG *, LONG), target, value);
 }

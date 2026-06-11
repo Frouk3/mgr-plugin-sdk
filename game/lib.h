@@ -29,7 +29,7 @@ namespace lib
             int field_8;
             // ^^ these two represent reference count, but for what exactly?
 
-            SharedCoreImplBase() { CallMethod<0x1310, SharedCoreImplBase *>(this); }
+            SharedCoreImplBase() { MAKE_CALL(shared::base + 0x1310, void(__thiscall *)(SharedCoreImplBase *), this); }
 
             virtual ~SharedCoreImplBase() {};
             virtual void destroyAllocator() = 0;
@@ -63,6 +63,7 @@ namespace lib
             virtual void shutdown()
             {
                 operator delete(this, (Hw::cHeap*)m_Allocator); // Oh no
+                // I wonder how Platinum Games just made this mistake, original code also replicates this
             }
         };
 
@@ -76,7 +77,7 @@ namespace lib
             {
             public:
 
-                Core() { CallMethod<0x13C0>(this); }
+                Core() { MAKE_CALL(shared::base + 0x13C0, void(__thiscall *)(Core *), this); }
 
                 virtual ~Core() {};
 
@@ -170,9 +171,9 @@ namespace lib
 
         Archive() { *(void***)this = (void**)(shared::base + 0x12A785C); field_4 = 0; }
 
-        Archive(int a2) { CallMethod<0x8677F0, Archive *, int>(this, a2); }
+        Archive(int a2) { MAKE_CALL(shared::base + 0x8677F0, void(__thiscall *)(Archive *, int), this, a2); }
 
-        ~Archive() { CallMethod<0x867920, Archive *>(this); }
+        ~Archive() { MAKE_CALL(shared::base + 0x867920, void(__thiscall *)(Archive *), this); }
 
         virtual bool dummy() {return false;}
     };
@@ -182,8 +183,8 @@ namespace lib
     public:
 
         InputArchive() { *(void***)this = (void**)(shared::base + 0x12A78DC); field_4 = 0; }
-        InputArchive(int a2) { CallMethod<0x867950, InputArchive *, int>(this, a2); }
-        ~InputArchive() { CallMethod<0x867980, InputArchive *>(this); }
+        InputArchive(int a2) { MAKE_CALL(shared::base + 0x867950, void(__thiscall *)(InputArchive *, int), this, a2); }
+        ~InputArchive() { MAKE_CALL(shared::base + 0x867980, void(__thiscall *)(InputArchive *), this); }
     };
 };
 
@@ -635,7 +636,7 @@ public:
     {
         if (this->m_pArray)
         {
-            operator delete(this->m_pArray, (Hw::cHeap*)m_Allocator);
+			delete[] this->m_pArray;
             this->m_pArray = nullptr;
         }
 
@@ -712,7 +713,7 @@ public:
            if (newSize <= 0x20) // Minimum for 32? Why?
                newSize = 0x20;
 
-           T* newArray = new(*m_Allocator) T[newSize];
+           T* newArray = new(m_Allocator) T[newSize];
 
            if (newArray)
            {
@@ -723,7 +724,7 @@ public:
 
                if (this->m_pArray)
                {
-                   operator delete(this->m_pArray, m_Allocator);
+                   delete[] this->m_pArray;
                    this->m_pArray = 0;
                    this->m_Capacity = 0;
                }
@@ -755,7 +756,7 @@ public:
             if (size <= this->m_Size) // new size of array cannot hold old elements
                 return;
 
-            T* newArray = new(*m_Allocator) T[size];
+            T* newArray = new(m_Allocator) T[size];
             if (newArray)
             {
                 if (this->m_Size && this->m_pArray)
@@ -763,7 +764,7 @@ public:
 
                 if (this->m_pArray)
                 {
-                    operator delete(this->m_pArray, this->m_Allocator);
+					delete[] this->m_pArray;
 
                     this->m_pArray = nullptr;
                     this->m_Capacity = 0;

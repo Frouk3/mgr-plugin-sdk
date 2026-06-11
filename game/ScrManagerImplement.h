@@ -4378,8 +4378,8 @@ class ScrManagerImplement : public ScrManager
     int field_444C;
     float field_4450;
     int field_4454;
-
-    static inline ScrManagerImplement *&ms_Instance = *(ScrManagerImplement**)(shared::base + 0x17EA104);
 };
+
+inline ScrManagerImplement *&g_ScrManager = *(ScrManagerImplement**)(shared::base + 0x17EA104);
 
 VALIDATE_SIZE(ScrManagerImplement, 0x4458);

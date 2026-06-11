@@ -28,10 +28,10 @@ public:
 
     cItemChip()
     {
-        ((void(__thiscall *)(cItemChip*))(shared::base + 0x6B1490))(this);
+        MAKE_CALL(shared::base + 0x6B1490, void(__thiscall *)(cItemChip*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173539C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173539C);
 };
 
 VALIDATE_SIZE(cItemChip, 0x970);

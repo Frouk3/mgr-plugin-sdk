@@ -36,182 +36,182 @@ public:
 
     int getAttackPower(int id)
     {
-        return ReturnCallVMTFunc<int, 1, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(1, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getAttackPowerByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 2, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(2, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getAttackHavokMulScalar(int id)
     {
-        return ReturnCallVMTFunc<int, 3, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(3, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getAttackHavokMulScalarByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 4, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(4, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getAttackPowerHavokPow(int id)
     {
-        return ReturnCallVMTFunc<int, 5, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(5, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getAttackPowerHavokPowByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 6, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(6, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getHitStopTime(int id)
     {
-        return ReturnCallVMTFunc<int, 7, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(7, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getHitStopTimeByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 8, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(8, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getInt0(int id)
     {
-        return ReturnCallVMTFunc<int, 9, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(9, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getInt0ByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 10, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(10, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getInt1(int id)
     {
-        return ReturnCallVMTFunc<int, 11, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(11, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getInt1ByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 12, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(12, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getFloat0(int id)
     {
-        return ReturnCallVMTFunc<float, 13, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(13, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getFloat0ByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 14, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(14, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getFloat1(int id)
     {
-        return ReturnCallVMTFunc<float, 15, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(15, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getFloat1ByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 16, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(16, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getFloat2(int id)
     {
-        return ReturnCallVMTFunc<float, 17, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(17, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getFloat2ByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 18, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(18, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getFloat3(int id)
     {
-        return ReturnCallVMTFunc<float, 19, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(19, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getFloat3ByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 20, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(20, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getNo(int id)
     {
-        return ReturnCallVMTFunc<int, 21, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(21, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getNoByNo(int no) // why
     {
-        return ReturnCallVMTFunc<int, 22, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(22, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getEasyPowerScale(int id)
     {
-        return ReturnCallVMTFunc<float, 23, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(23, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getEasyPowerScaleByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 24, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(24, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getHardPowerScale(int id)
     {
-        return ReturnCallVMTFunc<float, 25, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(25, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getHardPowerScaleByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 26, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(26, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getVeryhardPowerScale(int id)
     {
-        return ReturnCallVMTFunc<float, 27, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(27, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getVeryhardPowerScaleByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 28, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(28, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     float getRevengeancePowerScale(int id)
     {
-        return ReturnCallVMTFunc<float, 29, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(29, float(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     float getRevengeancePowerScaleByNo(int no)
     {
-        return ReturnCallVMTFunc<float, 30, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(30, float(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getInt3(int id)
     {
-        return ReturnCallVMTFunc<int, 31, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(31, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getInt3ByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 32, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(32, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getInt4(int id)
     {
-        return ReturnCallVMTFunc<int, 33, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(33, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getInt4ByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 34, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(34, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
 
     int getInt5(int id)
     {
-        return ReturnCallVMTFunc<int, 35, BattleParameterImplement *, int>(this, id);
+        return MAKE_VCALL(35, int(__thiscall *)(BattleParameterImplement *, int), this, id);
     }
 
     int getInt5ByNo(int no)
     {
-        return ReturnCallVMTFunc<int, 36, BattleParameterImplement *, int>(this, no);
+        return MAKE_VCALL(36, int(__thiscall *)(BattleParameterImplement *, int), this, no);
     }
     /*
     // We still don't know what this function does
@@ -223,12 +223,12 @@ public:
 
     BattleParameterImplement(Hw::cHeapVariable *pAllocator, void *bin)
     {
-        ((void(__thiscall *)(BattleParameterImplement*, Hw::cHeapVariable*, void *))(shared::base + 0x975270))(this, pAllocator, bin);
+        MAKE_CALL(shared::base + 0x975270, void(__thiscall *)(BattleParameterImplement*, Hw::cHeapVariable*, void *), this, pAllocator, bin);
     }
 
     ~BattleParameterImplement()
     {
-        ((void(__thiscall *)(BattleParameterImplement*))(shared::base + 0x9752A0))(this);
+        MAKE_CALL(shared::base + 0x9752A0, void(__thiscall *)(BattleParameterImplement*), this);
     }
 };
 

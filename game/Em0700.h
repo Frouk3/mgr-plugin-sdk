@@ -234,10 +234,10 @@ public:
 
     Em0700()
     {
-        ((void(__thiscall *)(Em0700 *))(shared::base + 0x6AE770))(this);
+        MAKE_CALL(shared::base + 0x6AE770, void(__thiscall *)(Em0700 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17351C0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17351C0);
 };
 
 class Em0700Face : public Behavior
@@ -246,10 +246,10 @@ public:
     
     Em0700Face()
     {
-        ((void(__thiscall *)(Em0700Face *))(shared::base + 0x6A66B0))(this);
+        MAKE_CALL(shared::base + 0x6A66B0, void(__thiscall *)(Em0700Face *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17351C4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17351C4);
 };
 
 VALIDATE_SIZE(Em0700Face, 0x870);

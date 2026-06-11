@@ -177,40 +177,40 @@ public:
     int field_1708;
     int field_170C;
 
-    cCameraGame() { ((void(__thiscall*)(cCameraGame*))(shared::base + 0x856CE0))(this); }
-    void startupScene() { ((void(__thiscall*)(cCameraGame*))(shared::base + 0x9C0CE0))(this); }
+    cCameraGame() { MAKE_CALL(shared::base + 0x856CE0, void(__thiscall *)(cCameraGame*), this); }
+    void startupScene() { MAKE_CALL(shared::base + 0x9C0CE0, void(__thiscall *)(cCameraGame*), this); }
     
     // screenPos - Vector of screen position
     // screenPos.z - How far away it from the screen rect
     // screenPos.w - Distance between given worldPos position and camera position
     BOOL worldToScreen(Hw::cVec4 &screenPos, const Hw::cVec4 &worldPos)
     {
-        return ((BOOL(__thiscall*)(cCameraGame*, Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x99FA80))(this, screenPos, worldPos);
+        return MAKE_CALL(shared::base + 0x99FA80, BOOL(__thiscall *)(cCameraGame*, Hw::cVec4&, const Hw::cVec4&), this, screenPos, worldPos);
     }
 
     void screenToWorld(Hw::cVec4& worldPos, const Hw::cVec4& screenPos)
     {
-        ((void(__thiscall*)(cCameraGame*, Hw::cVec4&, const Hw::cVec4&))(shared::base + 0x99FAB0))(this, worldPos, screenPos);
+        MAKE_CALL(shared::base + 0x99FAB0, void(__thiscall *)(cCameraGame*, Hw::cVec4&, const Hw::cVec4&), this, worldPos, screenPos);
     }
     
     void safePositionTargetXz(const Hw::cVec4& pos, const Hw::cVec4& lookAt, const Hw::cVec4& offset, float fov)
     {
-        ((void(__thiscall*)(cCameraGame*, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&, float))(shared::base + 0x9B8CB0))(this, pos, lookAt, offset, fov);
+        MAKE_CALL(shared::base + 0x9B8CB0, void(__thiscall *)(cCameraGame*, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&, float), this, pos, lookAt, offset, fov);
     }
     
     void updateView()
     {
-        ((void(__thiscall*)(cCameraGame*))(shared::base + 0x9B8090))(this);
+        MAKE_CALL(shared::base + 0x9B8090, void(__thiscall *)(cCameraGame*), this);
     }
 
     void setSmoothness(float smoothness)
     {
-        ((void(__thiscall*)(cCameraGame*, float))(shared::base + 0x9A8810))(this, smoothness);
+        MAKE_CALL(shared::base + 0x9A8810, void(__thiscall *)(cCameraGame*, float), this, smoothness);
     }
 
     void setCameraType(int type)
     {
-        ((void(__thiscall*)(cCameraGame*, int))(shared::base + 0x9C1300))(this, type);
+        MAKE_CALL(shared::base + 0x9C1300, void(__thiscall *)(cCameraGame*, int), this, type);
     }
 };
 

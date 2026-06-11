@@ -8,10 +8,10 @@ public:
 
     WpBaseDLC()
     {
-        ((void(__thiscall *)(WpBaseDLC*))(shared::base + 0x6A74A0))(this);
+        MAKE_CALL(shared::base + 0x6A74A0, void(__thiscall *)(WpBaseDLC*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C44);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C44);
 };
 
 VALIDATE_SIZE(WpBaseDLC, 0x8C0);

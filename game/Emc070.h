@@ -305,10 +305,10 @@ public:
 
     Emc070()
     {
-        ((void(__thiscall *)(Emc070 *))(shared::base + 0x6B27C0))(this);
+        MAKE_CALL(shared::base + 0x6B27C0, void(__thiscall *)(Emc070 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17358E0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17358E0);
 };
 
 class Emc070Gun : public WpBaseDLC
@@ -321,10 +321,10 @@ public:
 
     Emc070Gun()
     {
-        ((void(__thiscall *)(Emc070Gun *))(shared::base + 0x6B2990))(this);
+        MAKE_CALL(shared::base + 0x6B2990, void(__thiscall *)(Emc070Gun *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17358EC);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17358EC);
 };
 
 VALIDATE_SIZE(Emc070Gun, 0x8D0);

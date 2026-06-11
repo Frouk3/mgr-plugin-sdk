@@ -56,7 +56,7 @@ public:
 
 		for (int i = 0; i < 256; i++)
 		{
-			if (SHORT state = GetAsyncKeyState(i); state)
+			if (SHORT state = GetKeyState(i); state & 0x80)
 				aPressedKeys[i >> 5] |= 1 << (i & 0x1F);
 			else
 				aPressedKeys[i >> 5] &= ~(1 << (i & 0x1F));
@@ -93,47 +93,18 @@ public:
 	static inline T clamp(T x, T min, T max) { return (x < min) ? min : (x > max) ? max : x; }
 };
 
-__forceinline void** GetVMT(const void* self) { return *(void***)(self); }
-__forceinline void *GetVMT(const void* self, size_t index) { return GetVMT(self)[index]; }
+/*
+* why even bother making wrapper functions for different type of calls? Just make a simple macro that would apply the type instead
+*/
 
-// for these functions for calling, you better fill the template parameters explicitly, as automatic deduction may fail in some cases and it may waste resources of compiler and intellisense
+// get virtual table pointer from the instance
+#define GET_VTABLE(instance) (*(void***)instance)
 
-template <typename ret, size_t index, typename C, typename... Args>
-__forceinline ret ReturnCallVMTFunc(C self, Args... args) { return ((ret (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...); }
+// get function pointer based on the index from the instance
+#define GET_VFTABLE(instance, index) ((*(void***)instance)[index])
 
-template <size_t index, typename C, typename... Args>
-__forceinline void CallVMTFunc(C self, Args... args) { ((void (__thiscall *)(C, Args...))GetVMT(self, index))(self, args...); }
+// apply a type to target to make a call
+#define MAKE_CALL(target, type, ...) ((type)(target))(__VA_ARGS__)
 
-template <typename ret, unsigned int address, typename C, typename... Args>
-__forceinline ret ReturnCallMethod(C self, Args... args) { return ((ret (__thiscall *)(C, Args...))(shared::base + address))(self, args...); }
-
-template <unsigned int address, typename C, typename... Args>
-__forceinline void CallMethod(C self, Args... args) { ((void (__thiscall *)(C, Args...))(shared::base + address))(self, args...); }
-
-template<unsigned int address, typename... Args>
-__forceinline void CdeclCall(Args... args) { ((void (__cdecl*)(Args...))(shared::base + address))(args...); }
-
-template<typename ret, unsigned int address, typename... Args>
-__forceinline ret ReturnCdeclCall(Args... args) { return ((ret (__cdecl *)(Args...))(shared::base + address))(args...); }
-
-template<typename ret, unsigned int address, typename... Args>
-__forceinline ret ReturnStdcall(Args... args) { return ((ret (__stdcall *)(Args...))(shared::base + address))(args...); }
-
-template<unsigned int address, typename... Args>
-__forceinline void Stdcall(Args... args) { ((void (__stdcall *)(Args...))(shared::base + address))(args...); }
-
-#define NO_DEFAULT_CONSTRUCTION(className) \
-    public: \
-    className() = default;\
-    className(className const &) = default;\
-    className(className &&) = default;\
-    ~className() = default;\
-    className &operator=(className &&) = default;
-
-#define NO_DEFAULT_CONSTRUCTION_VIRTUALBASE(className) \
-    public: \
-    className() = default;\
-    className(className const &) = default;\
-    className(className &&) = default;\
-    virtual ~className() = default;\
-    className &operator=(className &&) = default;
+// apply a type to virtual function stored in index from instance
+#define MAKE_VCALL(index, type, instance, ...) ((type)((*(void***)instance)[index]))(instance, __VA_ARGS__)

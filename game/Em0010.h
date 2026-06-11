@@ -22,10 +22,10 @@ public:
 
     Em0010DebrisTest()
     {
-        ((void(__thiscall *)(Em0010DebrisTest*))(shared::base + 0x1E4DE0))(this);
+        MAKE_CALL(shared::base + 0x1E4DE0, void(__thiscall *)(Em0010DebrisTest*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735364);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735364);
 };
 
 class cEm0010Weapon : public BehaviorWeapon
@@ -38,10 +38,10 @@ public:
 
     cEm0010Weapon()
     {
-        ((void(__thiscall *)(cEm0010Weapon *))(shared::base + 0x6A6830))(this);
+        MAKE_CALL(shared::base + 0x6A6830, void(__thiscall *)(cEm0010Weapon *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D28);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D28);
 };
 
 class cEm0010Magazine : public BehaviorPartsModel
@@ -58,10 +58,10 @@ public:
 
     cEm0010Magazine()
     {
-        ((void(__thiscall *)(cEm0010Magazine*))(shared::base + 0x6AF110))(this);
+        MAKE_CALL(shared::base + 0x6AF110, void(__thiscall *)(cEm0010Magazine*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D24);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D24);
 };
 
 class EmC010Weapon : public cEm0010Weapon
@@ -70,10 +70,10 @@ public:
     
     EmC010Weapon()
     {
-        ((void(__thiscall *)(EmC010Weapon *))(shared::base + 0x6B4090))(this);
+        MAKE_CALL(shared::base + 0x6B4090, void(__thiscall *)(EmC010Weapon *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357A8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17357A8);
 };
 
 class Em0010WeaponShield : public cEm0010Weapon
@@ -86,10 +86,10 @@ public:
 
     Em0010WeaponShield()
     {
-        ((void(__thiscall *)(Em0010WeaponShield *))(shared::base + 0x6AF1C0))(this);
+        MAKE_CALL(shared::base + 0x6AF1C0, void(__thiscall *)(Em0010WeaponShield *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D2C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D2C);
 };
 
 class Em0010RPGBullet : public Behavior
@@ -102,10 +102,10 @@ public:
 
     Em0010RPGBullet()
     {
-        ((void(__thiscall *)(Em0010RPGBullet *))(shared::base + 0x6A68D0))(this);
+        MAKE_CALL(shared::base + 0x6A68D0, void(__thiscall *)(Em0010RPGBullet *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9D30);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9D30);
 };
 
 class Em0010DebrisActor : public Behavior
@@ -161,10 +161,10 @@ public:
 
     Em0010DebrisActor()
     {
-        ((void(__thiscall *)(Em0010DebrisActor*))(shared::base + 0x6A6BA0))(this);
+        MAKE_CALL(shared::base + 0x6A6BA0, void(__thiscall *)(Em0010DebrisActor*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735360);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735360);
 };
 
 class Em0010 : public BehaviorEmBase
@@ -619,10 +619,10 @@ public:
 
     Em0010()
     {
-        ((void(__thiscall *)(Em0010 *))(shared::base + 0x6AB940))(this);
+        MAKE_CALL(shared::base + 0x6AB940, void(__thiscall *)(Em0010 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D20);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D20);
 };
 
 VALIDATE_SIZE(Em0010DebrisTest, 0xB40);

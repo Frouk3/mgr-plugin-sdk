@@ -68,6 +68,4 @@ public:
     int field_194;
     int field_198;
     int field_19C;
-
-    virtual ~cRadarMap() override {};
 };

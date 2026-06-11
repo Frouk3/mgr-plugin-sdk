@@ -23,15 +23,15 @@ public:
 
     BehaviorDatabaseImplement()
     {
-        ((void (__thiscall *)(BehaviorDatabaseImplement *))(shared::base + 0x6C18F0))(this);
+        MAKE_CALL(shared::base + 0x6C18F0, void(__thiscall *)(BehaviorDatabaseImplement *), this);
     }
-
-    static inline BehaviorDatabaseImplement *&ms_Instance = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
     
     static inline BehaviorDatabaseImplement *get()
     {
-        return ((BehaviorDatabaseImplement *(__cdecl *)())(shared::base + 0x68B0B0))();
+        return MAKE_CALL(shared::base + 0x68B0B0, BehaviorDatabaseImplement *(__cdecl *)());
     }
 };
+
+inline BehaviorDatabaseImplement *&g_BehaviorDatabase = *(BehaviorDatabaseImplement **)(shared::base + 0x17E9BF4);
 
 VALIDATE_SIZE(BehaviorDatabaseImplement, 0x30);

@@ -8,10 +8,10 @@ public:
 
     Et4010()
     {
-        ((void(__thiscall *)(Et4010 *))(shared::base + 0x6A6A80))(this);
+        MAKE_CALL(shared::base + 0x6A6A80, void(__thiscall *)(Et4010 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17352C4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17352C4);
 };
 
 VALIDATE_SIZE(Et4010, 0x870);

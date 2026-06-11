@@ -36,10 +36,10 @@ public:
 
     BehaviorDebrisArmor()
     {
-        ((void (__thiscall *)(BehaviorDebrisArmor *))(shared::base + 0x6A6B30))(this);
+        MAKE_CALL(shared::base + 0x6A6B30, void(__thiscall *)(BehaviorDebrisArmor *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173530C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173530C);
 };
 
 VALIDATE_SIZE(BehaviorDebrisArmor, 0x8E0);

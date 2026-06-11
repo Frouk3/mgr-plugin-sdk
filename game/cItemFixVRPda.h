@@ -116,10 +116,10 @@ public:
 
     cItemFixVRPda()
     {
-        ((void(__thiscall *)(cItemFixVRPda*))(shared::base + 0x6C11A0))(this);
+        MAKE_CALL(shared::base + 0x6C11A0, void(__thiscall *)(cItemFixVRPda*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17353BC);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17353BC);
 };
 
 VALIDATE_SIZE(cItemFixVRPda, 0xAE0);

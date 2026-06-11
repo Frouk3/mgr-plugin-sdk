@@ -22,10 +22,10 @@ public:
 
     cItemViscelaBase()
     {
-        ((void(__thiscall *)(cItemViscelaBase*))(shared::base + 0x6B6700))(this);
+        MAKE_CALL(shared::base + 0x6B6700, void(__thiscall *)(cItemViscelaBase*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17353C0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17353C0);
 };
 
 VALIDATE_SIZE(cItemViscelaBase, 0x970);

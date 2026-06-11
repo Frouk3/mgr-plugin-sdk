@@ -14,12 +14,12 @@ public:
 
     hkpAllCdPointCollector()
     {
-        ((void(__thiscall *)(hkpAllCdPointCollector*))(shared::base + 0x38860))(this);
+        MAKE_CALL(shared::base + 0x38860, void(__thiscall *)(hkpAllCdPointCollector *), this);
     }
 
     void sortHits()
     {
-        ((void(__thiscall*)(hkpAllCdPointCollector*))(shared::base + 0xD2BCF0))(this);
+        MAKE_CALL(shared::base + 0xD2BCF0, void(__thiscall *)(hkpAllCdPointCollector *), this);
     }
 };
 

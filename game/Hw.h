@@ -313,7 +313,7 @@ namespace Hw
 	class cVec4;
 	class cQuat;
 
-	inline BOOL createSubWindow(const char* classname, const char* windowname, unsigned int x, unsigned int y) { return ((BOOL(__cdecl*)(const char*, const char*, unsigned int, unsigned int))(shared::base + 0xB98770))(classname, windowname, x, y); }
+	inline BOOL createSubWindow(const char* classname, const char* windowname, unsigned int x, unsigned int y) { return MAKE_CALL(shared::base + 0xB98770, BOOL(__cdecl*)(const char*, const char*, unsigned int, unsigned int), classname, windowname, x, y); }
 
 	class TextureManager
 	{
@@ -332,7 +332,7 @@ namespace Hw
 			int field_24;
 		};
 
-		inline void removeTexture(Texture& texture) { ((void(__cdecl*)(Texture&))(shared::base + 0xBA16D0))(texture); }
+		inline void removeTexture(Texture& texture) { MAKE_CALL(shared::base + 0xBA16D0, void(__cdecl*)(Texture&), texture); }
 
 		static inline cFixedList<Texture>& m_Textures = *(cFixedList<Texture>*)(shared::base + 0x1B20720);
 		static inline cCriticalSection& m_TextureCriticalSection = *(cCriticalSection*)(shared::base + 0x1B20740);
@@ -399,10 +399,10 @@ namespace Hw
 			void* m_pThreadParameter;
 		};
 
-		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char* threadName, int priority) { return ((BOOL(__cdecl*)(cWork*, unsigned int, int, const char*, int))(shared::base + 0x9D7DB0))(pThread, stackSize, a3, threadName, priority); }
-		static inline BOOL createThread(void(__cdecl* pfnThreadFunction)(void*), void* pParameter, unsigned int stackSize, int a4, const char* threadName, int priority) { return ((BOOL(__cdecl*)(void(__cdecl*)(void*), void*, unsigned int, int, const char*, int))(shared::base + 0x9D82C0))(pfnThreadFunction, pParameter, stackSize, a4, threadName, priority); }
+		static inline BOOL startupThread(cWork* pThread, unsigned int stackSize, int a3, const char* threadName, int priority) { return MAKE_CALL(shared::base + 0x9D7DB0, BOOL(__cdecl*)(cWork*, unsigned int, int, const char*, int), pThread, stackSize, a3, threadName, priority); }
+		static inline BOOL createThread(void(__cdecl* pfnThreadFunction)(void*), void* pParameter, unsigned int stackSize, int a4, const char* threadName, int priority) { return MAKE_CALL(shared::base + 0x9D82C0, BOOL(__cdecl*)(void(__cdecl*)(void*), void*, unsigned int, int, const char*, int), pfnThreadFunction, pParameter, stackSize, a4, threadName, priority); }
 		// Should be always called at the end of the thread function
-		static inline void Exit() { CdeclCall<0x9D7C70>(); }
+		static inline void Exit() { MAKE_CALL(shared::base + 0x9D7C70, void(__cdecl *)(), ); }
 	};
 
 	class GraphicDevice
@@ -427,11 +427,11 @@ namespace Hw
 	class OsTime
 	{
 	public:
-		static inline int Startup() { return ReturnCdeclCall<int, 0x9F8110>(); }
-		static inline float GetHiSystemTime() { return ReturnCdeclCall<float, 0x9F81D0>(); }
-		static inline LONGLONG GetHiSystemTickCount() { return ReturnCdeclCall<LONGLONG, 0x9F8230>(); }
-		static inline float GetSystemSecPerTick() { return ReturnCdeclCall<float, 0x9F8260>(); }
-		static inline int GetSystemTime() { return ReturnCdeclCall<int, 0xB98000>(); }
+		static inline int Startup() { return MAKE_CALL(shared::base + 0x9F8110, int(__cdecl *)(), ); }
+		static inline float GetHiSystemTime() { return MAKE_CALL(shared::base + 0x9F81D0, float(__cdecl *)(), ); }
+		static inline LONGLONG GetHiSystemTickCount() { return MAKE_CALL(shared::base + 0x9F8230, LONGLONG(__cdecl *)(), ); }
+		static inline float GetSystemSecPerTick() { return MAKE_CALL(shared::base + 0x9F8260, float(__cdecl *)(), ); }
+		static inline int GetSystemTime() { return MAKE_CALL(shared::base + 0xB98000, int(__cdecl *)(), ); }
 
 		static inline float& m_SecondsPerTick = *(float*)(shared::base + 0x19D4F14);
 		static inline LARGE_INTEGER& m_SystemHiTime = *(LARGE_INTEGER*)(shared::base + 0x19D4F18);
@@ -442,10 +442,10 @@ namespace Hw
 	class OsSystem
 	{
 	public:
-		static inline float GetHiSystemTime() { return ReturnCdeclCall<float, 0x9F8C10>(); }
+		static inline float GetHiSystemTime() { return MAKE_CALL(shared::base + 0x9F8C10, float(__cdecl*)()); }
 	};
 
-	inline RenderBufferHeapManager& RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
+	inline RenderBufferHeapManager& g_RenderBufferManager = *(RenderBufferHeapManager*)(shared::base + 0x1ADD490);
 
 	inline cRand& g_Rand = *(cRand*)(shared::base + 0x19D0814);
 };
@@ -455,12 +455,12 @@ class Hw::cSemaphore
 private:
 	void* m_hSemaphore;
 public:
-	cSemaphore() { CallMethod<0x9D7360, cSemaphore*>(this); }
+	cSemaphore() { MAKE_CALL(shared::base + 0x9D7360, void(__thiscall*)(cSemaphore*), this); }
 
-	int startup(unsigned int init_count, unsigned int max_count) { return ReturnCallMethod<BOOL, 0x9D7370, cSemaphore*, unsigned int, unsigned int>(this, init_count, max_count); }
-	void cleanup() { CallMethod<0x9D73B0, cSemaphore*>(this); }
-	void hold() { CallMethod<0x9D73D0, cSemaphore*>(this); }
-	void release() { CallMethod<0x9D73E0, cSemaphore*>(this); }
+	int startup(unsigned int init_count, unsigned int max_count) { return MAKE_CALL(shared::base + 0x9D7370, int(__thiscall*)(cSemaphore*, unsigned int, unsigned int), this, init_count, max_count); }
+	void cleanup() { MAKE_CALL(shared::base + 0x9D73B0, void(__thiscall*)(cSemaphore*), this); }
+	void hold() { MAKE_CALL(shared::base + 0x9D73D0, void(__thiscall*)(cSemaphore*), this); }
+	void release() { MAKE_CALL(shared::base + 0x9D73E0, void(__thiscall*)(cSemaphore*), this); }
 };
 
 class Hw::cCriticalSection
@@ -472,10 +472,10 @@ private:
 public:
 
 	cCriticalSection() { m_IsStartuped = FALSE; }
-	BOOL startup() { return ReturnCallMethod<BOOL, 0x9D7240, cCriticalSection*>(this); }
-	void cleanup() { CallMethod<0x9D7270, cCriticalSection*>(this); }
-	void enter() { CallMethod<0xA6C0, cCriticalSection*>(this); }
-	void leave() { CallMethod<0xA6D0, cCriticalSection*>(this); }
+	BOOL startup() { return MAKE_CALL(shared::base + 0x9D7240, BOOL(__thiscall*)(cCriticalSection*), this); }
+	void cleanup() { MAKE_CALL(shared::base + 0x9D7270, void(__thiscall*)(cCriticalSection*), this); }
+	void enter() { MAKE_CALL(shared::base + 0xA6C0, void(__thiscall*)(cCriticalSection*), this); }
+	void leave() { MAKE_CALL(shared::base + 0xA6D0, void(__thiscall*)(cCriticalSection*), this); }
 	int isValid() const { return m_IsStartuped; }
 };
 
@@ -492,41 +492,41 @@ public:
 	const char* m_pHeapName;
 	unsigned int m_OutOfMemoryFlag;
 
-	cHeap() { CallMethod<0x9D3650, cHeap*>(this); }
+	cHeap() { MAKE_CALL(shared::base + 0x9D3650, void(__thiscall*)(cHeap*), this); }
 	virtual ~cHeap() {};
 
-	void cleanup() { CallVMTFunc<1, cHeap*>(this); }
-	void destroy() { CallVMTFunc<2, cHeap*>(this); }
-	BOOL isValid() const { return ReturnCallVMTFunc<BOOL, 3, const cHeap*>(this); }
-	size_t getSize() const { return ReturnCallVMTFunc<size_t, 4, const cHeap*>(this); }
-	size_t getUsedSize() const { return ReturnCallVMTFunc<size_t, 5, const cHeap*>(this); }
-	size_t getAllocatableSize() const { return ReturnCallVMTFunc<size_t, 6, const cHeap*>(this); }
+	void cleanup() { MAKE_VCALL(1, void(__thiscall*)(cHeap *), this); }
+	void destroy() { MAKE_VCALL(2, void(__thiscall*)(cHeap *), this); }
+	BOOL isValid() const { return MAKE_VCALL(3, BOOL(__thiscall*)(const cHeap *), this); }
+	size_t getSize() const { return MAKE_VCALL(4, size_t(__thiscall*)(const cHeap *), this); }
+	size_t getUsedSize() const { return MAKE_VCALL(5, size_t(__thiscall*)(const cHeap *), this); }
+	size_t getAllocatableSize() const { return MAKE_VCALL(6, size_t(__thiscall*)(const cHeap *), this); }
 	// Pass nullptr to get the first allocation
-	void* getNextAlloc(void* block) const { return ReturnCallVMTFunc<void*, 7, const cHeap*, void*>(this, block); }
-	size_t getAllocSize(void* block) const { return ReturnCallVMTFunc<size_t, 8, const cHeap*, void*>(this, block); }
+	void* getNextAlloc(void* block) const { return MAKE_VCALL(7, void*(__thiscall*)(const cHeap *, void*), this, block); }
+	size_t getAllocSize(void* block) const { return MAKE_VCALL(8, size_t(__thiscall*)(const cHeap *, void*), this, block); }
 	// returns critical size at which it cannot allocate more memory
-	size_t getRestSizeLimit() const { return ReturnCallVMTFunc<size_t, 9, const cHeap*>(this); }
-	size_t getChildHeapSize() const { return ReturnCallVMTFunc<size_t, 10, const cHeap*>(this); }
-	void setDefragmentableFlag(void* a1) { CallVMTFunc<11, cHeap*, void*>(this, a1); }
-	void* createChildHeap(HANDLE* pHandle, size_t Size) { return ReturnCallVMTFunc<void*, 12, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
-	void destroyChildHeap(HANDLE* pHandle, size_t Size) { CallVMTFunc<13, cHeap*, HANDLE*, size_t>(this, pHandle, Size); }
-	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4) { return ReturnCallVMTFunc<void*, 14, cHeap*, size_t, size_t, HW_ALLOC_MODE, int>(this, size, align, allocMode, a4); }
-	void dealloc(void* block, size_t size) { CallVMTFunc<15, cHeap*, void*, size_t>(this, block, size); }
-	void* alloc(unsigned int size, int align = 32, HW_ALLOC_MODE allocMode = HW_ALLOC_MODE::HW_ALLOC_VIRTUAL, int a3 = 0) { return ReturnCallMethod<void*, 0x9D29B0, cHeap*, unsigned int, int, HW_ALLOC_MODE, int>(this, size, align, allocMode, a3); }
-	void setSubHeap(Hw::cHeap& rHeap) { CallMethod<0x9D2930, cHeap*, cHeap&>(this, rHeap); }
-	void unsetSubHeap() { CallMethod<0x9D2940, cHeap*>(this); }
+	size_t getRestSizeLimit() const { return MAKE_VCALL(9, size_t(__thiscall*)(const cHeap *), this); }
+	size_t getChildHeapSize() const { return MAKE_VCALL(10, size_t(__thiscall*)(const cHeap *), this); }
+	void setDefragmentableFlag(void* a1) { MAKE_VCALL(11, void(__thiscall*)(cHeap *, void*), this, a1); }
+	void* createChildHeap(HANDLE* pHandle, size_t Size) { return MAKE_VCALL(12, void*(__thiscall*)(cHeap *, HANDLE*, size_t), this, pHandle, Size); }
+	void destroyChildHeap(HANDLE* pHandle, size_t Size) { MAKE_VCALL(13, void(__thiscall*)(cHeap *, HANDLE*, size_t), this, pHandle, Size); }
+	void* allocImpl(size_t size, size_t align, HW_ALLOC_MODE allocMode, int a4) { return MAKE_VCALL(14, void*(__thiscall*)(cHeap *, size_t, size_t, HW_ALLOC_MODE, int), this, size, align, allocMode, a4); }
+	void dealloc(void* block, size_t size) { MAKE_VCALL(15, void(__thiscall*)(cHeap *, void*, size_t), this, block, size); }
+	void* alloc(unsigned int size, int align = 32, HW_ALLOC_MODE allocMode = HW_ALLOC_MODE::HW_ALLOC_VIRTUAL, int a3 = 0) { return MAKE_CALL(shared::base + 0x9D29B0, void*(__thiscall*)(cHeap *, unsigned int, int, HW_ALLOC_MODE, int), this, size, align, allocMode, a3); }
+	void setSubHeap(Hw::cHeap& rHeap) { MAKE_CALL(shared::base + 0x9D2930, void(__thiscall*)(cHeap *, Hw::cHeap&), this, rHeap); }
+	void unsetSubHeap() { MAKE_CALL(shared::base + 0x9D2940, void(__thiscall*)(cHeap *), this); }
 
-	static inline void free(void* block) { CdeclCall<0x9D4920, void*>(block); }
+	static inline void free(void* block) { MAKE_CALL(shared::base + 0x9D4920, void(__cdecl*)(void*), block); }
 };
 
-inline void* __cdecl operator new(size_t s, Hw::cHeap* rHeap) { return ReturnCdeclCall<void*, 0x9D3500, size_t, Hw::cHeap*>(s, rHeap); }
-inline void __cdecl operator delete(void* block, Hw::cHeap* rHeap) { CdeclCall<0x9D48D0, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
-inline void* __cdecl operator new[](size_t s, Hw::cHeap* rHeap) { return ReturnCdeclCall<void*, 0x9D3580, size_t, Hw::cHeap*>(s, rHeap); }
-inline void __cdecl operator delete[](void* block, Hw::cHeap* rHeap) { CdeclCall<0x9D4940, void*, Hw::cHeap*>(block, rHeap); } // Separated to avoid ambiguity
+inline void* __cdecl operator new(size_t s, Hw::cHeap* rHeap) { return MAKE_CALL(shared::base + 0x9D3500, void*(__cdecl*)(size_t, Hw::cHeap*), s, rHeap); }
+inline void __cdecl operator delete(void* block, Hw::cHeap* rHeap) { MAKE_CALL(shared::base + 0x9D48D0, void(__cdecl*)(void*, Hw::cHeap*), block, rHeap); } // Separated to avoid ambiguity
+inline void* __cdecl operator new[](size_t s, Hw::cHeap* rHeap) { return MAKE_CALL(shared::base + 0x9D3580, void*(__cdecl*)(size_t, Hw::cHeap*), s, rHeap); }
+inline void __cdecl operator delete[](void* block, Hw::cHeap* rHeap) { MAKE_CALL(shared::base + 0x9D4940, void(__cdecl*)(void*, Hw::cHeap*), block, rHeap); } // Separated to avoid ambiguity
 // Usage after heap startup
-inline void* __cdecl memAlloc(size_t s) { return ReturnCdeclCall<void*, 0x61E180, size_t>(s); }
+inline void* __cdecl memAlloc(size_t s) { return MAKE_CALL(shared::base + 0x61E180, void*(__cdecl*)(size_t), s); }
 // Usage after heap startup
-inline void __cdecl memDealloc(void* block) { CdeclCall<0x61D3D0, void*>(block); }
+inline void __cdecl memDealloc(void* block) { MAKE_CALL(shared::base + 0x61D3D0, void(__cdecl*)(void*), block); }
 
 class Hw::cHeapVariableBase : public Hw::cHeap
 {
@@ -546,17 +546,17 @@ public:
 	size_t m_RestSize;
 	size_t m_ChildHeapSize;
 
-	cHeapVariableBase() { CallMethod<0x9D3AF0, cHeapVariableBase*>(this); }
+	cHeapVariableBase() { MAKE_CALL(shared::base + 0x9D3AF0, void(__thiscall*)(cHeapVariableBase *), this); }
 };
 
 class Hw::cHeapVariable : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapVariable() { CallMethod<0x9D44F0, cHeapVariable*>(this); }
+	cHeapVariable() { MAKE_CALL(shared::base + 0x9D44F0, void(__thiscall*)(cHeapVariable *), this); }
 
-	int create(size_t size, Hw::cHeap& rHeap, const char* pName) { return ReturnCallVMTFunc<int, 16, Hw::cHeapVariable*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, pName); }
-	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName) { return ReturnCallVMTFunc<int, 17, Hw::cHeapVariable*, size_t, size_t, Hw::cHeap&, const char*>(this, size, align, rHeap, pName); }
+	int create(size_t size, Hw::cHeap& rHeap, const char* pName) { return MAKE_VCALL(16, int(__thiscall*)(cHeapVariable *, size_t, Hw::cHeap&, const char*), this, size, rHeap, pName); }
+	int create(size_t size, size_t align, Hw::cHeap& rHeap, const char* pName) { return MAKE_VCALL(17, int(__thiscall*)(cHeapVariable *, size_t, size_t, Hw::cHeap&, const char*), this, size, align, rHeap, pName); }
 };
 
 class Hw::cHeapPhysicalBase : public Hw::cHeap
@@ -585,23 +585,23 @@ public:
 	int field_6C;
 	cList* m_pBlocks[256];
 
-	cHeapPhysicalBase() { CallMethod<0x9D3860, cHeapPhysicalBase*>(this); }
+	cHeapPhysicalBase() { MAKE_CALL(shared::base + 0x9D3860, void(__thiscall*)(cHeapPhysicalBase *), this); }
 };
 
 class Hw::cHeapPhysical : public Hw::cHeapPhysicalBase
 {
 public:
 
-	cHeapPhysical() { CallMethod<0x9D48F0, cHeapPhysical*>(this); }
+	cHeapPhysical() { MAKE_CALL(shared::base + 0x9D48F0, void(__thiscall*)(cHeapPhysical *), this); }
 
-	int create(size_t size, Hw::cHeap& rHeap, const char* name) { return ReturnCallVMTFunc<int, 17, Hw::cHeapPhysical*, size_t, Hw::cHeap&, const char*>(this, size, rHeap, name); }
+	int create(size_t size, Hw::cHeap& rHeap, const char* name) { return MAKE_VCALL(17, int(__thiscall*)(cHeapPhysical *, size_t, Hw::cHeap&, const char*), this, size, rHeap, name); }
 };
 
 class Hw::cHeapHook
 {
 public:
 
-	cHeapHook() { CallMethod<0x9D32E0, cHeapHook*>(this); }
+	cHeapHook() { MAKE_CALL(shared::base + 0x9D32E0, void(__thiscall*)(cHeapHook *), this); }
 	virtual ~cHeapHook() {};
 };
 
@@ -622,13 +622,13 @@ public:
 	size_t m_RestNum;
 	Hw::cHeapFixed::cList* m_pFreeList, * m_pFirstList;
 
-	cHeapFixed() { CallMethod<0x9D36F0, Hw::cHeapFixed*>(this); }
+	cHeapFixed() { MAKE_CALL(shared::base + 0x9D36F0, void(__thiscall*)(cHeapFixed *), this); }
 
-	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap& creator, const char* name) { return ReturnCallVMTFunc<BOOL, 16, cHeapFixed*, size_t, size_t, size_t, Hw::cHeap&, const char*>(this, fixedSize, allocAmount, reservedSize, creator, name); }
-	void* alloc() { return ReturnCallMethod<void*, 0x9D2BC0, Hw::cHeapFixed*>(this); }
-	int canAlloc(size_t size, size_t num) { return ReturnCallMethod<int, 0x9D2BA0, Hw::cHeapFixed*, size_t, size_t>(this, size, num); }
-	unsigned int getBlockMaxNum() { return ReturnCallMethod<unsigned int, 0x9D2C80, Hw::cHeapFixed*>(this); }
-	unsigned int getBlockUsedNum() { return ReturnCallMethod<unsigned int, 0x9D2C90, Hw::cHeapFixed*>(this); }
+	BOOL create(size_t fixedSize, size_t allocAmount, size_t reservedSize, Hw::cHeap& creator, const char* name) { return MAKE_VCALL(16, BOOL(__thiscall*)(cHeapFixed *, size_t, size_t, size_t, Hw::cHeap&, const char*), this, fixedSize, allocAmount, reservedSize, creator, name); }
+	void* alloc() { return MAKE_CALL(shared::base + 0x9D2BC0, void*(__thiscall*)(cHeapFixed *), this); }
+	int canAlloc(size_t size, size_t num) { return MAKE_CALL(shared::base + 0x9D2BA0, int(__thiscall*)(cHeapFixed *, size_t, size_t), this, size, num); }
+	unsigned int getBlockMaxNum() { return MAKE_CALL(shared::base + 0x9D2C80, unsigned int(__thiscall*)(cHeapFixed *), this); }
+	unsigned int getBlockUsedNum() { return MAKE_CALL(shared::base + 0x9D2C90, unsigned int(__thiscall*)(cHeapFixed *), this); }
 };
 
 class Hw::cHeapOneTime : public Hw::cHeap
@@ -648,16 +648,16 @@ public:
 	Hw::cHeapOneTime::cList* m_pFirstList, * m_pLastList;
 	int m_RestSize;
 
-	cHeapOneTime() { CallMethod<0x9D3800, cHeapOneTime*>(this); }
+	cHeapOneTime() { MAKE_CALL(shared::base + 0x9D3800, void(__thiscall*)(cHeapOneTime *), this); }
 };
 
 class Hw::cHeapGlobal : public Hw::cHeapVariableBase
 {
 public:
 
-	cHeapGlobal() { CallMethod<0x9D3F20, cHeapGlobal*>(this); }
+	cHeapGlobal() { MAKE_CALL(shared::base + 0x9D3F20, void(__thiscall*)(cHeapGlobal *), this); }
 
-	static inline cHeapGlobal* GetInstance() { return ReturnCdeclCall<cHeapGlobal*, 0x61D830>(); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
+	static inline cHeapGlobal* GetInstance() { return MAKE_CALL(shared::base + 0x61D830, cHeapGlobal*(__cdecl*)()); } // -> return Hw::cHeapGlobal::ms_Instance.GetInstance(); 
 
 	BOOL create(size_t size, const char* target) // Got optimised away
 	{
@@ -681,7 +681,6 @@ public:
 	}
 
 	// non virtual ~cHeapGlobal() -> at 0x9D3F60
-
 	static inline cHeapGlobal& m_Instance = *(cHeapGlobal*)(shared::base + 0x1783AF0); // Actually a singleton
 };
 
@@ -690,9 +689,9 @@ class Hw::cShareHeapPhysical : public Hw::cHeapPhysical
 public:
 	cHeapPhysical* m_pShareHeap;
 
-	cShareHeapPhysical() { CallMethod<0x9D4BD0, cShareHeapPhysical*>(this); }
-	int create(Hw::cHeapPhysical& shareHeap, const char* name) { return ReturnCallVMTFunc<int, 18, cShareHeapPhysical*, Hw::cHeapPhysical&, const char*>(this, shareHeap, name); }
-	int startupShareHeap() { return ReturnCallVMTFunc<int, 19, cShareHeapPhysical*>(this); }
+	cShareHeapPhysical() { MAKE_CALL(shared::base + 0x9D4BD0, void(__thiscall*)(cShareHeapPhysical *), this); }
+	int create(Hw::cHeapPhysical& shareHeap, const char* name) { return MAKE_VCALL(18, int(__thiscall*)(cShareHeapPhysical *, Hw::cHeapPhysical&, const char*), this, shareHeap, name); }
+	int startupShareHeap() { return MAKE_VCALL(19, int(__thiscall*)(cShareHeapPhysical *), this); }
 };
 
 template <typename tC, unsigned const align, typename tHeapBinder = Hw::cHeap>
@@ -941,26 +940,26 @@ public:
 	char* m_dtt;
 
 	cFmerge(char* data) : m_data((FmergeHeader*)data), m_dtt(nullptr) {};
-	cFmerge() { ((void(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3530))(this); }
+	cFmerge() { MAKE_CALL(shared::base + 0x9E3530, void(__thiscall*)(Hw::cFmerge*), this); }
 
-	void* getDtt() { return ((void* (__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3550))(this); }
-	void* getData() { return ((void* (__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3560))(this); }
-	void setData(void* data, int index) { ((void(__thiscall*)(Hw::cFmerge*, void*, int))(shared::base + 0x9E3570))(this, data, index); }
-	void* getDataAt(int index) { return ((void* (__thiscall*)(Hw::cFmerge*, int))(shared::base + 0x9E3580))(this, index); }
-	size_t getFileAmount() { return ((size_t(__thiscall*)(Hw::cFmerge*))(shared::base + 0x9E3590))(this); }
-	size_t getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E3670))(this, fileIndex); }
-	const char* getFileIndexFileName(size_t fileIndex) { return ((const char* (__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E38D0))(this, fileIndex); }
-	BOOL getFileIndexExtension(char* pExt, size_t fileIndex) { return ((BOOL(__thiscall*)(Hw::cFmerge*, char*, size_t))(shared::base + 0x9E3C20))(this, pExt, fileIndex); }
-	void* getFileIndexData(size_t fileIndex) { return ((void* (__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E3CF0))(this, fileIndex); }
-	size_t _getFileIndexSize(size_t fileIndex) { return ((size_t(__thiscall*)(Hw::cFmerge*, size_t))(shared::base + 0x9E3EE0))(this, fileIndex); }
-	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E3F20))(this, ext, no); }
-	size_t getFileNameIndexI(const char* name) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*))(shared::base + 0x9E3FD0))(this, name); }
-	size_t getSubStrFileIndex(const char* name, unsigned int matchLimit) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4130))(this, name, matchLimit); }
-	void* getExtensionFileData(const char* name, unsigned int matchLimit) { return ((void* (__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E44B0))(this, name, matchLimit); }
-	void* getFileNameData(const char* name) { return ((void* (__thiscall*)(Hw::cFmerge*, const char*))(shared::base + 0x9E4500))(this, name); }
-	void* getFileNameData(const char* name, unsigned int no) { return ((void* (__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E4550))(this, name, no); }
-	size_t getFileNameSize(const char* name, unsigned int no) { return ((size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int))(shared::base + 0x9E46D0))(this, name, no); }
-	void setData(char* data, char* dds = nullptr) { ((void(__thiscall*)(Hw::cFmerge*, char*, char*))(shared::base + 0x9E3540))(this, data, dds); }
+	void* getDtt() { return MAKE_CALL(shared::base + 0x9E3550, void* (__thiscall*)(Hw::cFmerge*), this); }
+	void* getData() { return MAKE_CALL(shared::base + 0x9E3560, void* (__thiscall*)(Hw::cFmerge*), this); }
+	void setData(void* data, int index) { MAKE_CALL(shared::base + 0x9E3570, void(__thiscall*)(Hw::cFmerge*, void*, int), this, data, index); }
+	void* getDataAt(int index) { return MAKE_CALL(shared::base + 0x9E3580, void* (__thiscall*)(Hw::cFmerge*, int), this, index); }
+	size_t getFileAmount() { return MAKE_CALL(shared::base + 0x9E3590, size_t(__thiscall*)(Hw::cFmerge*), this); }
+	size_t getFileIndexSize(size_t fileIndex) { return MAKE_CALL(shared::base + 0x9E3670, size_t(__thiscall*)(Hw::cFmerge*, size_t), this, fileIndex); }
+	const char* getFileIndexFileName(size_t fileIndex) { return MAKE_CALL(shared::base + 0x9E38D0, const char* (__thiscall*)(Hw::cFmerge*, size_t), this, fileIndex); }
+	BOOL getFileIndexExtension(char* pExt, size_t fileIndex) { return MAKE_CALL(shared::base + 0x9E3C20, BOOL(__thiscall*)(Hw::cFmerge*, char*, size_t), this, pExt, fileIndex); }
+	void* getFileIndexData(size_t fileIndex) { return MAKE_CALL(shared::base + 0x9E3CF0, void* (__thiscall*)(Hw::cFmerge*, size_t), this, fileIndex); }
+	size_t _getFileIndexSize(size_t fileIndex) { return MAKE_CALL(shared::base + 0x9E3EE0, size_t(__thiscall*)(Hw::cFmerge*, size_t), this, fileIndex); }
+	size_t getExtensionFileIndex(const char* ext, unsigned int no) { return MAKE_CALL(shared::base + 0x9E3F20, size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int), this, ext, no); }
+	size_t getFileNameIndexI(const char* name) { return MAKE_CALL(shared::base + 0x9E3FD0, size_t(__thiscall*)(Hw::cFmerge*, const char*), this, name); }
+	size_t getSubStrFileIndex(const char* name, unsigned int matchLimit) { return MAKE_CALL(shared::base + 0x9E4130, size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int), this, name, matchLimit); }
+	void* getExtensionFileData(const char* name, unsigned int matchLimit) { return MAKE_CALL(shared::base + 0x9E44B0, void* (__thiscall*)(Hw::cFmerge*, const char*, unsigned int), this, name, matchLimit); }
+	void* getFileNameData(const char* name) { return MAKE_CALL(shared::base + 0x9E4500, void* (__thiscall*)(Hw::cFmerge*, const char*), this, name); }
+	void* getFileNameData(const char* name, unsigned int no) { return MAKE_CALL(shared::base + 0x9E4550, void* (__thiscall*)(Hw::cFmerge*, const char*, unsigned int), this, name, no); }
+	size_t getFileNameSize(const char* name, unsigned int no) { return MAKE_CALL(shared::base + 0x9E46D0, size_t(__thiscall*)(Hw::cFmerge*, const char*, unsigned int), this, name, no); }
+	void setData(char* data, char* dds = nullptr) { MAKE_CALL(shared::base + 0x9E3540, void(__thiscall*)(Hw::cFmerge*, char*, char*), this, data, dds); }
 
 	operator bool() { return m_data != nullptr; }
 };
@@ -1084,7 +1083,7 @@ class Hw::UserReplace
 public:
 	static inline REAL_USER_NO& m_MainUserNo = *(REAL_USER_NO*)(shared::base + 0x14CEA10);
 
-	static inline REAL_USER_NO GetRealUserNo(int userNo) { return ReturnCdeclCall<REAL_USER_NO, 0x9FD140, int>(userNo); }
+	static inline REAL_USER_NO GetRealUserNo(int userNo) { return MAKE_CALL(shared::base + 0x9FD140, REAL_USER_NO(__cdecl*)(int), userNo); }
 };
 
 class Hw::cKeyboardState
@@ -1099,16 +1098,16 @@ public:
 	unsigned int m_pOld[KB_MAP_FLAG_SIZE];
 	int m_RepCount;
 
-	BOOL on(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D93A0, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
-	BOOL on(char vKey) { return ReturnCallMethod<BOOL, 0x9D93D0, cKeyboardState*, char>(this, vKey); }
-	BOOL trig(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D9400, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
-	BOOL trig(char vKey) { return ReturnCallMethod<BOOL, 0x9D9430, cKeyboardState*, char>(this, vKey); }
-	BOOL rel(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D9460, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
-	BOOL rel(char vKey) { return ReturnCallMethod<BOOL, 0x9D9490, cKeyboardState*, char>(this, vKey); }
-	BOOL rep(KEYBOARD_MAP vKey) { return ReturnCallMethod<BOOL, 0x9D94C0, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
-	BOOL rep(char vKey) { return ReturnCallMethod<BOOL, 0x9D94F0, cKeyboardState*, char>(this, vKey); }
-	void setOn(KEYBOARD_MAP vKey, BOOL bDown) { CallMethod<0x9D9620, cKeyboardState*, KEYBOARD_MAP, BOOL>(this, vKey, bDown); }
-	void setTrig(KEYBOARD_MAP vKey) { CallMethod<0x9D9650, cKeyboardState*, KEYBOARD_MAP>(this, vKey); }
+	BOOL on(KEYBOARD_MAP vKey) { return MAKE_CALL(shared::base + 0x9D93A0, BOOL(__thiscall*)(Hw::cKeyboardState*, KEYBOARD_MAP), this, vKey); }
+	BOOL on(char vKey) { return MAKE_CALL(shared::base + 0x9D93D0, BOOL(__thiscall*)(Hw::cKeyboardState*, char), this, vKey); }
+	BOOL trig(KEYBOARD_MAP vKey) { return MAKE_CALL(shared::base + 0x9D9400, BOOL(__thiscall*)(Hw::cKeyboardState*, KEYBOARD_MAP), this, vKey); }
+	BOOL trig(char vKey) { return MAKE_CALL(shared::base + 0x9D9430, BOOL(__thiscall*)(Hw::cKeyboardState*, char), this, vKey); }
+	BOOL rel(KEYBOARD_MAP vKey) { return MAKE_CALL(shared::base + 0x9D9460, BOOL(__thiscall*)(Hw::cKeyboardState*, KEYBOARD_MAP), this, vKey); }
+	BOOL rel(char vKey) { return MAKE_CALL(shared::base + 0x9D9490, BOOL(__thiscall*)(Hw::cKeyboardState*, char), this, vKey); }
+	BOOL rep(KEYBOARD_MAP vKey) { return MAKE_CALL(shared::base + 0x9D94C0, BOOL(__thiscall*)(Hw::cKeyboardState*, KEYBOARD_MAP), this, vKey); }
+	BOOL rep(char vKey) { return MAKE_CALL(shared::base + 0x9D94F0, BOOL(__thiscall*)(Hw::cKeyboardState*, char), this, vKey); }
+	void setOn(KEYBOARD_MAP vKey, BOOL bDown) { MAKE_CALL(shared::base + 0x9D9620, void(__thiscall*)(Hw::cKeyboardState*, KEYBOARD_MAP, BOOL), this, vKey, bDown); }
+	void setTrig(KEYBOARD_MAP vKey) { MAKE_CALL(shared::base + 0x9D9650, void(__thiscall*)(Hw::cKeyboardState*, KEYBOARD_MAP), this, vKey); }
 }; // class is complete
 
 class Hw::cViewPort
@@ -1139,14 +1138,14 @@ public:
 	static inline int& m_RepeatWait = *(int*)(shared::base + 0x14CD830);
 	static inline int& m_RepeatCycle = *(int*)(shared::base + 0x14CD834);
 
-	static inline void InitState(cKeyboardState& rState) { CdeclCall<0x9DA4A0, cKeyboardState&>(rState); }
-	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA4C0, cKeyboardState&>(rState); }
+	static inline void InitState(cKeyboardState& rState) { MAKE_CALL(shared::base + 0x9DA4A0, void(__cdecl*)(cKeyboardState&), rState); }
+	static inline int UpdateStateOnToOld(cKeyboardState& rState) { return MAKE_CALL(shared::base + 0x9DA4C0, int(__cdecl*)(cKeyboardState&), rState); }
 };
 
 class Hw::MouseManagerBase
 {
 public:
-	static inline void UpdateState(cMouseState& rState) { CdeclCall<0x9D9800, cMouseState&>(rState); }
+	static inline void UpdateState(cMouseState& rState) { MAKE_CALL(shared::base + 0x9D9800, void(__cdecl*)(cMouseState&), rState); }
 
 	static inline int& m_RepeatWait = *(int*)(shared::base + 0x14CDDEC);
 	static inline int& m_RepeatCycle = *(int*)(shared::base + 0x14CDDF0);
@@ -1167,8 +1166,8 @@ class Hw::KeyboardManager : public Hw::KeyboardManagerBase
 public:
 	enum { MAX_KEY_MAP_FLAG = 256 };
 
-	static inline int UpdateKeyState(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA500, cKeyboardState&>(rState); }
-	static inline int UpdateState(cKeyboardState& rState) { return ReturnCdeclCall<int, 0x9DA710, cKeyboardState&>(rState); }
+	static inline int UpdateKeyState(cKeyboardState& rState) { return MAKE_CALL(shared::base + 0x9DA500, int(__cdecl*)(cKeyboardState&), rState); }
+	static inline int UpdateState(cKeyboardState& rState) { return MAKE_CALL(shared::base + 0x9DA710, int(__cdecl*)(cKeyboardState&), rState); }
 
 	static inline int* m_pStrokeHidFlag = (int*)(shared::base + 0x14CD838); // int m_pStrokeHidFlag[KB_MAP_MAX][2];
 	static inline char* m_pStateHidFlag = (char*)(shared::base + 0x19D06F8); //char m_pStateHidFlag[MAX_KEY_MAP_FLAG];
@@ -1199,10 +1198,10 @@ public:
 		int m_VibrationTotal;
 		int m_bVibrationEnabled;
 	};
-	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { CdeclCall<0x9D99F0, float, float, float, Hw::INPUT_PAD_ANALOG>(range, thres, ambit, analog); }
-	static inline void UpdatePad(cPadInfo& rInfo, int controllerId) { CdeclCall<0x9DA900, cPadInfo&, int>(rInfo, controllerId); }
-	static inline void SetVib(int controllerId, float leftMotorSpeed, float rightMotorSpeed, int time) { CdeclCall<0x9DA360, int, float, float, int>(controllerId, leftMotorSpeed, rightMotorSpeed, time); }
-	static inline void SetTriggerState(Hw::cPadState& pad, unsigned int buttons) { CdeclCall<0x9DA210, Hw::cPadState&, unsigned int>(pad, buttons); }
+	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { MAKE_CALL(shared::base + 0x9D99F0, void(__cdecl*)(float, float, float, Hw::INPUT_PAD_ANALOG), range, thres, ambit, analog); }
+	static inline void UpdatePad(cPadInfo& rInfo, int controllerId) { MAKE_CALL(shared::base + 0x9DA900, void(__cdecl*)(cPadInfo&, int), rInfo, controllerId); }
+	static inline void SetVib(int controllerId, float leftMotorSpeed, float rightMotorSpeed, int time) { MAKE_CALL(shared::base + 0x9DA360, void(__cdecl*)(int, float, float, int), controllerId, leftMotorSpeed, rightMotorSpeed, time); }
+	static inline void SetTriggerState(Hw::cPadState& pad, unsigned int buttons) { MAKE_CALL(shared::base + 0x9DA210, void(__cdecl*)(Hw::cPadState&, unsigned int), pad, buttons); }
 
 	static inline int& m_RepeatWait = *(int*)(shared::base + 0x19D05B8);
 	static inline int& m_RepeatCycle = *(int*)(shared::base + 0x19D05BC);
@@ -1218,14 +1217,14 @@ public:
 class Hw::InputSystem
 {
 public:
-	static inline void InitKeyboard(Hw::cKeyboardState& rState) { CdeclCall<0x9DAFF0, Hw::cKeyboardState&>(rState); }
-	static inline void UpdateKeyboard(Hw::cKeyboardState& rState) { CdeclCall<0x9DB010, Hw::cKeyboardState&>(rState); }
+	static inline void InitKeyboard(Hw::cKeyboardState& rState) { MAKE_CALL(shared::base + 0x9DAFF0, void(__cdecl*)(Hw::cKeyboardState&), rState); }
+	static inline void UpdateKeyboard(Hw::cKeyboardState& rState) { MAKE_CALL(shared::base + 0x9DB010, void(__cdecl*)(Hw::cKeyboardState&), rState); }
 
-	static inline void UpdateMouse(Hw::cMouseState& rState) { CdeclCall<0x9DA450, Hw::cMouseState&>(rState); }
+	static inline void UpdateMouse(Hw::cMouseState& rState) { MAKE_CALL(shared::base + 0x9DA450, void(__cdecl*)(Hw::cMouseState&), rState); }
 
-	static inline void InitPad(Hw::cPadState& rState) { CdeclCall<0x9DAFC0, Hw::cPadState&>(rState); }
-	static inline void UpdatePad(Hw::cPadState& rState, int controllerId) { CdeclCall<0x9DAFE0, Hw::cPadState&, int>(rState, controllerId); }
-	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { CdeclCall<0x9DA270, float, float, float, Hw::INPUT_PAD_ANALOG>(range, thres, ambit, analog); }
+	static inline void InitPad(Hw::cPadState& rState) { MAKE_CALL(shared::base + 0x9DAFC0, void(__cdecl*)(Hw::cPadState&), rState); }
+	static inline void UpdatePad(Hw::cPadState& rState, int controllerId) { MAKE_CALL(shared::base + 0x9DAFE0, void(__cdecl*)(Hw::cPadState&, int), rState, controllerId); }
+	static inline void SetAnalogRange(float range, float thres, float ambit, Hw::INPUT_PAD_ANALOG analog) { MAKE_CALL(shared::base + 0x9DA270, void(__cdecl*)(float, float, float, Hw::INPUT_PAD_ANALOG), range, thres, ambit, analog); }
 
 	static inline LPDIRECTINPUT8W& m_pInputDevice = *(LPDIRECTINPUT8W*)(shared::base + 0x19D06E4);
 };
@@ -1392,18 +1391,18 @@ class Hw::cRand
 private:
 	unsigned int m_Seed;
 public:
-	cRand() { CallMethod<0x9DBBB0, cRand*>(this); }
-	~cRand() { CallMethod<0x9DBBC0, cRand*>(this); }
+	cRand() { MAKE_CALL(shared::base + 0x9DBBB0, void(__thiscall*)(cRand*), this); }
+	~cRand() { MAKE_CALL(shared::base + 0x9DBBC0, void(__thiscall*)(cRand*), this); }
 
-	void setSeed(unsigned int seed) { CallMethod<0x9DBBD0, cRand*, unsigned int>(this, seed); }
-	unsigned int getSeed() { return ReturnCallMethod<unsigned int, 0x9DBBE0, cRand*>(this); }
-	unsigned short rollU16() { return ReturnCallMethod<unsigned short, 0x9DBBF0, cRand*>(this); }
-	unsigned int rollU32() { return ReturnCallMethod<unsigned int, 0x9DBC10, cRand*>(this); }
-	void initSeed() { CallMethod<0x9DE290, cRand*>(this); }
-	unsigned short getU16(unsigned short min, unsigned short max) { return ReturnCallMethod<unsigned short, 0x9DE2A0, cRand*, unsigned short, unsigned short>(this, min, max); }
-	short getS16(short min, short max) { return ReturnCallMethod<short, 0x9DE2D0, cRand*, short, short>(this, min, max); }
-	float getF32(float min, float max) { return ReturnCallMethod<float, 0x9DE300, cRand*, float, float>(this, min, max); }
-	float getF0_1() { return getF32(0.0f, 1.0f); }
+	void setSeed(unsigned int seed) { MAKE_CALL(shared::base + 0x9DBBD0, void(__thiscall*)(cRand*, unsigned int), this, seed); }
+	unsigned int getSeed() { return MAKE_CALL(shared::base + 0x9DBBE0, unsigned int(__thiscall*)(cRand*), this); }
+	unsigned short rollU16() { return MAKE_CALL(shared::base + 0x9DBBF0, unsigned short(__thiscall*)(cRand*), this); }
+	unsigned int rollU32() { return MAKE_CALL(shared::base + 0x9DBC10, unsigned int(__thiscall*)(cRand*), this); }
+	void initSeed() { MAKE_CALL(shared::base + 0x9DE290, void(__thiscall*)(cRand*), this); }
+	unsigned short getU16(unsigned short min, unsigned short max) { return MAKE_CALL(shared::base + 0x9DE2A0, unsigned short(__thiscall*)(cRand*, unsigned short, unsigned short), this, min, max); }
+	short getS16(short min, short max) { return MAKE_CALL(shared::base + 0x9DE2D0, short(__thiscall*)(cRand*, short, short), this, min, max); }
+	float getF32(float min, float max) { return MAKE_CALL(shared::base + 0x9DE300, float(__thiscall*)(cRand*, float, float), this, min, max); }
+	float getF0_1() { return MAKE_CALL(shared::base + 0x16220, float(__thiscall *)(cRand *), this); } // 11.06.2026, just found this
 	float getF1_1() { return getF32(-1.0f, 1.0f); }
 }; // class is complete(?, actually not sure)
 
@@ -1770,32 +1769,32 @@ public:
 	int field_AC;
 	int field_B0;
 
-	cJobManager() { CallMethod<0x9D6F30, cJobManager*>(this); }
-	~cJobManager() { CallMethod<0x9D8B60, cJobManager*>(this); }
+	cJobManager() { MAKE_CALL(shared::base + 0x9D6F30, void(__thiscall*)(cJobManager*), this); }
+	~cJobManager() { MAKE_CALL(shared::base + 0x9D8B60, void(__thiscall*)(cJobManager*), this); }
 
-	int shutdown()
+	void shutdown()
 	{
-		return ((int(__thiscall*)(cJobManager*))(shared::base + 0x9D8860))(this);
+		MAKE_CALL(shared::base + 0x9D8860, void(__thiscall*)(cJobManager*), this);
 	}
 
 	unsigned int getCurrentThreadId()
 	{
-		return ((unsigned int(__thiscall*)(cJobManager*))(shared::base + 0x9D7AD0))(this);
+		return MAKE_CALL(shared::base + 0x9D7AD0, unsigned int(__thiscall*)(cJobManager*), this);
 	}
 
 	void setJobFunction(void(__cdecl* function)(LPVOID reserved, LPVOID parameter), LPVOID parameter, unsigned int jobIndex)
 	{
-		((void(__thiscall*)(cJobManager*, void(__cdecl*)(LPVOID, LPVOID), LPVOID, unsigned int))(shared::base + 0x9D75D0))(this, function, parameter, jobIndex);
+		MAKE_CALL(shared::base + 0x9D75D0, void(__thiscall*)(cJobManager*, void(__cdecl*)(LPVOID, LPVOID), LPVOID, unsigned int), this, function, parameter, jobIndex);
 	}
 
 	BOOL startup(size_t jobAmount, int* threadIndices, Hw::cHeap* allocator, void* a5, void* a6, const char** threadNames, int a8)
 	{
-		return ((BOOL(__thiscall*)(cJobManager*, size_t, int*, Hw::cHeap*, void*, void*, const char**, int))(shared::base + 0x9D8B70))(this, jobAmount, threadIndices, allocator, a5, a6, threadNames, a8);
+		return MAKE_CALL(shared::base + 0x9D8B70, BOOL(__thiscall*)(cJobManager*, size_t, int*, Hw::cHeap*, void*, void*, const char**, int), this, jobAmount, threadIndices, allocator, a5, a6, threadNames, a8);
 	}
 
 	void activate(unsigned int jobs)
 	{
-		((void(__thiscall*)(cJobManager*, unsigned int))(shared::base + 0x9D79A0))(this, jobs);
+		MAKE_CALL(shared::base + 0x9D79A0, void(__thiscall*)(cJobManager*, unsigned int), this, jobs);
 	}
 };
 
@@ -1814,72 +1813,72 @@ public:
 
 	cTaskManager()
 	{
-		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D6DF0))(this);
+		MAKE_CALL(shared::base + 0x9D6DF0, void(__thiscall*)(cTaskManager*), this);
 	}
 
 	cWork* newWork(int task_prio)
 	{
-		return ((cWork * (__thiscall*)(cTaskManager*, int))(shared::base + 0x9D7420))(this, task_prio);
+		return MAKE_CALL(shared::base + 0x9D7420, cWork *(__thiscall*)(cTaskManager*, int), this, task_prio);
 	}
 
 	void deleteWork(cWork* pWork)
 	{
-		((void(__thiscall*)(cTaskManager*, cWork*))(shared::base + 0x9D74A0))(this, pWork);
+		MAKE_CALL(shared::base + 0x9D74A0, void(__thiscall*)(cTaskManager*, cWork*), this, pWork);
 	}
 
 	eTaskId getCurrentId()
 	{
-		return ((eTaskId(__thiscall*)(cTaskManager*))(shared::base + 0x9D7500))(this);
+		return MAKE_CALL(shared::base + 0x9D7500, eTaskId(__thiscall*)(cTaskManager*), this);
 	}
 
 	void execute(void(__cdecl* rFunc)(LPVOID parameter), LPVOID pParam, int task_prio, const char* task_name)
 	{
-		((void(__thiscall*)(cTaskManager*, void(__cdecl*)(LPVOID), LPVOID, int, const char*))(shared::base + 0x9D7870))(this, rFunc, pParam, task_prio, task_name);
+		MAKE_CALL(shared::base + 0x9D7870, void(__thiscall*)(cTaskManager*, void(__cdecl*)(LPVOID), LPVOID, int, const char*), this, rFunc, pParam, task_prio, task_name);
 	}
 
 	void killWork(cWork* pWork)
 	{
-		((void(__thiscall*)(cTaskManager*, cWork*))(shared::base + 0x9D7F40))(this, pWork);
+		MAKE_CALL(shared::base + 0x9D7F40, void(__thiscall*)(cTaskManager*, cWork*), this, pWork);
 	}
 
 	void cleanup()
 	{
-		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8450))(this);
+		MAKE_CALL(shared::base + 0x9D8450, void(__thiscall*)(cTaskManager*), this);
 	}
 
 	void sleep(int count)
 	{
-		((void(__thiscall*)(cTaskManager*, int))(shared::base + 0x9D8570))(this, count);
+		MAKE_CALL(shared::base + 0x9D8570, void(__thiscall*)(cTaskManager*, int), this, count);
 	}
 
 	~cTaskManager()
 	{
-		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8A00))(this);
+		MAKE_CALL(shared::base + 0x9D8A00, void(__thiscall*)(cTaskManager*), this);
 	}
 
 	BOOL startup(unsigned int taskCapacity, unsigned int taskStackSize, Hw::cHeapVariable* allocator)
 	{
-		return ((BOOL(__thiscall*)(cTaskManager*, unsigned int, unsigned int, Hw::cHeapVariable*))(shared::base + 0x9D8A10))(this, taskCapacity, taskStackSize, allocator);
+		return MAKE_CALL(shared::base + 0x9D8A10, BOOL(__thiscall*)(cTaskManager*, unsigned int, unsigned int, Hw::cHeapVariable*), this, taskCapacity, taskStackSize, allocator);
 	}
 
 	void update()
 	{
-		((void(__thiscall*)(cTaskManager*))(shared::base + 0x9D8DA0))(this);
+		MAKE_CALL(shared::base + 0x9D8DA0, void(__thiscall*)(cTaskManager*), this);
 	}
 
 	static inline void chain(void(__cdecl* rFunc)(LPVOID), LPVOID pParam)
 	{
-		((void(__cdecl*)(void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8950))(rFunc, pParam);
+		MAKE_CALL(shared::base + 0x9D8950, void(__cdecl*)(void(__cdecl*)(LPVOID), LPVOID), rFunc, pParam);
 	}
 
 	static inline cTaskManager* getCurrentManager()
 	{
-		return ((cTaskManager * (__cdecl*)())(shared::base + 0x9D6E10))();
+		return MAKE_CALL(shared::base + 0x9D6E10, cTaskManager *(__cdecl*)(), );
 	}
 
 	static inline void setCurrentManager(cTaskManager* pManager)
 	{
-		((void(__cdecl*)(cTaskManager*))(shared::base + 0x9D6E20))(pManager);
+		MAKE_CALL(shared::base + 0x9D6E20, void(__cdecl*)(cTaskManager*), pManager);
 	}
 
 	static inline cTaskManager*& m_pCurrentTaskManager = *(cTaskManager**)(shared::base + 0x19D0564); // private: static class
@@ -1915,102 +1914,102 @@ public:
 
 	void execute(void(__cdecl* rFunc)(LPVOID), LPVOID pParam, const char* task_name, eTaskId task_id)
 	{
-		((void(__thiscall*)(cWork*, void(__cdecl*)(LPVOID), LPVOID, const char*, eTaskId))(shared::base + 0x9D6E30))(this, rFunc, pParam, task_name, task_id);
+		MAKE_CALL(shared::base + 0x9D6E30, void(__thiscall*)(cWork*, void(__cdecl*)(LPVOID), LPVOID, const char*, eTaskId), this, rFunc, pParam, task_name, task_id);
 	}
 
 	void setTaskReport(void(__cdecl* rFunc)(eStatus))
 	{
-		((void(__thiscall*)(cWork*, void(__cdecl*)(eStatus)))(shared::base + 0x9D6E70))(this, rFunc);
+		MAKE_CALL(shared::base + 0x9D6E70, void(__thiscall*)(cWork*, void(__cdecl*)(eStatus)), this, rFunc);
 	}
 
 	BOOL isExit()
 	{
-		return ((BOOL(__thiscall*)(cWork*))(shared::base + 0x9D6E80))(this);
+		return MAKE_CALL(shared::base + 0x9D6E80, BOOL(__thiscall*)(cWork*), this);
 	}
 
 	eTaskId getTaskId()
 	{
-		return ((eTaskId(__thiscall*)(cWork*))(shared::base + 0x9D6E90))(this);
+		return MAKE_CALL(shared::base + 0x9D6E90, eTaskId(__thiscall*)(cWork*), this);
 	}
 
 	const char* getTaskName()
 	{
-		return ((const char* (__thiscall*)(cWork*))(shared::base + 0x9D6EA0))(this);
+		return MAKE_CALL(shared::base + 0x9D6EA0, const char*(__thiscall*)(cWork*), this);
 	}
 
 	int getTaskPrio()
 	{
-		return ((int(__thiscall*)(cWork*))(shared::base + 0x9D6EB0))(this);
+		return MAKE_CALL(shared::base + 0x9D6EB0, int(__thiscall*)(cWork*), this);
 	}
 
 	void setTaskPrio(int task_prio)
 	{
-		((void(__thiscall*)(cWork*, int))(shared::base + 0x9D6EC0))(this, task_prio);
+		MAKE_CALL(shared::base + 0x9D6EC0, void(__thiscall*)(cWork*, int), this, task_prio);
 	}
 
 	void chainWork(cWork* pPrev, cWork* pNext)
 	{
-		((void(__thiscall*)(cWork*, cWork*, cWork*))(shared::base + 0x9D6ED0))(this, pPrev, pNext);
+		MAKE_CALL(shared::base + 0x9D6ED0, void(__thiscall*)(cWork*, cWork*, cWork*), this, pPrev, pNext);
 	}
 
 	void unchainWork()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D6EF0))(this);
+		MAKE_CALL(shared::base + 0x9D6EF0, void(__thiscall*)(cWork*), this);
 	}
 
 	cWork* getNextWork()
 	{
-		return ((cWork * (__thiscall*)(cWork*))(shared::base + 0x9D6F20))(this);
+		return MAKE_CALL(shared::base + 0x9D6F20, cWork *(__thiscall*)(cWork*), this);
 	}
 
 	BOOL startup(unsigned int stack_size, /* unused */ int __formal, cTaskManager* pManager)
 	{
-		return ((BOOL(__thiscall*)(cWork*, unsigned int, int, cTaskManager*))(shared::base + 0x9D7540))(this, stack_size, __formal, pManager);
+		return MAKE_CALL(shared::base + 0x9D7540, BOOL(__thiscall*)(cWork*, unsigned int, int, cTaskManager*), this, stack_size, __formal, pManager);
 	}
 
 	void waitTaskStart()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D7590))(this);
+		MAKE_CALL(shared::base + 0x9D7590, void(__thiscall*)(cWork*), this);
 	}
 
 	void sendTaskStart()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D75A0))(this);
+		MAKE_CALL(shared::base + 0x9D75A0, void(__thiscall*)(cWork*), this);
 	}
 
 	void waitTaskStop()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D75B0))(this);
+		MAKE_CALL(shared::base + 0x9D75B0, void(__thiscall*)(cWork*), this);
 	}
 
 	void sendTaskStop()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D75C0))(this);
+		MAKE_CALL(shared::base + 0x9D75C0, void(__thiscall*)(cWork*), this);
 	}
 
 	void updateSleep()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D7910))(this);
+		MAKE_CALL(shared::base + 0x9D7910, void(__thiscall*)(cWork*), this);
 	}
 
 	void kill()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D7950))(this);
+		MAKE_CALL(shared::base + 0x9D7950, void(__thiscall*)(cWork*), this);
 	}
 
 	void cleanup()
 	{
-		((void(__thiscall*)(cWork*))(shared::base + 0x9D8000))(this);
+		MAKE_CALL(shared::base + 0x9D8000, void(__thiscall*)(cWork*), this);
 	}
 
 	void chain(void(__cdecl* rFunc)(LPVOID), LPVOID pParam)
 	{
-		((void(__thiscall*)(cWork*, void(__cdecl*)(LPVOID), LPVOID))(shared::base + 0x9D8090))(this, rFunc, pParam);
+		MAKE_CALL(shared::base + 0x9D8090, void(__thiscall*)(cWork*, void(__cdecl*)(LPVOID), LPVOID), this, rFunc, pParam);
 	}
 
 	void sleep(int count)
 	{
-		((void(__thiscall*)(cWork*, int))(shared::base + 0x9D80E0))(this, count);
+		MAKE_CALL(shared::base + 0x9D80E0, void(__thiscall*)(cWork*, int), this, count);
 	}
 };
 
@@ -2032,24 +2031,24 @@ public:
 
 	cTexture()
 	{
-		((void(__thiscall*)(cTexture*))(shared::base + 0xB972C0))(this);
+		MAKE_CALL(shared::base + 0xB972C0, void(__thiscall*)(cTexture*), this);
 	}
 
 	virtual ~cTexture() {};
 
 	BOOL create(void* wtb)
 	{
-		return ((BOOL(__thiscall*)(cTexture*, void*))(shared::base + 0xBA25D0))(this, wtb);
+		return MAKE_CALL(shared::base + 0xBA25D0, BOOL(__thiscall*)(cTexture*, void*), this, wtb);
 	}
 
 	BOOL create(void* wta, void* wtp)
 	{
-		return ((BOOL(__thiscall*)(cTexture*, void*, void*))(shared::base + 0xBA4D00))(this, wta, wtp);
+		return MAKE_CALL(shared::base + 0xBA4D00, BOOL(__thiscall*)(cTexture*, void*, void*), this, wta, wtp);
 	}
 
 	void reset()
 	{
-		((void(__thiscall*)(cTexture*))(shared::base + 0xB972F0))(this);
+		MAKE_CALL(shared::base + 0xB972F0, void(__thiscall*)(cTexture*), this);
 	}
 };
 
@@ -2105,14 +2104,14 @@ private:
 	int _padA4[3];
 public:
 
-	CameraProj() { CallMethod<0x812610, CameraProj*>(this); }
+	CameraProj() { MAKE_CALL(shared::base + 0x812610, void(__thiscall*)(CameraProj*), this); }
 	// non virtual destructor at 0x812450
 
 	virtual ~CameraProj() {};
 
-	void set(float nearZ, float farZ, float fovy) { CallMethod<0x9E4D60, CameraProj*, float, float, float>(this, nearZ, farZ, fovy); }
-	void updateProjMatrixPers() { CallMethod<0x9E5AA0, CameraProj*>(this); }
-	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { CallMethod<0x9E5B30, CameraProj*, const Hw::cMtx&, int>(this, mat, __formal); }
+	void set(float nearZ, float farZ, float fovy) { MAKE_CALL(shared::base + 0x9E4D60, void(__thiscall*)(CameraProj*, float, float, float), this, nearZ, farZ, fovy); }
+	void updateProjMatrixPers() { MAKE_CALL(shared::base + 0x9E5AA0, void(__thiscall*)(CameraProj*), this); }
+	void setProjMatrix(const Hw::cMtx& mat, int __formal = 0 /* unused arg */) { MAKE_CALL(shared::base + 0x9E5B30, void(__thiscall*)(CameraProj*, const Hw::cMtx&, int), this, mat, __formal); }
 };
 
 VALIDATE_SIZE(Hw::CameraProj, 0xB0);
@@ -2135,36 +2134,36 @@ private:
 	int _pad14C;
 public:
 
-	void initialize() { CallMethod<0x9E4EC0, cCameraBase*>(this); }
-	void movePos(const Hw::cVec4& pos) { CallMethod<0x9E4F20, cCameraBase*, const Hw::cVec4&>(this, pos); }
+	void initialize() { MAKE_CALL(shared::base + 0x9E4EC0, void(__thiscall*)(cCameraBase*), this); }
+	void movePos(const Hw::cVec4& pos) { MAKE_CALL(shared::base + 0x9E4F20, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, pos); }
 	// Move according to the rotation vector, Z would be forward
-	void movePosFront(const Hw::cVec4& pos) { CallMethod<0x9E4FA0, cCameraBase*, const Hw::cVec4&>(this, pos); }
+	void movePosFront(const Hw::cVec4& pos) { MAKE_CALL(shared::base + 0x9E4FA0, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, pos); }
 	// Move camera according to the Y rotation axis, Z is forward, it doesn't affect pitch at all
-	void movePosFrontY(const Hw::cVec4& pos) { CallMethod<0x9E5090, cCameraBase*, const Hw::cVec4&>(this, pos); }
-	void updateViewInverseMatrix() { CallMethod<0x9E5170, cCameraBase*>(this); }
-	void setViewMatrix(const Hw::cMtx& mat) { CallMethod<0x9E5180, cCameraBase*, const Hw::cMtx&>(this, mat); }
-	void updateTrans() { CallMethod<0x9E51B0, cCameraBase*>(this); }
-	void updateTarget() { CallMethod<0x9E5260, cCameraBase*>(this); }
-	void updateUp() { CallMethod<0x9E5310, cCameraBase*>(this); }
-	void updateRot() { CallMethod<0x9E5380, cCameraBase*>(this); }
-	void updateDist() { CallMethod<0x9E54E0, cCameraBase*>(this); }
-	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { CallMethod<0x9E5D10, cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&>(this, trans, target, up); }
-	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5DA0, cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, float>(this, trans, rot, dist); }
-	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { CallMethod<0x9E5E60, cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, float>(this, target, rot, dist); }
-	void setTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F20, cCameraBase*, const Hw::cVec4&>(this, trans); }
-	void addTrans(const Hw::cVec4& trans) { CallMethod<0x9E5F60, cCameraBase*, const Hw::cVec4&>(this, trans); }
-	void setTarget(const Hw::cVec4& target) { CallMethod<0x9E5FC0, cCameraBase*, const Hw::cVec4&>(this, target); }
-	void addTarget(const Hw::cVec4& target) { CallMethod<0x9E6000, cCameraBase*, const Hw::cVec4&>(this, target); }
-	void setUp(const Hw::cVec4& up) { CallMethod<0x9E6060, cCameraBase*, const Hw::cVec4&>(this, up); }
-	void setTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6090, cCameraBase*, const Hw::cVec4&>(this, rot); }
-	void addTargetRot(const Hw::cVec4& rot) { CallMethod<0x9E6120, cCameraBase*, const Hw::cVec4&>(this, rot); }
-	void setTransRot(const Hw::cVec4& rot) { CallMethod<0x9E61B0, cCameraBase*, const Hw::cVec4&>(this, rot); }
-	void addTransRot(const Hw::cVec4& rot) { CallMethod<0x9E6240, cCameraBase*, const Hw::cVec4&>(this, rot); }
-	void setTargetDist(float dist) { CallMethod<0x9E62D0, cCameraBase*, float>(this, dist); }
-	void addTargetDist(float dist, float min, float max) { CallMethod<0x9E62F0, cCameraBase*, float, float, float>(this, dist, min, max); }
-	void setTransDist(float dist) { CallMethod<0x9E6370, cCameraBase*, float>(this, dist); }
-	void addTransDist(float dist, float min, float max) { CallMethod<0x9E6390, cCameraBase*, float, float, float>(this, dist, min, max); }
-	void updateViewMatrix() { CallMethod<0x9E6410, cCameraBase*>(this); }
+	void movePosFrontY(const Hw::cVec4& pos) { MAKE_CALL(shared::base + 0x9E5090, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, pos); }
+	void updateViewInverseMatrix() { MAKE_CALL(shared::base + 0x9E5170, void(__thiscall*)(cCameraBase*), this); }
+	void setViewMatrix(const Hw::cMtx& mat) { MAKE_CALL(shared::base + 0x9E5180, void(__thiscall*)(cCameraBase*, const Hw::cMtx&), this, mat); }
+	void updateTrans() { MAKE_CALL(shared::base + 0x9E51B0, void(__thiscall*)(cCameraBase*), this); }
+	void updateTarget() { MAKE_CALL(shared::base + 0x9E5260, void(__thiscall*)(cCameraBase*), this); }
+	void updateUp() { MAKE_CALL(shared::base + 0x9E5310, void(__thiscall*)(cCameraBase*), this); }
+	void updateRot() { MAKE_CALL(shared::base + 0x9E5380, void(__thiscall*)(cCameraBase*), this); }
+	void updateDist() { MAKE_CALL(shared::base + 0x9E54E0, void(__thiscall*)(cCameraBase*), this); }
+	void setLookAt(const Hw::cVec4& trans, const Hw::cVec4& target, const Hw::cVec4& up) { MAKE_CALL(shared::base + 0x9E5D10, void(__thiscall*)(cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, const Hw::cVec4&), this, trans, target, up); }
+	void setLookFor(const Hw::cVec4& trans, const Hw::cVec4& rot, float dist) { MAKE_CALL(shared::base + 0x9E5DA0, void(__thiscall*)(cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, float), this, trans, rot, dist); }
+	void setWatchAt(const Hw::cVec4& target, const Hw::cVec4& rot, float dist) { MAKE_CALL(shared::base + 0x9E5E60, void(__thiscall*)(cCameraBase*, const Hw::cVec4&, const Hw::cVec4&, float), this, target, rot, dist); }
+	void setTrans(const Hw::cVec4& trans) { MAKE_CALL(shared::base + 0x9E5F20, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, trans); }
+	void addTrans(const Hw::cVec4& trans) { MAKE_CALL(shared::base + 0x9E5F60, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, trans); }
+	void setTarget(const Hw::cVec4& target) { MAKE_CALL(shared::base + 0x9E5FC0, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, target); }
+	void addTarget(const Hw::cVec4& target) { MAKE_CALL(shared::base + 0x9E6000, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, target); }
+	void setUp(const Hw::cVec4& up) { MAKE_CALL(shared::base + 0x9E6060, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, up); }
+	void setTargetRot(const Hw::cVec4& rot) { MAKE_CALL(shared::base + 0x9E6090, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, rot); }
+	void addTargetRot(const Hw::cVec4& rot) { MAKE_CALL(shared::base + 0x9E6120, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, rot); }
+	void setTransRot(const Hw::cVec4& rot) { MAKE_CALL(shared::base + 0x9E61B0, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, rot); }
+	void addTransRot(const Hw::cVec4& rot) { MAKE_CALL(shared::base + 0x9E6240, void(__thiscall*)(cCameraBase*, const Hw::cVec4&), this, rot); }
+	void setTargetDist(float dist) { MAKE_CALL(shared::base + 0x9E62D0, void(__thiscall*)(cCameraBase*, float), this, dist); }
+	void addTargetDist(float dist, float min, float max) { MAKE_CALL(shared::base + 0x9E62F0, void(__thiscall*)(cCameraBase*, float, float, float), this, dist, min, max); }
+	void setTransDist(float dist) { MAKE_CALL(shared::base + 0x9E6370, void(__thiscall*)(cCameraBase*, float), this, dist); }
+	void addTransDist(float dist, float min, float max) { MAKE_CALL(shared::base + 0x9E6390, void(__thiscall*)(cCameraBase*, float, float, float), this, dist, min, max); }
+	void updateViewMatrix() { MAKE_CALL(shared::base + 0x9E6410, void(__thiscall*)(cCameraBase*), this); }
 };
 
 VALIDATE_SIZE(Hw::cCameraBase, 0x150);
@@ -2179,14 +2178,14 @@ public:
 
 	cPrimHeap()
 	{
-		((void(__thiscall*)(Hw::cPrimHeap*))(shared::base + 0xB97EC0))(this);
+		MAKE_CALL(shared::base + 0xB97EC0, void(__thiscall*)(Hw::cPrimHeap*), this);
 	}
 
 	virtual ~cPrimHeap() {};
 
 	void* allocBuffer(size_t size, size_t reserved = 0x20)
 	{
-		return ((void* (__thiscall*)(cPrimHeap*, size_t, size_t))(shared::base + 0xB9B1F0))(this, size, reserved);
+		return MAKE_CALL(shared::base + 0xB9B1F0, void*(__thiscall*)(cPrimHeap*, size_t, size_t), this, size, reserved);
 	}
 };
 
@@ -2202,7 +2201,7 @@ public:
 
 	cIndexBufferHeap()
 	{
-		((void(__thiscall*)(cIndexBufferHeap*))(shared::base + 0xB9C7F0))(this);
+		MAKE_CALL(shared::base + 0xB9C7F0, void(__thiscall*)(cIndexBufferHeap*), this);
 	}
 
 	virtual ~cIndexBufferHeap() {};
@@ -2261,7 +2260,7 @@ public:
 
 	virtual ~cOtWork() {};
 
-	void draw() { CallVMTFunc<1, Hw::cOtWork*>(this); }
+	void draw() { MAKE_VCALL(1, void(__thiscall *)(cOtWork *), this); }
 };
 
 struct Hw::cVertexInfo
@@ -2477,7 +2476,7 @@ public:
 		}
 		else
 		{
-			CdeclCall<0x9D5650, const char*, const char*, size_t, size_t>("cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", rHeap.m_pHeapName, sizeof(T) * capacity, rHeap.getAllocatableSize());
+			MAKE_CALL(shared::base + 0x9D5650, void(__cdecl*)(const char*, ...), "cFixedVector::create Failed to allocate memory[%s need:%d Allocatable:%d]", rHeap.m_pHeapName, sizeof(T) * capacity, rHeap.getAllocatableSize());
 			return 0;
 		}
 		return 0;
@@ -2788,7 +2787,7 @@ public:
 		cTag* free = m_FreeBegin;
 		if (m_FreeBegin == npos)
 		{
-			CdeclCall<0x9D5650, const char*>("cFixedList<tC>::insert  list max over!");
+			MAKE_CALL(shared::base + 0x9D5650, void(__cdecl*)(const char*, ...), "cFixedList<tC>::insert  list max over!");
 			return npos;
 		}
 
@@ -3052,7 +3051,7 @@ public:
 			return TRUE;
 		}
 
-		CdeclCall<0x9D5650, const char*, const char*, size_t, size_t>("Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_pHeapName, sizeof(tC) * size, m_Allocator->getAllocatableSize());
+		MAKE_CALL(shared::base + 0x9D5650, void(__cdecl*)(const char*, ...), "Hw::cExpandableVector<tC, tHeapBinder>::create lack of memory[%s %d/%d]", m_Allocator->m_pHeapName, sizeof(tC) * size, m_Allocator->getAllocatableSize());
 		return FALSE;
 	}
 
@@ -3224,7 +3223,7 @@ public:
 		}
 		else
 		{
-			CdeclCall<0x9D5650, const char*>("Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
+			MAKE_CALL(shared::base + 0x9D5650, void(__cdecl*)(const char*, ...), "Hw::cExpandableVector<tC,tHeapBinder>::reallocate Out of memory");
 			return FALSE;
 		}
 
@@ -3241,7 +3240,7 @@ public:
 		}
 		else
 		{
-			CdeclCall<0x9D5650, const char*>("Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
+			MAKE_CALL(shared::base + 0x9D5650, void(__cdecl*)(const char*, ...), "Hw::cExpandableVector<tC,tHeapBinder>::resize insufficient capacity");
 			return FALSE;
 		}
 		return FALSE;

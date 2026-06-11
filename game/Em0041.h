@@ -42,7 +42,7 @@ public:
 
     Em0041()
     {
-        ((void(__thiscall *)(Em0041 *))(shared::base + 0x6A61F0))(this);
+        MAKE_CALL(shared::base + 0x6A61F0, void(__thiscall *)(Em0041 *), this);
     }
 
     static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x1734C54);

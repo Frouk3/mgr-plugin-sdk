@@ -32,10 +32,10 @@ public:
 
     BehaviorCamera()
     {
-        ((void (__thiscall *)(BehaviorCamera *))(shared::base + 0x6AF350))(this);
+        MAKE_CALL(shared::base + 0x6AF350, void(__thiscall *)(BehaviorCamera *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C80);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C80);
 };
 
 VALIDATE_SIZE(BehaviorCamera, 0xA60);

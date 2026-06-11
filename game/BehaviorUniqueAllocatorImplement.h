@@ -29,8 +29,8 @@ public:
 
     static inline BehaviorUniqueAllocatorImplement* get()
     {
-        return ((BehaviorUniqueAllocatorImplement *(__cdecl *)())(shared::base + 0x68AFD0))();
+        return MAKE_CALL(shared::base + 0x68AFD0, BehaviorUniqueAllocatorImplement *(__cdecl *)());
     }
-
-    static inline BehaviorUniqueAllocatorImplement *&ms_Instance = *(BehaviorUniqueAllocatorImplement**)(shared::base + 0x17E9BF0);
 };
+
+inline BehaviorUniqueAllocatorImplement *&g_BehaviorUniqueAllocator = *(BehaviorUniqueAllocatorImplement**)(shared::base + 0x17E9BF0);

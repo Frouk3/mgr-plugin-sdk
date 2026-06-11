@@ -92,10 +92,10 @@ public:
 
     Em0060Battery()
     {
-        ((void(__thiscall *)(Em0060Battery*))(shared::base + 0x6AF040))(this);
+        MAKE_CALL(shared::base + 0x6AF040, void(__thiscall *)(Em0060Battery*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734C84);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734C84);
 };
 
 class Em0060 : public BehaviorEmBase
@@ -736,10 +736,10 @@ public:
 
     Em0060()
     {
-        ((void(__thiscall *)(Em0060 *))(shared::base + 0x6AC940))(this);
+        MAKE_CALL(shared::base + 0x6AC940, void(__thiscall *)(Em0060 *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1734C80);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x1734C80);
 };
 
 VALIDATE_SIZE(Em0060Battery, 0xB50);

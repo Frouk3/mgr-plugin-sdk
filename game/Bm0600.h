@@ -16,10 +16,10 @@ public:
 
     Bm0600()
     {
-        ((void(__thiscall *)(Bm0600 *))(shared::base + 0x6B0410))(this);
+        MAKE_CALL(shared::base + 0x6B0410, void(__thiscall *)(Bm0600 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734BE4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734BE4);
 };
 
 VALIDATE_SIZE(Bm0600, 0xB60);

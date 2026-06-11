@@ -12,10 +12,10 @@ public:
 
     BehaviorEmBody()
     {
-        ((void(__thiscall *)(BehaviorEmBody *))(shared::base + 0x6A6180))(this);
+        MAKE_CALL(shared::base + 0x6A6180, void(__thiscall *)(BehaviorEmBody *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9CA0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9CA0);
 };
 
 VALIDATE_SIZE(BehaviorEmBody, 0x880);

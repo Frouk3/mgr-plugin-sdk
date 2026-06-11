@@ -121,10 +121,10 @@ public:
 
     BehaviorDatsu()
     {
-        ((void (__thiscall *)(BehaviorDatsu *))(shared::base + 0x6A6130))(this);
+        MAKE_CALL(shared::base + 0x6A6130, void(__thiscall *)(BehaviorDatsu *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9CA8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9CA8);
 };
 
 VALIDATE_SIZE(BehaviorDatsu, 0xAE0);

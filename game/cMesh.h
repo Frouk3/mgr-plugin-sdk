@@ -7,6 +7,6 @@ public:
 
     cMesh()
     {
-        ((void(__thiscall*)(cMesh*))(shared::base + 0x611B50))(this);
+        MAKE_CALL(shared::base + 0x611B50, void(__thiscall *)(cMesh *), this);
     }
 };

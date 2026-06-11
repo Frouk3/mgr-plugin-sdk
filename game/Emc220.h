@@ -617,10 +617,10 @@ public:
 
     Emc220()
     {
-        ((void(__thiscall *)(Emc220*))(shared::base + 0x6B3590))(this);
+        MAKE_CALL(shared::base + 0x6B3590, void(__thiscall *)(Emc220*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735A10);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735A10);
 };
 
 class Emc220Weapon : public WpBaseDLC
@@ -645,10 +645,10 @@ public:
 
     Emc220Weapon()
     {
-        ((void(__thiscall *)(Emc220Weapon*))(shared::base + 0x6B3780))(this);
+        MAKE_CALL(shared::base + 0x6B3780, void(__thiscall *)(Emc220Weapon*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735A14);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735A14);
 };
 
 VALIDATE_SIZE(Emc220Weapon, 0x900);

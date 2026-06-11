@@ -48,15 +48,14 @@ public:
     int field_A8;
     int field_AC;
 
-    virtual ~cEspControler() {};
+    virtual ~cEspControler() {}
     void FadeUnits(float duration, float endFade)
     {
-        ((void(__thiscall*)(cEspControler*, float, float))(shared::base + 0xAAA6E0))(this, duration, endFade);
-    };
+        MAKE_CALL(shared::base + 0xAAA6E0, void(__thiscall *)(cEspControler *, float, float), this, duration, endFade);
+    }
 
     cEspControler()
     {
-        ((void(__thiscall*)(cEspControler*))(shared::base + 0xAAA060))(this);
-    };
-
+        MAKE_CALL(shared::base + 0xAAA060, void(__thiscall *)(cEspControler *), this);
+    }
 };

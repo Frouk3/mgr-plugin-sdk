@@ -11,7 +11,7 @@ namespace SoundArea
         int field_4;
         int field_8;
         int field_C;
-        D3DXMATRIX field_10;
+        Hw::cMtx field_10;
         float field_50;
         float field_54;
         float field_58;
@@ -28,8 +28,8 @@ namespace SoundArea
         float field_84;
         float field_88;
         float field_8C;
-        D3DXMATRIX field_90;
-        D3DXMATRIX field_D0;
+        Hw::cMtx field_90;
+        Hw::cMtx field_D0;
         Entity *field_110;
         int field_114;
         int field_118;
@@ -46,7 +46,7 @@ namespace SoundArea
         int field_128;
         float field_12C;
         float field_130;
-        D3DXVECTOR3 field_134;
+        Hw::cVec3 field_134;
         float field_140;
         float field_144;
         float field_148;

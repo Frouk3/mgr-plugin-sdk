@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cRtti.h>
 class cObject
 {
 public:
 
-    virtual const char** getClassName() {static const char *objName = "cObject"; return &objName; };
+    virtual cRtti* getRtti() { return nullptr; } // dummy is always a dummy
     virtual ~cObject() {};
 };

@@ -411,10 +411,10 @@ public:
 
     Emc040()
     {
-        ((void(__thiscall *)(Emc040 *))(shared::base + 0x6B2430))(this);
+        MAKE_CALL(shared::base + 0x6B2430, void(__thiscall *)(Emc040 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17357F0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17357F0);
 };
 
 VALIDATE_SIZE(Emc040, 0x1790);

@@ -116,7 +116,7 @@ public:
 
             Freerun()
             {
-                ((void(__thiscall *)(Freerun*))(shared::base + 0x982FF0))(this);
+                MAKE_CALL(shared::base + 0x982FF0, void (__thiscall *)(Freerun*), this);
             }
         };
         Freerun m_freerun;
@@ -134,7 +134,7 @@ public:
 
         ConstantStruct(void *file)
         {
-            ((void(__thiscall *)(ConstantStruct*, void*))(shared::base + 0x7F88F0))(this, file);
+            MAKE_CALL(shared::base + 0x7F88F0, void (__thiscall *)(ConstantStruct*, void*), this, file);
         }
     };
 
@@ -3048,156 +3048,156 @@ public:
     int field_53F8;
     int field_53FC;
 
-    Pl0000() { CallMethod<0x6C0310, Pl0000*>(this); }
+    Pl0000() { MAKE_CALL(shared::base + 0x6C0310, void (__thiscall *)(Pl0000*), this); }
 
     // vft start
 
     BOOL isBladeModeActive()
     {
-        return ReturnCallVMTFunc<BOOL, 203, Pl0000*>(this);
+        return MAKE_VCALL(203, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL isRunning()
     {
-        return ReturnCallVMTFunc<BOOL, 204, Pl0000*>(this);
+        return MAKE_VCALL(204, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL isIdle()
     {
-        return ReturnCallVMTFunc<BOOL, 206, Pl0000*>(this);
+        return MAKE_VCALL(206, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL isInAir()
     {
-        return ReturnCallVMTFunc<BOOL, 208, Pl0000*>(this);
+        return MAKE_VCALL(208, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL canActivateRipperMode()
     {
-        return ReturnCallVMTFunc<BOOL, 209, Pl0000*>(this);
+        return MAKE_VCALL(209, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL isCodecTalk()
     {
-        return ReturnCallVMTFunc<BOOL, 211, Pl0000*>(this);
+        return MAKE_VCALL(211, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL isParrying()
     {
-        ReturnCallVMTFunc<BOOL, 216, Pl0000*>(this);
+        return MAKE_VCALL(216, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     BOOL isOnGround()
     {
-        return ReturnCallVMTFunc<BOOL, 220, Pl0000*>(this);
+        return MAKE_VCALL(220, BOOL(__thiscall*)(Pl0000*), this);
     }
 
     void applyWeaponChanges()
     {
-        CallVMTFunc<225, Pl0000*>(this);
+        MAKE_VCALL(225, void(__thiscall*)(Pl0000*), this);
     }
 
     void setIdle(int a2)
     {
-        CallVMTFunc<226, Pl0000*, int>(this, a2);
+        MAKE_VCALL(226, void(__thiscall*)(Pl0000*, int), this, a2);
     }
 
     void forceKill()
     {
-        CallVMTFunc<227, Pl0000*>(this);
+        MAKE_VCALL(227, void(__thiscall*)(Pl0000*), this);
     }
 
     float getDefenseDamage()
     {
-        return ReturnCallVMTFunc<float, 237, Pl0000*>(this);
+        return MAKE_VCALL(237, float(__thiscall*)(Pl0000*), this);
     }
 
     void updateInput()
     {
-        CallVMTFunc<241, Pl0000*>(this);
+        MAKE_VCALL(241, void(__thiscall*)(Pl0000*), this);
     }
 
     void handleActions()
     {
-        CallVMTFunc<242, Pl0000*>(this);
+        MAKE_VCALL(242, void(__thiscall*)(Pl0000*), this);
     }
 
     void rebuildCustomWeapon()
     {
-        CallVMTFunc<246, Pl0000*>(this);
+        MAKE_VCALL(246, void(__thiscall*)(Pl0000*), this);
     }
 
     // duplicate at field_3DC(247th virtual function)
     void createEffect(int id, cEspControler* effController)
     {
-        CallVMTFunc<248, Pl0000*, int, cEspControler*>(this, id, effController);
+        MAKE_VCALL(248, void(__thiscall*)(Pl0000*, int, cEspControler*), this, id, effController);
     }
 
     // vft end
 
     void setSlowMo(float Duration, float SlowRate)
     {
-        ((void(__thiscall*)(Pl0000*, float, float))(shared::base + 0x77AB80))(this, Duration, SlowRate);
+        MAKE_CALL(shared::base + 0x77AB80, void (__thiscall *)(Pl0000*, float, float), this, Duration, SlowRate);
     }
 
     void enableRipperMode()
     {
-        ((void(__thiscall*)(Pl0000*))(shared::base + 0x785190))(this);
+        MAKE_CALL(shared::base + 0x785190, void (__thiscall *)(Pl0000*), this);
     }
 
     void setFuelLevel(float fLevel)
     {
-        ((void(__thiscall*)(Pl0000*, float))(shared::base + 0x7C3100))(this, fLevel);
+        MAKE_CALL(shared::base + 0x7C3100, void (__thiscall *)(Pl0000*, float), this, fLevel);
     }
 
     void disableRipperMode(bool bUseFade)
     {
-        ((void(__thiscall*)(Pl0000*, bool))(shared::base + 0x7D9590))(this, bUseFade);
+        MAKE_CALL(shared::base + 0x7D9590, void (__thiscall *)(Pl0000*, bool), this, bUseFade);
     }
 
     float getFuelContainer()
     {
-        return ((float(__thiscall*)(Pl0000*))(shared::base + 0x7DA020))(this);
+        return MAKE_CALL(shared::base + 0x7DA020, float (__thiscall *)(Pl0000*), this);
     }
 
     int getMaxHealth(int unused = 0)
     {
-        return ((int(__thiscall*)(Pl0000*, int))(shared::base + 0x77C980))(this, unused);
+        return MAKE_CALL(shared::base + 0x77C980, int (__thiscall *)(Pl0000*, int), this, unused);
     }
 
     void setSwordLost(BOOL bShouldLose)
     {
-        ((void(__thiscall*)(Pl0000*, BOOL))(shared::base + 0x77E210))(this, bShouldLose);
+        MAKE_CALL(shared::base + 0x77E210, void (__thiscall *)(Pl0000*, BOOL), this, bShouldLose);
     }
 
     BOOL isUnarmed()
     {
-        return ((BOOL(__thiscall*)(Pl0000*))(shared::base + 0x780980))(this);
+        return MAKE_CALL(shared::base + 0x780980, BOOL (__thiscall *)(Pl0000*), this);
     }
 
     float getFuelCapacity(bool bIgnoreUnused)
     {
-        return ((float(__thiscall*)(Pl0000*, bool))(shared::base + 0x7C2F00))(this, bIgnoreUnused);
+        return MAKE_CALL(shared::base + 0x7C2F00, float (__thiscall *)(Pl0000*, bool), this, bIgnoreUnused);
     }
 
     void setPlayerSafe()
     {
-        ((void(__thiscall*)(Pl0000*))(shared::base + 0x7E86F0))(this);
+        MAKE_CALL(shared::base + 0x7E86F0, void (__thiscall *)(Pl0000*), this);
     }
 
     float getRemaninigAnimationTime(int node)
     {
-        return ((float(__thiscall *)(Pl0000 *, int))(shared::base + 0x695BD0))(this, node);
+        return MAKE_CALL(shared::base + 0x695BD0, float (__thiscall *)(Pl0000 *, int), this, node);
     }
 
     float getRemainingAnimationFrames(int node)
     {
-        return ((float(__thiscall *)(Pl0000 *, int))(shared::base + 0x695C80))(this, node);
+        return MAKE_CALL(shared::base + 0x695C80, float (__thiscall *)(Pl0000 *, int), this, node);
     }
 
     void setDefaultInput()
     {
-        ((void(__thiscall *)(Pl0000 *))(shared::base + 0x779E20))(this);
+        MAKE_CALL(shared::base + 0x779E20, void (__thiscall *)(Pl0000 *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9DB8);

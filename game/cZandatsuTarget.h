@@ -34,7 +34,7 @@ struct cZandatsuTarget
 
     cZandatsuTarget& operator=(const cZandatsuTarget& lhs)
     {
-        ((void(__thiscall*)(cZandatsuTarget *, const cZandatsuTarget&))(shared::base + 0x4A50C0))(this, lhs);
+        MAKE_CALL(shared::base + 0x4A50C0, void(__thiscall *)(cZandatsuTarget *, const cZandatsuTarget&), this, lhs);
         return *this;
     }
 };

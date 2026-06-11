@@ -16,7 +16,7 @@ public:
 
     cLightVolumeObj()
     {
-        ((void(__thiscall *)(cLightVolumeObj *))(shared::base + 0x6A6FA0))(this);
+        MAKE_CALL(shared::base + 0x6A6FA0, void(__thiscall *)(cLightVolumeObj *), this);
     }
 
     // There's no context for this object but from Behavior only

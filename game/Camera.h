@@ -41,7 +41,7 @@ public:
 
     StateNode()
     {
-        ((void(__thiscall *)(StateNode *))(shared::base + 0x9A42D0))(this);
+        MAKE_CALL(shared::base + 0x9A42D0, void(__thiscall *)(StateNode *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance *)(shared::base + 0x19C558C);
@@ -71,7 +71,7 @@ public:
 
     StateAnimation()
     {
-        ((void(__thiscall *)(StateAnimation*))(shared::base + 0x9A7DE0))(this);
+        MAKE_CALL(shared::base + 0x9A7DE0, void(__thiscall *)(StateAnimation*), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x19C63F8);
@@ -99,7 +99,7 @@ public:
 
     StateBattle()
     {
-        ((void(__thiscall *)(StateBattle*))(shared::base + 0x9A43F0))(this);
+        MAKE_CALL(shared::base + 0x9A43F0, void(__thiscall *)(StateBattle*), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x19C63E4);
@@ -174,7 +174,7 @@ public:
 
     StateBattleFixed()
     {
-        ((void(__thiscall *)(StateBattleFixed *))(shared::base + 0x9A7B20))(this);
+        MAKE_CALL(shared::base + 0x9A7B20, void(__thiscall *)(StateBattleFixed *), this);
     }
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63E8);
@@ -250,7 +250,7 @@ public:
 
     StateDiveKill()
     {
-        ((void(__thiscall *)(StateDiveKill *))(shared::base + 0x9A7C40))(this);
+        MAKE_CALL(shared::base + 0x9A7C40, void(__thiscall *)(StateDiveKill *), this);
     }
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C641C);
@@ -333,7 +333,7 @@ public:
 
     StateFps()
     {
-        ((void(__thiscall *)(StateFps *))(shared::base + 0x9B7BE0))(this);
+        MAKE_CALL(shared::base + 0x9B7BE0, void(__thiscall *)(StateFps *), this);
     }
 
     static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x19C63FC);

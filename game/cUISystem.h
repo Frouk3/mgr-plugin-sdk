@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Hw.h>
-#include <RGBA32.h>
 #include <cCkMsgDataManager.h>
 
 class cUIDrawBase;
@@ -83,10 +82,10 @@ public:
     int field_4;
     int field_8;
     int field_C;
-    RGBA32 field_10;
-    RGBA32 field_20;
-    RGBA32 field_30;
-    RGBA32 field_40;
+    Hw::cFcol field_10;
+    Hw::cFcol field_20;
+    Hw::cFcol field_30;
+    Hw::cFcol field_40;
     int field_50;
     int field_54;
     int field_58;
@@ -710,18 +709,18 @@ public:
 
     float getResolutionXScaleFactor()
     {
-        return ((float(__thiscall*)(cUISystem*))(shared::base + 0x8AD4B0))(this);
+        return MAKE_CALL(shared::base + 0x8AD4B0, float(__thiscall*)(cUISystem*), this);
     }
 
     float getResolutionYScaleFactor()
     {
-        return ((float(__thiscall*)(cUISystem*))(shared::base + 0x8AD4D0))(this);
+        return MAKE_CALL(shared::base + 0x8AD4D0, float(__thiscall*)(cUISystem*), this);
     }
 
     virtual ~cUISystem() {};
-
-    static inline cUISystem& ms_Instance = *(cUISystem*)(shared::base + 0x19C2010);
 };
+
+inline cUISystem& g_UISystem = *(cUISystem*)(shared::base + 0x19C2010);
 
 class cUICtrl
 {
@@ -1105,17 +1104,17 @@ public:
     virtual ~cUIDrawBase() {};
     Layer getLayer()
     {
-        return ReturnCallVMTFunc<Layer, 2, cUIDrawBase *>(this);
+        return MAKE_VCALL(2, Layer(__thiscall*)(cUIDrawBase*), this);
     }
 
     void draw(int a2, int a3) // those parameters are served for PrimHeap and info for drawing(?)
     {
-        CallVMTFunc<5, cUIDrawBase*, int, int>(this, a2, a3);
+        MAKE_VCALL(5, void(__thiscall *)(cUIDrawBase*, int, int), this, a2, a3);
     }
     
     void chainTrans(int a2, int a3, int a4)
     {
-        CallVMTFunc<6, cUIDrawBase*, int, int, int>(this, a2, a3, a4);
+        MAKE_VCALL(6, void(__thiscall *)(cUIDrawBase*, int, int, int), this, a2, a3, a4);
     }
 };
 

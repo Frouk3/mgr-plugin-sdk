@@ -963,10 +963,10 @@ public:
 
     Em8080()
     {
-        ((void(__thiscall *)(Em8080 *))(shared::base + 0x6B5150))(this);
+        MAKE_CALL(shared::base + 0x6B5150, void(__thiscall *)(Em8080 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17356A0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17356A0);
 };
 
 VALIDATE_SIZE(Em8080, 0x24A0);

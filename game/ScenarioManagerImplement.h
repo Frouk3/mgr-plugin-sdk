@@ -54,9 +54,9 @@ public:
     int field_B4;
     int field_B8;
     int field_BC;
-
-    static inline ScenarioManagerImplement* &ms_Instance = *(ScenarioManagerImplement**)(shared::base + 0x17E9A30);
 };
+
+inline ScenarioManagerImplement* &g_ScenarioManager = *(ScenarioManagerImplement**)(shared::base + 0x17E9A30);
 
 class ScenarioEnemeySetCompletedSlot : public Slot
 {

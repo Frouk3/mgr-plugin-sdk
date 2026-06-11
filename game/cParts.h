@@ -48,12 +48,12 @@ public:
     cParts* m_pPartsParent;
     int field_AC; // maybe unused and/or padding
 
-    cParts() { CallMethod<0x607410, cParts *>(this); }
-    void init(const cParts& other, BOOL bWorldFixed) { CallMethod<0x6074D0, cParts *, const cParts&, BOOL>(this, other, bWorldFixed); } // it was a copy constructor, but it didn't mention virtual table setup, so I made it a normal method
-    void init(const Hw::cVec4& transPos, short boneIndex) { CallMethod<0x6075A0, cParts *, const Hw::cVec4&, short>(this, transPos, boneIndex); }
-    void convertRotationToQuaternion() { CallMethod<0x3F790, cParts *>(this); }
-    void updateLocalMatrix() { CallMethod<0x615310, cParts *>(this); }
-    void updateLocalTransform() { CallMethod<0x615190, cParts *>(this); }
+    cParts() { MAKE_CALL(shared::base + 0x607410, void(__thiscall *)(cParts *), this); }
+    void init(const cParts& other, BOOL bWorldFixed) { MAKE_CALL(shared::base + 0x6074D0, void(__thiscall *)(cParts *, const cParts&, BOOL), this, other, bWorldFixed); } // it was a copy constructor, but it didn't mention virtual table setup, so I made it a normal method
+    void init(const Hw::cVec4& transPos, short boneIndex) { MAKE_CALL(shared::base + 0x6075A0, void(__thiscall *)(cParts *, const Hw::cVec4&, short), this, transPos, boneIndex); }
+    void convertRotationToQuaternion() { MAKE_CALL(shared::base + 0x3F790, void(__thiscall *)(cParts *), this); }
+    void updateLocalMatrix() { MAKE_CALL(shared::base + 0x615310, void(__thiscall *)(cParts *), this); }
+    void updateLocalTransform() { MAKE_CALL(shared::base + 0x615190, void(__thiscall *)(cParts *), this); }
 
     virtual ~cParts() {} // Non virtual destructor at 0x6074C0
 

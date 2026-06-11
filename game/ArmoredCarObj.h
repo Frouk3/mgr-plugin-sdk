@@ -12,10 +12,10 @@ public:
 
     ArmoredCarObj()
     {
-        ((void(__thiscall *)(ArmoredCarObj*))(shared::base + 0x6B0BB0))(this);
+        MAKE_CALL(shared::base + 0x6B0BB0, void(__thiscall *)(ArmoredCarObj*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734C10);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734C10);
 };
 
 VALIDATE_SIZE(ArmoredCarObj, 0xB50);

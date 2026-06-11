@@ -13,15 +13,10 @@ public:
     
     Pl0013()
     {
-        ((void(__thiscall *)(Pl0013 *))(shared::base + 0x6AB520))(this);
+        MAKE_CALL(shared::base + 0x6AB520, void (__thiscall *)(Pl0013 *), this);
     }
 
-    static inline Pl0013 *__cdecl allocate(Hw::cHeapVariable *allocator)
-    {
-        return ((Pl0013 * (__cdecl*)(Hw::cHeapVariable*))(shared::base + 0x6BCB70))(allocator);
-    }
-
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D80);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D80);
 };
 
 VALIDATE_SIZE(Pl0013, 0xAC0);

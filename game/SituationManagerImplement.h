@@ -23,12 +23,12 @@ public:
     lib::AllocatedArray<Unit *> *m_UnitArray;
     int field_2C;
 
-    static inline SituationManagerImplement*& ms_Instance = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);
-
     static inline SituationManagerImplement *get()
     {
-        return ((SituationManagerImplement *(__cdecl *)())(shared::base + 0x8206D0))();
+        return MAKE_CALL(shared::base + 0x8206D0, SituationManagerImplement *(__cdecl *)());
     }
 };
+
+inline SituationManagerImplement*& g_SituationManager = *(SituationManagerImplement**)(shared::base + 0x17EA1A4);
 
 VALIDATE_SIZE(SituationManagerImplement, 0x30);

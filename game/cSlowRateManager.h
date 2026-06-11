@@ -7,16 +7,16 @@ class cSlowRate
 public:
 	cSlowRateUnit *m_pUnit;
 
-	cSlowRate() { CallMethod<0xA03940, cSlowRate *>(this); }
+	cSlowRate() { MAKE_CALL(shared::base + 0xA03940, void(__thiscall *)(cSlowRate*), this); }
 
-	BOOL isValid() { return ReturnCallMethod<BOOL, 0xA03950, cSlowRate*>(this); }
-	float get() { return ReturnCallMethod<float, 0xA049B0, cSlowRate*>(this); } // don't even ask about name, it's from the .pdb of Bayonetta
+	BOOL isValid() { return MAKE_CALL(shared::base + 0xA03950, BOOL(__thiscall *)(cSlowRate*), this); }
+	float get() { return MAKE_CALL(shared::base + 0xA049B0, float(__thiscall *)(cSlowRate*), this); } // don't even ask about name, it's from the .pdb of Bayonetta
 
-	void cleanup() { CallMethod<0xA060F0, cSlowRate*>(this); }
-	~cSlowRate() { CallMethod<0xA085E0, cSlowRate *>(this); }
+	void cleanup() { MAKE_CALL(shared::base + 0xA060F0, void(__thiscall *)(cSlowRate*), this); }
+	~cSlowRate() { MAKE_CALL(shared::base + 0xA085E0, void(__thiscall *)(cSlowRate*), this); }
 	// Managed copy constructor with reference count
-	cSlowRate& operator=(const cSlowRate& other) { return ReturnCallMethod<cSlowRate&, 0xA08600, cSlowRate *, const cSlowRate&>(this, other); }
-	BOOL setSlowType(eSlowRate type) { return ReturnCallMethod<BOOL, 0xA08640, cSlowRate*, eSlowRate>(this, type); }
+	cSlowRate& operator=(const cSlowRate& other) { return MAKE_CALL(shared::base + 0xA08600, cSlowRate&(__thiscall *)(cSlowRate*, const cSlowRate&), this, other); }
+	BOOL setSlowType(eSlowRate type) { return MAKE_CALL(shared::base + 0xA08640, BOOL(__thiscall *)(cSlowRate*, eSlowRate), this, type); }
 };
 
 class cSlowRateManager
@@ -53,66 +53,66 @@ public:
 	virtual ~cSlowRateManager() {};
 	// non virtual destructor at 0xA09010
 
-	cSlowRateManager() { CallMethod<0xA08FB0, cSlowRateManager*>(this); }
+	cSlowRateManager() { MAKE_CALL(shared::base + 0xA08FB0, void(__thiscall *)(cSlowRateManager*), this); }
 
 	void setTickDelay(float framerate)
 	{
-		((void(__thiscall*)(cSlowRateManager*, float))(shared::base + 0xA03A50))(this, framerate);
+		MAKE_CALL(shared::base + 0xA03A50, void(__thiscall *)(cSlowRateManager*, float), this, framerate);
 	}
 
 	void setSlowRate(eSlowRate SlowRateType, float SlowRate)
 	{
-		((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03A70))(this, SlowRateType, SlowRate);
+		MAKE_CALL(shared::base + 0xA03A70, void(__thiscall *)(cSlowRateManager*, int, float), this, SlowRateType, SlowRate);
 	}
 
 	float getDeltaRate(eSlowRate type)
 	{
-		return ((float(__thiscall*)(cSlowRateManager*, int))(shared::base + 0xA03A90))(this, type);
+		return MAKE_CALL(shared::base + 0xA03A90, float(__thiscall *)(cSlowRateManager*, int), this, type);
 	}
 
 	void setRate(eSlowRate slowRateType, float rate)
 	{
-		((void(__thiscall*)(cSlowRateManager*, int, float))(shared::base + 0xA03AB0))(this, slowRateType, rate);
+		MAKE_CALL(shared::base + 0xA03AB0, void(__thiscall *)(cSlowRateManager*, int, float), this, slowRateType, rate);
 	}
 
 	float getRate(eSlowRate type)
 	{
-		return ((float(__thiscall*)(cSlowRateManager*, int))(shared::base + 0xA03AD0))(this, type);
+		return MAKE_CALL(shared::base + 0xA03AD0, float(__thiscall *)(cSlowRateManager*, int), this, type);
 	}
 
 	float getSlowRateBefore(eSlowRate type)
 	{
-		return ((float(__thiscall*)(cSlowRateManager*, int))(shared::base + 0xA03AF0))(this, type);
+		return MAKE_CALL(shared::base + 0xA03AF0, float(__thiscall *)(cSlowRateManager*, int), this, type);
 	}
 
 	void resetSlowRate()
 	{
-		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA03B10))(this);
+		MAKE_CALL(shared::base + 0xA03B10, void(__thiscall *)(cSlowRateManager*), this);
 	}
 
 	cSlowRateUnit* allocUnit()
 	{
-		return ((cSlowRateUnit * (__thiscall*)(cSlowRateManager*))(shared::base + 0xA06230))(this);
+		return MAKE_CALL(shared::base + 0xA06230, cSlowRateUnit*(__thiscall *)(cSlowRateManager*), this);
 	}
 
 	BOOL allocateUnits(size_t units, Hw::cHeap *allocator)
 	{
-		return ((BOOL(__thiscall*)(cSlowRateManager*, size_t, Hw::cHeap*))(shared::base + 0xA198A0))(this, units, allocator);
+		return MAKE_CALL(shared::base + 0xA198A0, BOOL(__thiscall *)(cSlowRateManager*, size_t, Hw::cHeap*), this, units, allocator);
 	}
 
 	BOOL startup(Hw::cHeap *allocator, float frameRate)
 	{
-		return ((BOOL(__thiscall*)(cSlowRateManager*, Hw::cHeap*, float))(shared::base + 0xA086A0))(this, allocator, frameRate);
+		return MAKE_CALL(shared::base + 0xA086A0, BOOL(__thiscall *)(cSlowRateManager*, Hw::cHeap*, float), this, allocator, frameRate);
 	}
 
 	void cleanup()
 	{
-		((void(__thiscall*)(cSlowRateManager*))(shared::base + 0xA08740))(this);
+		MAKE_CALL(shared::base + 0xA08740, void(__thiscall *)(cSlowRateManager*), this);
 	}
 
 	static inline cSlowRateManager* get()
 	{
-		return ((cSlowRateManager * (__cdecl*)())(shared::base + 0xA03960))();
+		return MAKE_CALL(shared::base + 0xA03960, cSlowRateManager * (__cdecl*)());
 	}
 
 	// static inline cSlowRateManager& ms_Instance = *(cSlowRateManager*)(shared::base + 0x17E93B0);

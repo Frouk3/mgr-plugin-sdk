@@ -61,10 +61,10 @@ public:
 
     BehaviorDebrisEmActor()
     {
-        ((void (__thiscall *)(BehaviorDebrisEmActor *))(shared::base + 0x6A6B60))(this);
+        MAKE_CALL(shared::base + 0x6A6B60, void(__thiscall *)(BehaviorDebrisEmActor *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735314);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735314);
 };
 
 VALIDATE_SIZE(BehaviorDebrisEmActor, 0x910);

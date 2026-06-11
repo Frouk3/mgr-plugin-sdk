@@ -24,6 +24,6 @@ public:
 
     void startup(void *a2)
     {
-        CallVMTFunc<2, cItemBase *, void *>(this, a2);
+        MAKE_VCALL(2, void(__thiscall *)(cItemBase*, void*), this, a2);
     }
 };

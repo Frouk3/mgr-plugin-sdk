@@ -12,10 +12,10 @@ public:
 
     Ba041a()
     {
-        ((void(__thiscall *)(Ba041a*))(shared::base + 0x6B0940))(this);
+        MAKE_CALL(shared::base + 0x6B0940, void(__thiscall *)(Ba041a*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734B30);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734B30);
 };
 
 VALIDATE_SIZE(Ba041a, 0xB40);

@@ -93,17 +93,17 @@ public:
 
     BehaviorEmBase()
     {
-        ((void(__thiscall *)(BehaviorEmBase *))(shared::base + 0xED790))(this);
+        MAKE_CALL(shared::base + 0xED790, void(__thiscall *)(BehaviorEmBase *), this);
     }
 
     void setWait()
     {
-        CallVMTFunc<211, BehaviorEmBase *>(this);
+        MAKE_VCALL(211, void(__thiscall *)(BehaviorEmBase*), this);
     }
 
     void createEffect(int effId, cEspControler *pEsp)
     {
-        CallVMTFunc<214, BehaviorEmBase *, int, cEspControler *>(this, effId, pEsp);
+        MAKE_VCALL(214, void(__thiscall *)(BehaviorEmBase*, int, cEspControler*), this, effId, pEsp);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C78);

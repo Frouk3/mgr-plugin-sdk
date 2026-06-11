@@ -14,16 +14,16 @@ public:
 
     void shutdown()
     {
-        ((void(__thiscall *)(AnimationMapManagerImplement *))(shared::base + 0x4D8180))(this);
+        MAKE_CALL(shared::base + 0x4D8180, void(__thiscall *)(AnimationMapManagerImplement *), this);
     }
 
-    AnimationMapManagerImplement *get()
+    static inline AnimationMapManagerImplement *get()
     {
-        return ((AnimationMapManagerImplement *(__cdecl *)())(shared::base + 0x4D7570))(); // I want to say that they're using singleton pattern here, but it isn't true singleton
+        return MAKE_CALL(shared::base + 0x4D7570, AnimationMapManagerImplement*(__cdecl *)());
     }
-
-    static inline AnimationMapManagerImplement*& ms_pInstance = *(AnimationMapManagerImplement**)(shared::base + 0x1735BF4);
 };
+
+inline AnimationMapManagerImplement*& g_AnimationMapManager = *(AnimationMapManagerImplement**)(shared::base + 0x1735BF4);
 
 VALIDATE_SIZE(AnimationMapManagerImplement, 0x30);
 VALIDATE_SIZE(AnimationMap::Unit, 0x3C);

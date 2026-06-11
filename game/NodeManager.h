@@ -9263,9 +9263,9 @@ struct NodeManager
     int field_58AA0;
     int field_58AA4;
     NodeManager::NodeSystem field_58AA8;
-
-    static inline NodeManager &ms_Instance = *(NodeManager*)(shared::base + 0x1964500);
 };
+
+inline NodeManager &g_NodeManager = *(NodeManager*)(shared::base + 0x1964500);
 
 VALIDATE_SIZE(NodeManager, 0x58C38);
 

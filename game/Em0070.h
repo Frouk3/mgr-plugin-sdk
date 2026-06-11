@@ -13,10 +13,10 @@ public:
 
     Em0070Gun()
     {
-        ((void(__thiscall *)(Em0070Gun *))(shared::base + 0x6A6780))(this);
+        MAKE_CALL(shared::base + 0x6A6780, void(__thiscall *)(Em0070Gun *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D5C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D5C);
 };
 
 class Em0070Debris : public Behavior
@@ -37,10 +37,10 @@ public:
 
     Em0070Debris()
     {
-        ((void(__thiscall *)(Em0070Debris *))(shared::base + 0x6A6C10))(this);
+        MAKE_CALL(shared::base + 0x6A6C10, void(__thiscall *)(Em0070Debris *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D58);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D58);
 };
 
 class Em0070 : public BehaviorEmBase
@@ -345,10 +345,10 @@ public:
 
     Em0070()
     {
-        ((void(__thiscall *)(Em0070*))(shared::base + 0x6ACAF0))(this);
+        MAKE_CALL(shared::base + 0x6ACAF0, void(__thiscall *)(Em0070*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734D50);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734D50);
 };
 
 VALIDATE_SIZE(Em0070Gun, 0x8D0);

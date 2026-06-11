@@ -16,12 +16,12 @@ public:
 
     hkpAllRayHitCollector()
     {
-        ((void(__thiscall *)(hkpAllRayHitCollector *))(shared::base + 0x1EC620))(this);
+        MAKE_CALL(shared::base + 0x1EC620, void(__thiscall *)(hkpAllRayHitCollector*), this);
     }
 
     void sortHits()
     {
-        ((void(__thiscall *)(hkpAllRayHitCollector *))(shared::base + 0xD2C170))(this);
+        MAKE_CALL(shared::base + 0xD2C170, void(__thiscall *)(hkpAllRayHitCollector*), this);
     }
 
     inline const hkArray<hkpWorldRayCastOutput>& getHits() const

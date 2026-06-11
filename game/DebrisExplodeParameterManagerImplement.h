@@ -10,6 +10,6 @@ public:
 	int field_24;
 	lib::AllocatedArray<struct DebrisExplodeParameterResource*>* m_explodeParameterResources;
 	int field_2C;
-
-	static inline DebrisExplodeParameterManagerImplement* &ms_Instance = *(DebrisExplodeParameterManagerImplement**)(shared::base + 0x1736A50);
 };
+
+inline DebrisExplodeParameterManagerImplement* &g_DebrisExplodeParameterManager = *(DebrisExplodeParameterManagerImplement**)(shared::base + 0x1736A50);

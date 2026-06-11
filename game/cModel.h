@@ -83,7 +83,7 @@ public:
     int field_488;
     int field_48C;
 
-    cModel() { CallMethod<0x619480, cModel *>(this); }
+    cModel() { MAKE_CALL(shared::base + 0x619480, void(__thiscall *)(cModel*), this); }
 };
 
 VALIDATE_SIZE(cModel, 0x490);

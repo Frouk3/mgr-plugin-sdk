@@ -11,6 +11,6 @@ public:
 	int field_24;
 	lib::AllocatedArray<struct DatsuSetTableResource*> *m_datsuResources;
 	int field_2C;
-
-	static inline DatsuSetTableManagerImplement*& ms_Instance = *(DatsuSetTableManagerImplement**)(shared::base + 0x1736A20);
 };
+
+inline DatsuSetTableManagerImplement*& g_DatsuSetTableManager = *(DatsuSetTableManagerImplement**)(shared::base + 0x1736A20);

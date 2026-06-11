@@ -24,9 +24,9 @@ bool isObjExists(eObjID objId)
 		}
 	}
 
-	sprintf(buffer, "%s\\%s%04x.dat", folder, folder, objId & 0x0000FFFF);
+	sprintf_s(buffer, "%s\\%s%04x.dat", folder, folder, objId & 0x0000FFFF);
 
-	return ((BOOL(__cdecl*)(const char*))(shared::base + 0x9EC390))(buffer) == TRUE;
+	return MAKE_CALL(shared::base + 0x9EC390, BOOL(__cdecl*)(const char*), buffer);
 }
 
 struct EntSpawn

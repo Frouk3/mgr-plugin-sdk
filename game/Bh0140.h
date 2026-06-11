@@ -8,10 +8,10 @@ public:
 
     Bh0140()
     {
-        ((void(__thiscall *)(Bh0140 *))(shared::base + 0x6AE9D0))(this);
+        MAKE_CALL(shared::base + 0x6AE9D0, void(__thiscall *)(Bh0140 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17351D8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17351D8);
 };
 
 VALIDATE_SIZE(Bh0140, 0xC10);

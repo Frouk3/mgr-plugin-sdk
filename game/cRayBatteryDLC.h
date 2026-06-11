@@ -186,10 +186,10 @@ public:
 
     cRayBatteryDLC()
     {
-        ((void(__thiscall *)(cRayBatteryDLC*))(shared::base + 0x6B3B60))(this);
+        MAKE_CALL(shared::base + 0x6B3B60, void(__thiscall *)(cRayBatteryDLC*), this);
     }
-    
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735BF0);
+
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735BF0);
 };
 
 VALIDATE_SIZE(cRayBatteryDLC, 0xE20);

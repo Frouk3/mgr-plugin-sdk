@@ -191,10 +191,10 @@ public:
 
     BehaviorBalkan()
     {
-        ((void(__thiscall *)(BehaviorBalkan *))(shared::base + 0x6AFE40))(this);
+        MAKE_CALL(shared::base + 0x6AFE40, void(__thiscall *)(BehaviorBalkan *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C98);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C98);
 };
 
 VALIDATE_SIZE(BehaviorBalkan, 0x46790);

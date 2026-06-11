@@ -14,10 +14,10 @@ public:
 
     Em0130Weapon()
     {
-        ((void(__thiscall *)(Em0130Weapon *))(shared::base + 0x6B59C0))(this);
+        MAKE_CALL(shared::base + 0x6B59C0, void(__thiscall *)(Em0130Weapon *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x1735514);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x1735514);
 };
 
 class Em0130Face : public Behavior
@@ -26,10 +26,10 @@ public:
 
     Em0130Face()
     {
-        ((void(__thiscall *)(Em0130Face *))(shared::base + 0x6A6F40))(this);
+        MAKE_CALL(shared::base + 0x6A6F40, void(__thiscall *)(Em0130Face *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x173551C);
+    static inline ContextInstance& m_Context = *(ContextInstance *)(shared::base + 0x173551C);
 };
 
 class Em0130Debris : public RayArmorDebris
@@ -46,7 +46,7 @@ public:
 
     Em0130Debris()
     {
-        ((void(__thiscall *)(Em0130Debris *))(shared::base + 0x6B5A70))(this);
+        MAKE_CALL(shared::base + 0x6B5A70, void(__thiscall *)(Em0130Debris *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735518);
@@ -306,10 +306,10 @@ public:
 
     Em0130()
     {
-        ((void(__thiscall *)(Em0130*))(shared::base + 0x6B57D0))(this);
+        MAKE_CALL(shared::base + 0x6B57D0, void(__thiscall *)(Em0130*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735510);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735510);
 };
 
 VALIDATE_SIZE(Em0130Weapon, 0x8D0);

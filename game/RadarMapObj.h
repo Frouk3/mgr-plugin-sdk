@@ -8,10 +8,10 @@ public:
 
     RadarMapObj()
     {
-        ((void(__thiscall *)(RadarMapObj *))(shared::base + 0x6A6D60))(this);
+        MAKE_CALL(shared::base + 0x6A6D60, void (__thiscall *)(RadarMapObj *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735434);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735434);
 };
 
 VALIDATE_SIZE(RadarMapObj, 0x870);

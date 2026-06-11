@@ -46,7 +46,7 @@ public:
 
         WeaponData()
         {
-            ((void(__thiscall *)(WeaponData *))(shared::base + 0x68F0E0))(this);
+            MAKE_CALL(shared::base + 0x68F0E0, void(__thiscall *)(WeaponData *), this);
         }
     };
 public:
@@ -73,10 +73,10 @@ public:
 
     BehaviorWeapon()
     {
-        ((void(__thiscall *)(BehaviorWeapon *))(shared::base + 0x6A4AD0))(this);
+        MAKE_CALL(shared::base + 0x6A4AD0, void(__thiscall *)(BehaviorWeapon *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C2C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C2C);
 };
 
 VALIDATE_SIZE(BehaviorWeapon::WeaponData, 0x90);

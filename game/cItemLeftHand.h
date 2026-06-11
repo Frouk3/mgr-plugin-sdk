@@ -20,10 +20,10 @@ public:
 
     cItemLeftHand()
     {
-        ((void(__thiscall *)(cItemLeftHand *))(shared::base + 0x6B13C0))(this);
+        MAKE_CALL(shared::base + 0x6B13C0, void(__thiscall *)(cItemLeftHand *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17353B0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17353B0);
 };
 
 VALIDATE_SIZE(cItemLeftHand, 0x950);

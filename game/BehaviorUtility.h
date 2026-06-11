@@ -27,17 +27,17 @@ namespace BehaviorUtility
 
         RayCast()
         {
-            ((void(__thiscall*)(RayCast*))(shared::base + 0x689310))(this);
+            MAKE_CALL(shared::base + 0x689310, void(__thiscall *)(RayCast *), this);
         }
 
         ~RayCast()
         {
-            ((void(__thiscall*)(RayCast*))(shared::base + 0x689390))(this);
+            MAKE_CALL(shared::base + 0x689390, void(__thiscall *)(RayCast *), this);
         }
 
         void drawRayInfo(unsigned int color, unsigned int debugLayer, const char* text)
         {
-            ((void(__thiscall*)(RayCast*, unsigned int, unsigned int, const char*))(shared::base + 0x684420))(this, color, debugLayer, text);
+            MAKE_CALL(shared::base + 0x684420, void(__thiscall *)(RayCast *, unsigned int, unsigned int, const char *), this, color, debugLayer, text);
         }
     };
 
@@ -53,13 +53,13 @@ namespace BehaviorUtility
 
         void drawRayInfo(unsigned int color, int debugLayer, const char* text)
         {
-            ((void(__thiscall*)(RayInfo*, unsigned int, int, const char*))(shared::base + 0x684140))(this, color, debugLayer, text);
+            MAKE_CALL(shared::base + 0x684140, void(__thiscall *)(RayInfo *, unsigned int, int, const char *), this, color, debugLayer, text);
         }
     };
 
     int checkRay(RayCast* rayCast, RayInfo* rayInfo)
     {
-        return ((int(__cdecl*)(RayCast*, RayInfo*))(shared::base + 0x686290))(rayCast, rayInfo);
+        return MAKE_CALL(shared::base + 0x686290, int(__cdecl *)(RayCast *, RayInfo *), rayCast, rayInfo);
     }
 }
 

@@ -11,8 +11,8 @@ public:
 
     static inline BattleSituationManagerImplement *get()
     {
-        return ((BattleSituationManagerImplement*(__cdecl*)())(shared::base + 0x972B30))();
+        return MAKE_CALL(shared::base + 0x972B30, BattleSituationManagerImplement *(__cdecl*)());
     }
-
-    static inline BattleSituationManagerImplement*& ms_Instance = *(BattleSituationManagerImplement**)(shared::base + 0x19C5264);
 };
+
+inline BattleSituationManagerImplement*& g_BattleSituationManager = *(BattleSituationManagerImplement**)(shared::base + 0x19C5264);

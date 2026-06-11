@@ -45,10 +45,10 @@ public:
 
     E3_EnemyBoard()
     {
-        ((void(__thiscall *)(E3_EnemyBoard*))(shared::base + 0x6B0AC0))(this);
+        MAKE_CALL(shared::base + 0x6B0AC0, void(__thiscall *)(E3_EnemyBoard*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734B4C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734B4C);
 };
 
 VALIDATE_SIZE(E3_EnemyBoard, 0xF80);

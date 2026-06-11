@@ -26,10 +26,10 @@ public:
 
     BehaviorBh()
     {
-        ((void (__thiscall *)(BehaviorBh*))(shared::base + 0x6C7AB0))(this);
+        MAKE_CALL(shared::base + 0x6C7AB0, void(__thiscall *)(BehaviorBh *), this);
     };
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9C5C);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9C5C);
 };
 
 VALIDATE_SIZE(BehaviorBh, 0xC10);

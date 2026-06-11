@@ -607,10 +607,10 @@ public:
 
     Em0310()
     {
-        ((void(__thiscall *)(Em0310*))(shared::base + 0x6AD3E0))(this);
+        MAKE_CALL(shared::base + 0x6AD3E0, void(__thiscall *)(Em0310*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735140);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735140);
 };
 
 class Em0310Weapon : public BehaviorWeapon
@@ -623,10 +623,10 @@ public:
 
     Em0310Weapon()
     {
-        ((void(__thiscall *)(Em0310Weapon *))(shared::base + 0x6A6470))(this);
+        MAKE_CALL(shared::base + 0x6A6470, void(__thiscall *)(Em0310Weapon *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735144);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735144);
 };
 
 class Em0310Pillar : public BehaviorBgBase
@@ -640,10 +640,10 @@ public:
 
     Em0310Pillar()
     {
-        ((void(__thiscall *)(Em0310Pillar *))(shared::base + 0x6A64B0))(this);
+        MAKE_CALL(shared::base + 0x6A64B0, void(__thiscall *)(Em0310Pillar *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735148);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735148);
 };
 
 class Em0310Shield : public Behavior
@@ -669,10 +669,10 @@ public:
 
     Em0310Shield()
     {
-        ((void(__thiscall *)(Em0310Shield *))(shared::base + 0x6A6370))(this);
+        MAKE_CALL(shared::base + 0x6A6370, void(__thiscall *)(Em0310Shield *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x173514C);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x173514C);
 };
 
 class Em0310QteObstacle : public BehaviorBgBase
@@ -691,10 +691,10 @@ public:
     
     Em0310QteObstacle()
     {
-        ((void(__thiscall *)(Em0310QteObstacle*))(shared::base + 0x6A63D0))(this);
+        MAKE_CALL(shared::base + 0x6A63D0, void(__thiscall *)(Em0310QteObstacle*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735150);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735150);
 };
 
 class Em0310QteCeiling : public BehaviorBgBase
@@ -708,10 +708,10 @@ public:
 
     Em0310QteCeiling()
     {
-        ((void(__thiscall *)(Em0310QteCeiling*))(shared::base + 0x6A6410))(this);
+        MAKE_CALL(shared::base + 0x6A6410, void(__thiscall *)(Em0310QteCeiling*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735154);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735154);
 };
 
 class Em0310QteCeilingDebris : public BehaviorDebrisBase
@@ -724,10 +724,10 @@ public:
 
     Em0310QteCeilingDebris()
     {
-        ((void(__thiscall *)(Em0310QteCeilingDebris*))(shared::base + 0x6AFB70))(this);
+        MAKE_CALL(shared::base + 0x6AFB70, void(__thiscall *)(Em0310QteCeilingDebris*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735158);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735158);
 };
 
 class Em0310QteDummy : public Behavior
@@ -740,10 +740,10 @@ public:
 
     Em0310QteDummy()
     {
-        ((void(__thiscall *)(Em0310QteDummy *))(shared::base + 0x6A6440))(this);
+        MAKE_CALL(shared::base + 0x6A6440, void(__thiscall *)(Em0310QteDummy *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173515C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173515C);
 };
 
 class Em0310Debris : public BehaviorDebrisBase
@@ -756,10 +756,10 @@ public:
 
     Em0310Debris()
     {
-        ((void(__thiscall *)(Em0310Debris *))(shared::base + 0x6AFC00))(this);
+        MAKE_CALL(shared::base + 0x6AFC00, void(__thiscall *)(Em0310Debris *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735160);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735160);
 };
 
 VALIDATE_SIZE(Em0310Shield, 0x9B0);

@@ -173,13 +173,13 @@ public:
 
     void processAndRecordRelevantCollisions(Collision *collider)
     {
-        CallVMTFunc<3, Collision *, Collision *>(this, collider);
+        MAKE_VCALL(3, void(__thiscall *)(Collision *, Collision *), this, collider);
     }
 
     Hw::cVec4 getMaxShapeExpansion(const Hw::cVec4& scale)
     {
         Hw::cVec4 result;
-        ReturnCallVMTFunc<Hw::cVec4&, 6, Collision *, Hw::cVec4&, const Hw::cVec4&>(this, result, scale);
+        result = MAKE_VCALL(6, Hw::cVec4&(__thiscall *)(Collision *, Hw::cVec4&, const Hw::cVec4&), this, result, scale);
         return result;
     }
 
@@ -187,52 +187,52 @@ public:
 
     Collision()
     {
-        ((void(__thiscall *)(Collision*))(shared::base + 0x97C050))(this);
+        MAKE_CALL(shared::base + 0x97C050, void(__thiscall *)(Collision*), this);
     }
 
     ~Collision()
     {
-        ((void(__thiscall *)(Collision*))(shared::base + 0x97C2B0))(this);
+        MAKE_CALL(shared::base + 0x97C2B0, void(__thiscall *)(Collision*), this);
     }
 
     void addRef()
     {
-        ((void(__thiscall *)(Collision*))(shared::base + 0x977200))(this);
+        MAKE_CALL(shared::base + 0x977200, void(__thiscall *)(Collision*), this);
     }
 
     void setOwner(Entity *owner, int a2)
     {
-        ((void(__thiscall *)(Collision*, Entity*, int))(shared::base + 0x977C50))(this, owner, a2);
+        MAKE_CALL(shared::base + 0x977C50, void(__thiscall *)(Collision*, Entity*, int), this, owner, a2);
     }
 
     void setName(const char *name)
     {
-        ((void(__thiscall *)(Collision*, const char*))(shared::base + 0x1CD00))(this, name);
+        MAKE_CALL(shared::base + 0x1CD00, void(__thiscall *)(Collision*, const char*), this, name);
     }
 
     int release() // returns new ref count
     {
-        return ((int(__thiscall *)(Collision*))(shared::base + 0x97B0F0))(this);
+        return MAKE_CALL(shared::base + 0x97B0F0, int(__thiscall *)(Collision*), this);
     }
 
     void registerCollision()
     {
-        ((void(__thiscall *)(Collision*))(shared::base + 0x97B890))(this);
+        MAKE_CALL(shared::base + 0x97B890, void(__thiscall *)(Collision*), this);
     }
 
     void unregisterCollision()
     {
-        ((void(__thiscall *)(Collision*))(shared::base + 0x97ACC0))(this);
+        MAKE_CALL(shared::base + 0x97ACC0, void(__thiscall *)(Collision*), this);
     }
 
     void addObjDatReference(eObjID obj, int setType)
     {
-        ((void(__thiscall *)(Collision*, eObjID, int))(shared::base + 0x977E40))(this, obj, setType);
+        MAKE_CALL(shared::base + 0x977E40, void(__thiscall *)(Collision*, eObjID, int), this, obj, setType);
     }
 
     void releaseObjectReference()
     {
-        ((void(__thiscall *)(Collision*))(shared::base + 0x977210))(this);
+        MAKE_CALL(shared::base + 0x977210, void(__thiscall *)(Collision*), this);
     }
 };
 

@@ -124,10 +124,10 @@ public:
     
     cRayRightHand()
     {
-        ((void(__thiscall *)(cRayRightHand*))(shared::base + 0x6C1070))(this);
+        MAKE_CALL(shared::base + 0x6C1070, void(__thiscall *)(cRayRightHand*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9CC8);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9CC8);
 };
 
 VALIDATE_SIZE(cRayRightHand, 0xC30);

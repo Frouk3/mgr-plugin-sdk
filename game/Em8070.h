@@ -13,10 +13,10 @@ public:
 
     Em8070Gun()
     {
-        ((void(__thiscall *)(Em8070Gun *))(shared::base + 0x6B50A0))(this);
+        MAKE_CALL(shared::base + 0x6B50A0, void(__thiscall *)(Em8070Gun *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173568C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173568C);
 };
 
 class Em8070 : public EmBaseDLC
@@ -333,10 +333,10 @@ public:
 
     Em8070()
     {
-        ((void(__thiscall *)(Em8070 *))(shared::base + 0x6B4EC0))(this);
+        MAKE_CALL(shared::base + 0x6B4EC0, void(__thiscall *)(Em8070 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735680);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735680);
 };
 
 VALIDATE_SIZE(Em8070Gun, 0x8D0);

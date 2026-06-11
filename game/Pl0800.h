@@ -66,13 +66,8 @@ public:
 
     Pl0800()
     {
-        ((void(__thiscall *)(Pl0800 *))(shared::base + 0x6AB5C0))(this);
+        MAKE_CALL(shared::base + 0x6AB5C0, void (__thiscall *)(Pl0800 *), this);
     }
 
-    static inline Pl0800 *__cdecl allocate(Hw::cHeapVariable *allocator)
-    {
-        return ((Pl0800 * (__cdecl *)(Hw::cHeapVariable *))(shared::base + 0x6BCBD0))(allocator);
-    }
-
-    static inline ContextInstance& ms_Context = *(ContextInstance *)(shared::base + 0x17353F0);
+    static inline ContextInstance& m_Context = *(ContextInstance *)(shared::base + 0x17353F0);
 };

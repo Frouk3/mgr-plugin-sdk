@@ -322,15 +322,15 @@ struct CriFsBinderHn
 
 inline int CRIAPI criFsBinder_GetStatus(int binderId, CriFsBinderStatus* bindStatus)
 {
-    return ((int(CRIAPI*)(int, CriFsBinderStatus*))(shared::base + 0xE97D56))(binderId, bindStatus);
+    return MAKE_CALL(shared::base + 0xE97D56, int(CRIAPI *)(int, CriFsBinderStatus *), binderId, bindStatus);
 }
 
 inline int CRIAPI criFsBinder_UnBind(int binderId)
 {
-    return ((int(CRIAPI*)(int))(shared::base + 0xE97543))(binderId);
+    return MAKE_CALL(shared::base + 0xE97543, int(CRIAPI *)(int), binderId);
 }
 
 inline int CRIAPI CriFsBinderHn_free(CriFsBinderHn* binderHn)
 {
-    return ((int(CRIAPI*)(CriFsBinderHn*))(shared::base + 0xE97C59))(binderHn);
+    return MAKE_CALL(shared::base + 0xE97C59, int(CRIAPI *)(CriFsBinderHn *), binderHn);
 }

@@ -14,8 +14,8 @@ public:
     int field_18;
     int field_1C;
     int field_20;
-
-    static inline TargetManagerImplement*& pInstance = *(TargetManagerImplement**)(shared::base + 0x17EA108);
 };
+
+inline TargetManagerImplement*& g_TargetManager = *(TargetManagerImplement**)(shared::base + 0x17EA108);
 
 VALIDATE_SIZE(TargetManagerImplement, 0x24);

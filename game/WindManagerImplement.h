@@ -16,6 +16,6 @@ class WindManagerImplement : public WindManager
 {
 public:
     lib::AllocatedArray<Wind *> *m_pWind;
-
-    static inline WindManagerImplement *& ms_Instance = *(WindManagerImplement**)(shared::base + 0x1735D98);
 };
+
+inline WindManagerImplement *&g_WindManager = *(WindManagerImplement**)(shared::base + 0x1735D98);

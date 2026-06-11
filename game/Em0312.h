@@ -93,10 +93,10 @@ public:
 
     Em0312()
     {
-        ((void(__thiscall *)(Em0312 *))(shared::base + 0x6AD570))(this);
+        MAKE_CALL(shared::base + 0x6AD570, void(__thiscall *)(Em0312 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173516C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173516C);
 };
 
 VALIDATE_SIZE(Em0312, 0xC60);

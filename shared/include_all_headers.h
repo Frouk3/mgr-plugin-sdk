@@ -1,6 +1,7 @@
 
 #include <Events.h>
 #include <Hooks.h>
+#include <SafeHook.h>
 #include <shared.h>
 #include <CriAtomic.h>
 #include <CriBase.h>
@@ -363,6 +364,7 @@
 #include <cResultDisp.h>
 #include <cRoomResourceManager.h>
 #include <cRpgSite.h>
+#include <cRtti.h>
 #include <cSavingDisp.h>
 #include <cSavingIcon.h>
 #include <cScene.h>
@@ -534,6 +536,7 @@
 #include <HoldEntitySlot.h>
 #include <Hw.h>
 #include <HwDebug.h>
+#include <HwDvd.h>
 #include <HwMath.h>
 #include <It0500.h>
 #include <It0510.h>
@@ -574,8 +577,6 @@
 #include <RayArmorDebris.h>
 #include <RayCastManager.h>
 #include <ReactionObjectManager.h>
-#include <RGB32.h>
-#include <RGBA32.h>
 #include <RigidBodyCollection.h>
 #include <RigidBodyCollision.h>
 #include <RigidBodyList.h>

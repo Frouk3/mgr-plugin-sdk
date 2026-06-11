@@ -228,7 +228,7 @@ public:
 
 	int getPartsIndexNo(unsigned short boneIndex)
 	{
-		return ((int(__thiscall *)(EntryModelData*, unsigned short))(shared::base + 0x606DE0))(this, boneIndex);
+		return MAKE_CALL(shared::base + 0x606DE0, int(__thiscall *)(cModelDataManager::EntryModelData*, unsigned short), this, boneIndex);
 	}
 };
 
@@ -606,11 +606,11 @@ public:
 
 	void clear()
 	{
-		((void(__thiscall *)(cMaterial *))(shared::base + 0x607FA0))(this);
+		MAKE_CALL(shared::base + 0x607FA0, void(__thiscall *)(cMaterial*), this);
 	}
 
 	void cleanup()
 	{
-		((void(__thiscall *)(cMaterial *))(shared::base + 0x6118E0))(this);
+		MAKE_CALL(shared::base + 0x6118E0, void(__thiscall *)(cMaterial*), this);
 	}
 };

@@ -12,10 +12,10 @@ public:
 
     BehaviorDestructionImpact()
     {
-        ((void(__thiscall *)(BehaviorDestructionImpact *))(shared::base + 0x6A6800))(this);
+        MAKE_CALL(shared::base + 0x6A6800, void(__thiscall *)(BehaviorDestructionImpact *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17354B4);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17354B4);
 };
 
 VALIDATE_SIZE(BehaviorDestructionImpact, 0x880);

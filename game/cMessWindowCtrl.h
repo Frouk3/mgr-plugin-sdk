@@ -13,6 +13,6 @@ public:
 
     int createWindow(int a2, int a3, int a4)
     {
-        return ReturnCallVMTFunc<int, 1, cMessWindowCtrl *, int, int, int>(this, a2, a3, a4);
+        return MAKE_VCALL(1, int(__thiscall*)(cMessWindowCtrl*, int, int, int), this, a2, a3, a4);
     }
 };

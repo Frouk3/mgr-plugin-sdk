@@ -16,10 +16,10 @@ public:
 
     RoomBaseUnit()
     {
-        ((void(__thiscall *)(RoomBaseUnit*))(shared::base + 0x6A6F70))(this);
+        MAKE_CALL(shared::base + 0x6A6F70, void (__thiscall *)(RoomBaseUnit *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x173534C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x173534C);
 };
 
 VALIDATE_SIZE(RoomBaseUnit, 0x890);

@@ -35,10 +35,10 @@ public:
 
     Wp030a()
     {
-        ((void(__thiscall *)(Wp030a *))(shared::base + 0x6A6750))(this);
+        MAKE_CALL(shared::base + 0x6A6750, void(__thiscall *)(Wp030a*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735450);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735450);
 };
 
 VALIDATE_SIZE(Wp030a, 0x8D0);

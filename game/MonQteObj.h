@@ -30,10 +30,10 @@ public:
 
     MonQteObj()
     {
-        ((void(__thiscall *)(MonQteObj *))(shared::base + 0x6AECC0))(this);
+        MAKE_CALL(shared::base + 0x6AECC0, void(__thiscall *)(MonQteObj *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F60);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F60);
 };
 
 VALIDATE_SIZE(MonQteObj, 0x1300);

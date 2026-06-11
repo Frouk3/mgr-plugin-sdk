@@ -16,13 +16,13 @@ public:
     int field_8;
     int field_C;
     cEspControler field_10;
-  
-    static inline BattleRegionManagerImplement*& ms_Instance = *(BattleRegionManagerImplement**)(shared::base + 0x1734B00);
 
     static inline BattleRegionManagerImplement* get()
     {
-        return ((BattleRegionManagerImplement *(__cdecl *)())(shared::base + 0x1110))();
+        return MAKE_CALL(shared::base + 0x1110, BattleRegionManagerImplement *(__cdecl*)());
     }
 };
+
+inline BattleRegionManagerImplement*& g_BattleRegionManager = *(BattleRegionManagerImplement**)(shared::base + 0x1734B00);
 
 VALIDATE_SIZE(BattleRegionManagerImplement, 0xC0);

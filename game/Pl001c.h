@@ -80,7 +80,7 @@ public:
 
     Pl001c()
     {
-        ((void(__thiscall *)(Pl001c*))(shared::base + 0x6A6100))(this);
+        MAKE_CALL(shared::base + 0x6A6100, void (__thiscall *)(Pl001c*), this);
     }
 
     static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17353E0);

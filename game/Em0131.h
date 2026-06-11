@@ -21,10 +21,10 @@ public:
 
     Em0131Debris()
     {
-        ((void(__thiscall *)(Em0131Debris *))(shared::base + 0x6B5B00))(this);
+        MAKE_CALL(shared::base + 0x6B5B00, void(__thiscall *)(Em0131Debris *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735524);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735524);
 };
 
 class Em0131 : public EmBaseDLC
@@ -37,10 +37,10 @@ public:
     
     Em0131()
     {
-        ((void(__thiscall *)(Em0131*))(shared::base + 0x6B5950))(this);
+        MAKE_CALL(shared::base + 0x6B5950, void(__thiscall *)(Em0131*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735520);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735520);
 };
 
 VALIDATE_SIZE(Em0131Debris, 0x9B0);

@@ -30,18 +30,18 @@ public:
 
     SceneModelSystem()
     {
-        ((void (__thiscall *)(SceneModelSystem *))(shared::base + 0x6197D0))(this);
+        MAKE_CALL(shared::base + 0x6197D0, void (__thiscall *)(SceneModelSystem *), this);
     }
 
     void removeModel(cModel *model)
     {
-        ((void(__thiscall *)(SceneModelSystem *, cModel *))(shared::base + 0x618C30))(this, model);
+        MAKE_CALL(shared::base + 0x618C30, void (__thiscall *)(SceneModelSystem *, cModel *), this, model);
     }
 
     void addModel(cModel *model)
     {
-        ((void(__thiscall *)(SceneModelSystem *, cModel *))(shared::base + 0x618BE0))(this, model);
+        MAKE_CALL(shared::base + 0x618BE0, void (__thiscall *)(SceneModelSystem *, cModel *), this, model);
     }
-
-    static inline SceneModelSystem &Instance = *(SceneModelSystem*)(shared::base + 0x177B628);
 };
+
+inline SceneModelSystem &g_SceneModelSystem = *(SceneModelSystem*)(shared::base + 0x177B628);

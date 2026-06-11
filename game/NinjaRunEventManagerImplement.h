@@ -141,7 +141,7 @@ public:
         int field_178;
         int field_17C;
 
-        virtual void field_0() {};
+        virtual void dummy() {};
     };
 
     class EventUnit : PhantomUnit
@@ -166,8 +166,8 @@ public:
     int field_10;
     int field_14;
     int field_18;
-
-    static inline NinjaRunEventManagerImplement*& ms_Instance = *(NinjaRunEventManagerImplement**)(shared::base + 0x17EA188);
 };
+
+static inline NinjaRunEventManagerImplement*& g_NinjaRunEventManager = *(NinjaRunEventManagerImplement**)(shared::base + 0x17EA188);
 
 VALIDATE_SIZE(NinjaRunEventManagerImplement, 0x1C);

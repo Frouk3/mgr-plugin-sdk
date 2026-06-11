@@ -8,10 +8,10 @@ public:
 
     It0510()
     {
-        ((void(__thiscall *)(It0510 *))(shared::base + 0x6C0E10))(this);
+        MAKE_CALL(shared::base + 0x6C0E10, void(__thiscall *)(It0510 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735384);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735384);
 };
 
 VALIDATE_SIZE(It0510, 0x970);

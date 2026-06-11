@@ -27,17 +27,17 @@ struct AnimationMap
 
     lib::AllocatedArray<Unit> *m_pUnits;
 
-    AnimationMap(Hw::cHeapVariable *allocator, void *mapData) { CallMethod<0x4DA630, AnimationMap *, Hw::cHeapVariable *, void *>(this, allocator, mapData); }
-    Unit *getUnitByAnim(int animId) { return ReturnCallMethod<Unit*, 0x4D7D10, AnimationMap *, int>(this, animId); }
-    Unit *getUnit(int index) { return ReturnCallMethod<Unit*, 0x4D7D50, AnimationMap *, int>(this, index); }
-    const char *getNameByAnim(int animId) { return ReturnCallMethod<const char*, 0x4D7D70, AnimationMap *, int>(this, animId); }
-    int getLoopByAnim(int animId) { return ReturnCallMethod<int, 0x4D7DB0, AnimationMap *, int>(this, animId); }
-    float getInterpolationByAnim(int animId) { return ReturnCallMethod<float, 0x4D7DF0, AnimationMap *, int>(this, animId); }
-    float getStartFrameByAnim(int animId) { return ReturnCallMethod<float, 0x4D7E50, AnimationMap *, int>(this, animId); }
-    int getYTranslateEaseOffByAnim(int animId) { return ReturnCallMethod<int, 0x4D7FD0, AnimationMap *, int>(this, animId); }
-    int getZTranslateEaseOffByAnim(int animId) { return ReturnCallMethod<int, 0x4D8010, AnimationMap *, int>(this, animId); }
-    int getMirrorByAnim(int animId) { return ReturnCallMethod<int, 0x4D8050, AnimationMap *, int>(this, animId); }
-    int getOtherByAnim(int animId) { return ReturnCallMethod<int, 0x4D8090, AnimationMap *, int>(this, animId); }
+    AnimationMap(Hw::cHeapVariable *allocator, void *mapData) { MAKE_CALL(shared::base + 0x4DA630, void(__thiscall *)(AnimationMap *, Hw::cHeapVariable *, void *), this, allocator, mapData); }
+    Unit *getUnitByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D7D10, Unit*(__thiscall *)(AnimationMap *, int), this, animId); }
+    Unit *getUnit(int index) { return MAKE_CALL(shared::base + 0x4D7D50, Unit*(__thiscall *)(AnimationMap *, int), this, index); }
+    const char *getNameByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D7D70, const char*(__thiscall *)(AnimationMap *, int), this, animId); }
+    int getLoopByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D7DB0, int(__thiscall *)(AnimationMap *, int), this, animId); }
+    float getInterpolationByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D7DF0, float(__thiscall *)(AnimationMap *, int), this, animId); }
+    float getStartFrameByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D7E50, float(__thiscall *)(AnimationMap *, int), this, animId); }
+    int getYTranslateEaseOffByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D7FD0, int(__thiscall *)(AnimationMap *, int), this, animId); }
+    int getZTranslateEaseOffByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D8010, int(__thiscall *)(AnimationMap *, int), this, animId); }
+    int getMirrorByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D8050, int(__thiscall *)(AnimationMap *, int), this, animId); }
+    int getOtherByAnim(int animId) { return MAKE_CALL(shared::base + 0x4D8090, int(__thiscall *)(AnimationMap *, int), this, animId); }
 };
 
 class AnimationMapResource

@@ -41,190 +41,190 @@ public:
     
     PlayerManagerImplement()
     {
-        ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x856D60))(this);
+        MAKE_CALL(shared::base + 0x856D60, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void tick()
     {
-        CallVMTFunc<1, PlayerManagerImplement *>(this);
+        MAKE_VCALL(1, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void preparePlayer()
     {
-        CallVMTFunc<2, PlayerManagerImplement*>(this);
+        MAKE_VCALL(2, void (__thiscall *)(PlayerManagerImplement*), this);
     }
 
     void shutdown()
     {
-        CallVMTFunc<3, PlayerManagerImplement *>(this);
+        MAKE_VCALL(3, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void setSlowRate(float SlowRate, int a3, int a4)
     {
-        CallVMTFunc<7, PlayerManagerImplement *, float, int, int>(this, SlowRate, a3, a4);
+        MAKE_VCALL(7, void (__thiscall *)(PlayerManagerImplement *, float, int, int), this, SlowRate, a3, a4);
     }
 
     Hw::cVec4 &getPlayerPosition()
     {
-        return ReturnCallVMTFunc<Hw::cVec4 &, 8, PlayerManagerImplement*>(this);
+        return MAKE_VCALL(8, Hw::cVec4& (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     Entity *getEntity(unsigned int index) const
     {
-        return ReturnCallVMTFunc<Entity *, 9, const PlayerManagerImplement *, unsigned int>(this, index);
+        return MAKE_VCALL(9, Entity *(__thiscall *)(const PlayerManagerImplement *, unsigned int), this, index);
     }
 
     Entity *getEntity(unsigned int index)
     {
-        return ReturnCallVMTFunc<Entity *, 10, PlayerManagerImplement *, unsigned int>(this, index);
+        return MAKE_VCALL(10, Entity *(__thiscall *)(PlayerManagerImplement *, unsigned int), this, index);
     }
 
     void setSwordHidden(int shouldHide)
     {
-        CallVMTFunc<12, PlayerManagerImplement *>(this, shouldHide);
+        MAKE_VCALL(12, void (__thiscall *)(PlayerManagerImplement *, int), this, shouldHide);
     }
 
     void createBalkanEntity()
     {
-        CallVMTFunc<16, PlayerManagerImplement *>(this);
+        MAKE_VCALL(16, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void removeBalkanEntity()
     {
-        CallVMTFunc<17, PlayerManagerImplement*>(this);
+        MAKE_VCALL(17, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     Entity *getBalkanEntity()
     {
-        return ReturnCallVMTFunc<Entity *, 18, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(18, Entity *(__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void clearKogekkoEntity()
     {
-        CallVMTFunc<20, PlayerManagerImplement *>(this);
+        MAKE_VCALL(20, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void setMainWeaponEquipped(int weaponType)
     {
-        CallVMTFunc<21, PlayerManagerImplement *, int>(this, weaponType);
+        MAKE_VCALL(21, void (__thiscall *)(PlayerManagerImplement *, int), this, weaponType);
     }
 
     int getMainWeaponEquipped()
     {
-        return ReturnCallVMTFunc<int, 22, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(22, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void setCustomWeaponEquipped(int customWeaponType)
     {
-        CallVMTFunc<24, PlayerManagerImplement *, int>(this, customWeaponType);
+        MAKE_VCALL(24, void (__thiscall *)(PlayerManagerImplement *, int), this, customWeaponType);
     }
 
     void setSubWeaponEquipped(int subWeaponType)
     {
-        CallVMTFunc<25, PlayerManagerImplement *, int>(this, subWeaponType);
+        MAKE_VCALL(25, void (__thiscall *)(PlayerManagerImplement *, int), this, subWeaponType);
     }
 
     int getCustomWeaponEquipped()
     {
-        return ReturnCallVMTFunc<int, 26, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(26, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     int getSubWeaponEquipped()
     {
-        return ReturnCallVMTFunc<int, 27, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(27, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void setRecoveryEquipped(int recoveryType)
     {
-        CallVMTFunc<29, PlayerManagerImplement *, int>(this, recoveryType);
+        MAKE_VCALL(29, void (__thiscall *)(PlayerManagerImplement *, int), this, recoveryType);
     }
 
     int getRecoveryEquipped()
     {
-        return ReturnCallVMTFunc<int, 30, PlayerManagerImplement*>(this);
+        return MAKE_VCALL(30, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void updatePlayerStats()
     {
-        CallVMTFunc<31, PlayerManagerImplement *>(this);
+        MAKE_VCALL(31, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void updatePlayerStatsAsRaiden()
     {
-        CallVMTFunc<32, PlayerManagerImplement *>(this);
+        MAKE_VCALL(32, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void upgradeHealth()
     {
-        CallVMTFunc<34, PlayerManagerImplement *>(this);
+        MAKE_VCALL(34, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void downgradeHealth()
     {
-        CallVMTFunc<35, PlayerManagerImplement *>(this);
+        MAKE_VCALL(35, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void upgradeFuelContainer()
     {
-        CallVMTFunc<36, PlayerManagerImplement *>(this);
+        MAKE_VCALL(36, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void downgradeFuelContainer()
     {
-        CallVMTFunc<37, PlayerManagerImplement *>(this);
+        MAKE_VCALL(37, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     int getHealthUpgrades()
     {
-        return ReturnCallVMTFunc<int, 38, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(38, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     int getFuelContainerUpgrades()
     {
-        return ReturnCallVMTFunc<int, 39, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(39, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     bool isPlayerAlive()
     {
-        return ReturnCallVMTFunc<bool, 40, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(40, bool (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void addBP(int bpCount)
     {
-        CallVMTFunc<41, PlayerManagerImplement*, int>(this, bpCount);
+        MAKE_VCALL(41, void (__thiscall *)(PlayerManagerImplement *, int), this, bpCount);
     }
 
     int getBP()
     {
-        return ReturnCallVMTFunc<int, 42, PlayerManagerImplement *>(this);
+        return MAKE_VCALL(42, int (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void preparePl0000()
     {
-        ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x840850))(this);
+        MAKE_CALL(shared::base + 0x840850, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void preparePl1400()
     {
-        ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x840B00))(this);
+        MAKE_CALL(shared::base + 0x840B00, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     void preparePl1500()
     {
-        ((void (__thiscall *)(PlayerManagerImplement *))(shared::base + 0x840DA0))(this);
+        MAKE_CALL(shared::base + 0x840DA0, void (__thiscall *)(PlayerManagerImplement *), this);
     }
 
     static inline PlayerManagerImplement* get()
     {
-        return ((PlayerManagerImplement *(__cdecl *)())(shared::base + 0x813920))();
+        return MAKE_CALL(shared::base + 0x813920, PlayerManagerImplement* (__cdecl *)());
     }
 
     static inline Entity* getPlayerEntity()
     {
-        return ((Entity *(__cdecl *)())(shared::base + 0x6C45B0))();
+        return MAKE_CALL(shared::base + 0x6C45B0, Entity* (__cdecl *)());
     }
 };
 
-PlayerManagerImplement *&g_pPlayerManager = *(PlayerManagerImplement**)(shared::base + 0x17EA100);
+inline PlayerManagerImplement *&g_pPlayerManager = *(PlayerManagerImplement**)(shared::base + 0x17EA100);
 
 VALIDATE_SIZE(PlayerManagerImplement, 0x100);

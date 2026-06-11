@@ -32,10 +32,10 @@ public:
 
     BehaviorPartsModel()
     {
-        ((void(__thiscall *)(BehaviorPartsModel*))(shared::base + 0x6AE2C0))(this);
+        MAKE_CALL(shared::base + 0x6AE2C0, void(__thiscall *)(BehaviorPartsModel *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9C8C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C8C);
 };
 
 VALIDATE_SIZE(BehaviorPartsModel, 0xA60);

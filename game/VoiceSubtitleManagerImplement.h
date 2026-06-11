@@ -35,6 +35,6 @@ public:
     int field_C;
     int field_10;
     int field_14;
-
-    static inline VoiceSubtitleManagerImplement*& ms_Instance = *(VoiceSubtitleManagerImplement**)(shared::base + 0x17EA1A8);
 };
+
+inline VoiceSubtitleManagerImplement*& g_VoiceSubtitleManager = *(VoiceSubtitleManagerImplement**)(shared::base + 0x17EA1A8);

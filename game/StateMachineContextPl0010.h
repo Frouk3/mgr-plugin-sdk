@@ -296,5 +296,5 @@ public:
     float field_5D8;
     int field_5DC;
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9EF4);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9EF4);
 };

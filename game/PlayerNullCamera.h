@@ -12,10 +12,10 @@ public:
 
     PlayerNullCamera()
     {
-        ((void(__thiscall *)(PlayerNullCamera*))(shared::base + 0x6A60D0))(this);
+        MAKE_CALL(shared::base + 0x6A60D0, void (__thiscall *)(PlayerNullCamera *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17E9DD8);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17E9DD8);
 };
 
 VALIDATE_SIZE(PlayerNullCamera, 0x880);

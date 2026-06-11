@@ -25,10 +25,10 @@ public:
 
     Em8220Weapon()
     {
-        ((void(__thiscall *)(Em8220Weapon*))(shared::base + 0x6B5DE0))(this);
+        MAKE_CALL(shared::base + 0x6B5DE0, void(__thiscall *)(Em8220Weapon*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735744);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735744);
 };
 
 class Em8220 : public EmBaseDLC
@@ -685,10 +685,10 @@ public:
 
     Em8220()
     {
-        ((void(__thiscall *)(Em8220*))(shared::base + 0x6B5B90))(this);
+        MAKE_CALL(shared::base + 0x6B5B90, void(__thiscall *)(Em8220*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735740);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735740);
 };
 
 

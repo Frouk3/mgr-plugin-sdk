@@ -14,6 +14,6 @@ public:
     int field_18;
     int field_1C;
     int field_20;
-
-    static inline EffectCollisionMaterialImplement *&ms_Instance = *(EffectCollisionMaterialImplement**)(shared::base + 0x1735DBC);
 };
+
+inline EffectCollisionMaterialImplement *&g_EffectCollisionMaterial = *(EffectCollisionMaterialImplement**)(shared::base + 0x1735DBC);

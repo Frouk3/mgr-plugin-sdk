@@ -12,10 +12,10 @@ public:
 
     cItemFixBase()
     {
-        ((void(__thiscall *)(cItemFixBase *))(shared::base + 0x6B1420))(this);
+        MAKE_CALL(shared::base + 0x6B1420, void(__thiscall *)(cItemFixBase *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735394);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735394);
 };
 
 VALIDATE_SIZE(cItemFixBase, 0x930);

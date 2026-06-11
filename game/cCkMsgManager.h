@@ -54,6 +54,6 @@ public:
     int field_BC;
 
     virtual ~cCkMsgManager() {};
-
-    static inline cCkMsgManager &ms_Instance = *(cCkMsgManager*)(shared::base + 0x19C3D08);
 };
+
+inline cCkMsgManager &g_CkMsgManager = *(cCkMsgManager*)(shared::base + 0x19C3D08);

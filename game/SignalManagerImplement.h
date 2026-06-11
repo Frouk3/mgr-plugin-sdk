@@ -19,6 +19,6 @@ class SignalManagerImplement : public SignalManager
 {
 public:
     lib::StaticArray<Signal *, 256> m_Signals;
-
-    static inline SignalManagerImplement* &ms_Instance = *(SignalManagerImplement**)(shared::base + 0x19C53D4);
 };
+
+inline SignalManagerImplement* &g_SignalManager = *(SignalManagerImplement**)(shared::base + 0x19C53D4);

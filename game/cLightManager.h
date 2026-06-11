@@ -4,9 +4,6 @@
 #include <Hw.h>
 #include <cObject.h>
 
-#include <RGB32.h>
-#include <RGBA32.h>
-
 class cLightApplyScale : public cObject
 {
 public:
@@ -94,8 +91,8 @@ public:
     float field_94;
     float field_98;
     float field_9C;
-    RGBA32 m_AmbientColor;
-    RGB32 m_SunColor;
+    Hw::cFcol m_AmbientColor;
+    float m_SunColor[3];
     int field_C0;
     int field_C4;
     int field_C8;
@@ -90978,8 +90975,8 @@ public:
     int field_5BFA0;
     int field_5BFA4;
     Hw::cCriticalSection field_5BFA8;
-
-    static inline cLightManager& ms_Instance = *(cLightManager*)(shared::base + 0x1783D20);
 };
+
+inline cLightManager& g_LightMng = *(cLightManager*)(shared::base + 0x1783D20);
 
 VALIDATE_SIZE(cLightDataMinimum, 0x1E00);

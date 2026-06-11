@@ -8,10 +8,10 @@ public:
 
     Em0190SearchLight()
     {
-        ((void(__thiscall *)(Em0190SearchLight*))(shared::base + 0x6A69C0))(this);
+        MAKE_CALL(shared::base + 0x6A69C0, void(__thiscall *)(Em0190SearchLight*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F28);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F28);
 };
 
 class Em0190MoveCheckLinearCastCollector : public hkpAllCdPointCollector{};
@@ -58,10 +58,10 @@ public:
 
     Em0190Debris()
     {
-        ((void(__thiscall *)(Em0190Debris *))(shared::base + 0x6A6BE0))(this);
+        MAKE_CALL(shared::base + 0x6A6BE0, void(__thiscall *)(Em0190Debris *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F24);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F24);
 };
 
 class Em0190 : public BehaviorEmBase
@@ -368,10 +368,10 @@ public:
 
     Em0190()
     {
-        ((void(__thiscall *)(Em0190 *))(shared::base + 0x6AF4A0))(this);
+        MAKE_CALL(shared::base + 0x6AF4A0, void(__thiscall *)(Em0190 *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F20);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F20);
 };
 
 VALIDATE_SIZE(Em0190SearchLight, 0x870);

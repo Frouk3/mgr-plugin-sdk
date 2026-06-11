@@ -156,10 +156,10 @@ public:
 
     cPl0000SaiWeapon()
     {
-        ((void(__thiscall *)(cPl0000SaiWeapon*))(shared::base + 0x6AF280))(this);
+        MAKE_CALL(shared::base + 0x6AF280, void(__thiscall *)(cPl0000SaiWeapon*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9DD0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9DD0);
 };
 
 VALIDATE_SIZE(cPl0000SaiWeapon, 0xDE0);

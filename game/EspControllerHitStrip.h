@@ -16,7 +16,7 @@ public:
 
     EspControllerHitStrip()
     {
-        ((void (__thiscall *)(EspControllerHitStrip*))(shared::base + 0xAAAAB0))(this);
+        MAKE_CALL(shared::base + 0xAAAAB0, void(__thiscall *)(EspControllerHitStrip*), this);
     }
 };
 

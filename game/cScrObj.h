@@ -21,10 +21,10 @@ public:
 
     cScrObj()
     {
-        ((void(__thiscall *)(cScrObj *))(shared::base + 0x6A6900))(this);
+        MAKE_CALL(shared::base + 0x6A6900, void(__thiscall *)(cScrObj *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x177B37C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x177B37C);
 };
 
 VALIDATE_SIZE(cScrObj, 0x8E0);

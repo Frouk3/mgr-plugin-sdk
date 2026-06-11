@@ -20,10 +20,10 @@ public:
 
     cRayDamageCutArmor()
     {
-        ((void(__thiscall *)(cRayDamageCutArmor *))(shared::base + 0x6C0E90))(this);
+        MAKE_CALL(shared::base + 0x6C0E90, void(__thiscall *)(cRayDamageCutArmor *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9CE0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9CE0);
 };
 
 VALIDATE_SIZE(cRayDamageCutArmor, 0xA90);

@@ -26,62 +26,62 @@ public:
 
     void addOffense(Collision *pCollision)
     {
-        CallVMTFunc<2, BattleCollisionManagerImplement*, Collision*>(this, pCollision);
+        MAKE_VCALL(2, void(__thiscall *)(BattleCollisionManagerImplement *, Collision *), this, pCollision);
     }
 
     void addDefense(Collision *pCollision)
     {
-        CallVMTFunc<3, BattleCollisionManagerImplement*, Collision*>(this, pCollision);
+        MAKE_VCALL(3, void(__thiscall *)(BattleCollisionManagerImplement *, Collision *), this, pCollision);
     }
 
     void removeOffense(Collision *pCollision)
     {
-        CallVMTFunc<4, BattleCollisionManagerImplement*, Collision*>(this, pCollision);
+        MAKE_VCALL(4, void(__thiscall *)(BattleCollisionManagerImplement *, Collision *), this, pCollision);
     }
 
     void removeDefense(Collision *pCollision)
     {
-        CallVMTFunc<5, BattleCollisionManagerImplement*, Collision*>(this, pCollision);
+        MAKE_VCALL(5, void(__thiscall *)(BattleCollisionManagerImplement *, Collision *), this, pCollision);
     }
 
     Collision *getOffenseByUniqueID(int uniqueID)
     {
-        return ReturnCallVMTFunc<Collision*, 6, BattleCollisionManagerImplement*, int>(this, uniqueID);
+        return MAKE_VCALL(6, Collision *(__thiscall *)(BattleCollisionManagerImplement *, int), this, uniqueID);
     }
 
     size_t getOffenseCount()
     {
-        return ReturnCallVMTFunc<size_t, 13, BattleCollisionManagerImplement*>(this);
+        return MAKE_VCALL(13, size_t(__thiscall *)(BattleCollisionManagerImplement *), this);
     }
 
     size_t getDefenseCount()
     {
-        return ReturnCallVMTFunc<size_t, 14, BattleCollisionManagerImplement*>(this);
+        return MAKE_VCALL(14, size_t(__thiscall *)(BattleCollisionManagerImplement *), this);
     }
 
     Collision *getOffenseCollision(size_t index) // index == array index
     {
-        return ReturnCallVMTFunc<Collision*, 15, BattleCollisionManagerImplement*, size_t>(this, index);
+        return MAKE_VCALL(15, Collision *(__thiscall *)(BattleCollisionManagerImplement *, size_t), this, index);
     }
 
     Collision *getDefenseCollision(size_t index) // index == array index
     {
-        return ReturnCallVMTFunc<Collision*, 16, BattleCollisionManagerImplement*, size_t>(this, index);
+        return MAKE_VCALL(16, Collision *(__thiscall *)(BattleCollisionManagerImplement *, size_t), this, index);
     }
 
     // vft end
 
     BattleCollisionManagerImplement(Hw::cHeapVariable *pAllocator)
     {
-        ((void(__thiscall *)(BattleCollisionManagerImplement*, Hw::cHeapVariable*))(shared::base + 0x97B2C0))(this, pAllocator);
+        MAKE_CALL(shared::base + 0x97B2C0, void(__thiscall *)(BattleCollisionManagerImplement*, Hw::cHeapVariable*), this, pAllocator);
     }
 
     ~BattleCollisionManagerImplement()
     {
-        ((void(__thiscall *)(BattleCollisionManagerImplement*))(shared::base + 0x97B9C0))(this);
+        MAKE_CALL(shared::base + 0x97B9C0, void(__thiscall *)(BattleCollisionManagerImplement*), this);
     }
-
-    static inline BattleCollisionManagerImplement *&ms_Instance = *(BattleCollisionManagerImplement**)(shared::base + 0x19C52EC);
 };
+
+inline BattleCollisionManagerImplement *&g_BattleCollisionManager = *(BattleCollisionManagerImplement**)(shared::base + 0x19C52EC);
 
 VALIDATE_SIZE(BattleCollisionManagerImplement, 0x40);

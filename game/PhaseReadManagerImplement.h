@@ -30,8 +30,8 @@ public:
     Hw::cHeapPhysical field_28;
     int field_498;
     int field_49C;
-
-    static inline PhaseReadManagerImplement *&ms_Instance = *(PhaseReadManagerImplement**)(shared::base + 0x19C51C0);
 };
+
+inline PhaseReadManagerImplement *&g_PhaseReadManager = *(PhaseReadManagerImplement**)(shared::base + 0x19C51C0);
 
 VALIDATE_SIZE(PhaseReadManagerImplement, 0x4A0);

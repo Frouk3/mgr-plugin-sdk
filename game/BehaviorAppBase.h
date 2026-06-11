@@ -95,48 +95,48 @@ public:
 
     BehaviorAppBase()
     {
-        ((void(__thiscall *)(BehaviorAppBase *))(shared::base + 0xEC370))(this);
+        MAKE_CALL(shared::base + 0xEC370, void(__thiscall *)(BehaviorAppBase *), this);
     }
 
     // vft start
     
     void adjustHeading(float adjustment, float yawThreshold, float maxYaw, float desiredYawOffset)
     {
-        CallVMTFunc<194, BehaviorAppBase *, float, float, float, float>(this, adjustment, yawThreshold, maxYaw, desiredYawOffset);
+        MAKE_VCALL(194, void(__thiscall *)(BehaviorAppBase *, float, float, float, float), this, adjustment, yawThreshold, maxYaw, desiredYawOffset);
     }
 
     void damage(int damage, bool leave1Hp)
     {
-        CallVMTFunc<195, BehaviorAppBase *, int, bool>(this, damage, leave1Hp);
+        MAKE_VCALL(195, void(__thiscall *)(BehaviorAppBase *, int, bool), this, damage, leave1Hp);
     }
 
     void heal(int heal)
     {
-        CallVMTFunc<196, BehaviorAppBase *, int>(this, heal);
+        MAKE_VCALL(196, void(__thiscall *)(BehaviorAppBase *, int), this, heal);
     }
 
     // return 0 in air, 1 on ground
-    BOOL updateVelocity(float deltaTime) { return ReturnCallVMTFunc<BOOL, 200, BehaviorAppBase *, float>(this, deltaTime);}
-    BOOL isOnGround() { return ReturnCallVMTFunc<BOOL, 201, BehaviorAppBase *>(this); }
-    void updateMutekiTimer(float deltaTime) { CallVMTFunc<202, BehaviorAppBase *, float>(this, deltaTime); }
+    BOOL updateVelocity(float deltaTime) { return MAKE_VCALL(200, BOOL(__thiscall *)(BehaviorAppBase *, float), this, deltaTime); }
+    BOOL isOnGround() { return MAKE_VCALL(201, BOOL(__thiscall *)(BehaviorAppBase *), this); }
+    void updateMutekiTimer(float deltaTime) { MAKE_VCALL(202, void(__thiscall *)(BehaviorAppBase *, float), this, deltaTime); }
 
     // vft end
 
-    int isMuteki() { return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EF10))(this); }
+    int isMuteki() { return MAKE_CALL(shared::base + 0x68EF10, int (__thiscall *)(BehaviorAppBase *), this); }
 
     void setupHealth(int health)
     {
-        ((void(__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EDF0))(this, health);
+        MAKE_CALL(shared::base + 0x68EDF0, void(__thiscall *)(BehaviorAppBase *, int), this, health);
     }
 
     void setHealth(int health)
     {
-        ((void (__thiscall *)(BehaviorAppBase *, int))(shared::base + 0x68EE20))(this, health);
+        MAKE_CALL(shared::base + 0x68EE20, void(__thiscall *)(BehaviorAppBase *, int), this, health);
     }
 
     int getHealth()
     {
-        return ((int (__thiscall *)(BehaviorAppBase *))(shared::base + 0x68EEA0))(this);
+        return MAKE_CALL(shared::base + 0x68EEA0, int (__thiscall *)(BehaviorAppBase *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9C24);

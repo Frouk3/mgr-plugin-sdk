@@ -6,6 +6,6 @@
 class PhantomManagerImplement : public PhantomManager
 {
 public:
-
-    static inline PhantomManagerImplement *&ms_Instance = *(PhantomManagerImplement**)(shared::base + 0x1735DD8);
 };
+
+inline PhantomManagerImplement *&g_PhantomManager = *(PhantomManagerImplement**)(shared::base + 0x1735DD8);

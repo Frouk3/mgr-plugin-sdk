@@ -136,10 +136,10 @@ public:
     
     cGeckoBattery()
     {
-        ((void(__thiscall *)(cGeckoBattery*))(shared::base + 0x6AEE90))(this);
+        MAKE_CALL(shared::base + 0x6AEE90, void(__thiscall *)(cGeckoBattery*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17E9D70);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17E9D70);
 };
 
 VALIDATE_SIZE(cGeckoBattery, 0xC00);

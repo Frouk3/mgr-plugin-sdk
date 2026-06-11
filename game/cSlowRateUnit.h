@@ -23,16 +23,16 @@ public:
     int m_FadeOutTicks;
     int m_InitialFadeOut;
 
-    cSlowRateUnit() { CallMethod<0xA03B60, cSlowRateUnit *>(this); }
-    void move() { CallMethod<0xA03B90, cSlowRateUnit *>(this); }
-    float updateDelta() { return ReturnCallMethod<float, 0xA03BD0, cSlowRateUnit *>(this);}
-    void setType(eSlowRate type) { CallMethod<0xA03C20, cSlowRateUnit *>(this, type); }
-    eSlowRate getType() { return ReturnCallMethod<eSlowRate, 0xA03C30, cSlowRateUnit *>(this); }
-    void set(float rate) { CallMethod<0xA03C40, cSlowRateUnit *>(this, rate); }
-    float get() { return ReturnCallMethod<float, 0xA03CB0, cSlowRateUnit *>(this); }
-    void setSlowRate(float slowRate) { CallMethod<0xA03CC0, cSlowRateUnit *>(this, slowRate); }
-    float getSlowRate() { return ReturnCallMethod<float, 0xA03CE0, cSlowRateUnit *>(this); }
-    int getRefCount() { return ReturnCallMethod<int, 0xA03CF0, cSlowRateUnit *>(this); }
+    cSlowRateUnit() { MAKE_CALL(shared::base + 0xA03B60, void(__thiscall *)(cSlowRateUnit*), this); }
+    void move() { MAKE_CALL(shared::base + 0xA03B90, void(__thiscall *)(cSlowRateUnit*), this); }
+    float updateDelta() { return MAKE_CALL(shared::base + 0xA03BD0, float(__thiscall *)(cSlowRateUnit*), this); }
+    void setType(eSlowRate type) { MAKE_CALL(shared::base + 0xA03C20, void(__thiscall *)(cSlowRateUnit*, eSlowRate), this, type); }
+    eSlowRate getType() { return MAKE_CALL(shared::base + 0xA03C30, eSlowRate(__thiscall *)(cSlowRateUnit*), this); }
+    void set(float rate) { MAKE_CALL(shared::base + 0xA03C40, void(__thiscall *)(cSlowRateUnit*, float), this, rate); }
+    float get() { return MAKE_CALL(shared::base + 0xA03CB0, float(__thiscall *)(cSlowRateUnit*), this); }
+    void setSlowRate(float slowRate) { MAKE_CALL(shared::base + 0xA03CC0, void(__thiscall *)(cSlowRateUnit*, float), this, slowRate); }
+    float getSlowRate() { return MAKE_CALL(shared::base + 0xA03CE0, float(__thiscall *)(cSlowRateUnit*), this); }
+    int getRefCount() { return MAKE_CALL(shared::base + 0xA03CF0, int(__thiscall *)(cSlowRateUnit*), this); }
 };
 
 VALIDATE_SIZE(cSlowRateUnit, 0x28);

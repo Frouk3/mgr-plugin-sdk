@@ -12,10 +12,10 @@ public:
 
     BehaviorDebrisSlider()
     {
-        ((void(__thiscall *)(BehaviorDebrisSlider *))(shared::base + 0x1DC040))(this);
+        MAKE_CALL(shared::base + 0x1DC040, void(__thiscall *)(BehaviorDebrisSlider *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735328);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735328);
 };
 
 VALIDATE_SIZE(BehaviorDebrisSlider, 0x9B0);

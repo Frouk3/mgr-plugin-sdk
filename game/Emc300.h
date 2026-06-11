@@ -24,7 +24,7 @@ public:
 
     Emc300()
     {
-        ((void(__thiscall *)(Emc300 *))(shared::base + 0x6B1540))(this);
+        MAKE_CALL(shared::base + 0x6B1540, void(__thiscall *)(Emc300 *), this);
     }
 
     static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735A30);

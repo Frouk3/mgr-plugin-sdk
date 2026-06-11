@@ -608,10 +608,10 @@ public:
 
     Em0600()
     {
-        ((void(__thiscall *)(Em0600*))(shared::base + 0x6AC300))(this);
+        MAKE_CALL(shared::base + 0x6AC300, void(__thiscall *)(Em0600*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x17351A0);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x17351A0);
 };
 
 class Em060c : public Behavior
@@ -620,10 +620,10 @@ public:
 
     Em060c()
     {
-        ((void(__thiscall *)(Em060c *))(shared::base + 0x6A61C0))(this);
+        MAKE_CALL(shared::base + 0x6A61C0, void(__thiscall *)(Em060c *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17351A4);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17351A4);
 };
 
 class Em0600Gun : public BehaviorAppBase
@@ -668,10 +668,10 @@ public:
 
     Em0600Gun()
     {
-        ((void(__thiscall *)(Em0600Gun *))(shared::base + 0x6AC4F0))(this);
+        MAKE_CALL(shared::base + 0x6AC4F0, void(__thiscall *)(Em0600Gun *), this);
     }
 
-    static inline ContextInstance &ms_Context = *(ContextInstance*)(shared::base + 0x17351A8);
+    static inline ContextInstance &m_Context = *(ContextInstance*)(shared::base + 0x17351A8);
 };
 
 VALIDATE_SIZE(Em060c, 0x870);

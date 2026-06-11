@@ -29,10 +29,10 @@ public:
 
     PowGaObjDLC()
     {
-        ((void(__thiscall *)(PowGaObjDLC *))(shared::base + 0x6B3E50))(this);
+        MAKE_CALL(shared::base + 0x6B3E50, void (__thiscall *)(PowGaObjDLC *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1735ABC);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1735ABC);
 };
 
 VALIDATE_SIZE(PowGaObjDLC, 0xB00);

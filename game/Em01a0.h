@@ -14,10 +14,10 @@ public:
 
     Em01a0Sai()
     {
-        ((void(__thiscall *)(Em01a0Sai *))(shared::base + 0x6A65D0))(this);
+        MAKE_CALL(shared::base + 0x6A65D0, void(__thiscall *)(Em01a0Sai *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F50);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F50);
 };
 
 class Em01a0Upper : public BehaviorEmBase
@@ -34,10 +34,10 @@ public:
 
     Em01a0Upper()
     {
-        ((void(__thiscall *)(Em01a0Upper*))(shared::base + 0x6ADF90))(this);
+        MAKE_CALL(shared::base + 0x6ADF90, void(__thiscall *)(Em01a0Upper*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F3C);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F3C);
 };
 
 class Em01a0Parts : public BehaviorPartsModel
@@ -100,10 +100,10 @@ public:
 
     Em01a0Parts()
     {
-        ((void(__thiscall *)(Em01a0Parts*))(shared::base + 0x6C0F40))(this);
+        MAKE_CALL(shared::base + 0x6C0F40, void(__thiscall *)(Em01a0Parts*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F38);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F38);
 };
 
 class Em01a0Line : public Behavior
@@ -129,10 +129,10 @@ public:
 
     Em01a0Line()
     {
-        ((void(__thiscall *)(Em01a0Line *))(shared::base + 0x6A6620))(this);
+        MAKE_CALL(shared::base + 0x6A6620, void(__thiscall *)(Em01a0Line *), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F54);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F54);
 };
 
 class Em01a0 : public BehaviorEmBase
@@ -522,10 +522,10 @@ public:
     
     Em01a0()
     {
-        ((void(__thiscall *)(Em01a0*))(shared::base + 0x6ADE00))(this);
+        MAKE_CALL(shared::base + 0x6ADE00, void(__thiscall *)(Em01a0*), this);
     }
 
-    static inline ContextInstance& ms_Context = *(ContextInstance*)(shared::base + 0x1734F34);
+    static inline ContextInstance& m_Context = *(ContextInstance*)(shared::base + 0x1734F34);
 };
 
 VALIDATE_SIZE(Em01a0Sai, 0x8D0);

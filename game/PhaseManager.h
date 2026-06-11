@@ -12,14 +12,14 @@ private:
 public:
     lib::StaticArray<int, 64> m_ContentsId;
 
-    cPhaseAbstract() { CallMethod<0x9664B0, cPhaseAbstract *>(this); }
+    cPhaseAbstract() { MAKE_CALL(shared::base + 0x9664B0, void(__thiscall *)(cPhaseAbstract*), this); }
 
-    void startup() { CallVMTFunc<2, cPhaseAbstract *>(this); }
-    void update() { CallVMTFunc<3, cPhaseAbstract *>(this); }
-    void cleanup() { CallVMTFunc<4, cPhaseAbstract *>(this); }
-    void onFlagPhase(int a2, const char *subPhase, int a4) { CallVMTFunc<5, cPhaseAbstract *, int, const char *, int>(this, a2, subPhase, a4); }
-    void onSave() { CallVMTFunc<6, cPhaseAbstract *>(this); }
-    void offFlagPhase(int a2, const char *subPhase) { CallVMTFunc<7, cPhaseAbstract *, int, const char *>(this, a2, subPhase); }
+    void startup() { MAKE_VCALL(2, void(__thiscall *)(cPhaseAbstract*), this); }
+    void update() { MAKE_VCALL(3, void(__thiscall *)(cPhaseAbstract*), this); }
+    void cleanup() { MAKE_VCALL(4, void(__thiscall *)(cPhaseAbstract*), this); }
+    void onFlagPhase(int a2, const char *subPhase, int a4) { MAKE_VCALL(5, void(__thiscall *)(cPhaseAbstract *, int, const char *, int), this, a2, subPhase, a4); }
+    void onSave() { MAKE_VCALL(6, void(__thiscall *)(cPhaseAbstract*), this); }
+    void offFlagPhase(int a2, const char *subPhase) { MAKE_VCALL(7, void(__thiscall *)(cPhaseAbstract *, int, const char *), this, a2, subPhase); }
 
     virtual ~cPhaseAbstract() {};
 };
@@ -169,61 +169,64 @@ struct PhaseManager
     int field_25C;
     int field_260;
 
-    static inline int getCurrentSubPhase()
+    /* // perhaps named differently and not in the PhaseManager class
+    static inline int getCurrentSubPhase() 
     {
-        return ((int (__cdecl *)())(shared::base + 0x532720))();
+        return MAKE_CALL(shared::base + 0x532720, int (__cdecl *)());
     }
+    */
     int createReadRoomList(int a2, int a3, int a4)
     {
-        return ((int (__thiscall *)(PhaseManager *, int, int, int))(shared::base + 0x945560))(this, a2, a3, a4);
+        return MAKE_CALL(shared::base + 0x945560, int (__thiscall *)(PhaseManager *, int, int, int), this, a2, a3, a4);
     }
     bool isCurrentPhase(const char *phase)
     {
-        return ((bool (__thiscall *)(PhaseManager *, const char *))(shared::base + 0x945560))(this, phase);
+        return MAKE_CALL(shared::base + 0x945560, bool (__thiscall *)(PhaseManager *, const char *), this, phase);
     }
     bool isDLCPhase()
     {
-        return ((bool (__thiscall *)(PhaseManager *))(shared::base + 0x9466F0))(this);
+        return MAKE_CALL(shared::base + 0x9466F0, bool (__thiscall *)(PhaseManager *), this);
     }
     bool isSamDLC()
     {
-        return ((bool (__thiscall *)(PhaseManager *))(shared::base + 0x946780))(this);
+        return MAKE_CALL(shared::base + 0x946780, bool (__thiscall *)(PhaseManager *), this);
     }
     bool isWolfDLC()
     {
-        return ((bool (__thiscall *)(PhaseManager *))(shared::base + 0x9467A0))(this);
+        return MAKE_CALL(shared::base + 0x9467A0, bool (__thiscall *)(PhaseManager *), this);
     }
     int setDefaultData()
     {
-        return ((int (__thiscall *)(PhaseManager *))(shared::base + 0x94E890))(this);
+        return MAKE_CALL(shared::base + 0x94E890, int (__thiscall *)(PhaseManager *), this);
     }
     bool isPassSubPhase(int a2, bool a3, const char *debugLog)
     {
-        return ((bool (__thiscall *)(PhaseManager *, int, bool , const char*))(shared::base + 0x94F0B0))(this, a2, a3, debugLog);
+        return MAKE_CALL(shared::base + 0x94F0B0, bool (__thiscall *)(PhaseManager *, int, bool , const char*), this, a2, a3, debugLog);
     }
     void startup()
     {
-        ((void (__thiscall *)(PhaseManager *))(shared::base + 0x958370))(this);
+        MAKE_CALL(shared::base + 0x958370, void (__thiscall *)(PhaseManager *), this);
     }
     bool setSubPhaseData(const char* phase)
     {
-        return ((bool (__thiscall *)(PhaseManager *, const char *))(shared::base + 0x958D70))(this, phase);
+        return MAKE_CALL(shared::base + 0x958D70, bool (__thiscall *)(PhaseManager *, const char *), this, phase);
     }
     bool setPhaseData(int a2)
     {
-        return ((bool (__thiscall *)(PhaseManager*, int))(shared::base + 0x95ED60))(this, a2);
+        return MAKE_CALL(shared::base + 0x95ED60, bool (__thiscall *)(PhaseManager*, int), this, a2);
     }
     void gameOverEvent(int a2)
     {
-        ((void (__thiscall *)(PhaseManager *, int))(shared::base + 0x9664E0))(this, a2);
+        MAKE_CALL(shared::base + 0x9664E0, void (__thiscall *)(PhaseManager *, int), this, a2);
     }
     void requestSubPhaseChange(const char* phase, BOOL checkIfPass, int a3)
     {
-        ((void(__thiscall*)(PhaseManager*, const char*, BOOL, int))(shared::base + 0x95EA40))(this, phase, checkIfPass, a3);
+        MAKE_CALL(shared::base + 0x95EA40, void (__thiscall *)(PhaseManager*, const char*, BOOL, int), this, phase, checkIfPass, a3);
     }
     void requestPhaseChange(int phase, const char* subPhase)
     {
-        ((void(__thiscall*)(PhaseManager*, int, const char*))(shared::base + 0x95E850))(this, phase, subPhase);
+        MAKE_CALL(shared::base + 0x95E850, void (__thiscall *)(PhaseManager*, int, const char*), this, phase, subPhase);
     }
-    static inline PhaseManager& ms_Instance = *(PhaseManager*)(shared::base + 0x14B9140);
 };
+
+static inline PhaseManager& g_PhaseManager = *(PhaseManager*)(shared::base + 0x14B9140);
