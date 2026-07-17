@@ -12,12 +12,15 @@ on:
 
 jobs:
   test-build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Generate headers and run smoke build
         shell: cmd
-        run: ci_test_build.bat
+        run: call ci_test_build.bat
