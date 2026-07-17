@@ -1,14 +1,16 @@
 @echo off
 setlocal
 
-set "output_file=include_all_headers.h"
+set "output_file=%MGR_PLUGIN_SDK%\shared\include_all_headers.h"
 
-> "%output_file%" echo.
+> "%output_file%" echo #pragma once
 echo Initializing %output_file%...
 
 echo Processing shared directory...
 for /f "tokens=*" %%F in ('dir "%MGR_PLUGIN_SDK%\shared\*.h" /b /a:-d') do (
-    echo #include ^<%%~nxF^>
+    if /i not "%%~nxF"=="include_all_headers.h" (
+        echo #include ^<%%~nxF^>
+    )
 ) >> "%output_file%"
 
 echo Processing game/Criware directory...
@@ -23,6 +25,11 @@ for /f "tokens=*" %%F in ('dir "%MGR_PLUGIN_SDK%\game\Havok\*.h" /b /a:-d') do (
 
 echo Processing game directory...
 for /f "tokens=*" %%F in ('dir "%MGR_PLUGIN_SDK%\game\*.h" /b /a:-d') do (
+    echo #include ^<%%~nxF^>
+) >> "%output_file%"
+
+echo Processing SafeHook directory...
+for /f "tokens=*" %%F in ('dir "%MGR_PLUGIN_SDK%\SafeHook\*.h" /b /a:-d') do (
     echo #include ^<%%~nxF^>
 ) >> "%output_file%"
 

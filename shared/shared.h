@@ -98,13 +98,13 @@ public:
 */
 
 // get virtual table pointer from the instance
-#define GET_VTABLE(instance) (*(void***)instance)
+#define GET_VTABLE(instance) (*(void***)(instance))
 
 // get function pointer based on the index from the instance
-#define GET_VFTABLE(instance, index) ((*(void***)instance)[index])
+#define GET_VFTABLE(instance, index) (GET_VTABLE(instance)[index])
 
 // apply a type to target to make a call
 #define MAKE_CALL(target, type, ...) ((type)(target))(__VA_ARGS__)
 
-// apply a type to virtual function stored in index from instance
-#define MAKE_VCALL(index, type, instance, ...) ((type)((*(void***)instance)[index]))(instance, __VA_ARGS__)
+// apply a type to virtual function stored in index from instance and make a call
+#define MAKE_VCALL(index, type, instance, ...) MAKE_CALL(GET_VFTABLE(instance, index), type, instance, __VA_ARGS__)

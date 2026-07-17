@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - pdb-update
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Generate headers and run smoke build
+        shell: cmd
+        run: ci_test_build.bat

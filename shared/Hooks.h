@@ -21,26 +21,26 @@ namespace Hooks
 
 #define CREATE_HOOK(disable, target, ret, calldecl, name, ...) namespace Hooks \
 	{ \
-		class hook##name : public cBaseHook \
+		class hook_##name : public cBaseHook \
 		{ \
 		public: \
 			static inline ret calldecl name(__VA_ARGS__); \
 			static inline ret(calldecl *original)(__VA_ARGS__) = nullptr; \
-			hook##name() : cBaseHook((LPVOID)(target), name, !disable, (LPVOID*)&original) {} \
+			hook_##name() : cBaseHook((LPVOID)(target), name, !disable, (LPVOID*)&original) {} \
 		}; \
 	} \
-	Hooks::hook##name Hook##name; \
-	ret Hooks::hook##name::name(__VA_ARGS__)
+	Hooks::hook_##name Hook_##name; \
+	ret Hooks::hook_##name::name(__VA_ARGS__)
 
 #define CREATE_THISCALL(disable, target, ret, name, C, ...) namespace Hooks \
 	{ \
-		class hook##name : public cBaseHook \
+		class hook_##name : public cBaseHook \
 		{ \
 		public: \
 			static inline ret __fastcall name(C pThis, void* edx, ##__VA_ARGS__); \
 			static inline ret(__thiscall *original)(C pThis, ##__VA_ARGS__) = nullptr; \
-			hook##name() : cBaseHook((LPVOID)(target), name, !disable, (LPVOID*)&original) {} \
+			hook_##name() : cBaseHook((LPVOID)(target), name, !disable, (LPVOID*)&original) {} \
 		}; \
 	} \
-	Hooks::hook##name Hook##name; \
-	ret Hooks::hook##name::name(C pThis, void* edx, ##__VA_ARGS__)
+	Hooks::hook_##name Hook_##name; \
+	ret Hooks::hook_##name::name(C pThis, void* edx, ##__VA_ARGS__)

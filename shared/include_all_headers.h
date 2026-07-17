@@ -1,7 +1,6 @@
-
+#pragma once
 #include <Events.h>
 #include <Hooks.h>
-#include <SafeHook.h>
 #include <shared.h>
 #include <CriAtomic.h>
 #include <CriBase.h>
@@ -622,3 +621,4 @@
 #include <Wp030a.h>
 #include <WpBaseDLC.h>
 #include <ZangekiModeExitSlot.h>
+#include <SafeHook.h>

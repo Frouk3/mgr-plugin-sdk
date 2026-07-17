@@ -1,3 +1,4 @@
 /.vs
 /.vscode
 CppProperties.json
+include_all_headers.h
