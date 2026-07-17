@@ -18,9 +18,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v2
-
       - name: Generate headers and run smoke build
-        shell: cmd
-        run: call ci_test_build.bat
+        shell: pwsh
+        run: |
+          $searchRoots = @(
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio",
+            "${env:ProgramFiles}\Microsoft Visual Studio"
+          )
+
+          $vsDevCmd = Get-ChildItem -Path $searchRoots -Filter VsDevCmd.bat -Recurse -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+
+          if (-not $vsDevCmd) {
+            throw "VsDevCmd.bat was not found on the runner."
+          }
+
+          cmd /c "call `"$($vsDevCmd.FullName)`" -arch=x86 -host_arch=x64 && call ci_test_build.bat"
