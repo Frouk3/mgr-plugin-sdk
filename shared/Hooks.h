@@ -1,6 +1,6 @@
 #pragma once
 #include <shared.h>
-#include <SafeHook.h>
+#include "../SafeHook/SafeHook.h"
 #include <assert.h>
 
 namespace Hooks
