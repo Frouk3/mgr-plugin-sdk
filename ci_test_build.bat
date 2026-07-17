@@ -21,7 +21,7 @@ set "SMOKE_CPP=%BUILD_DIR%\include_smoke_test.cpp"
 set "SMOKE_OBJ=%BUILD_DIR%\include_smoke_test.obj"
 
 > "%SMOKE_CPP%" (
-    echo #include "shared/include_all_headers.h"
+    echo #include "../shared/include_all_headers.h"
     echo int main^(^) { return 0; }
 )
 
