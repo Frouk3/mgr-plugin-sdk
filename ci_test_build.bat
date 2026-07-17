@@ -47,7 +47,7 @@ if errorlevel 1 (
     if errorlevel 1 exit /b %ERRORLEVEL%
 )
 
-cl /nologo /std:c++20 /permissive- /EHsc /W4 /c ^
+cl /nologo /std:c++20 /permissive- /EHsc /W3 /MT /c ^
     /Fo"%SMOKE_OBJ%" ^
     /I"%ROOT%\shared" ^
     /I"%ROOT%\shared\dxsdk" ^
