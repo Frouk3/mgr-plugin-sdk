@@ -25,29 +25,39 @@ set "SMOKE_OBJ=%BUILD_DIR%\include_smoke_test.obj"
     echo int main^(^) { return 0; }
 )
 
-where cl >nul 2>nul
-if errorlevel 1 (
-    set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
-    if not exist "%VSWHERE%" (
-        echo cl.exe was not found and vswhere.exe is unavailable.
+if defined VS_DEVCMD_PATH (
+    if not exist "%VS_DEVCMD_PATH%" (
+        echo The cached Visual Studio developer command path is invalid.
         exit /b 1
     )
 
-    set "VCVARSALL="
-    for /f "usebackq delims=" %%I in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find VC\Auxiliary\Build\vcvarsall.bat`) do (
-        set "VCVARSALL=%%I"
-    )
-
-    if not defined VCVARSALL (
-        echo Unable to locate a Visual Studio C++ toolchain.
-        exit /b 1
-    )
-
-    call "%VCVARSALL%" x86
+    call "%VS_DEVCMD_PATH%" -arch=x86 -host_arch=x64
     if errorlevel 1 exit /b %ERRORLEVEL%
+) else (
+    where cl >nul 2>nul
+    if errorlevel 1 (
+        set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+        if not exist "%VSWHERE%" (
+            echo cl.exe was not found and vswhere.exe is unavailable.
+            exit /b 1
+        )
+
+        set "VCVARSALL="
+        for /f "usebackq delims=" %%I in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find VC\Auxiliary\Build\vcvarsall.bat`) do (
+            set "VCVARSALL=%%I"
+        )
+
+        if not defined VCVARSALL (
+            echo Unable to locate a Visual Studio C++ toolchain.
+            exit /b 1
+        )
+
+        call "%VCVARSALL%" x86
+        if errorlevel 1 exit /b %ERRORLEVEL%
+    )
 )
 
-cl /nologo /std:c++20 /permissive- /EHsc /W3 /MT /c ^
+cl /nologo /std:c++20 /permissive- /EHsc /W3 /c ^
     /Fo"%SMOKE_OBJ%" ^
     /I"%ROOT%\shared" ^
     /I"%ROOT%\shared\dxsdk" ^
